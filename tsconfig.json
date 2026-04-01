@@ -3,6 +3,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -10,10 +12,19 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "isolatedModules": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
     "experimentalDecorators": true,
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "paths": {
+      "@quartz/*": ["./packages/quartz/src/*"],
+      "quartz": ["./packages/quartz/src/public-api.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -24,10 +35,10 @@
   "files": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./app/tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./packages/quartz/tsconfig.lib.json"
     }
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "name": "@yourscope/quartz",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "sass": "./src/styles/_index.scss",
+      "types": "./src/public-api.d.ts",
+      "default": "./fesm2022/quartz.mjs"
+    }
+  }
+}

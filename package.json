@@ -3,11 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:quartz": "node dist/quartz/server/server.mjs"
+    "start": "ng serve demo",
+    "build": "ng build quartz",
+    "build:demo": "ng build demo",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "lint": "ng lint",
+    "format": "prettier --write \"**/*.{ts,html,scss,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\""
   },
   "prettier": {
     "printWidth": 100,
@@ -22,27 +28,34 @@
     ]
   },
   "private": true,
-  "packageManager": "npm@11.6.2",
   "dependencies": {
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
     "@angular/core": "^21.0.0",
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
-    "@angular/platform-server": "^21.0.0",
     "@angular/router": "^21.0.0",
-    "@angular/ssr": "^21.0.4",
-    "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@analogjs/vitest-angular": "^2.4.0",
+    "@angular-devkit/build-angular": "^21.2.6",
+    "@angular-eslint/eslint-plugin": "^21.3.1",
+    "@angular-eslint/eslint-plugin-template": "^21.3.1",
+    "@angular-eslint/schematics": "^21.3.1",
+    "@angular-eslint/template-parser": "^21.3.1",
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
-    "@types/express": "^5.0.1",
+    "@angular/platform-browser-dynamic": "^21.2.6",
+    "@angular/platform-server": "^21.0.0",
+    "@playwright/test": "^1.59.0",
     "@types/node": "^20.17.19",
+    "eslint": "^10.1.0",
     "jsdom": "^27.1.0",
+    "ng-packagr": "^21.2.2",
+    "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }
