@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SplitterDemoComponent } from './demos/splitter-demo.component';
 import { ToastDemoComponent } from './demos/toast-demo.component';
+import { OverlayDemo } from './demos/overlay-demo';
 
 @Component({
   selector: 'app-root',
-  imports: [SplitterDemoComponent, ToastDemoComponent],
+  imports: [SplitterDemoComponent, ToastDemoComponent, OverlayDemo],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-gray-100">
@@ -15,6 +16,7 @@ import { ToastDemoComponent } from './demos/toast-demo.component';
       <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <app-splitter-demo />
         <app-toast-demo />
+        <app-overlay-demo />
       </main>
     </div>
   `,
