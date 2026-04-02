@@ -1,115 +1,68 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { SplitterOrientation } from './splitter.model';
-
-interface SplitterState {
-  orientation: SplitterOrientation;
-  isDragging: boolean;
-  containerSize: number;
-  leftPanelSize: number; // percentage
-  rightPanelSize: number; // percentage
-  minSize: number;
-  maxSize: number;
-  step: number;
-}
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
+import { SplitterOrientation, SplitterConfig, DEFAULT_SPLITTER_CONFIG } from './splitter.types';
 
 @Injectable()
 export class SplitterService {
-  // Private state
-  private readonly _state = signal<SplitterState>({
-    orientation: 'horizontal',
-    isDragging: false,
-    containerSize: 0,
-    leftPanelSize: 50,
-    rightPanelSize: 50,
-    minSize: 0,
-    maxSize: 100,
-    step: 1,
-  });
+  private config = signal<SplitterConfig>(DEFAULT_SPLITTER_CONFIG);
 
-  // Public readonly state
-  readonly state = this._state.asReadonly();
+  // Core state signals
+  private _position = signal<number>(DEFAULT_SPLITTER_CONFIG.defaultPosition);
+  private _orientation = signal<SplitterOrientation>('horizontal');
+  private _isDragging = signal<boolean>(false);
+  private _containerRect = signal<DOMRect | null>(null);
 
-  // Computed values
-  readonly orientation = computed(() => this._state().orientation);
-  readonly isDragging = computed(() => this._state().isDragging);
-  readonly leftPanelSize = computed(() => this._state().leftPanelSize);
-  readonly rightPanelSize = computed(() => this._state().rightPanelSize);
-  readonly isHorizontal = computed(() => this._state().orientation === 'horizontal');
+  // Public readonly signals
+  readonly position = computed(() => this._position());
+  readonly orientation = computed(() => this._orientation());
+  readonly isDragging = computed(() => this._isDragging());
+  readonly containerRect = computed(() => this._containerRect());
 
-  // Actions
+  // Derived state
+  readonly isHorizontal = computed(() => this._orientation() === 'horizontal');
+  readonly isVertical = computed(() => this._orientation() === 'vertical');
+  readonly minSize = computed(() => this.config().minSize);
+  readonly maxSize = computed(() => this.config().maxSize);
+  readonly step = computed(() => this.config().step);
+
+  updateConfig(config: Partial<SplitterConfig>): void {
+    this.config.update((current) => ({ ...current, ...config }));
+  }
+
   setOrientation(orientation: SplitterOrientation): void {
-    this._state.update((state) => ({ ...state, orientation }));
+    this._orientation.set(orientation);
   }
 
-  setConfig(minSize: number, maxSize: number, step: number): void {
-    this._state.update((state) => ({
-      ...state,
-      minSize,
-      maxSize,
-      step,
-    }));
+  setContainerRect(rect: DOMRect): void {
+    this._containerRect.set(rect);
   }
 
-  setContainerSize(size: number): void {
-    this._state.update((state) => ({ ...state, containerSize: size }));
+  setPosition(position: number): void {
+    const cfg = this.config();
+    const clamped = Math.max(cfg.minSize, Math.min(cfg.maxSize, position));
+    const stepped = Math.round(clamped / cfg.step) * cfg.step;
+    this._position.set(stepped);
   }
 
-  startDrag(): void {
-    this._state.update((state) => ({ ...state, isDragging: true }));
+  startDragging(): void {
+    this._isDragging.set(true);
   }
 
-  endDrag(): void {
-    this._state.update((state) => ({ ...state, isDragging: false }));
+  stopDragging(): void {
+    this._isDragging.set(false);
   }
 
-  updateSplit(position: number): void {
-    const state = this._state();
-    
-    // Clamp to min/max
-    let clamped = Math.max(state.minSize, Math.min(state.maxSize, position));
-    
-    // Apply step
-    if (state.step > 0) {
-      clamped = Math.round(clamped / state.step) * state.step;
-    }
-    
-    // Ensure we don't exceed bounds after stepping
-    clamped = Math.max(state.minSize, Math.min(state.maxSize, clamped));
-    
-    this._state.update((s) => ({
-      ...s,
-      leftPanelSize: clamped,
-      rightPanelSize: 100 - clamped,
-    }));
-  }
+  calculatePositionFromEvent(clientX: number, clientY: number): number {
+    const rect = this._containerRect();
+    if (!rect) return this._position();
 
-  // Calculate position from mouse/touch event
-  calculatePositionFromEvent(
-    clientX: number,
-    clientY: number,
-    containerRect: DOMRect
-  ): number {
-    const state = this._state();
-    
-    if (state.orientation === 'horizontal') {
-      return ((clientX - containerRect.left) / containerRect.width) * 100;
+    if (this.isHorizontal()) {
+      return ((clientX - rect.left) / rect.width) * 100;
     } else {
-      return ((clientY - containerRect.top) / containerRect.height) * 100;
+      return ((clientY - rect.top) / rect.height) * 100;
     }
   }
 
-  // Adjust by keyboard
-  adjustByStep(direction: 'increase' | 'decrease'): void {
-    const state = this._state();
-    const delta = direction === 'increase' ? state.step : -state.step;
-    this.updateSplit(state.leftPanelSize + delta);
-  }
-
-  setToMin(): void {
-    this.updateSplit(this._state().minSize);
-  }
-
-  setToMax(): void {
-    this.updateSplit(this._state().maxSize);
+  calculatePositionFromTouch(touch: Touch): number {
+    return this.calculatePositionFromEvent(touch.clientX, touch.clientY);
   }
 }

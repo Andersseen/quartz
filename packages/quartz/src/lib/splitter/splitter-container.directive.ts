@@ -1,63 +1,76 @@
-import { Directive, ElementRef, input, output, inject, HostListener, booleanAttribute } from '@angular/core';
-import { SplitterGroupService, SplitterOrientation } from './splitter-group.service';
+import { Directive, ElementRef, inject, input, output, effect } from '@angular/core';
+import { SplitterService } from './splitter.service';
+import { SplitterOrientation } from './splitter.types';
 
 @Directive({
   selector: '[qzSplitterContainer]',
-  providers: [SplitterGroupService],
+  providers: [SplitterService],
   host: {
     '[class.qz-splitter-container]': 'true',
     '[class.qz-splitter-container--horizontal]': 'orientation() === "horizontal"',
     '[class.qz-splitter-container--vertical]': 'orientation() === "vertical"',
-    '[class.qz-splitter-container--dragging]': 'groupService.isDragging',
+    '[class.qz-splitter-container--dragging]': 'splitterService.isDragging()',
     '[style.display]': '"flex"',
     '[style.flex-direction]': 'orientation() === "horizontal" ? "row" : "column"',
-  }
+    '[style.width]': '"100%"',
+    '[style.height]': '"100%"',
+    '[style.overflow]': '"hidden"',
+  },
 })
 export class SplitterContainerDirective {
   private elementRef = inject(ElementRef<HTMLElement>);
-  // Make it public so it can be accessed from child directives
-  groupService = inject(SplitterGroupService);
-  
+  readonly splitterService = inject(SplitterService);
+
   // Inputs
-  orientation = input<SplitterOrientation>('horizontal');
-  minSize = input<number>(0);
-  maxSize = input<number>(100);
-  step = input<number>(1);
-  
+  readonly orientation = input<SplitterOrientation>('horizontal');
+  readonly minSize = input<number>(0);
+  readonly maxSize = input<number>(100);
+  readonly step = input<number>(1);
+  readonly defaultPosition = input<number>(50);
+
   // Outputs
-  positionChange = output<number>();
-  dragStart = output<void>();
-  dragEnd = output<void>();
+  readonly positionChange = output<number>();
+  readonly dragStart = output<void>();
+  readonly dragEnd = output<void>();
 
   constructor() {
+    // Initialize service with config
+    effect(() => {
+      this.splitterService.updateConfig({
+        minSize: this.minSize(),
+        maxSize: this.maxSize(),
+        step: this.step(),
+        defaultPosition: this.defaultPosition(),
+      });
+    });
+
     // Sync orientation to service
-    const orientation = this.orientation();
-    this.groupService.orientation = orientation;
+    effect(() => {
+      this.splitterService.setOrientation(this.orientation());
+    });
+
+    // Emit position changes
+    effect(() => {
+      const position = this.splitterService.position();
+      this.positionChange.emit(position);
+    });
+
+    // Emit drag events
+    effect(() => {
+      const isDragging = this.splitterService.isDragging();
+      if (isDragging) {
+        this.dragStart.emit();
+      } else {
+        this.dragEnd.emit();
+      }
+    });
+
+    // Set initial position
+    this.splitterService.setPosition(this.defaultPosition());
   }
 
-  getPosition(): number {
-    return this.groupService.position;
-  }
-
-  setPosition(position: number): void {
-    const clamped = Math.max(this.minSize(), Math.min(this.maxSize(), position));
-    const stepped = Math.round(clamped / this.step()) * this.step();
-    
-    this.groupService.position = stepped;
-    this.positionChange.emit(stepped);
-  }
-
-  startDrag(): void {
-    this.groupService.isDragging = true;
-    this.dragStart.emit();
-  }
-
-  endDrag(): void {
-    this.groupService.isDragging = false;
-    this.dragEnd.emit();
-  }
-
-  getContainerRect(): DOMRect {
-    return this.elementRef.nativeElement.getBoundingClientRect();
+  updateContainerRect(): void {
+    const rect = this.elementRef.nativeElement.getBoundingClientRect();
+    this.splitterService.setContainerRect(rect);
   }
 }

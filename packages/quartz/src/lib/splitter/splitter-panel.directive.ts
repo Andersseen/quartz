@@ -1,5 +1,5 @@
-import { Directive, ElementRef, input, inject, booleanAttribute } from '@angular/core';
-import { SplitterGroupService } from './splitter-group.service';
+import { Directive, inject, input, booleanAttribute } from '@angular/core';
+import { SplitterService } from './splitter.service';
 
 @Directive({
   selector: '[qzSplitterPanel]',
@@ -7,57 +7,42 @@ import { SplitterGroupService } from './splitter-group.service';
     '[class.qz-splitter-panel]': 'true',
     '[class.qz-splitter-panel--primary]': 'isPrimary()',
     '[class.qz-splitter-panel--secondary]': '!isPrimary()',
+    '[class.qz-splitter-panel--horizontal]': 'splitterService.isHorizontal()',
+    '[class.qz-splitter-panel--vertical]': 'splitterService.isVertical()',
     '[style.overflow]': '"auto"',
-  }
+    '[style.width.%]': 'panelWidth()',
+    '[style.height.%]': 'panelHeight()',
+    '[style.flex]': '"none"',
+    '[style.min-width]': 'isPrimary() ? "0" : "none"',
+    '[style.min-height]': 'isPrimary() ? "0" : "none"',
+    '[style.max-width]': 'isPrimary() ? "none" : "100%"',
+    '[style.max-height]': 'isPrimary() ? "none" : "100%"',
+  },
 })
 export class SplitterPanelDirective {
-  private elementRef = inject(ElementRef<HTMLElement>);
-  private groupService = inject(SplitterGroupService);
-  
-  isPrimary = input<boolean, string | boolean>(true, { 
+  protected splitterService = inject(SplitterService);
+
+  isPrimary = input<boolean, string | boolean>(true, {
     alias: 'qzSplitterPanel',
-    transform: booleanAttribute 
+    transform: booleanAttribute,
   });
-  
-  constructor() {
-    // Subscribe to position changes
-    this.groupService.position$.subscribe((position) => {
-      this.updateSize(position);
-    });
-    
-    // Subscribe to orientation changes
-    this.groupService.orientation$.subscribe(() => {
-      this.updateSize(this.groupService.position);
-    });
-    
-    // Initial sizing
-    this.updateSize(this.groupService.position);
-  }
-  
-  private updateSize(position: number): void {
-    const element = this.elementRef.nativeElement;
-    const isHorizontal = this.groupService.orientation === 'horizontal';
-    
-    if (isHorizontal) {
-      if (this.isPrimary()) {
-        element.style.width = `${position}%`;
-        element.style.height = '100%';
-        element.style.flex = 'none';
-      } else {
-        element.style.width = `${100 - position}%`;
-        element.style.height = '100%';
-        element.style.flex = 'none';
-      }
-    } else {
-      if (this.isPrimary()) {
-        element.style.height = `${position}%`;
-        element.style.width = '100%';
-        element.style.flex = 'none';
-      } else {
-        element.style.height = `${100 - position}%`;
-        element.style.width = '100%';
-        element.style.flex = 'none';
-      }
+
+  // Computed styles based on orientation and position
+  panelWidth = () => {
+    if (this.splitterService.isHorizontal()) {
+      return this.isPrimary()
+        ? this.splitterService.position()
+        : 100 - this.splitterService.position();
     }
-  }
+    return 100;
+  };
+
+  panelHeight = () => {
+    if (this.splitterService.isVertical()) {
+      return this.isPrimary()
+        ? this.splitterService.position()
+        : 100 - this.splitterService.position();
+    }
+    return 100;
+  };
 }

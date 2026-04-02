@@ -1,110 +1,68 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   SplitterContainerDirective,
-  SplitterDirective,
-  SplitterPanelDirective,
   SplitterHandleDirective,
+  SplitterPanelDirective,
 } from '../../../../packages/quartz/src/lib/splitter';
 
 @Component({
   selector: 'app-splitter-demo',
   standalone: true,
-  imports: [
-    SplitterContainerDirective,
-    SplitterDirective,
-    SplitterPanelDirective,
-    SplitterHandleDirective,
-  ],
+  imports: [SplitterContainerDirective, SplitterHandleDirective, SplitterPanelDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="demo-container">
-      <h1>Splitter Demo</h1>
+      <h1 class="demo-title">Splitter Demo</h1>
 
-      <section>
-        <h2>Horizontal Splitter</h2>
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Horizontal Splitter</h2>
         <div
           qzSplitterContainer
           orientation="horizontal"
-          style="height: 300px; border: 2px solid #ccc;"
+          [minSize]="20"
+          [maxSize]="80"
+          class="splitter-wrapper horizontal"
         >
-          <div
-            qzSplitterPanel="true"
-            style="background: #e3f2fd; padding: 20px;"
-          >
-            <h3>Left Panel</h3>
-            <p>
-              This is the primary (left) panel. Drag the handle to resize.
-            </p>
-            <p>
-              You can also use keyboard: Arrow keys to move, Home/End for
-              min/max.
-            </p>
+          <div qzSplitterPanel="true" class="panel panel-primary">
+            <h3 class="panel-title">Left Panel</h3>
+            <p class="panel-text">This is the primary (left) panel. Drag the handle to resize.</p>
+            <p class="panel-hint">Keyboard: Arrow keys to move, Home/End for min/max.</p>
           </div>
 
-          <div
-            qzSplitter
-            qzSplitterHandle
-            style="
-              width: 8px;
-              background: #2196f3;
-              cursor: col-resize;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            <span style="color: white; font-size: 12px;">⋮</span>
+          <div qzSplitterHandle class="handle handle-horizontal">
+            <span class="handle-icon">⋮</span>
           </div>
 
-          <div
-            qzSplitterPanel="false"
-            style="background: #f3e5f5; padding: 20px;"
-          >
-            <h3>Right Panel</h3>
-            <p>
-              This is the secondary (right) panel. It automatically adjusts its
-              size.
+          <div qzSplitterPanel="false" class="panel panel-secondary">
+            <h3 class="panel-title">Right Panel</h3>
+            <p class="panel-text">
+              This is the secondary (right) panel. It automatically adjusts its size.
             </p>
           </div>
         </div>
       </section>
 
-      <section style="margin-top: 40px;">
-        <h2>Vertical Splitter</h2>
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Vertical Splitter</h2>
         <div
           qzSplitterContainer
           orientation="vertical"
-          style="height: 400px; border: 2px solid #ccc;"
+          [minSize]="20"
+          [maxSize]="80"
+          class="splitter-wrapper vertical"
         >
-          <div
-            qzSplitterPanel="true"
-            style="background: #e8f5e9; padding: 20px;"
-          >
-            <h3>Top Panel</h3>
-            <p>This is the primary (top) panel.</p>
+          <div qzSplitterPanel="true" class="panel panel-primary-green">
+            <h3 class="panel-title">Top Panel</h3>
+            <p class="panel-text">This is the primary (top) panel.</p>
           </div>
 
-          <div
-            qzSplitter
-            qzSplitterHandle
-            style="
-              height: 8px;
-              background: #4caf50;
-              cursor: row-resize;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            <span style="color: white; font-size: 12px;">⋯</span>
+          <div qzSplitterHandle class="handle handle-vertical">
+            <span class="handle-icon">⋯</span>
           </div>
 
-          <div
-            qzSplitterPanel="false"
-            style="background: #fff3e0; padding: 20px;"
-          >
-            <h3>Bottom Panel</h3>
-            <p>This is the secondary (bottom) panel.</p>
+          <div qzSplitterPanel="false" class="panel panel-secondary-orange">
+            <h3 class="panel-title">Bottom Panel</h3>
+            <p class="panel-text">This is the secondary (bottom) panel.</p>
           </div>
         </div>
       </section>
@@ -112,27 +70,109 @@ import {
   `,
   styles: [
     `
-    .demo-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+      .demo-container {
+        padding: 2rem;
+        max-width: 72rem;
+        margin: 0 auto;
+      }
 
-    section {
-      margin-bottom: 40px;
-    }
+      .demo-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #111827;
+      }
 
-    h1,
-    h2,
-    h3 {
-      margin-bottom: 16px;
-    }
+      .demo-section {
+        margin-bottom: 3rem;
+      }
 
-    p {
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-  `,
+      .demo-subtitle {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #1f2937;
+      }
+
+      .splitter-wrapper {
+        border: 2px solid #d1d5db;
+        border-radius: 0.5rem;
+      }
+
+      .splitter-wrapper.horizontal {
+        height: 20rem;
+      }
+
+      .splitter-wrapper.vertical {
+        height: 24rem;
+      }
+
+      .panel {
+        padding: 1.5rem;
+        overflow: auto;
+      }
+
+      .panel-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .panel-text {
+        color: #374151;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+      }
+
+      .panel-hint {
+        color: #4b5563;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .panel-primary {
+        background-color: #eff6ff;
+      }
+
+      .panel-secondary {
+        background-color: #f5f3ff;
+      }
+
+      .panel-primary-green {
+        background-color: #f0fdf4;
+      }
+
+      .panel-secondary-orange {
+        background-color: #fff7ed;
+      }
+
+      .handle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #9ca3af;
+        transition: background-color 0.2s;
+      }
+
+      .handle:hover {
+        background-color: #6b7280;
+      }
+
+      .handle-horizontal {
+        width: 0.5rem;
+      }
+
+      .handle-vertical {
+        height: 0.5rem;
+      }
+
+      .handle-icon {
+        color: white;
+        font-size: 0.75rem;
+        pointer-events: none;
+        user-select: none;
+      }
+    `,
   ],
 })
 export class SplitterDemoComponent {}

@@ -4,11 +4,12 @@ export const VERSION = '0.0.1';
 // Splitter
 export {
   SplitterContainerDirective,
-  SplitterDirective,
-  SplitterPanelDirective,
   SplitterHandleDirective,
-  SplitterGroupService,
+  SplitterPanelDirective,
+  SplitterService,
   type SplitterOrientation,
+  type SplitterState,
+  type SplitterConfig,
 } from './lib/splitter';
 
 // Toast

@@ -7,38 +7,16 @@ import { ToastDemoComponent } from './demos/toast-demo.component';
   imports: [SplitterDemoComponent, ToastDemoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="app-container">
-      <header>
-        <h1>Quartz UI - Headless Components Demo</h1>
+    <div class="min-h-screen bg-gray-100">
+      <header class="bg-blue-600 text-white py-6 px-4 shadow-md">
+        <h1 class="text-3xl font-bold text-center">Quartz UI - Headless Components Demo</h1>
       </header>
-      
-      <main>
+
+      <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <app-splitter-demo />
         <app-toast-demo />
       </main>
     </div>
   `,
-  styles: [`
-    .app-container {
-      min-height: 100vh;
-      background: #f5f5f5;
-    }
-    
-    header {
-      background: #1976d2;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-    
-    main {
-      padding: 20px;
-    }
-  `]
 })
 export class App {}
