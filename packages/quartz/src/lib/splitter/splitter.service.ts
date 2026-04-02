@@ -1,23 +1,20 @@
-import { Injectable, signal, computed, effect, inject } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { SplitterOrientation, SplitterConfig, DEFAULT_SPLITTER_CONFIG } from './splitter.types';
 
 @Injectable()
 export class SplitterService {
   private config = signal<SplitterConfig>(DEFAULT_SPLITTER_CONFIG);
 
-  // Core state signals
   private _position = signal<number>(DEFAULT_SPLITTER_CONFIG.defaultPosition);
   private _orientation = signal<SplitterOrientation>('horizontal');
   private _isDragging = signal<boolean>(false);
   private _containerRect = signal<DOMRect | null>(null);
 
-  // Public readonly signals
-  readonly position = computed(() => this._position());
-  readonly orientation = computed(() => this._orientation());
-  readonly isDragging = computed(() => this._isDragging());
-  readonly containerRect = computed(() => this._containerRect());
+  readonly position = this._position.asReadonly();
+  readonly orientation = this._orientation.asReadonly();
+  readonly isDragging = this._isDragging.asReadonly();
+  readonly containerRect = this._containerRect.asReadonly();
 
-  // Derived state
   readonly isHorizontal = computed(() => this._orientation() === 'horizontal');
   readonly isVertical = computed(() => this._orientation() === 'vertical');
   readonly minSize = computed(() => this.config().minSize);

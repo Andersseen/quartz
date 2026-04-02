@@ -1,14 +1,5 @@
-import {
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  HostListener,
-  DestroyRef,
-  effect,
-} from '@angular/core';
+import { Directive, ElementRef, inject, effect } from '@angular/core';
 import { SplitterService } from './splitter.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: '[qzSplitterHandle]',
@@ -27,18 +18,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     '[style.cursor]': 'splitterService.isHorizontal() ? "col-resize" : "row-resize"',
     '[style.user-select]': '"none"',
     '[style.touch-action]': '"none"',
+
+    '(mousedown)': 'onMouseDown($event)',
+    '(touchstart)': 'onTouchStart($event)',
+    '(keydown)': 'onKeydown($event)',
   },
 })
 export class SplitterHandleDirective {
   private elementRef = inject(ElementRef<HTMLElement>);
   protected splitterService = inject(SplitterService);
-  private destroyRef = inject(DestroyRef);
 
-  // Track drag start position for proper calculations
   private isDragging = false;
 
   constructor() {
-    // Update container rect when dragging starts
     effect(() => {
       if (this.splitterService.isDragging()) {
         this.updateContainerRect();
@@ -47,7 +39,6 @@ export class SplitterHandleDirective {
   }
 
   private updateContainerRect(): void {
-    // Find the container element and update its rect
     const container = this.findContainer();
     if (container) {
       const rect = container.getBoundingClientRect();
@@ -56,9 +47,17 @@ export class SplitterHandleDirective {
   }
 
   private findContainer(): HTMLElement | null {
-    let element: HTMLElement | null = this.elementRef.nativeElement;
+    let element: HTMLElement | null = this.elementRef.nativeElement.parentElement;
     while (element) {
-      if (element.hasAttribute('qz-splitter-container')) {
+      if (
+        element.hasAttribute('qzsplittercontainer') ||
+        element.hasAttribute('qzSplitterContainer') ||
+        element.hasAttribute('ng-reflect-orientation')
+      ) {
+        return element;
+      }
+
+      if (element.classList.contains('qz-splitter-container')) {
         return element;
       }
       element = element.parentElement;
@@ -66,7 +65,6 @@ export class SplitterHandleDirective {
     return null;
   }
 
-  @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -74,7 +72,6 @@ export class SplitterHandleDirective {
     this.addDocumentListeners();
   }
 
-  @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -82,7 +79,6 @@ export class SplitterHandleDirective {
     this.addTouchListeners();
   }
 
-  @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {
     const step = this.splitterService.step();
     let newPosition = this.splitterService.position();
@@ -106,11 +102,13 @@ export class SplitterHandleDirective {
     }
 
     event.preventDefault();
+
+    this.updateContainerRect();
     this.splitterService.setPosition(newPosition);
   }
 
   private startDrag(): void {
-    if (this.splitterService.isDragging()) return;
+    if (this.isDragging) return;
     this.isDragging = true;
     this.updateContainerRect();
     this.splitterService.startDragging();

@@ -1,4 +1,4 @@
-import { Directive, inject, input, booleanAttribute } from '@angular/core';
+import { Directive, inject, input, booleanAttribute, computed } from '@angular/core';
 import { SplitterService } from './splitter.service';
 
 @Directive({
@@ -10,13 +10,14 @@ import { SplitterService } from './splitter.service';
     '[class.qz-splitter-panel--horizontal]': 'splitterService.isHorizontal()',
     '[class.qz-splitter-panel--vertical]': 'splitterService.isVertical()',
     '[style.overflow]': '"auto"',
-    '[style.width.%]': 'panelWidth()',
-    '[style.height.%]': 'panelHeight()',
     '[style.flex]': '"none"',
-    '[style.min-width]': 'isPrimary() ? "0" : "none"',
-    '[style.min-height]': 'isPrimary() ? "0" : "none"',
-    '[style.max-width]': 'isPrimary() ? "none" : "100%"',
-    '[style.max-height]': 'isPrimary() ? "none" : "100%"',
+    '[style.width]': 'widthStyle()',
+    '[style.height]': 'heightStyle()',
+    '[style.min-width]': '"0"',
+    '[style.min-height]': '"0"',
+    '[style.max-width]': '"none"',
+    '[style.max-height]': '"none"',
+    '[style.box-sizing]': '"border-box"',
   },
 })
 export class SplitterPanelDirective {
@@ -27,22 +28,22 @@ export class SplitterPanelDirective {
     transform: booleanAttribute,
   });
 
-  // Computed styles based on orientation and position
-  panelWidth = () => {
-    if (this.splitterService.isHorizontal()) {
-      return this.isPrimary()
-        ? this.splitterService.position()
-        : 100 - this.splitterService.position();
-    }
-    return 100;
-  };
+  private panelSize = computed(() => {
+    const pos = this.splitterService.position();
+    return this.isPrimary() ? pos : 100 - pos;
+  });
 
-  panelHeight = () => {
-    if (this.splitterService.isVertical()) {
-      return this.isPrimary()
-        ? this.splitterService.position()
-        : 100 - this.splitterService.position();
+  widthStyle = computed(() => {
+    if (this.splitterService.isHorizontal()) {
+      return `${this.panelSize()}%`;
     }
-    return 100;
-  };
+    return '100%';
+  });
+
+  heightStyle = computed(() => {
+    if (this.splitterService.isVertical()) {
+      return `${this.panelSize()}%`;
+    }
+    return '100%';
+  });
 }

@@ -21,20 +21,17 @@ export class SplitterContainerDirective {
   private elementRef = inject(ElementRef<HTMLElement>);
   readonly splitterService = inject(SplitterService);
 
-  // Inputs
   readonly orientation = input<SplitterOrientation>('horizontal');
   readonly minSize = input<number>(0);
   readonly maxSize = input<number>(100);
   readonly step = input<number>(1);
   readonly defaultPosition = input<number>(50);
 
-  // Outputs
   readonly positionChange = output<number>();
   readonly dragStart = output<void>();
   readonly dragEnd = output<void>();
 
   constructor() {
-    // Initialize service with config
     effect(() => {
       this.splitterService.updateConfig({
         minSize: this.minSize(),
@@ -44,20 +41,27 @@ export class SplitterContainerDirective {
       });
     });
 
-    // Sync orientation to service
     effect(() => {
       this.splitterService.setOrientation(this.orientation());
     });
 
-    // Emit position changes
+    let positionInitialized = false;
     effect(() => {
       const position = this.splitterService.position();
+      if (!positionInitialized) {
+        positionInitialized = true;
+        return;
+      }
       this.positionChange.emit(position);
     });
 
-    // Emit drag events
+    let draggingInitialized = false;
     effect(() => {
       const isDragging = this.splitterService.isDragging();
+      if (!draggingInitialized) {
+        draggingInitialized = true;
+        return;
+      }
       if (isDragging) {
         this.dragStart.emit();
       } else {
@@ -65,7 +69,6 @@ export class SplitterContainerDirective {
       }
     });
 
-    // Set initial position
     this.splitterService.setPosition(this.defaultPosition());
   }
 
