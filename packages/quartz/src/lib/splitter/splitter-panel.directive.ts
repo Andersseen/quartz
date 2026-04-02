@@ -1,5 +1,5 @@
-import { Directive, ElementRef, input, inject, booleanAttribute } from '@angular/core';
-import { SplitterGroupService } from './splitter-group.service';
+import { Directive, inject, input, booleanAttribute, computed } from '@angular/core';
+import { SplitterService } from './splitter.service';
 
 @Directive({
   selector: '[qzSplitterPanel]',
@@ -7,57 +7,43 @@ import { SplitterGroupService } from './splitter-group.service';
     '[class.qz-splitter-panel]': 'true',
     '[class.qz-splitter-panel--primary]': 'isPrimary()',
     '[class.qz-splitter-panel--secondary]': '!isPrimary()',
+    '[class.qz-splitter-panel--horizontal]': 'splitterService.isHorizontal()',
+    '[class.qz-splitter-panel--vertical]': 'splitterService.isVertical()',
     '[style.overflow]': '"auto"',
-  }
+    '[style.flex]': '"none"',
+    '[style.width]': 'widthStyle()',
+    '[style.height]': 'heightStyle()',
+    '[style.min-width]': '"0"',
+    '[style.min-height]': '"0"',
+    '[style.max-width]': '"none"',
+    '[style.max-height]': '"none"',
+    '[style.box-sizing]': '"border-box"',
+  },
 })
 export class SplitterPanelDirective {
-  private elementRef = inject(ElementRef<HTMLElement>);
-  private groupService = inject(SplitterGroupService);
-  
-  isPrimary = input<boolean, string | boolean>(true, { 
+  protected splitterService = inject(SplitterService);
+
+  isPrimary = input<boolean, string | boolean>(true, {
     alias: 'qzSplitterPanel',
-    transform: booleanAttribute 
+    transform: booleanAttribute,
   });
-  
-  constructor() {
-    // Subscribe to position changes
-    this.groupService.position$.subscribe((position) => {
-      this.updateSize(position);
-    });
-    
-    // Subscribe to orientation changes
-    this.groupService.orientation$.subscribe(() => {
-      this.updateSize(this.groupService.position);
-    });
-    
-    // Initial sizing
-    this.updateSize(this.groupService.position);
-  }
-  
-  private updateSize(position: number): void {
-    const element = this.elementRef.nativeElement;
-    const isHorizontal = this.groupService.orientation === 'horizontal';
-    
-    if (isHorizontal) {
-      if (this.isPrimary()) {
-        element.style.width = `${position}%`;
-        element.style.height = '100%';
-        element.style.flex = 'none';
-      } else {
-        element.style.width = `${100 - position}%`;
-        element.style.height = '100%';
-        element.style.flex = 'none';
-      }
-    } else {
-      if (this.isPrimary()) {
-        element.style.height = `${position}%`;
-        element.style.width = '100%';
-        element.style.flex = 'none';
-      } else {
-        element.style.height = `${100 - position}%`;
-        element.style.width = '100%';
-        element.style.flex = 'none';
-      }
+
+  private panelSize = computed(() => {
+    const pos = this.splitterService.position();
+    return this.isPrimary() ? pos : 100 - pos;
+  });
+
+  widthStyle = computed(() => {
+    if (this.splitterService.isHorizontal()) {
+      return `${this.panelSize()}%`;
     }
-  }
+    return '100%';
+  });
+
+  heightStyle = computed(() => {
+    if (this.splitterService.isVertical()) {
+      return `${this.panelSize()}%`;
+    }
+    return '100%';
+  });
 }

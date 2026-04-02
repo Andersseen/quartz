@@ -12,153 +12,179 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="demo-container">
-      <h1>Toast Demo</h1>
+      <h1 class="demo-title">Toast Demo</h1>
 
-      <section>
-        <h2>Basic Toasts</h2>
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Basic Toasts</h2>
         <div class="button-group">
-          <button (click)="showSuccess()" class="btn btn-success">
-            Show Success
-          </button>
+          <button (click)="showSuccess()" class="btn btn-success">Show Success</button>
           <button (click)="showError()" class="btn btn-error">Show Error</button>
-          <button (click)="showWarning()" class="btn btn-warning">
-            Show Warning
-          </button>
+          <button (click)="showWarning()" class="btn btn-warning">Show Warning</button>
           <button (click)="showInfo()" class="btn btn-info">Show Info</button>
         </div>
       </section>
 
-      <section>
-        <h2>Positions</h2>
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Positions</h2>
         <div class="button-group">
-          <button (click)="showAtPosition('top-left')" class="btn">
-            Top Left
-          </button>
-          <button (click)="showAtPosition('top-center')" class="btn">
-            Top Center
-          </button>
-          <button (click)="showAtPosition('top-right')" class="btn">
-            Top Right
-          </button>
-          <button (click)="showAtPosition('bottom-left')" class="btn">
+          <button (click)="showAtPosition('top-left')" class="btn btn-outline">Top Left</button>
+          <button (click)="showAtPosition('top-center')" class="btn btn-outline">Top Center</button>
+          <button (click)="showAtPosition('top-right')" class="btn btn-outline">Top Right</button>
+          <button (click)="showAtPosition('bottom-left')" class="btn btn-outline">
             Bottom Left
           </button>
-          <button (click)="showAtPosition('bottom-center')" class="btn">
+          <button (click)="showAtPosition('bottom-center')" class="btn btn-outline">
             Bottom Center
           </button>
-          <button (click)="showAtPosition('bottom-right')" class="btn">
+          <button (click)="showAtPosition('bottom-right')" class="btn btn-outline">
             Bottom Right
           </button>
         </div>
       </section>
 
-      <section>
-        <h2>Custom Duration</h2>
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Custom Duration</h2>
         <div class="button-group">
-          <button (click)="showWithDuration(1000)" class="btn">1 Second</button>
-          <button (click)="showWithDuration(5000)" class="btn">5 Seconds</button>
-          <button (click)="showWithDuration(10000)" class="btn">10 Seconds</button>
-          <button (click)="showPersistent()" class="btn">Persistent (no auto-dismiss)</button>
-        </div>
-      </section>
-
-      <section>
-        <h2>With Title</h2>
-        <button (click)="showWithTitle()" class="btn">Show Toast with Title</button>
-      </section>
-
-      <section>
-        <h2>Actions</h2>
-        <div class="button-group">
-          <button (click)="dismissAll()" class="btn btn-secondary">
-            Dismiss All
+          <button (click)="showWithDuration(1000)" class="btn btn-outline">1 Second</button>
+          <button (click)="showWithDuration(5000)" class="btn btn-outline">5 Seconds</button>
+          <button (click)="showWithDuration(10000)" class="btn btn-outline">10 Seconds</button>
+          <button (click)="showPersistent()" class="btn btn-outline">
+            Persistent (no auto-dismiss)
           </button>
         </div>
       </section>
+
+      <section class="demo-section">
+        <h2 class="demo-subtitle">With Title</h2>
+        <button (click)="showWithTitle()" class="btn btn-primary">Show Toast with Title</button>
+      </section>
+
+      <section class="demo-section">
+        <h2 class="demo-subtitle">Actions</h2>
+        <button (click)="dismissAll()" class="btn btn-secondary">Dismiss All</button>
+      </section>
     </div>
 
-    <!-- Toast Container - Place this at the root of your app -->
     <qz-toast-container />
   `,
-  styles: [`
-    .demo-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .demo-container {
+        padding: 2rem;
+        max-width: 72rem;
+        margin: 0 auto;
+      }
 
-    section {
-      margin-bottom: 40px;
-      padding: 20px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-    }
+      .demo-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #111827;
+      }
 
-    h1, h2 {
-      margin-bottom: 16px;
-    }
+      .demo-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+      }
 
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+      .demo-subtitle {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #1f2937;
+      }
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      background: #2196f3;
-      color: white;
-      transition: background 0.2s;
-    }
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
 
-    .btn:hover {
-      background: #1976d2;
-    }
+      .btn {
+        padding: 0.625rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+      }
 
-    .btn-success {
-      background: #4caf50;
-    }
+      .btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+      }
 
-    .btn-success:hover {
-      background: #388e3c;
-    }
+      .btn-primary {
+        background-color: #2563eb;
+        color: white;
+      }
 
-    .btn-error {
-      background: #f44336;
-    }
+      .btn-primary:hover {
+        background-color: #1d4ed8;
+      }
 
-    .btn-error:hover {
-      background: #d32f2f;
-    }
+      .btn-secondary {
+        background-color: #4b5563;
+        color: white;
+      }
 
-    .btn-warning {
-      background: #ff9800;
-    }
+      .btn-secondary:hover {
+        background-color: #374151;
+      }
 
-    .btn-warning:hover {
-      background: #f57c00;
-    }
+      .btn-success {
+        background-color: #16a34a;
+        color: white;
+      }
 
-    .btn-info {
-      background: #2196f3;
-    }
+      .btn-success:hover {
+        background-color: #15803d;
+      }
 
-    .btn-info:hover {
-      background: #1976d2;
-    }
+      .btn-error {
+        background-color: #dc2626;
+        color: white;
+      }
 
-    .btn-secondary {
-      background: #757575;
-    }
+      .btn-error:hover {
+        background-color: #b91c1c;
+      }
 
-    .btn-secondary:hover {
-      background: #616161;
-    }
-  `],
+      .btn-warning {
+        background-color: #d97706;
+        color: white;
+      }
+
+      .btn-warning:hover {
+        background-color: #b45309;
+      }
+
+      .btn-info {
+        background-color: #2563eb;
+        color: white;
+      }
+
+      .btn-info:hover {
+        background-color: #1d4ed8;
+      }
+
+      .btn-outline {
+        background-color: white;
+        color: #374151;
+        border: 2px solid #d1d5db;
+      }
+
+      .btn-outline:hover {
+        border-color: #9ca3af;
+        background-color: #f9fafb;
+      }
+    `,
+  ],
 })
 export class ToastDemoComponent {
   private toastService = inject(ToastService);
@@ -209,10 +235,7 @@ export class ToastDemoComponent {
   }
 
   showWithTitle(): void {
-    this.toastService.success(
-      'Your changes have been saved successfully.',
-      'Changes Saved'
-    );
+    this.toastService.success('Your changes have been saved successfully.', 'Changes Saved');
   }
 
   dismissAll(): void {
