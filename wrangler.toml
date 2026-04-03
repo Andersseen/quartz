@@ -1,0 +1,5 @@
+name = "quartz-ui"
+pages_build_output_dir = "dist/demo/browser"
+
+[vars]
+# Add any environment variables here

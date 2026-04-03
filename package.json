@@ -6,6 +6,8 @@
     "start": "ng serve demo",
     "build": "ng build quartz",
     "build:demo": "ng build demo",
+    "pages:build": "ng build demo --configuration production",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

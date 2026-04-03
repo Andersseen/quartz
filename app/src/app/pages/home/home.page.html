@@ -6,13 +6,22 @@
   <header class="header">
     <div class="header__inner">
       <a routerLink="/" class="header__logo">
-        <span class="header__logo-icon">💎</span>
+        <svg width="24" height="24" viewBox="0 0 32 32" class="header__logo-svg">
+          <defs>
+            <linearGradient id="qz-gradient-header" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path d="M16 2L28 14L16 30L4 14L16 2Z" stroke="url(#qz-gradient-header)" stroke-width="2.5" stroke-linejoin="round" fill="rgba(16, 185, 129, 0.05)" />
+          <path d="M16 2V14M4 14H28M16 14L4 14M16 14L28 14M16 14L16 30" stroke="url(#qz-gradient-header)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="1 3" />
+        </svg>
         <span class="header__logo-text">Quartz UI</span>
       </a>
 
       <nav class="header__nav">
         <a routerLink="/" class="header__nav-link" routerLinkActive="header__nav-link--active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a href="#components" class="header__nav-link">Componentes</a>
+        <a routerLink="/components" class="header__nav-link" routerLinkActive="header__nav-link--active">Componentes</a>
         <a routerLink="/docs" class="header__nav-link" routerLinkActive="header__nav-link--active">Docs</a>
       </nav>
 
@@ -50,79 +59,11 @@
           Get Started
           <span class="home__btn-icon">→</span>
         </a>
-        <a href="#components" class="home__btn home__btn--secondary"> Explore Components </a>
+        <a routerLink="/components" class="home__btn home__btn--secondary"> Explore Components </a>
       </div>
     </div>
   </main>
 
-  <section id="components" class="home__grid-section">
-    <header class="home__grid-header">
-      <h2 class="home__grid-title">Components</h2>
-      <p class="home__grid-subtitle">Ready to use primitives for your next project</p>
-    </header>
-
-    <div class="home__grid">
-      <a routerLink="/overlay" class="home__card glass-panel">
-        <div class="home__card-glow"></div>
-        <div class="home__card-icon">◎</div>
-        <h3 class="home__card-title">Overlay</h3>
-        <p class="home__card-desc">
-          Portal-based positioning with auto-flip, click-outside handling.
-        </p>
-        <div class="home__card-tags">
-          <span class="home__card-tag">Modal</span>
-          <span class="home__card-tag">Popover</span>
-        </div>
-      </a>
-
-      <a routerLink="/splitter" class="home__card glass-panel">
-        <div class="home__card-glow"></div>
-        <div class="home__card-icon">▦</div>
-        <h3 class="home__card-title">Splitter</h3>
-        <p class="home__card-desc">Resizable panels with keyboard navigation and constraints.</p>
-        <div class="home__card-tags">
-          <span class="home__card-tag">Resizable</span>
-          <span class="home__card-tag">A11y</span>
-        </div>
-      </a>
-
-      <a routerLink="/toast" class="home__card glass-panel">
-        <div class="home__card-glow"></div>
-        <div class="home__card-icon">🔔</div>
-        <h3 class="home__card-title">Toast</h3>
-        <p class="home__card-desc">Notification system with multiple positions and durations.</p>
-        <div class="home__card-tags">
-          <span class="home__card-tag">Dynamic</span>
-          <span class="home__card-tag">Feedback</span>
-        </div>
-      </a>
-
-      <a routerLink="/drag-drop" class="home__card glass-panel">
-        <div class="home__card-glow"></div>
-        <div class="home__card-icon">✥</div>
-        <h3 class="home__card-title">Drag & Drop</h3>
-        <p class="home__card-desc">Sortable lists and draggable elements with touch support.</p>
-        <div class="home__card-tags">
-          <span class="home__card-tag">Sortable</span>
-          <span class="home__card-tag">Native</span>
-        </div>
-      </a>
-
-      <div class="home__card home__card--soon glass-panel">
-        <div class="home__card-badge">Coming Soon</div>
-        <div class="home__card-icon">☰</div>
-        <h3 class="home__card-title">Listbox</h3>
-        <p class="home__card-desc">Accessible list selection with keyboard navigation.</p>
-      </div>
-
-      <div class="home__card home__card--soon glass-panel">
-        <div class="home__card-badge">Coming Soon</div>
-        <div class="home__card-icon">💬</div>
-        <h3 class="home__card-title">Tooltip</h3>
-        <p class="home__card-desc">Powerful tooltips with smart positioning.</p>
-      </div>
-    </div>
-  </section>
 
   <section class="home__features-section">
     <div class="home__features">

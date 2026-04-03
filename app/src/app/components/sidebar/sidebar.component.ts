@@ -17,7 +17,16 @@ interface NavItem {
     <aside class="sidebar">
       <div class="sidebar__header">
         <div class="sidebar__logo">
-          <span class="sidebar__logo-icon">💎</span>
+          <svg width="28" height="28" viewBox="0 0 32 32" class="sidebar__logo-svg">
+            <defs>
+              <linearGradient id="qz-gradient-sidebar" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <path d="M16 2L28 14L16 30L4 14L16 2Z" stroke="url(#qz-gradient-sidebar)" stroke-width="2.5" stroke-linejoin="round" fill="rgba(16, 185, 129, 0.05)" />
+            <path d="M16 2V14M4 14H28M16 14L4 14M16 14L28 14M16 14L16 30" stroke="url(#qz-gradient-sidebar)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="1 3" />
+          </svg>
           <div class="sidebar__logo-text">
             <span class="sidebar__logo-title">Quartz UI</span>
             <span class="sidebar__logo-subtitle">Headless Components</span>
@@ -36,6 +45,14 @@ interface NavItem {
           >
             <span class="sidebar__link-icon">◈</span>
             <span>Getting Started</span>
+          </a>
+          <a
+            routerLink="/components"
+            routerLinkActive="sidebar__link--active"
+            class="sidebar__link"
+          >
+            <span class="sidebar__link-icon">▦</span>
+            <span>Components</span>
           </a>
         </div>
 
