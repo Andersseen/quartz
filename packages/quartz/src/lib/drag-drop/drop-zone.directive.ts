@@ -16,7 +16,7 @@ import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.typ
   host: {
     '[class.qz-drop-zone]': 'true',
     '[class.qz-drag-over]': 'isDragOver()',
-    '[class.qz-drop-disabled]': 'isDisabled()',
+    '[class.qz-drop-disabled]': 'disabled()',
     '[class.qz-can-drop]': 'canDrop()',
     '(dragenter)': 'onDragEnter($event)',
     '(dragleave)': 'onDragLeave($event)',
@@ -25,20 +25,20 @@ import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.typ
   },
 })
 export class DropZoneDirective {
-  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private dragDropService = inject(DragDropService);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly dragDropService = inject(DragDropService);
 
   /** Configuration object */
   readonly config = input<DropZoneConfig | string>({}, { alias: 'qzDropZone' });
   /** Acceptable drag types */
   readonly accept = input<string[]>([], { alias: 'qzDropZoneAccept' });
   /** Whether drop is disabled */
-  readonly disabledInput = input(false, {
+  readonly disabled = input(false, {
     alias: 'qzDropZoneDisabled',
     transform: booleanAttribute,
   });
   /** Whether to allow sorting */
-  readonly sortableInput = input(false, {
+  readonly sortable = input(false, {
     alias: 'qzDropZoneSortable',
     transform: booleanAttribute,
   });
@@ -52,14 +52,13 @@ export class DropZoneDirective {
   /** Emitted when dragging over */
   readonly dragOver = output<QzDragOverInfo>();
 
-  readonly isDragOver = signal(false);
+  private readonly _isDragOver = signal(false);
+  readonly isDragOver = this._isDragOver.asReadonly();
+
   private dragCounter = 0;
 
-  readonly isDisabled = computed(() => this.disabledInput());
-  readonly isSortable = computed(() => this.sortableInput());
-
   readonly canDrop = computed(() => {
-    if (this.isDisabled()) return false;
+    if (this.disabled()) return false;
     if (!this.dragDropService.isDragging()) return false;
 
     const dragType = this.dragDropService.dragType();
@@ -77,13 +76,13 @@ export class DropZoneDirective {
   }
 
   onDragEnter(event: DragEvent): void {
-    if (this.isDisabled() || !this.canDrop()) return;
+    if (this.disabled() || !this.canDrop()) return;
 
     event.preventDefault();
     this.dragCounter++;
 
     if (this.dragCounter === 1) {
-      this.isDragOver.set(true);
+      this._isDragOver.set(true);
       this.dragEnter.emit({
         data: this.dragDropService.dragData(),
         element: this.elementRef.nativeElement,
@@ -94,18 +93,18 @@ export class DropZoneDirective {
   }
 
   onDragLeave(event: DragEvent): void {
-    if (this.isDisabled()) return;
+    if (this.disabled()) return;
 
     this.dragCounter--;
 
     if (this.dragCounter === 0) {
-      this.isDragOver.set(false);
+      this._isDragOver.set(false);
       this.dragLeave.emit();
     }
   }
 
   onDragOver(event: DragEvent): void {
-    if (this.isDisabled() || !this.canDrop()) return;
+    if (this.disabled() || !this.canDrop()) return;
 
     event.preventDefault();
     event.dataTransfer!.dropEffect = 'move';
@@ -118,16 +117,16 @@ export class DropZoneDirective {
     });
   }
 
-  onDrop(event: any): void {
+  onDrop(event: unknown): void {
     const dragEvent = event as DragEvent;
-    if (this.isDisabled() || !this.canDrop()) {
+    if (this.disabled() || !this.canDrop()) {
       dragEvent.preventDefault();
       return;
     }
 
     dragEvent.preventDefault();
     this.dragCounter = 0;
-    this.isDragOver.set(false);
+    this._isDragOver.set(false);
 
     const data = this.dragDropService.dragData();
     const sourceElement = this.dragDropService.sourceElement();
@@ -154,7 +153,7 @@ export class DropZoneDirective {
   }
 
   private calculateDropIndex(event: DragEvent): number | undefined {
-    if (!this.isSortable()) return undefined;
+    if (!this.sortable()) return undefined;
 
     const element = this.elementRef.nativeElement;
     const children = Array.from(element.children);

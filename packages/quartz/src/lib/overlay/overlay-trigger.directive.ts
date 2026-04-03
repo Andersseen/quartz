@@ -6,9 +6,8 @@ import {
   input,
   output,
   OnDestroy,
-  contentChild,
   TemplateRef,
-  effect,
+  signal,
 } from '@angular/core';
 import { OverlayService } from './overlay.service';
 import { OverlayRef } from './overlay-ref';
@@ -35,16 +34,16 @@ import { OverlayConfig, OverlayPlacement } from './overlay.types';
   exportAs: 'qzOverlay',
   host: {
     '[class.qz-overlay-trigger]': 'true',
-    '[class.qz-overlay-trigger--open]': 'isOpen',
-    '[attr.aria-expanded]': 'isOpen',
+    '[class.qz-overlay-trigger--open]': 'isOpen()',
+    '[attr.aria-expanded]': 'isOpen()',
     '[attr.aria-haspopup]': '"true"',
     '(click)': 'toggle()',
   },
 })
 export class OverlayTriggerDirective implements OnDestroy {
-  private elementRef = inject(ElementRef<HTMLElement>);
-  private viewContainerRef = inject(ViewContainerRef);
-  private overlayService = inject(OverlayService);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly overlayService = inject(OverlayService);
 
   // ── Inputs ──────────────────────────────────────────────────────────────
 
@@ -68,9 +67,8 @@ export class OverlayTriggerDirective implements OnDestroy {
 
   private overlayRef: OverlayRef | null = null;
 
-  get isOpen(): boolean {
-    return this.overlayRef?.isOpen ?? false;
-  }
+  private readonly _isOpen = signal(false);
+  readonly isOpen = this._isOpen.asReadonly();
 
   // ── Public API ───────────────────────────────────────────────────────────
 
@@ -93,10 +91,12 @@ export class OverlayTriggerDirective implements OnDestroy {
     );
 
     this.overlayRef.closed$.subscribe(() => {
+      this._isOpen.set(false);
       this.closed.emit();
     });
 
     this.overlayRef.open();
+    this._isOpen.set(true);
     this.opened.emit();
   }
 
@@ -105,7 +105,7 @@ export class OverlayTriggerDirective implements OnDestroy {
   }
 
   toggle(): void {
-    this.isOpen ? this.close() : this.open();
+    this.isOpen() ? this.close() : this.open();
   }
 
   /** Recompute position (e.g. after content changes size) */
