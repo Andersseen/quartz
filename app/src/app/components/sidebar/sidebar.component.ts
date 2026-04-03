@@ -29,7 +29,7 @@ interface NavItem {
         <div class="sidebar__section">
           <span class="sidebar__section-title">Overview</span>
           <a
-            routerLink="/"
+            routerLink="/docs"
             routerLinkActive="sidebar__link--active"
             [routerLinkActiveOptions]="{ exact: true }"
             class="sidebar__link"
@@ -78,8 +78,8 @@ interface NavItem {
         flex-direction: column;
         height: 100%;
         width: 260px;
-        background: #0f0f13;
-        border-right: 1px solid #1e1e2a;
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border);
         position: fixed;
         left: 0;
         top: 0;
@@ -88,7 +88,7 @@ interface NavItem {
 
       .sidebar__header {
         padding: 1.5rem;
-        border-bottom: 1px solid #1e1e2a;
+        border-bottom: 1px solid var(--border);
       }
 
       .sidebar__logo {
@@ -135,7 +135,7 @@ interface NavItem {
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #6b7280;
+        color: var(--text-muted);
         padding: 0 0.75rem;
         margin-bottom: 0.5rem;
       }
@@ -161,8 +161,8 @@ interface NavItem {
       }
 
       .sidebar__link--active {
-        background: #1e1430;
-        color: #a78bfa;
+        background: rgba(139, 92, 246, 0.1);
+        color: var(--primary);
       }
 
       .sidebar__link--active::before {

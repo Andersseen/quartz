@@ -1,167 +1,152 @@
 <div class="home">
+  <!-- Decorative Background Blobs -->
+  <div class="bg-blur-blob" style="top: -100px; left: -100px"></div>
+  <div class="bg-blur-blob bg-blur-blob--accent" style="top: 200px; right: -100px"></div>
+
   <header class="header">
     <div class="header__inner">
       <a routerLink="/" class="header__logo">
         <span class="header__logo-icon">💎</span>
         <span class="header__logo-text">Quartz UI</span>
       </a>
-      <nav class="header__nav">
-        <a routerLink="/overlay" class="header__link">Overlay</a>
-        <a routerLink="/splitter" class="header__link">Splitter</a>
-        <a routerLink="/toast" class="header__link">Toast</a>
-        <a routerLink="/drag-drop" class="header__link">Drag & Drop</a>
-      </nav>
-      <a href="https://github.com" target="_blank" class="header__github">
-        <svg height="20" viewBox="0 0 16 16" fill="currentColor">
-          <path
-            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-          />
-        </svg>
-      </a>
+      <div class="header__actions">
+        <a href="https://github.com" target="_blank" class="header__github">
+          <svg height="24" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+            />
+          </svg>
+        </a>
+      </div>
     </div>
   </header>
 
-  <div class="home__hero">
-    <div class="home__badge">
-      <span class="home__badge-dot"></span>
-      v0.0.1 Available Now
+  <main class="home__hero">
+    <!-- Hero Toolbar (Pill Nav) -->
+    <nav class="home__hero-toolbar glass-panel">
+      <a routerLink="/" class="home__hero-link home__hero-link--active">Home</a>
+      <a href="#components" class="home__hero-link">Componentes</a>
+      <a routerLink="/docs" class="home__hero-link">Docs</a>
+    </nav>
+
+    <div class="home__hero-content">
+      <div class="home__badge">
+        <span class="home__badge-dot"></span>
+        <span class="home__badge-text">v0.0.1 • Headless Primitives</span>
+      </div>
+
+      <h1 class="home__title">
+        Build with
+        <span class="text-gradient">Precision.</span>
+      </h1>
+
+      <p class="home__subtitle">
+        A collection of unstyled, accessible, and composable Angular components. Reclaim control
+        over your design system.
+      </p>
+
+      <div class="home__actions">
+        <a routerLink="/docs" class="home__btn home__btn--primary">
+          Get Started
+          <span class="home__btn-icon">→</span>
+        </a>
+        <a href="#components" class="home__btn home__btn--secondary"> Explore Components </a>
+      </div>
     </div>
-    <h1 class="home__title">
-      Quartz UI
-      <span class="home__title-highlight">Headless Components</span>
-    </h1>
-    <p class="home__subtitle">
-      A collection of unstyled, accessible, and composable Angular components. Build your own
-      design system without reinventing the wheel.
-    </p>
-    <div class="home__actions">
-      <a routerLink="/overlay" class="home__btn home__btn--primary">
-        Explore Components
-        <span>→</span>
+  </main>
+
+  <section id="components" class="home__grid-section">
+    <header class="home__grid-header">
+      <h2 class="home__grid-title">Components</h2>
+      <p class="home__grid-subtitle">Ready to use primitives for your next project</p>
+    </header>
+
+    <div class="home__grid">
+      <a routerLink="/overlay" class="home__card glass-panel">
+        <div class="home__card-glow"></div>
+        <div class="home__card-icon">◎</div>
+        <h3 class="home__card-title">Overlay</h3>
+        <p class="home__card-desc">
+          Portal-based positioning with auto-flip, click-outside handling.
+        </p>
+        <div class="home__card-tags">
+          <span class="home__card-tag">Modal</span>
+          <span class="home__card-tag">Popover</span>
+        </div>
       </a>
-      <a href="https://github.com" target="_blank" class="home__btn home__btn--secondary">
-        View on GitHub
+
+      <a routerLink="/splitter" class="home__card glass-panel">
+        <div class="home__card-glow"></div>
+        <div class="home__card-icon">▦</div>
+        <h3 class="home__card-title">Splitter</h3>
+        <p class="home__card-desc">Resizable panels with keyboard navigation and constraints.</p>
+        <div class="home__card-tags">
+          <span class="home__card-tag">Resizable</span>
+          <span class="home__card-tag">A11y</span>
+        </div>
       </a>
-    </div>
-  </div>
 
-  <div class="home__grid">
-    <a routerLink="/overlay" class="home__card">
-      <div class="home__card-icon">◎</div>
-      <h3 class="home__card-title">Overlay</h3>
-      <p class="home__card-desc">
-        Portal-based positioning with auto-flip, click-outside handling, and scroll management.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">Dropdown</span>
-        <span class="home__card-tag">Popover</span>
-        <span class="home__card-tag">Modal</span>
+      <a routerLink="/toast" class="home__card glass-panel">
+        <div class="home__card-glow"></div>
+        <div class="home__card-icon">🔔</div>
+        <h3 class="home__card-title">Toast</h3>
+        <p class="home__card-desc">Notification system with multiple positions and durations.</p>
+        <div class="home__card-tags">
+          <span class="home__card-tag">Dynamic</span>
+          <span class="home__card-tag">Feedback</span>
+        </div>
+      </a>
+
+      <a routerLink="/drag-drop" class="home__card glass-panel">
+        <div class="home__card-glow"></div>
+        <div class="home__card-icon">✥</div>
+        <h3 class="home__card-title">Drag & Drop</h3>
+        <p class="home__card-desc">Sortable lists and draggable elements with touch support.</p>
+        <div class="home__card-tags">
+          <span class="home__card-tag">Sortable</span>
+          <span class="home__card-tag">Native</span>
+        </div>
+      </a>
+
+      <div class="home__card home__card--soon glass-panel">
+        <div class="home__card-badge">Coming Soon</div>
+        <div class="home__card-icon">☰</div>
+        <h3 class="home__card-title">Listbox</h3>
+        <p class="home__card-desc">Accessible list selection with keyboard navigation.</p>
       </div>
-    </a>
 
-    <a routerLink="/splitter" class="home__card">
-      <div class="home__card-icon">▦</div>
-      <h3 class="home__card-title">Splitter</h3>
-      <p class="home__card-desc">
-        Resizable panels with keyboard navigation, touch support, and flexible constraints.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">Horizontal</span>
-        <span class="home__card-tag">Vertical</span>
-        <span class="home__card-tag">Draggable</span>
-      </div>
-    </a>
-
-    <a routerLink="/toast" class="home__card">
-      <div class="home__card-icon">🔔</div>
-      <h3 class="home__card-title">Toast</h3>
-      <p class="home__card-desc">
-        Notification system with multiple positions, durations, and action support.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">6 Positions</span>
-        <span class="home__card-tag">Auto-dismiss</span>
-        <span class="home__card-tag">Actions</span>
-      </div>
-    </a>
-
-    <a routerLink="/drag-drop" class="home__card">
-      <div class="home__card-icon">🎯</div>
-      <h3 class="home__card-title">Drag & Drop</h3>
-      <p class="home__card-desc">
-        Sortable lists and draggable elements with keyboard support and touch gestures.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">Sortable</span>
-        <span class="home__card-tag">Touch</span>
-        <span class="home__card-tag">Keyboard</span>
-      </div>
-    </a>
-
-    <div class="home__card home__card--soon">
-      <div class="home__card-badge">Coming Soon</div>
-      <div class="home__card-icon">☰</div>
-      <h3 class="home__card-title">Listbox</h3>
-      <p class="home__card-desc">
-        Accessible list selection with single/multiple selection, keyboard navigation.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">Single</span>
-        <span class="home__card-tag">Multi</span>
-        <span class="home__card-tag">Virtual</span>
+      <div class="home__card home__card--soon glass-panel">
+        <div class="home__card-badge">Coming Soon</div>
+        <div class="home__card-icon">💬</div>
+        <h3 class="home__card-title">Tooltip</h3>
+        <p class="home__card-desc">Powerful tooltips with smart positioning.</p>
       </div>
     </div>
+  </section>
 
-    <div class="home__card home__card--soon">
-      <div class="home__card-badge">Coming Soon</div>
-      <div class="home__card-icon">💬</div>
-      <h3 class="home__card-title">Tooltip</h3>
-      <p class="home__card-desc">
-        Simple and powerful tooltips with hover/focus triggers and smart positioning.
-      </p>
-      <div class="home__card-tags">
-        <span class="home__card-tag">Hover</span>
-        <span class="home__card-tag">Focus</span>
-        <span class="home__card-tag">Delay</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="home__features">
-    <h2 class="home__section-title">Why Quartz UI?</h2>
-    <div class="home__features-grid">
+  <section class="home__features-section">
+    <div class="home__features">
       <div class="home__feature">
         <div class="home__feature-icon">⚡</div>
-        <h4 class="home__feature-title">Headless & Unstyled</h4>
-        <p class="home__feature-desc">
-          Full control over styling. Bring your own CSS, Tailwind, or any framework.
-        </p>
+        <h4 class="home__feature-title">Headless</h4>
+        <p class="home__feature-desc">Bring your own CSS or UI framework.</p>
       </div>
       <div class="home__feature">
         <div class="home__feature-icon">♿</div>
         <h4 class="home__feature-title">Accessible</h4>
-        <p class="home__feature-desc">
-          Built with WAI-ARIA patterns. Keyboard navigation and screen reader support.
-        </p>
-      </div>
-      <div class="home__feature">
-        <div class="home__feature-icon">🎯</div>
-        <h4 class="home__feature-title">TypeScript First</h4>
-        <p class="home__feature-desc">
-          Full type safety with strict TypeScript. IntelliSense support out of the box.
-        </p>
+        <p class="home__feature-desc">WAI-ARIA patterns out of the box.</p>
       </div>
       <div class="home__feature">
         <div class="home__feature-icon">🎨</div>
-        <h4 class="home__feature-title">Composable</h4>
-        <p class="home__feature-desc">
-          Mix and match primitives. Build complex UI patterns from simple building blocks.
-        </p>
+        <h4 class="home__feature-title">Themable</h4>
+        <p class="home__feature-desc">Infinite styling possibilities.</p>
       </div>
     </div>
-  </div>
+  </section>
 
   <footer class="footer">
-    <p>Quartz UI — Built with Angular</p>
+    <div class="footer__inner">
+      <p>© 2024 Quartz UI. Built by Andersseen.</p>
+    </div>
   </footer>
 </div>
