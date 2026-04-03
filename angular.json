@@ -40,7 +40,7 @@
             "browser": "app/src/main.ts",
             "tsConfig": "app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["app/src/favicon.ico", "app/src/assets"],
+            "assets": ["app/src/favicon.svg", "app/src/assets"],
             "styles": ["app/src/styles.scss"],
             "scripts": [],
             "ssr": false,

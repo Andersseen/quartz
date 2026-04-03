@@ -1,0 +1,53 @@
+<div class="docs">
+  <div class="docs__content">
+    <header class="docs__header">
+      <h1 class="docs__title text-gradient">Documentation</h1>
+      <p class="docs__subtitle">
+        Learn how to build high-performance, accessible, and beautiful user interfaces with Quartz
+        UI.
+      </p>
+    </header>
+
+    <section class="docs__section">
+      <h2>Introduction</h2>
+      <p>
+        Quartz UI is a library of headless, unstyled components for Angular. Our philosophy is to
+        provide the logic and accessibility features (WAI-ARIA) of common UI patterns, while
+        leaving the styling completely in your hands.
+      </p>
+    </section>
+
+    <section class="docs__section">
+      <h2>Installation</h2>
+      <div class="code-block">
+        <pre><code>npm install @quartz/ui</code></pre>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </section>
+
+    <section class="docs__section">
+      <h2>Quick Start</h2>
+      <p>Import the primitives you need and start building.</p>
+      <div class="code-block">
+        <pre><code>import {{ '{' }} OverlayModule {{ '}' }} from '@quartz/ui'
+
+@Component({{ '{' }}
+  selector: 'app-component',
+  imports: [OverlayModule],
+  template: \`
+    &lt;button q-overlay-trigger&gt;Open Popover&lt;/button&gt;
+    &lt;q-overlay&gt;
+      &lt;div class="popover-content"&gt;Hello World!&lt;/div&gt;
+    &lt;/q-overlay&gt;
+  \`
+{{ '}' }})
+export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
+      </div>
+    </section>
+
+    <section class="docs__footer">
+      <p>Ready to explore? Check out the individual components in the sidebar.</p>
+      <a routerLink="/overlay" class="btn btn--primary">Browse Components</a>
+    </section>
+  </div>
+</div>

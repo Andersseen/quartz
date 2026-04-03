@@ -1,4 +1,6 @@
-import { Directive, ElementRef, inject, input, output, effect } from '@angular/core';
+import { Directive, ElementRef, inject, input, effect } from '@angular/core';
+import { outputFromObservable, toObservable } from '@angular/core/rxjs-interop';
+import { skip, filter, map } from 'rxjs';
 import { SplitterService } from './splitter.service';
 import { SplitterOrientation } from './splitter.types';
 
@@ -18,7 +20,7 @@ import { SplitterOrientation } from './splitter.types';
   },
 })
 export class SplitterContainerDirective {
-  private elementRef = inject(ElementRef<HTMLElement>);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
   readonly splitterService = inject(SplitterService);
 
   readonly orientation = input<SplitterOrientation>('horizontal');
@@ -27,9 +29,18 @@ export class SplitterContainerDirective {
   readonly step = input<number>(1);
   readonly defaultPosition = input<number>(50);
 
-  readonly positionChange = output<number>();
-  readonly dragStart = output<void>();
-  readonly dragEnd = output<void>();
+  readonly positionChange = outputFromObservable(
+    toObservable(this.splitterService.position).pipe(skip(1))
+  );
+
+  private readonly isDragging$ = toObservable(this.splitterService.isDragging).pipe(skip(1));
+
+  readonly dragStart = outputFromObservable(
+    this.isDragging$.pipe(filter(v => v), map(() => void 0 as void))
+  );
+  readonly dragEnd = outputFromObservable(
+    this.isDragging$.pipe(filter(v => !v), map(() => void 0 as void))
+  );
 
   constructor() {
     effect(() => {
@@ -43,30 +54,6 @@ export class SplitterContainerDirective {
 
     effect(() => {
       this.splitterService.setOrientation(this.orientation());
-    });
-
-    let positionInitialized = false;
-    effect(() => {
-      const position = this.splitterService.position();
-      if (!positionInitialized) {
-        positionInitialized = true;
-        return;
-      }
-      this.positionChange.emit(position);
-    });
-
-    let draggingInitialized = false;
-    effect(() => {
-      const isDragging = this.splitterService.isDragging();
-      if (!draggingInitialized) {
-        draggingInitialized = true;
-        return;
-      }
-      if (isDragging) {
-        this.dragStart.emit();
-      } else {
-        this.dragEnd.emit();
-      }
     });
 
     this.splitterService.setPosition(this.defaultPosition());

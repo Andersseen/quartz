@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.components-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem;
+}
+
+.components-page__header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.components-page__title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.04em;
+}
+
+.components-page__subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}

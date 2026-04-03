@@ -1,0 +1,115 @@
+<app-demo-page
+  badge="Layout"
+  title="Splitter"
+  description="Resizable panel system with keyboard navigation, touch support, and flexible constraints. Perfect for IDE-style layouts and dashboards."
+  [features]="[
+    { title: 'Horizontal & Vertical', description: 'Both orientations' },
+    { title: 'Keyboard Nav', description: 'Arrow keys, Home, End' },
+    { title: 'Touch Support', description: 'Mobile friendly' },
+    { title: 'Constraints', description: 'Min/max size limits' },
+  ]"
+>
+  <div class="demos">
+    <section class="demo-section">
+      <h2 class="demo-section__title">Horizontal Splitter</h2>
+      <p class="demo-section__desc">
+        Side-by-side panels with a draggable vertical handle. Use arrow keys or drag to resize.
+      </p>
+
+      <app-code-block [code]="horizontalCode">
+        <div preview class="demo-preview">
+          <div class="splitter-frame">
+            <div
+              qzSplitterContainer
+              orientation="horizontal"
+              [minSize]="20"
+              [maxSize]="80"
+              [defaultPosition]="40"
+              (positionChange)="hPosition.set($event)"
+              class="splitter-wrapper"
+            >
+              <div qzSplitterPanel="true" class="panel panel--left">
+                <div class="panel__content">
+                  <div class="panel__icon">🗂️</div>
+                  <h3 class="panel__title">Explorer</h3>
+                  <p class="panel__text">File tree, project navigator, or sidebar content.</p>
+                  <div class="panel__stat">
+                    <span>Width</span>
+                    <strong>{{ hPosition() | number: '1.0-0' }}%</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div qzSplitterHandle class="handle handle--vertical">
+                <div class="handle__grip"><span></span><span></span><span></span></div>
+              </div>
+
+              <div qzSplitterPanel="false" class="panel panel--right">
+                <div class="panel__content">
+                  <div class="panel__icon">✏️</div>
+                  <h3 class="panel__title">Editor</h3>
+                  <p class="panel__text">Main content area that fills remaining space.</p>
+                  <div class="panel__stat">
+                    <span>Width</span>
+                    <strong>{{ 100 - hPosition() | number: '1.0-0' }}%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Vertical Splitter</h2>
+      <p class="demo-section__desc">
+        Stacked panels with a draggable horizontal handle. Ideal for terminal/output layouts.
+      </p>
+
+      <app-code-block [code]="verticalCode">
+        <div preview class="demo-preview">
+          <div class="splitter-frame">
+            <div
+              qzSplitterContainer
+              orientation="vertical"
+              [minSize]="20"
+              [maxSize]="80"
+              [defaultPosition]="55"
+              (positionChange)="vPosition.set($event)"
+              class="splitter-wrapper"
+            >
+              <div qzSplitterPanel="true" class="panel panel--top">
+                <div class="panel__content">
+                  <div class="panel__icon">📄</div>
+                  <h3 class="panel__title">Source</h3>
+                  <p class="panel__text">Top panel — code editor or primary content.</p>
+                  <div class="panel__stat">
+                    <span>Height</span>
+                    <strong>{{ vPosition() | number: '1.0-0' }}%</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div qzSplitterHandle class="handle handle--horizontal">
+                <div class="handle__grip"><span></span><span></span><span></span></div>
+              </div>
+
+              <div qzSplitterPanel="false" class="panel panel--bottom">
+                <div class="panel__content">
+                  <div class="panel__icon">🖥️</div>
+                  <h3 class="panel__title">Terminal</h3>
+                  <p class="panel__text">Bottom panel — output or console.</p>
+                  <div class="panel__stat">
+                    <span>Height</span>
+                    <strong>{{ 100 - vPosition() | number: '1.0-0' }}%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>
