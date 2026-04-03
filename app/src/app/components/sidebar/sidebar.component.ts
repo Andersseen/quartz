@@ -230,6 +230,7 @@ export class SidebarComponent {
     { path: '/overlay', label: 'Overlay', icon: '◎' },
     { path: '/splitter', label: 'Splitter', icon: '▦' },
     { path: '/toast', label: 'Toast', icon: '🔔' },
+    { path: '/drag-drop', label: 'Drag & Drop', icon: '✥' },
     { path: '/listbox', label: 'Listbox', icon: '☰', soon: true },
     { path: '/tooltip', label: 'Tooltip', icon: '💬', soon: true },
   ]);

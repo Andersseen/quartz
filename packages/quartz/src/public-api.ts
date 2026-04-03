@@ -27,3 +27,15 @@ export {
   type ToastPosition,
   DEFAULT_TOAST_OPTIONS,
 } from './lib/toast';
+
+// Drag & Drop
+export { DraggableDirective, DropZoneDirective, DragDropService } from './lib/drag-drop';
+export type {
+  DragDropConfig,
+  DropZoneConfig,
+  QzDragInfo,
+  QzDragEndInfo,
+  QzDropInfo,
+  QzDragOverInfo,
+  DragDropOrientation,
+} from './lib/drag-drop';
