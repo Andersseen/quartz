@@ -1,0 +1,132 @@
+<app-demo-page
+  badge="Interaction"
+  title="Drag & Drop"
+  description="Sortable lists and draggable elements with keyboard support and touch gestures. Built with native HTML5 Drag and Drop API."
+  [features]="[
+    { title: 'Native DnD', description: 'HTML5 Drag & Drop API' },
+    { title: 'Sortable', description: 'Reorder items easily' },
+    { title: 'Type Support', description: 'Categorize draggables' },
+    { title: 'Touch Ready', description: 'Mobile compatible' },
+  ]"
+>
+  <div class="demos">
+    <section class="demo-section">
+      <h2 class="demo-section__title">Kanban Board</h2>
+      <p class="demo-section__desc">
+        Drag tasks between columns to change their status. Each column accepts only 'task' type
+        items.
+      </p>
+
+      <app-code-block [code]="kanbanCode">
+        <div preview class="demo-preview">
+          <div class="kanban">
+            @for (column of columns; track column.id) {
+              <div
+                class="kanban__column"
+                qzDropZone
+                [qzDropZoneAccept]="['task']"
+                (drop)="onTaskDrop($event, column.id)"
+              >
+                <div class="kanban__header">
+                  <span class="kanban__badge" [class]="'kanban__badge--' + column.id">
+                    {{ getTasksByStatus(column.id).length }}
+                  </span>
+                  <h3 class="kanban__title">{{ column.title }}</h3>
+                </div>
+
+                <div class="kanban__tasks">
+                  @for (task of getTasksByStatus(column.id); track task.id) {
+                    <div
+                      class="task-card"
+                      qzDraggable
+                      [qzDraggableData]="task"
+                      qzDraggableType="task"
+                      [qzDraggable]="{}"
+                      (dragStart)="onDragStart($event)"
+                    >
+                      <div class="task-card__header">
+                        <span
+                          class="task-card__priority"
+                          [class]="'task-card__priority--' + task.priority"
+                        ></span>
+                        <span class="task-card__id">{{ task.id }}</span>
+                      </div>
+                      <h4 class="task-card__title">{{ task.title }}</h4>
+                      <p class="task-card__desc">{{ task.description }}</p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Sortable List</h2>
+      <p class="demo-section__desc">
+        Drag items to reorder them within the list. The drop zone calculates the insertion index
+        automatically.
+      </p>
+
+      <app-code-block [code]="sortableCode">
+        <div preview class="demo-preview">
+          <div
+            class="sortable-list"
+            qzDropZone
+            [qzDropZoneSortable]="true"
+            (drop)="onReorder($event)"
+          >
+            @for (item of sortableItems(); track item.id) {
+              <div
+                class="sortable-item"
+                qzDraggable
+                [qzDraggableData]="item"
+                qzDraggableType="sortable"
+              >
+                <span class="sortable-item__handle">⋮⋮</span>
+                <span class="sortable-item__number">{{ item.id }}</span>
+                <span class="sortable-item__text">{{ item.text }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Simple Draggable</h2>
+      <p class="demo-section__desc">
+        Basic draggable element with custom data. Drop it anywhere in the drop zone below.
+      </p>
+
+      <app-code-block [code]="simpleCode">
+        <div preview class="demo-preview demo-preview--center">
+          <div class="simple-demo">
+            <div
+              class="draggable-box"
+              qzDraggable
+              [qzDraggableData]="{ message: 'Hello from draggable!' }"
+              (dragStart)="simpleDragStart($event)"
+            >
+              <span>🎁</span>
+              <span>Drag me!</span>
+            </div>
+
+            <div class="drop-target" qzDropZone (drop)="onSimpleDrop($event)">
+              @if (droppedMessage(); as msg) {
+                <div class="drop-result">
+                  <span>✨</span>
+                  <span>{{ msg }}</span>
+                </div>
+              } @else {
+                <span class="drop-placeholder">Drop here</span>
+              }
+            </div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

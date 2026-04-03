@@ -1,0 +1,286 @@
+.demos {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.demo-section {
+  background: #0f0f13;
+  border: 1px solid #1e1e2a;
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.demo-section__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0 0 0.5rem;
+}
+
+.demo-section__desc {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.demo-preview {
+  padding: 1rem;
+  min-height: 300px;
+}
+
+.demo-preview--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.kanban__column {
+  background: #0a0a0c;
+  border: 1px solid #1e1e2a;
+  border-radius: 12px;
+  padding: 1rem;
+  min-height: 300px;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.kanban__column.qz-drag-over {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.kanban__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #1e1e2a;
+}
+
+.kanban__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.kanban__badge--todo {
+  background: #6b7280;
+}
+
+.kanban__badge--in-progress {
+  background: #3b82f6;
+}
+
+.kanban__badge--done {
+  background: #22c55e;
+}
+
+.kanban__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0;
+}
+
+.kanban__tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.task-card {
+  background: #1e1e2a;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  padding: 0.875rem;
+  cursor: grab;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.task-card:hover {
+  border-color: #3a3a4a;
+}
+
+.task-card.qz-dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.task-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.task-card__priority {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.task-card__priority--low {
+  background: #22c55e;
+}
+
+.task-card__priority--medium {
+  background: #f59e0b;
+}
+
+.task-card__priority--high {
+  background: #ef4444;
+}
+
+.task-card__id {
+  font-size: 0.7rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.task-card__title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  margin: 0 0 0.25rem;
+}
+
+.task-card__desc {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.sortable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.sortable-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #1e1e2a;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  cursor: grab;
+  transition: all 0.15s;
+}
+
+.sortable-item:hover {
+  border-color: #3a3a4a;
+}
+
+.sortable-item.qz-dragging {
+  opacity: 0.5;
+}
+
+.sortable-item__handle {
+  color: #6b7280;
+  font-size: 0.875rem;
+  letter-spacing: -2px;
+}
+
+.sortable-item__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #0f0f13;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a78bfa;
+}
+
+.sortable-item__text {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #e5e7eb;
+}
+
+.simple-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.draggable-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  cursor: grab;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+  transition: transform 0.15s;
+}
+
+.draggable-box:hover {
+  transform: translateY(-2px);
+}
+
+.draggable-box.qz-dragging {
+  cursor: grabbing;
+  opacity: 0.8;
+}
+
+.drop-target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 120px;
+  background: #0a0a0c;
+  border: 2px dashed #2a2a3a;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.drop-target.qz-drag-over {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.drop-placeholder {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.drop-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a78bfa;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
