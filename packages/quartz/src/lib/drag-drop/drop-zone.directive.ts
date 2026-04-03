@@ -1,26 +1,27 @@
 import {
   Directive,
   ElementRef,
-  Input,
-  Output,
-  EventEmitter,
-  HostListener,
   inject,
   signal,
   computed,
   booleanAttribute,
+  input,
+  output,
 } from '@angular/core';
 import { DragDropService } from './drag-drop.service';
 import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.types';
 
 @Directive({
   selector: '[qzDropZone]',
-  standalone: true,
   host: {
     '[class.qz-drop-zone]': 'true',
     '[class.qz-drag-over]': 'isDragOver()',
     '[class.qz-drop-disabled]': 'isDisabled()',
     '[class.qz-can-drop]': 'canDrop()',
+    '(dragenter)': 'onDragEnter($event)',
+    '(dragleave)': 'onDragLeave($event)',
+    '(dragover)': 'onDragOver($event)',
+    '(drop)': 'onDrop($event)',
   },
 })
 export class DropZoneDirective {
@@ -28,43 +29,41 @@ export class DropZoneDirective {
   private dragDropService = inject(DragDropService);
 
   /** Configuration object */
-  @Input('qzDropZone') set configValue(value: DropZoneConfig | string) {
-    if (typeof value === 'object' && value !== null) {
-      this.config = value;
-    } else {
-      this.config = {};
-    }
-  }
-  private config: DropZoneConfig = {};
-
+  readonly config = input<DropZoneConfig | string>({}, { alias: 'qzDropZone' });
   /** Acceptable drag types */
-  @Input('qzDropZoneAccept') accept: string[] = [];
+  readonly accept = input<string[]>([], { alias: 'qzDropZoneAccept' });
   /** Whether drop is disabled */
-  @Input({ alias: 'qzDropZoneDisabled', transform: booleanAttribute }) disabledInput = false;
+  readonly disabledInput = input(false, {
+    alias: 'qzDropZoneDisabled',
+    transform: booleanAttribute,
+  });
   /** Whether to allow sorting */
-  @Input({ alias: 'qzDropZoneSortable', transform: booleanAttribute }) sortableInput = false;
+  readonly sortableInput = input(false, {
+    alias: 'qzDropZoneSortable',
+    transform: booleanAttribute,
+  });
 
   /** Emitted when item is dropped */
-  @Output() drop = new EventEmitter<QzDropInfo>();
+  readonly drop = output<QzDropInfo>();
   /** Emitted when drag enters */
-  @Output() dragEnter = new EventEmitter<QzDragOverInfo>();
+  readonly dragEnter = output<QzDragOverInfo>();
   /** Emitted when drag leaves */
-  @Output() dragLeave = new EventEmitter<void>();
+  readonly dragLeave = output<void>();
   /** Emitted when dragging over */
-  @Output() dragOver = new EventEmitter<QzDragOverInfo>();
+  readonly dragOver = output<QzDragOverInfo>();
 
-  isDragOver = signal(false);
+  readonly isDragOver = signal(false);
   private dragCounter = 0;
 
-  isDisabled = computed(() => this.disabledInput);
-  isSortable = computed(() => this.sortableInput);
+  readonly isDisabled = computed(() => this.disabledInput());
+  readonly isSortable = computed(() => this.sortableInput());
 
-  canDrop = computed(() => {
+  readonly canDrop = computed(() => {
     if (this.isDisabled()) return false;
     if (!this.dragDropService.isDragging()) return false;
 
     const dragType = this.dragDropService.dragType();
-    const acceptedTypes = this.accept.length > 0 ? this.accept : this.config.accept;
+    const acceptedTypes = this.accept().length > 0 ? this.accept() : this.getConfig().accept;
 
     if (!acceptedTypes || acceptedTypes.length === 0) return true;
     if (!dragType) return true;
@@ -72,7 +71,11 @@ export class DropZoneDirective {
     return acceptedTypes.includes(dragType);
   });
 
-  @HostListener('dragenter', ['$event'])
+  private getConfig(): DropZoneConfig {
+    const cfg = this.config();
+    return typeof cfg === 'object' && cfg !== null ? cfg : {};
+  }
+
   onDragEnter(event: DragEvent): void {
     if (this.isDisabled() || !this.canDrop()) return;
 
@@ -90,7 +93,6 @@ export class DropZoneDirective {
     }
   }
 
-  @HostListener('dragleave', ['$event'])
   onDragLeave(event: DragEvent): void {
     if (this.isDisabled()) return;
 
@@ -102,7 +104,6 @@ export class DropZoneDirective {
     }
   }
 
-  @HostListener('dragover', ['$event'])
   onDragOver(event: DragEvent): void {
     if (this.isDisabled() || !this.canDrop()) return;
 
@@ -117,14 +118,14 @@ export class DropZoneDirective {
     });
   }
 
-  @HostListener('drop', ['$event'])
   onDrop(event: any): void {
+    const dragEvent = event as DragEvent;
     if (this.isDisabled() || !this.canDrop()) {
-      event.preventDefault();
+      dragEvent.preventDefault();
       return;
     }
 
-    event.preventDefault();
+    dragEvent.preventDefault();
     this.dragCounter = 0;
     this.isDragOver.set(false);
 
@@ -135,8 +136,8 @@ export class DropZoneDirective {
       data,
       source: sourceElement!,
       target: this.elementRef.nativeElement,
-      event,
-      index: this.calculateDropIndex(event),
+      event: dragEvent,
+      index: this.calculateDropIndex(dragEvent),
     });
   }
 
@@ -145,12 +146,9 @@ export class DropZoneDirective {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    // Determine if we're in the top/bottom or left/right half
     if (rect.width > rect.height) {
-      // Horizontal layout
       return event.clientX < centerX ? 'before' : 'after';
     } else {
-      // Vertical layout
       return event.clientY < centerY ? 'before' : 'after';
     }
   }
@@ -158,7 +156,6 @@ export class DropZoneDirective {
   private calculateDropIndex(event: DragEvent): number | undefined {
     if (!this.isSortable()) return undefined;
 
-    // For sortable lists, calculate the index where item should be inserted
     const element = this.elementRef.nativeElement;
     const children = Array.from(element.children);
 

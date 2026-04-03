@@ -1,28 +1,28 @@
 import {
   Directive,
   ElementRef,
-  Input,
-  Output,
-  EventEmitter,
-  HostListener,
   inject,
   signal,
   effect,
   booleanAttribute,
   computed,
+  input,
+  output,
 } from '@angular/core';
 import { DragDropService } from './drag-drop.service';
 import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.types';
 
 @Directive({
   selector: '[qzDraggable]',
-  standalone: true,
   host: {
     '[draggable]': '!isDisabled()',
     '[class.qz-draggable]': 'true',
     '[class.qz-dragging]': 'isDragging()',
     '[class.qz-disabled]': 'isDisabled()',
     '[style.cursor]': 'isDisabled() ? "not-allowed" : "grab"',
+    '[attr.aria-grabbed]': 'isDragging()',
+    '(dragstart)': 'onDragStart($event)',
+    '(dragend)': 'onDragEnd($event)',
   },
 })
 export class DraggableDirective {
@@ -30,33 +30,28 @@ export class DraggableDirective {
   private dragDropService = inject(DragDropService);
 
   /** Configuration object */
-  @Input('qzDraggable') set configValue(value: DragDropConfig | string) {
-    if (typeof value === 'object' && value !== null) {
-      this.config = value;
-    } else {
-      this.config = {};
-    }
-  }
-  private config: DragDropConfig = {};
-
+  readonly config = input<DragDropConfig | string>({}, { alias: 'qzDraggable' });
   /** Data to transfer during drag */
-  @Input('qzDraggableData') data: unknown;
+  readonly data = input<unknown>(undefined, { alias: 'qzDraggableData' });
   /** Drag type for categorization */
-  @Input('qzDraggableType') type = 'default';
+  readonly type = input('default', { alias: 'qzDraggableType' });
   /** Whether dragging is disabled */
-  @Input({ alias: 'qzDraggableDisabled', transform: booleanAttribute }) disabledInput = false;
+  readonly disabledInput = input(false, {
+    alias: 'qzDraggableDisabled',
+    transform: booleanAttribute,
+  });
   /** Drag handle selector */
-  @Input('qzDraggableHandle') handle: string | null = null;
+  readonly handle = input<string | null>(null, { alias: 'qzDraggableHandle' });
 
   /** Emitted when drag starts */
-  @Output() dragStart = new EventEmitter<QzDragInfo>();
+  readonly dragStart = output<QzDragInfo>();
   /** Emitted when drag ends */
-  @Output() dragEnd = new EventEmitter<QzDragEndInfo>();
+  readonly dragEnd = output<QzDragEndInfo>();
 
-  isDragging = signal(false);
+  readonly isDragging = signal(false);
   private dragImage: HTMLElement | null = null;
 
-  isDisabled = computed(() => this.disabledInput);
+  readonly isDisabled = computed(() => this.disabledInput());
 
   constructor() {
     effect(() => {
@@ -69,7 +64,11 @@ export class DraggableDirective {
     });
   }
 
-  @HostListener('dragstart', ['$event'])
+  private getConfig(): DragDropConfig {
+    const cfg = this.config();
+    return typeof cfg === 'object' && cfg !== null ? cfg : {};
+  }
+
   onDragStart(event: DragEvent): void {
     if (this.isDisabled()) {
       event.preventDefault();
@@ -80,16 +79,14 @@ export class DraggableDirective {
     const element = this.elementRef.nativeElement;
     element.setAttribute('aria-grabbed', 'true');
 
-    // Store data
-    const dragData = this.data ?? this.config.data;
-    this.dragDropService.startDrag(dragData, element, this.type);
+    const config = this.getConfig();
+    const dragData = this.data() ?? config.data;
+    this.dragDropService.startDrag(dragData, element, this.type());
 
-    // Set drag data
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/plain', JSON.stringify({ type: this.type }));
+      event.dataTransfer.setData('text/plain', JSON.stringify({ type: this.type() }));
 
-      // Create custom drag image if needed
       this.createDragImage(element);
       if (this.dragImage) {
         event.dataTransfer.setDragImage(this.dragImage, 0, 0);
@@ -103,13 +100,11 @@ export class DraggableDirective {
     });
   }
 
-  @HostListener('dragend', ['$event'])
   onDragEnd(event: DragEvent): void {
     this.isDragging.set(false);
     const element = this.elementRef.nativeElement;
     element.setAttribute('aria-grabbed', 'false');
 
-    // Clean up drag image
     if (this.dragImage) {
       this.dragImage.remove();
       this.dragImage = null;
@@ -128,12 +123,10 @@ export class DraggableDirective {
   }
 
   private createDragImage(original: HTMLElement): void {
-    // Remove previous drag image if exists
     if (this.dragImage) {
       this.dragImage.remove();
     }
 
-    // Clone the element for drag image
     this.dragImage = original.cloneNode(true) as HTMLElement;
     this.dragImage.style.position = 'fixed';
     this.dragImage.style.top = '-1000px';

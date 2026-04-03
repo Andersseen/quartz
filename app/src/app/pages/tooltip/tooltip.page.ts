@@ -3,7 +3,6 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
 
 @Component({
   selector: 'app-tooltip-page',
-  standalone: true,
   imports: [DemoPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -15,15 +14,14 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
         { title: 'Hover & Focus', description: 'Multiple triggers' },
         { title: 'Smart Position', description: 'Auto-placement' },
         { title: 'Delay Control', description: 'Show/hide delays' },
-        { title: 'Custom Content', description: 'HTML support' }
+        { title: 'Custom Content', description: 'HTML support' },
       ]"
     >
       <div class="coming-soon">
         <div class="coming-soon__icon">🚧</div>
         <h2 class="coming-soon__title">Coming Soon</h2>
         <p class="coming-soon__desc">
-          The Tooltip component is currently in development.
-          Check back soon for updates!
+          The Tooltip component is currently in development. Check back soon for updates!
         </p>
       </div>
     </app-demo-page>

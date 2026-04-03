@@ -7,7 +7,6 @@ interface Feature {
 
 @Component({
   selector: 'app-demo-page',
-  standalone: true,
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

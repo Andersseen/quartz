@@ -5,7 +5,6 @@ import { CodeBlockComponent } from '../../components/code-block/code-block.compo
 
 @Component({
   selector: 'app-toast-page',
-  standalone: true,
   imports: [ToastContainerComponent, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

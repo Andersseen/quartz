@@ -10,7 +10,6 @@ import { CodeBlockComponent } from '../../components/code-block/code-block.compo
 
 @Component({
   selector: 'app-splitter-page',
-  standalone: true,
   imports: [
     SplitterContainerDirective,
     SplitterHandleDirective,

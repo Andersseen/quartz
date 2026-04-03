@@ -3,7 +3,6 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
 
 @Component({
   selector: 'app-listbox-page',
-  standalone: true,
   imports: [DemoPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -15,15 +14,14 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
         { title: 'Single & Multi', description: 'Selection modes' },
         { title: 'Keyboard Nav', description: 'Arrow keys, typeahead' },
         { title: 'Virtual Scroll', description: 'Performance for large lists' },
-        { title: 'WAI-ARIA', description: 'Full accessibility' }
+        { title: 'WAI-ARIA', description: 'Full accessibility' },
       ]"
     >
       <div class="coming-soon">
         <div class="coming-soon__icon">🚧</div>
         <h2 class="coming-soon__title">Coming Soon</h2>
         <p class="coming-soon__desc">
-          The Listbox component is currently in development.
-          Check back soon for updates!
+          The Listbox component is currently in development. Check back soon for updates!
         </p>
       </div>
     </app-demo-page>

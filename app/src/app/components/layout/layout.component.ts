@@ -4,7 +4,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [RouterOutlet, SidebarComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

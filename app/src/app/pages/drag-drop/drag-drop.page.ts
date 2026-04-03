@@ -19,7 +19,6 @@ interface Task {
 
 @Component({
   selector: 'app-drag-drop-page',
-  standalone: true,
   imports: [DraggableDirective, DropZoneDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

@@ -11,7 +11,6 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
   imports: [RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

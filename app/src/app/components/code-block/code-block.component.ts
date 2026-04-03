@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, input, signal } from '@angular/core
 
 @Component({
   selector: 'app-code-block',
-  standalone: true,
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

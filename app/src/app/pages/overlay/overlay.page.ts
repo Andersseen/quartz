@@ -14,7 +14,6 @@ import { CodeBlockComponent } from '../../components/code-block/code-block.compo
 
 @Component({
   selector: 'app-overlay-page',
-  standalone: true,
   imports: [OverlayTriggerDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
