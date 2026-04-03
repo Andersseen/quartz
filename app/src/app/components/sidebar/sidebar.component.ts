@@ -35,26 +35,6 @@ interface NavItem {
       </div>
 
       <nav class="sidebar__nav">
-        <div class="sidebar__section">
-          <span class="sidebar__section-title">Overview</span>
-          <a
-            routerLink="/docs"
-            routerLinkActive="sidebar__link--active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="sidebar__link"
-          >
-            <span class="sidebar__link-icon">◈</span>
-            <span>Getting Started</span>
-          </a>
-          <a
-            routerLink="/components"
-            routerLinkActive="sidebar__link--active"
-            class="sidebar__link"
-          >
-            <span class="sidebar__link-icon">▦</span>
-            <span>Components</span>
-          </a>
-        </div>
 
         <div class="sidebar__section">
           <span class="sidebar__section-title">Components</span>
