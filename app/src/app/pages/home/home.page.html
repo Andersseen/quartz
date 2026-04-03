@@ -9,6 +9,13 @@
         <span class="header__logo-icon">💎</span>
         <span class="header__logo-text">Quartz UI</span>
       </a>
+
+      <nav class="header__nav">
+        <a routerLink="/" class="header__nav-link" routerLinkActive="header__nav-link--active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a href="#components" class="header__nav-link">Componentes</a>
+        <a routerLink="/docs" class="header__nav-link" routerLinkActive="header__nav-link--active">Docs</a>
+      </nav>
+
       <div class="header__actions">
         <a href="https://github.com" target="_blank" class="header__github">
           <svg height="24" viewBox="0 0 16 16" fill="currentColor">
@@ -22,13 +29,6 @@
   </header>
 
   <main class="home__hero">
-    <!-- Hero Toolbar (Pill Nav) -->
-    <nav class="home__hero-toolbar glass-panel">
-      <a routerLink="/" class="home__hero-link home__hero-link--active">Home</a>
-      <a href="#components" class="home__hero-link">Componentes</a>
-      <a routerLink="/docs" class="home__hero-link">Docs</a>
-    </nav>
-
     <div class="home__hero-content">
       <div class="home__badge">
         <span class="home__badge-dot"></span>
