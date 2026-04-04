@@ -11,8 +11,10 @@ import { DocsPage } from './pages/docs/docs.page';
 import { ComponentsPage } from './pages/components/components.page';
 
 export const routes: Routes = [
-  // Home - Sin sidebar
+  // Root Level Pages (No sidebar)
   { path: '', component: HomePage },
+  { path: 'docs', component: DocsPage },
+  { path: 'components', redirectTo: 'overlay', pathMatch: 'full' },
 
   // Demos - Con sidebar
   {
@@ -25,8 +27,6 @@ export const routes: Routes = [
       { path: 'listbox', component: ListboxPage },
       { path: 'tooltip', component: TooltipPage },
       { path: 'drag-drop', component: DragDropPage },
-      { path: 'docs', component: DocsPage },
-      { path: 'components', component: ComponentsPage },
     ],
   },
 
