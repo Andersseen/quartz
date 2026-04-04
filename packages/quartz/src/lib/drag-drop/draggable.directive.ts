@@ -8,6 +8,7 @@ import {
   computed,
   input,
   output,
+  Renderer2,
 } from '@angular/core';
 import { DragDropService } from './drag-drop.service';
 import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.types';
@@ -28,6 +29,7 @@ import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.type
 export class DraggableDirective {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private dragDropService = inject(DragDropService);
+  private renderer = inject(Renderer2);
 
   /** Configuration object */
   readonly config = input<DragDropConfig | string>({}, { alias: 'qzDraggable' });
@@ -57,9 +59,11 @@ export class DraggableDirective {
     effect(() => {
       const isDisabled = this.isDisabled();
       const element = this.elementRef.nativeElement;
-      element.setAttribute('aria-grabbed', 'false');
+      this.renderer.setAttribute(element, 'aria-grabbed', 'false');
       if (isDisabled) {
-        element.removeAttribute('draggable');
+        this.renderer.removeAttribute(element, 'draggable');
+      } else {
+        this.renderer.setAttribute(element, 'draggable', 'true');
       }
     });
   }
@@ -77,7 +81,7 @@ export class DraggableDirective {
 
     this.isDragging.set(true);
     const element = this.elementRef.nativeElement;
-    element.setAttribute('aria-grabbed', 'true');
+    this.renderer.setAttribute(element, 'aria-grabbed', 'true');
 
     const config = this.getConfig();
     const dragData = this.data() ?? config.data;
@@ -103,10 +107,10 @@ export class DraggableDirective {
   onDragEnd(event: DragEvent): void {
     this.isDragging.set(false);
     const element = this.elementRef.nativeElement;
-    element.setAttribute('aria-grabbed', 'false');
+    this.renderer.setAttribute(element, 'aria-grabbed', 'false');
 
     if (this.dragImage) {
-      this.dragImage.remove();
+      this.renderer.removeChild(document.body, this.dragImage);
       this.dragImage = null;
     }
 
@@ -124,18 +128,18 @@ export class DraggableDirective {
 
   private createDragImage(original: HTMLElement): void {
     if (this.dragImage) {
-      this.dragImage.remove();
+      this.renderer.removeChild(document.body, this.dragImage);
     }
 
     this.dragImage = original.cloneNode(true) as HTMLElement;
-    this.dragImage.style.position = 'fixed';
-    this.dragImage.style.top = '-1000px';
-    this.dragImage.style.opacity = '0.9';
-    this.dragImage.style.transform = 'rotate(3deg)';
-    this.dragImage.style.pointerEvents = 'none';
-    this.dragImage.style.zIndex = '9999';
-    this.dragImage.style.width = original.offsetWidth + 'px';
+    this.renderer.setStyle(this.dragImage, 'position', 'fixed');
+    this.renderer.setStyle(this.dragImage, 'top', '-1000px');
+    this.renderer.setStyle(this.dragImage, 'opacity', '0.9');
+    this.renderer.setStyle(this.dragImage, 'transform', 'rotate(3deg)');
+    this.renderer.setStyle(this.dragImage, 'pointer-events', 'none');
+    this.renderer.setStyle(this.dragImage, 'z-index', '9999');
+    this.renderer.setStyle(this.dragImage, 'width', original.offsetWidth + 'px');
 
-    document.body.appendChild(this.dragImage);
+    this.renderer.appendChild(document.body, this.dragImage);
   }
 }
