@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render } from '@testing-library/angular';
 import { App } from './app.component';
 
 describe('App', () => {

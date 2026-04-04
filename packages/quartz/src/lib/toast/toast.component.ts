@@ -157,20 +157,20 @@ import { Toast } from './toast.model';
 export class ToastComponent {
   toast = input.required<Toast>();
   dismiss = output<void>();
-  pause = output<void>();
-  resume = output<void>();
+  qzPause = output<void>();
+  qzResume = output<void>();
 
   progress = input<number>(100);
 
   onMouseEnter(): void {
     if (this.toast().pauseOnHover) {
-      this.pause.emit();
+      this.qzPause.emit();
     }
   }
 
   onMouseLeave(): void {
     if (this.toast().pauseOnHover) {
-      this.resume.emit();
+      this.qzResume.emit();
     }
   }
 }

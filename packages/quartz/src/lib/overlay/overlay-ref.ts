@@ -6,7 +6,7 @@ import { calculatePosition } from './overlay-position';
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
   private wrapperEl: HTMLElement | null = null;
-  private scrollParents: Element[] = [];
+  private scrollParents: (Element | Document)[] = [];
 
   private _closed$ = new Subject<void>();
   readonly closed$ = this._closed$.asObservable();
@@ -165,8 +165,8 @@ export class OverlayRef {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function getScrollParents(el: HTMLElement): Element[] {
-  const parents: any[] = [];
+function getScrollParents(el: HTMLElement): (Element | Document)[] {
+  const parents: (Element | Document)[] = [];
   let current: Element | null = el.parentElement;
 
   while (current && current !== document.body) {

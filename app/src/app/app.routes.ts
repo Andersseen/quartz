@@ -8,7 +8,6 @@ import { ListboxPage } from './pages/listbox/listbox.page';
 import { TooltipPage } from './pages/tooltip/tooltip.page';
 import { DragDropPage } from './pages/drag-drop/drag-drop.page';
 import { DocsPage } from './pages/docs/docs.page';
-import { ComponentsPage } from './pages/components/components.page';
 
 export const routes: Routes = [
   // Root Level Pages (No sidebar)

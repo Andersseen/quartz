@@ -1,9 +1,6 @@
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
+// @ts-expect-error: Missing @angular/ssr/node types in environment
+import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
+// @ts-expect-error: Missing express types in environment
 import express from 'express';
 import { join } from 'node:path';
 
@@ -24,10 +21,12 @@ app.use(
 );
 
 
-app.use((req, res, next) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((req: any, res: any, next: any) => {
   angularApp
     .handle(req)
-    .then((response) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .then((response: any) =>
       response ? writeResponseToNodeResponse(response, res) : next(),
     )
     .catch(next);
@@ -36,12 +35,13 @@ app.use((req, res, next) => {
 
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, (error) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  app.listen(port, (error: any) => {
     if (error) {
       throw error;
     }
 
-    console.log(`Node Express server listening on http:
+    console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 

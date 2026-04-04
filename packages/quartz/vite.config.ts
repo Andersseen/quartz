@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [angular()],
   test: {
     globals: true,
@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => ({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: '../../coverage/quartz'
+      reportsDirectory: '../../coverage/quartz',
+      all: true,
+      include: ['src/lib/**/*.ts'],
+      exclude: ['**/*.spec.ts', '**/index.ts', '**/test-setup.ts']
     }
   }
 }));

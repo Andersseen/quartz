@@ -44,13 +44,13 @@ export class DropZoneDirective {
   });
 
   /** Emitted when item is dropped */
-  readonly drop = output<QzDropInfo>();
+  readonly qzDrop = output<QzDropInfo>();
   /** Emitted when drag enters */
-  readonly dragEnter = output<QzDragOverInfo>();
+  readonly qzDragEnter = output<QzDragOverInfo>();
   /** Emitted when drag leaves */
-  readonly dragLeave = output<void>();
+  readonly qzDragLeave = output<void>();
   /** Emitted when dragging over */
-  readonly dragOver = output<QzDragOverInfo>();
+  readonly qzDragOver = output<QzDragOverInfo>();
 
   private readonly _isDragOver = signal(false);
   readonly isDragOver = this._isDragOver.asReadonly();
@@ -83,7 +83,7 @@ export class DropZoneDirective {
 
     if (this.dragCounter === 1) {
       this._isDragOver.set(true);
-      this.dragEnter.emit({
+      this.qzDragEnter.emit({
         data: this.dragDropService.dragData(),
         element: this.elementRef.nativeElement,
         event,
@@ -92,14 +92,14 @@ export class DropZoneDirective {
     }
   }
 
-  onDragLeave(event: DragEvent): void {
+  onDragLeave(_event: DragEvent): void {
     if (this.disabled()) return;
 
     this.dragCounter--;
 
     if (this.dragCounter === 0) {
       this._isDragOver.set(false);
-      this.dragLeave.emit();
+      this.qzDragLeave.emit();
     }
   }
 
@@ -109,7 +109,7 @@ export class DropZoneDirective {
     event.preventDefault();
     event.dataTransfer!.dropEffect = 'move';
 
-    this.dragOver.emit({
+    this.qzDragOver.emit({
       data: this.dragDropService.dragData(),
       element: this.elementRef.nativeElement,
       event,
@@ -131,7 +131,7 @@ export class DropZoneDirective {
     const data = this.dragDropService.dragData();
     const sourceElement = this.dragDropService.sourceElement();
 
-    this.drop.emit({
+    this.qzDrop.emit({
       data,
       source: sourceElement!,
       target: this.elementRef.nativeElement,

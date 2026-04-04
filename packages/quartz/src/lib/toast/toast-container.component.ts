@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ToastService } from './toast.service';
 import { ToastComponent } from './toast.component';
-import { ToastPosition, Toast } from './toast.model';
+import { ToastPosition } from './toast.model';
 
 @Component({
   selector: 'qz-toast-container',
@@ -21,8 +21,8 @@ import { ToastPosition, Toast } from './toast.model';
             [toast]="toast"
             [progress]="calculateProgress(toast)"
             (dismiss)="toastService.dismiss(toast.id)"
-            (pause)="toastService.pause(toast.id)"
-            (resume)="toastService.resume(toast.id)"
+            (qzPause)="toastService.pause(toast.id)"
+            (qzResume)="toastService.resume(toast.id)"
           />
         }
       </div>

@@ -25,7 +25,7 @@
                 class="kanban__column"
                 qzDropZone
                 [qzDropZoneAccept]="['task']"
-                (drop)="onTaskDrop($event, column.id)"
+                (qzDrop)="onTaskDrop($event, column.id)"
               >
                 <div class="kanban__header">
                   <span class="kanban__badge" [class]="'kanban__badge--' + column.id">
@@ -42,7 +42,7 @@
                       [qzDraggableData]="task"
                       qzDraggableType="task"
                       [qzDraggable]="{}"
-                      (dragStart)="onDragStart($event)"
+                      (qzDragStart)="onDragStart($event)"
                     >
                       <div class="task-card__header">
                         <span
@@ -76,7 +76,7 @@
             class="sortable-list"
             qzDropZone
             [qzDropZoneSortable]="true"
-            (drop)="onReorder($event)"
+            (qzDrop)="onReorder($event)"
           >
             @for (item of sortableItems(); track item.id) {
               <div
@@ -108,13 +108,13 @@
               class="draggable-box"
               qzDraggable
               [qzDraggableData]="{ message: 'Hello from draggable!' }"
-              (dragStart)="simpleDragStart($event)"
+              (qzDragStart)="simpleDragStart($event)"
             >
               <span>🎁</span>
               <span>Drag me!</span>
             </div>
 
-            <div class="drop-target" qzDropZone (drop)="onSimpleDrop($event)">
+            <div class="drop-target" qzDropZone (qzDrop)="onSimpleDrop($event)">
               @if (droppedMessage(); as msg) {
                 <div class="drop-result">
                   <span>✨</span>

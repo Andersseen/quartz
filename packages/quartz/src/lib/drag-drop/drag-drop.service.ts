@@ -30,7 +30,7 @@ export class DragDropService {
     });
   }
 
-  endDrag(dropped: boolean): void {
+  endDrag(_dropped: boolean): void {
     this.state.set({
       isDragging: false,
       data: null,

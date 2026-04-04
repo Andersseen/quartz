@@ -32,28 +32,27 @@ export class DraggableDirective {
   private renderer = inject(Renderer2);
 
   /** Configuration object */
-  readonly config = input<DragDropConfig | string>({}, { alias: 'qzDraggable' });
+  readonly qzDraggable = input<DragDropConfig | string>({});
   /** Data to transfer during drag */
-  readonly data = input<unknown>(undefined, { alias: 'qzDraggableData' });
+  readonly qzDraggableData = input<unknown>(undefined);
   /** Drag type for categorization */
-  readonly type = input('default', { alias: 'qzDraggableType' });
+  readonly qzDraggableType = input('default');
   /** Whether dragging is disabled */
-  readonly disabledInput = input(false, {
-    alias: 'qzDraggableDisabled',
+  readonly qzDraggableDisabled = input(false, {
     transform: booleanAttribute,
   });
   /** Drag handle selector */
-  readonly handle = input<string | null>(null, { alias: 'qzDraggableHandle' });
+  readonly qzDraggableHandle = input<string | null>(null);
 
   /** Emitted when drag starts */
-  readonly dragStart = output<QzDragInfo>();
+  readonly qzDragStart = output<QzDragInfo>();
   /** Emitted when drag ends */
-  readonly dragEnd = output<QzDragEndInfo>();
+  readonly qzDragEnd = output<QzDragEndInfo>();
 
   readonly isDragging = signal(false);
   private dragImage: HTMLElement | null = null;
 
-  readonly isDisabled = computed(() => this.disabledInput());
+  readonly isDisabled = computed(() => this.qzDraggableDisabled());
 
   constructor() {
     effect(() => {
@@ -69,7 +68,7 @@ export class DraggableDirective {
   }
 
   private getConfig(): DragDropConfig {
-    const cfg = this.config();
+    const cfg = this.qzDraggable();
     return typeof cfg === 'object' && cfg !== null ? cfg : {};
   }
 
@@ -84,12 +83,12 @@ export class DraggableDirective {
     this.renderer.setAttribute(element, 'aria-grabbed', 'true');
 
     const config = this.getConfig();
-    const dragData = this.data() ?? config.data;
-    this.dragDropService.startDrag(dragData, element, this.type());
+    const dragData = this.qzDraggableData() ?? config.data;
+    this.dragDropService.startDrag(dragData, element, this.qzDraggableType());
 
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/plain', JSON.stringify({ type: this.type() }));
+      event.dataTransfer.setData('text/plain', JSON.stringify({ type: this.qzDraggableType() }));
 
       this.createDragImage(element);
       if (this.dragImage) {
@@ -97,7 +96,7 @@ export class DraggableDirective {
       }
     }
 
-    this.dragStart.emit({
+    this.qzDragStart.emit({
       data: dragData,
       element,
       event,
@@ -116,7 +115,7 @@ export class DraggableDirective {
 
     const dropped = event.dataTransfer?.dropEffect !== 'none';
 
-    this.dragEnd.emit({
+    this.qzDragEnd.emit({
       data: this.dragDropService.dragData(),
       element,
       event,
