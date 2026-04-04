@@ -23,6 +23,15 @@
           "options": {
             "configFile": "packages/quartz/vitest.config.ts"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/quartz/**/*.ts",
+              "packages/quartz/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -95,6 +104,12 @@
           "builder": "playwright-ng-schematics:e2e",
           "options": {
             "configFile": "playwright.config.ts"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["app/**/*.ts", "app/**/*.html"]
           }
         }
       }

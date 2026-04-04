@@ -15,10 +15,6 @@ const FLIP_MAP: Record<OverlayPlacement, OverlayPlacement> = {
   'right-end': 'left-end',
 };
 
-function getMainAxis(placement: OverlayPlacement): 'vertical' | 'horizontal' {
-  return placement.startsWith('top') || placement.startsWith('bottom') ? 'vertical' : 'horizontal';
-}
-
 function computeRaw(
   anchor: DOMRect,
   overlay: { width: number; height: number },

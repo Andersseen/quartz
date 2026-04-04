@@ -1,23 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { render } from '@testing-library/angular';
+import { App } from './app.component';
 
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    }).compileComponents();
+  it('should create the app', async () => {
+    const { fixture } = await render(App);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, quartz');
+  it('should render the router-outlet', async () => {
+    await render(App);
+    // Testing Library approach: check for elements in the DOM
+    const outlet = document.querySelector('router-outlet');
+    expect(outlet).toBeInTheDocument();
   });
 });

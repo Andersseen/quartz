@@ -1,5 +1,6 @@
-import { Directive, ElementRef, inject, effect } from '@angular/core';
+import { Directive, ElementRef, inject, effect, Renderer2, OnDestroy } from '@angular/core';
 import { SplitterService } from './splitter.service';
+import { SplitterContainerDirective } from './splitter-container.directive';
 
 @Directive({
   selector: '[qzSplitterHandle]',
@@ -24,11 +25,14 @@ import { SplitterService } from './splitter.service';
     '(keydown)': 'onKeydown($event)',
   },
 })
-export class SplitterHandleDirective {
+export class SplitterHandleDirective implements OnDestroy {
   private elementRef = inject(ElementRef<HTMLElement>);
+  private renderer = inject(Renderer2);
   protected splitterService = inject(SplitterService);
+  private container = inject(SplitterContainerDirective, { optional: true });
 
   private isDragging = false;
+  private unlisteners: (() => void)[] = [];
 
   constructor() {
     effect(() => {
@@ -38,31 +42,14 @@ export class SplitterHandleDirective {
     });
   }
 
-  private updateContainerRect(): void {
-    const container = this.findContainer();
-    if (container) {
-      const rect = container.getBoundingClientRect();
-      this.splitterService.setContainerRect(rect);
-    }
+  ngOnDestroy(): void {
+    this.removeListeners();
   }
 
-  private findContainer(): HTMLElement | null {
-    let element: HTMLElement | null = this.elementRef.nativeElement.parentElement;
-    while (element) {
-      if (
-        element.hasAttribute('qzsplittercontainer') ||
-        element.hasAttribute('qzSplitterContainer') ||
-        element.hasAttribute('ng-reflect-orientation')
-      ) {
-        return element;
-      }
-
-      if (element.classList.contains('qz-splitter-container')) {
-        return element;
-      }
-      element = element.parentElement;
+  private updateContainerRect(): void {
+    if (this.container) {
+      this.container.updateContainerRect();
     }
-    return null;
   }
 
   onMouseDown(event: MouseEvent): void {
@@ -117,56 +104,52 @@ export class SplitterHandleDirective {
   private stopDrag(): void {
     this.isDragging = false;
     this.splitterService.stopDragging();
-    this.removeDocumentListeners();
+    this.removeListeners();
   }
 
   private addDocumentListeners(): void {
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
-  }
-
-  private removeDocumentListeners(): void {
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
+    this.unlisteners.push(
+      this.renderer.listen('document', 'mousemove', (e) => this.onMouseMove(e)),
+      this.renderer.listen('document', 'mouseup', () => this.onMouseUp()),
+    );
   }
 
   private addTouchListeners(): void {
-    document.addEventListener('touchmove', this.onTouchMove, { passive: false });
-    document.addEventListener('touchend', this.onTouchEnd);
-    document.addEventListener('touchcancel', this.onTouchEnd);
+    this.unlisteners.push(
+      this.renderer.listen('document', 'touchmove', (e) => this.onTouchMove(e)),
+      this.renderer.listen('document', 'touchend', () => this.onTouchEnd()),
+      this.renderer.listen('document', 'touchcancel', () => this.onTouchEnd()),
+    );
   }
 
-  private removeTouchListeners(): void {
-    document.removeEventListener('touchmove', this.onTouchMove);
-    document.removeEventListener('touchend', this.onTouchEnd);
-    document.removeEventListener('touchcancel', this.onTouchEnd);
+  private removeListeners(): void {
+    this.unlisteners.forEach((unlisten) => unlisten());
+    this.unlisteners = [];
   }
 
-  private onMouseMove = (event: MouseEvent): void => {
+  private onMouseMove(event: MouseEvent): void {
     if (!this.isDragging) return;
     const newPosition = this.splitterService.calculatePositionFromEvent(
       event.clientX,
       event.clientY,
     );
     this.splitterService.setPosition(newPosition);
-  };
+  }
 
-  private onMouseUp = (): void => {
+  private onMouseUp(): void {
     this.stopDrag();
-  };
+  }
 
-  private onTouchMove = (event: TouchEvent): void => {
+  private onTouchMove(event: TouchEvent): void {
     if (!this.isDragging) return;
-    event.preventDefault();
     const touch = event.touches[0];
     if (touch) {
       const newPosition = this.splitterService.calculatePositionFromTouch(touch);
       this.splitterService.setPosition(newPosition);
     }
-  };
+  }
 
-  private onTouchEnd = (): void => {
+  private onTouchEnd(): void {
     this.stopDrag();
-    this.removeTouchListeners();
-  };
+  }
 }

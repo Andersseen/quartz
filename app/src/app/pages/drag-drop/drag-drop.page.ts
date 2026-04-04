@@ -119,7 +119,7 @@ export class DragDropPage {
     });
   }
 
-  simpleDragStart(event: QzDragInfo): void {
+  simpleDragStart(_event: QzDragInfo): void {
     console.log('Simple drag started');
   }
 

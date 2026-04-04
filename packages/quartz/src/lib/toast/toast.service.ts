@@ -1,9 +1,8 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import {
   Toast,
   ToastOptions,
-  ToastType,
   ToastPosition,
   DEFAULT_TOAST_OPTIONS,
 } from './toast.model';
@@ -13,7 +12,7 @@ function generateId(): string {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ToastService {
+export class ToastService implements OnDestroy {
   private document = inject(DOCUMENT);
 
   private _toasts = signal<Toast[]>([]);

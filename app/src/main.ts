@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { App } from './app/app';
+import { App } from './app/app.component';
 import { routes } from './app/app.routes';
 
 bootstrapApplication(App, {
