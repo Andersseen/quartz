@@ -9,20 +9,20 @@ interface DragState {
 
 @Injectable({ providedIn: 'root' })
 export class DragDropService {
-  private state = signal<DragState>({
+  #state = signal<DragState>({
     isDragging: false,
     data: null,
     sourceElement: null,
     dragType: null,
   });
 
-  readonly isDragging = computed(() => this.state().isDragging);
-  readonly dragData = computed(() => this.state().data);
-  readonly sourceElement = computed(() => this.state().sourceElement);
-  readonly dragType = computed(() => this.state().dragType);
+  readonly isDragging = computed(() => this.#state().isDragging);
+  readonly dragData = computed(() => this.#state().data);
+  readonly sourceElement = computed(() => this.#state().sourceElement);
+  readonly dragType = computed(() => this.#state().dragType);
 
   startDrag(data: unknown, sourceElement: HTMLElement, dragType?: string): void {
-    this.state.set({
+    this.#state.set({
       isDragging: true,
       data,
       sourceElement,
@@ -31,7 +31,7 @@ export class DragDropService {
   }
 
   endDrag(_dropped: boolean): void {
-    this.state.set({
+    this.#state.set({
       isDragging: false,
       data: null,
       sourceElement: null,
@@ -40,6 +40,6 @@ export class DragDropService {
   }
 
   getDragData<T>(): T | null {
-    return this.state().data as T | null;
+    return this.#state().data as T | null;
   }
 }
