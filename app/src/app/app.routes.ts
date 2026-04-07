@@ -12,6 +12,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/layout/layout.component'),
     children: [
       { path: 'overlay', loadComponent: () => import('./pages/overlay/overlay.page') },
+      { path: 'dialog', loadComponent: () => import('./pages/dialog/dialog.page') },
       { path: 'splitter', loadComponent: () => import('./pages/splitter/splitter.page') },
       { path: 'toast', loadComponent: () => import('./pages/toast/toast.page') },
       { path: 'listbox', loadComponent: () => import('./pages/listbox/listbox.page') },

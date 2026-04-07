@@ -5,6 +5,9 @@ export const VERSION = '0.0.1';
 export { OverlayTriggerDirective, OverlayService, OverlayRef } from './lib/overlay';
 export type { OverlayPlacement, OverlayConfig, OverlayPosition } from './lib/overlay';
 
+// Dialog & Drawer
+export { DialogService, DialogRef, type DialogPosition, type DialogConfig } from './lib/dialog';
+
 // Splitter
 export {
   SplitterContainerDirective,

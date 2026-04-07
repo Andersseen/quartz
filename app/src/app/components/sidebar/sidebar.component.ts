@@ -19,6 +19,7 @@ interface NavItem {
 export class SidebarComponent {
   components = input<NavItem[]>([
     { path: '/overlay', label: 'Overlay', icon: '◎' },
+    { path: '/dialog', label: 'Dialog', icon: '◻' },
     { path: '/splitter', label: 'Splitter', icon: '▦' },
     { path: '/toast', label: 'Toast', icon: '🔔' },
     { path: '/drag-drop', label: 'Drag & Drop', icon: '✥' },
