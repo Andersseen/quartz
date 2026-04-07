@@ -11,15 +11,16 @@ export class OverlayService {
     if (!this._containerEl) {
       this._containerEl = this.document.createElement('div');
       this._containerEl.setAttribute('data-qz-overlay-container', '');
-      this._containerEl.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        z-index: 9999;
-        pointer-events: none;
-      `;
+      
+      const style = this._containerEl.style;
+      style.setProperty('position', 'fixed');
+      style.setProperty('top', '0');
+      style.setProperty('left', '0');
+      style.setProperty('width', '0');
+      style.setProperty('height', '0');
+      style.setProperty('z-index', '9999');
+      style.setProperty('pointer-events', 'none');
+
       this.document.body.appendChild(this._containerEl);
     }
     return this._containerEl;
