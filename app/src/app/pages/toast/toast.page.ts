@@ -11,7 +11,7 @@ import { TYPES_SNIPPET, POSITIONS_SNIPPET, DURATION_SNIPPET, API_SNIPPET } from 
   templateUrl: './toast.page.html',
   styleUrl: './toast.page.scss',
 })
-export class ToastPage {
+export default class ToastPage {
   private toastService = inject(ToastService);
 
   readonly positions: ToastPosition[] = [

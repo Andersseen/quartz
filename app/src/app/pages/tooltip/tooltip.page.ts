@@ -8,4 +8,4 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
   templateUrl: './tooltip.page.html',
   styleUrl: './tooltip.page.scss',
 })
-export class TooltipPage {}
+export default class TooltipPage {}

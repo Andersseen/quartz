@@ -5,18 +5,18 @@ import { SplitterOrientation, SplitterConfig, DEFAULT_SPLITTER_CONFIG } from './
 export class SplitterService {
   private config = signal<SplitterConfig>(DEFAULT_SPLITTER_CONFIG);
 
-  private _position = signal<number>(DEFAULT_SPLITTER_CONFIG.defaultPosition);
-  private _orientation = signal<SplitterOrientation>('horizontal');
-  private _isDragging = signal<boolean>(false);
-  private _containerRect = signal<DOMRect | null>(null);
+  #position = signal<number>(DEFAULT_SPLITTER_CONFIG.defaultPosition);
+  #orientation = signal<SplitterOrientation>('horizontal');
+  #isDragging = signal<boolean>(false);
+  #containerRect = signal<DOMRect | null>(null);
 
-  readonly position = this._position.asReadonly();
-  readonly orientation = this._orientation.asReadonly();
-  readonly isDragging = this._isDragging.asReadonly();
-  readonly containerRect = this._containerRect.asReadonly();
+  readonly position = this.#position.asReadonly();
+  readonly orientation = this.#orientation.asReadonly();
+  readonly isDragging = this.#isDragging.asReadonly();
+  readonly containerRect = this.#containerRect.asReadonly();
 
-  readonly isHorizontal = computed(() => this._orientation() === 'horizontal');
-  readonly isVertical = computed(() => this._orientation() === 'vertical');
+  readonly isHorizontal = computed(() => this.#orientation() === 'horizontal');
+  readonly isVertical = computed(() => this.#orientation() === 'vertical');
   readonly minSize = computed(() => this.config().minSize);
   readonly maxSize = computed(() => this.config().maxSize);
   readonly step = computed(() => this.config().step);
@@ -26,31 +26,31 @@ export class SplitterService {
   }
 
   setOrientation(orientation: SplitterOrientation): void {
-    this._orientation.set(orientation);
+    this.#orientation.set(orientation);
   }
 
   setContainerRect(rect: DOMRect): void {
-    this._containerRect.set(rect);
+    this.#containerRect.set(rect);
   }
 
   setPosition(position: number): void {
     const cfg = this.config();
     const clamped = Math.max(cfg.minSize, Math.min(cfg.maxSize, position));
     const stepped = Math.round(clamped / cfg.step) * cfg.step;
-    this._position.set(stepped);
+    this.#position.set(stepped);
   }
 
   startDragging(): void {
-    this._isDragging.set(true);
+    this.#isDragging.set(true);
   }
 
   stopDragging(): void {
-    this._isDragging.set(false);
+    this.#isDragging.set(false);
   }
 
   calculatePositionFromEvent(clientX: number, clientY: number): number {
-    const rect = this._containerRect();
-    if (!rect) return this._position();
+    const rect = this.#containerRect();
+    if (!rect) return this.#position();
 
     if (this.isHorizontal()) {
       return ((clientX - rect.left) / rect.width) * 100;

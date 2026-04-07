@@ -25,7 +25,7 @@ import {
   templateUrl: './overlay.page.html',
   styleUrl: './overlay.page.scss',
 })
-export class OverlayPage {
+export default class OverlayPage {
   private overlayService = inject(OverlayService);
   private viewContainerRef = inject(ViewContainerRef);
 

@@ -37,4 +37,4 @@ import { HeaderComponent } from '../header/header.component';
     `,
   ],
 })
-export class LayoutComponent {}
+export default class LayoutComponent {}

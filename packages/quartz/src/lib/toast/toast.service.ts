@@ -15,11 +15,11 @@ function generateId(): string {
 export class ToastService implements OnDestroy {
   private document = inject(DOCUMENT);
 
-  private _toasts = signal<Toast[]>([]);
-  private _isInitialized = signal(false);
+  #toasts = signal<Toast[]>([]);
+  #isInitialized = signal(false);
 
-  readonly toasts = computed(() => this._toasts());
-  readonly isInitialized = computed(() => this._isInitialized());
+  readonly toasts = computed(() => this.#toasts());
+  readonly isInitialized = computed(() => this.#isInitialized());
 
   readonly toastsByPosition = computed(() => {
     const grouped = new Map<ToastPosition, Toast[]>();
@@ -33,7 +33,7 @@ export class ToastService implements OnDestroy {
     ];
 
     positions.forEach((pos) => grouped.set(pos, []));
-    this._toasts().forEach((toast) => {
+    this.#toasts().forEach((toast) => {
       const list = grouped.get(toast.position) || [];
       list.push(toast);
       grouped.set(toast.position, list);
@@ -67,7 +67,7 @@ export class ToastService implements OnDestroy {
       isPaused: false,
     };
 
-    this._toasts.update((toasts) => [...toasts, toast]);
+    this.#toasts.update((toasts) => [...toasts, toast]);
     return id;
   }
 
@@ -104,21 +104,21 @@ export class ToastService implements OnDestroy {
   }
 
   dismiss(id: string): void {
-    this._toasts.update((toasts) => toasts.filter((t) => t.id !== id));
+    this.#toasts.update((toasts) => toasts.filter((t) => t.id !== id));
   }
 
   dismissAll(): void {
-    this._toasts.set([]);
+    this.#toasts.set([]);
   }
 
   pause(id: string): void {
-    this._toasts.update((toasts) =>
+    this.#toasts.update((toasts) =>
       toasts.map((t) => (t.id === id ? { ...t, isPaused: true } : t)),
     );
   }
 
   resume(id: string): void {
-    this._toasts.update((toasts) =>
+    this.#toasts.update((toasts) =>
       toasts.map((t) => {
         if (t.id !== id) return t;
 
@@ -138,7 +138,7 @@ export class ToastService implements OnDestroy {
     const TICK = 100;
 
     this.timerId = window.setInterval(() => {
-      this._toasts.update((toasts) => {
+      this.#toasts.update((toasts) => {
         const now = new Date().getTime();
 
         return toasts

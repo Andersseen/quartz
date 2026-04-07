@@ -5,24 +5,25 @@ import { OverlayConfig, DEFAULT_OVERLAY_CONFIG } from './overlay.types';
 @Injectable({ providedIn: 'root' })
 export class OverlayService {
   private document = inject(DOCUMENT);
-  private _containerEl: HTMLElement | null = null;
+  #containerEl: HTMLElement | null = null;
 
   private get containerEl(): HTMLElement {
-    if (!this._containerEl) {
-      this._containerEl = this.document.createElement('div');
-      this._containerEl.setAttribute('data-qz-overlay-container', '');
-      this._containerEl.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        z-index: 9999;
-        pointer-events: none;
-      `;
-      this.document.body.appendChild(this._containerEl);
+    if (!this.#containerEl) {
+      this.#containerEl = this.document.createElement('div');
+      this.#containerEl.setAttribute('data-qz-overlay-container', '');
+      
+      const style = this.#containerEl.style;
+      style.setProperty('position', 'fixed');
+      style.setProperty('top', '0');
+      style.setProperty('left', '0');
+      style.setProperty('width', '0');
+      style.setProperty('height', '0');
+      style.setProperty('z-index', '9999');
+      style.setProperty('pointer-events', 'none');
+
+      this.document.body.appendChild(this.#containerEl);
     }
-    return this._containerEl;
+    return this.#containerEl;
   }
 
   /**

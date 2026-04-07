@@ -1,0 +1,15 @@
+<section class="home__cta-section">
+  <div class="home__cta-inner">
+    <h2>Ready to craft your UI?</h2>
+    <p>Zero dependencies, perfect accessibility, infinite styling.</p>
+
+    <div class="home__cta-card">
+      <div class="npm-install">
+        <span class="prompt">$</span> npm install quartz-ui
+        <button class="copy-btn" (click)="copyInstallCommand()" [class.copied]="copied()">
+          {{ copied() ? '✓ Copied' : 'Copy' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

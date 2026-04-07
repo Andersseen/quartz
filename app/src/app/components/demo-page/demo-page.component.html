@@ -1,0 +1,22 @@
+<div class="demo-page">
+  <header class="demo-page__header">
+    <div class="demo-page__badge">{{ badge() }}</div>
+    <h1 class="demo-page__title">{{ title() }}</h1>
+    <p class="demo-page__description">{{ description() }}</p>
+
+    @if (features().length > 0) {
+      <div class="demo-page__features">
+        @for (feature of features(); track feature.title) {
+          <div class="demo-page__feature">
+            <div class="demo-page__feature-title">{{ feature.title }}</div>
+            <div class="demo-page__feature-desc">{{ feature.description }}</div>
+          </div>
+        }
+      </div>
+    }
+  </header>
+
+  <main class="demo-page__content">
+    <ng-content />
+  </main>
+</div>

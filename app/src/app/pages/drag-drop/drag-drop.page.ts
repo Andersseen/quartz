@@ -25,7 +25,7 @@ interface Task {
   templateUrl: './drag-drop.page.html',
   styleUrl: './drag-drop.page.scss',
 })
-export class DragDropPage {
+export default class DragDropPage {
   private dragDropService = inject(DragDropService);
 
   readonly columns = [
