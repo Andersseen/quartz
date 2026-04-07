@@ -23,7 +23,7 @@ import { HORIZONTAL_SNIPPET, VERTICAL_SNIPPET } from './splitter.snippets';
   templateUrl: './splitter.page.html',
   styleUrl: './splitter.page.scss',
 })
-export class SplitterPage {
+export default class SplitterPage {
   hPosition = signal(40);
   vPosition = signal(55);
 

@@ -9,4 +9,4 @@ import { HeaderComponent } from '../../components/header/header.component';
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss',
 })
-export class HomePage {}
+export default class HomePage {}

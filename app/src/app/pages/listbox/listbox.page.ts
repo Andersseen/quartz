@@ -8,4 +8,4 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
   templateUrl: './listbox.page.html',
   styleUrl: './listbox.page.scss',
 })
-export class ListboxPage {}
+export default class ListboxPage {}

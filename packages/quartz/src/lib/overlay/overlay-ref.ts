@@ -8,11 +8,11 @@ export class OverlayRef {
   private wrapperEl: HTMLElement | null = null;
   private scrollParents: (Element | Document)[] = [];
 
-  private _closed$ = new Subject<void>();
-  readonly closed$ = this._closed$.asObservable();
+  #closed$ = new Subject<void>();
+  readonly closed$ = this.#closed$.asObservable();
 
-  private _position$ = new Subject<OverlayPosition>();
-  readonly position$ = this._position$.asObservable();
+  #position$ = new Subject<OverlayPosition>();
+  readonly position$ = this.#position$.asObservable();
 
   constructor(
     private templateRef: TemplateRef<unknown>,
@@ -72,7 +72,7 @@ export class OverlayRef {
       this.wrapperEl = null;
     }
 
-    this._closed$.next();
+    this.#closed$.next();
   }
 
   toggle(): void {
@@ -100,7 +100,7 @@ export class OverlayRef {
     );
 
     this.wrapperEl.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
-    this._position$.next(pos);
+    this.#position$.next(pos);
   }
 
   // ── Listeners ──────────────────────────────────────────────────────────────
@@ -158,8 +158,8 @@ export class OverlayRef {
 
   destroy(): void {
     this.close();
-    this._closed$.complete();
-    this._position$.complete();
+    this.#closed$.complete();
+    this.#position$.complete();
   }
 }
 

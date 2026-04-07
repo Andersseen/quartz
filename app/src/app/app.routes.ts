@@ -1,31 +1,22 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout.component';
-import { HomePage } from './pages/home/home.page';
-import { OverlayPage } from './pages/overlay/overlay.page';
-import { SplitterPage } from './pages/splitter/splitter.page';
-import { ToastPage } from './pages/toast/toast.page';
-import { ListboxPage } from './pages/listbox/listbox.page';
-import { TooltipPage } from './pages/tooltip/tooltip.page';
-import { DragDropPage } from './pages/drag-drop/drag-drop.page';
-import { DocsPage } from './pages/docs/docs.page';
 
 export const routes: Routes = [
   // Root Level Pages (No sidebar)
-  { path: '', component: HomePage },
-  { path: 'docs', component: DocsPage },
+  { path: '', loadComponent: () => import('./pages/home/home.page') },
+  { path: 'docs', loadComponent: () => import('./pages/docs/docs.page') },
   { path: 'components', redirectTo: 'overlay', pathMatch: 'full' },
 
   // Demos - Con sidebar
   {
     path: '',
-    component: LayoutComponent,
+    loadComponent: () => import('./components/layout/layout.component'),
     children: [
-      { path: 'overlay', component: OverlayPage },
-      { path: 'splitter', component: SplitterPage },
-      { path: 'toast', component: ToastPage },
-      { path: 'listbox', component: ListboxPage },
-      { path: 'tooltip', component: TooltipPage },
-      { path: 'drag-drop', component: DragDropPage },
+      { path: 'overlay', loadComponent: () => import('./pages/overlay/overlay.page') },
+      { path: 'splitter', loadComponent: () => import('./pages/splitter/splitter.page') },
+      { path: 'toast', loadComponent: () => import('./pages/toast/toast.page') },
+      { path: 'listbox', loadComponent: () => import('./pages/listbox/listbox.page') },
+      { path: 'tooltip', loadComponent: () => import('./pages/tooltip/tooltip.page') },
+      { path: 'drag-drop', loadComponent: () => import('./pages/drag-drop/drag-drop.page') },
     ],
   },
 
