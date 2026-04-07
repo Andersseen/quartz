@@ -4,58 +4,14 @@
   <div class="bg-blur-blob bg-blur-blob--accent" style="top: 200px; right: -100px"></div>
 
   <app-header />
-
-  <main class="home__hero">
-    <div class="home__hero-content">
-      <div class="home__badge">
-        <span class="home__badge-dot"></span>
-        <span class="home__badge-text">v0.0.1 • Headless Primitives</span>
-      </div>
-
-      <h1 class="home__title">
-        Build with
-        <span class="text-gradient">Precision.</span>
-      </h1>
-
-      <p class="home__subtitle">
-        A collection of unstyled, accessible, and composable Angular components. Reclaim control
-        over your design system.
-      </p>
-
-      <div class="home__actions">
-        <a routerLink="/docs" class="home__btn home__btn--primary">
-          Get Started
-          <span class="home__btn-icon">→</span>
-        </a>
-        <a routerLink="/components" class="home__btn home__btn--secondary"> Explore Components </a>
-      </div>
-    </div>
-  </main>
-
-
-  <section class="home__features-section">
-    <div class="home__features">
-      <div class="home__feature">
-        <div class="home__feature-icon">⚡</div>
-        <h4 class="home__feature-title">Headless</h4>
-        <p class="home__feature-desc">Bring your own CSS or UI framework.</p>
-      </div>
-      <div class="home__feature">
-        <div class="home__feature-icon">♿</div>
-        <h4 class="home__feature-title">Accessible</h4>
-        <p class="home__feature-desc">WAI-ARIA patterns out of the box.</p>
-      </div>
-      <div class="home__feature">
-        <div class="home__feature-icon">🎨</div>
-        <h4 class="home__feature-title">Themable</h4>
-        <p class="home__feature-desc">Infinite styling possibilities.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="footer__inner">
-      <p>© 2024 Quartz UI. Built by Andersseen.</p>
-    </div>
-  </footer>
+  
+  <app-home-hero />
+  
+  <app-home-features />
+  
+  <app-home-code-preview />
+  
+  <app-home-cta />
+  
+  <app-home-footer />
 </div>
