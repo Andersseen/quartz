@@ -18,7 +18,8 @@
     "lint": "eslint \"{packages/quartz,app}/**/*.{ts,html}\"",
     "format": "prettier --write \"**/*.{ts,html,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\"",
-    "quartz": "node cli/bin/quartz.js"
+    "quartz": "node cli/bin/quartz.js",
+    "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs app/public --local"
   },
   "prettier": {
     "printWidth": 100,

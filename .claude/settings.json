@@ -6,7 +6,11 @@
       "Bash(node /Users/andriipap/Andersseen/Web/Projects/quartz/cli/bin/quartz.js list)",
       "Bash(node /Users/andriipap/Andersseen/Web/Projects/quartz/cli/bin/quartz.js add splitter --output /tmp/test-quartz-add --verbose)",
       "Read(//tmp/test-quartz-add/**)",
-      "Bash(pnpm typecheck *)"
+      "Bash(pnpm typecheck *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); build=d['projects']['demo']['architect']['build']; print\\(json.dumps\\(build.get\\('options',{}\\), indent=2\\)\\)\")",
+      "Read(//Users/andriipap/Andersseen/Web/Projects/**)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('name:', d.get\\('name'\\)\\); print\\('scripts:', json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\); print\\('bin:', json.dumps\\(d.get\\('bin',{}\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")"
     ],
     "additionalDirectories": [
       "/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"

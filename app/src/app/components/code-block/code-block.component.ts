@@ -2,7 +2,6 @@ import {
   Component,
   ChangeDetectionStrategy,
   CUSTOM_ELEMENTS_SCHEMA,
-  DestroyRef,
   inject,
   input,
   OnInit,
@@ -37,7 +36,11 @@ import { EditorLoaderService } from '../../services/editor-loader.service';
           </button>
         </div>
         @if (activeTab() === 'code') {
-          <button class="code-block__copy" (click)="copyCode()" [attr.aria-label]="copied() ? 'Copied' : 'Copy code'">
+          <button
+            class="code-block__copy"
+            (click)="copyCode()"
+            [attr.aria-label]="copied() ? 'Copied' : 'Copy code'"
+          >
             @if (copied()) {
               <span>&#10003; Copied</span>
             } @else {
@@ -57,10 +60,9 @@ import { EditorLoaderService } from '../../services/editor-loader.service';
             @if (editorLoaded()) {
               <vertex-editor
                 [attr.value]="code()"
-                language="typescript"
-                [attr.theme]="editorTheme()"
+                [attr.language]="language()"
+                theme="dark"
                 lineNumbers="true"
-                readonly="true"
                 style="display: block; height: 380px; overflow: auto;"
               ></vertex-editor>
             } @else {
@@ -175,27 +177,19 @@ import { EditorLoaderService } from '../../services/editor-loader.service';
 })
 export class CodeBlockComponent implements OnInit {
   code = input.required<string>();
+  // Most quartz demos are Angular templates — pass 'typescript' for .ts snippets
+  language = input<'html' | 'typescript'>('html');
   activeTab = signal<'preview' | 'code'>('preview');
   copied = signal(false);
   editorLoaded = signal(false);
-  editorTheme = signal<'light' | 'dark'>('dark');
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly editorLoader = inject(EditorLoaderService);
-  private readonly destroyRef = inject(DestroyRef);
 
   async ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return;
-
     await this.editorLoader.loadEditor();
     this.editorLoaded.set(true);
-    this.editorTheme.set(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-
-    const observer = new MutationObserver(() => {
-      this.editorTheme.set(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-    });
-    observer.observe(document.documentElement, { attributeFilter: ['class'] });
-    this.destroyRef.onDestroy(() => observer.disconnect());
   }
 
   copyCode(): void {
