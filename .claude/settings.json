@@ -12,8 +12,6 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('name:', d.get\\('name'\\)\\); print\\('scripts:', json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\); print\\('bin:', json.dumps\\(d.get\\('bin',{}\\), indent=2\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")"
     ],
-    "additionalDirectories": [
-      "/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"
-    ]
+    "additionalDirectories": ["/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"]
   }
 }

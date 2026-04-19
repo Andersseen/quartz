@@ -1,0 +1,29 @@
+<section class="home__code-section">
+  <div class="home__code-container">
+    <div class="home__code-text">
+      <h2>Painless APIs.</h2>
+      <p>
+        Control sophisticated UI behaviors with a single line of typescript while keeping full
+        control over the markup and styles.
+      </p>
+    </div>
+    <div class="home__code-window">
+      <div class="home__code-header">
+        <span class="home__code-dot red"></span>
+        <span class="home__code-dot yellow"></span>
+        <span class="home__code-dot green"></span>
+        <span class="home__code-tab">save-profile.ts</span>
+      </div>
+      <pre><code><span class="keyword">import</span> &#123; ToastService &#125; <span class="keyword">from</span> <span class="string">'quartz/toast'</span>;
+
+<span class="keyword">export class</span> ProfileComponent &#123;
+  <span class="keyword">constructor</span>(private toast: ToastService) &#123;&#125;
+
+  save() &#123;
+    <span class="comment">// 🚀 Trigger a beautiful toast instantly</span>
+    <span class="keyword">this</span>.toast.success(<span class="string">'Profile updated exactly as intended.'</span>);
+  &#125;
+&#125;</code></pre>
+    </div>
+  </div>
+</section>

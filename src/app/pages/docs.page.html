@@ -1,0 +1,119 @@
+<app-header />
+
+<div class="docs">
+  <div class="docs__content">
+    <header class="docs__header">
+      <h1 class="docs__title text-gradient">Getting Started</h1>
+      <p class="docs__subtitle">
+        Quartz UI is a collection of unstyled, accessible, and high-performance Angular primitives.
+        Follow these steps to integrate them into your project.
+      </p>
+    </header>
+
+    <div class="docs__grid">
+      <!-- Installation Section -->
+      <section class="docs__section">
+        <h2 class="docs__section-title">1. Installation</h2>
+        <p class="docs__section-text">
+          Add the core package to your project using your preferred package manager.
+        </p>
+
+        <div class="install-card">
+          <div class="install-card__tabs">
+            <button class="install-card__tab active">pnpm</button>
+            <button class="install-card__tab">npm</button>
+            <button class="install-card__tab">yarn</button>
+          </div>
+          <div class="install-card__body">
+            <code class="install-card__code">pnpm add @quartz/ui</code>
+            <button class="install-card__copy" title="Copy to clipboard">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Styles Configuration -->
+      <section class="docs__section">
+        <h2 class="docs__section-title">2. Styles Configuration</h2>
+        <p class="docs__section-text">
+          Quartz UI is CSS-agnostic. However, we recommend setting up a basic CSS reset and a color
+          palette in your <code class="inline-code">styles.scss</code>.
+        </p>
+        <div class="code-header">styles.scss</div>
+        <div class="code-block">
+          <pre><code>// Quartz UI doesn't require any specific CSS imports.
+// You are free to use Tailwind, CSS Modules, or Vanilla CSS.
+
+:root {{ '{' }}
+  --qz-primary: #8b5cf6;
+  --qz-primary-glow: rgba(139, 92, 246, 0.4);
+{{ '}' }}</code></pre>
+        </div>
+      </section>
+
+      <!-- Usage Section -->
+      <section class="docs__section">
+        <h2 class="docs__section-title">3. Basic Usage</h2>
+        <p class="docs__section-text">
+          Import the standalone primitive you need and start building.
+        </p>
+        <div class="code-header">app.component.ts</div>
+        <div class="code-block">
+          <pre><code>import {{ '{' }} QzOverlay {{ '}' }} from '@quartz/ui/overlay';
+
+@Component({{ '{' }}
+  selector: 'app-root',
+  standalone: true,
+  imports: [QzOverlay],
+  template: \`
+    &lt;button qzOverlayTrigger&gt;Open Menu&lt;/button&gt;
+    &lt;qz-overlay&gt;
+      &lt;div class="menu-content"&gt;...&lt;/div&gt;
+    &lt;/qz-overlay&gt;
+  \`
+{{ '}' }})
+export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
+        </div>
+      </section>
+    </div>
+
+    <footer class="docs__footer">
+      <div class="qz-card glass-panel dark-glow">
+        <h3>Next Steps</h3>
+        <p>
+          Now that you've installed the core, check out the component showcase to see what you can
+          build.
+        </p>
+        <a routerLink="/components" class="btn-explore">
+          Explore Components
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </footer>
+  </div>
+</div>

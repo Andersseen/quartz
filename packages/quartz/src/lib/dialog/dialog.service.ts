@@ -1,4 +1,11 @@
-import { Injectable, TemplateRef, ViewContainerRef, inject, DOCUMENT, EmbeddedViewRef } from '@angular/core';
+import {
+  Injectable,
+  TemplateRef,
+  ViewContainerRef,
+  inject,
+  DOCUMENT,
+  EmbeddedViewRef,
+} from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
 
@@ -10,7 +17,7 @@ export class DialogService {
   open(
     templateRef: TemplateRef<unknown>,
     viewContainerRef: ViewContainerRef,
-    config: Partial<DialogConfig> = {}
+    config: Partial<DialogConfig> = {},
   ): DialogRef {
     const resolvedConfig: DialogConfig = { ...DEFAULT_DIALOG_CONFIG, ...config };
 
@@ -69,7 +76,7 @@ export class DialogService {
     // -- Render template with DialogRef as $implicit context --------------------
     const viewRef = viewContainerRef.createEmbeddedView(
       templateRef as TemplateRef<{ $implicit: DialogRef }>,
-      { $implicit: ref }
+      { $implicit: ref },
     );
     viewRef.detectChanges();
 
@@ -126,7 +133,7 @@ export class DialogService {
   }
 
   #toClassList(value: string | string[]): string[] {
-    if (Array.isArray(value)) return value.flatMap(c => c.split(/\s+/).filter(Boolean));
+    if (Array.isArray(value)) return value.flatMap((c) => c.split(/\s+/).filter(Boolean));
     return value.split(/\s+/).filter(Boolean);
   }
 
@@ -135,7 +142,7 @@ export class DialogService {
     backdrop: HTMLElement | null,
     wrapper: HTMLElement,
     view: EmbeddedViewRef<unknown>,
-    onKeyDown: (e: KeyboardEvent) => void
+    onKeyDown: (e: KeyboardEvent) => void,
   ): void {
     if (!this.#openDialogs.has(ref)) return;
     this.#openDialogs.delete(ref);

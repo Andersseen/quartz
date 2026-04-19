@@ -1,11 +1,6 @@
 import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import {
-  Toast,
-  ToastOptions,
-  ToastPosition,
-  DEFAULT_TOAST_OPTIONS,
-} from './toast.model';
+import { Toast, ToastOptions, ToastPosition, DEFAULT_TOAST_OPTIONS } from './toast.model';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 9);

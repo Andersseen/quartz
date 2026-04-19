@@ -30,16 +30,22 @@ export class SplitterContainerDirective {
   readonly defaultPosition = input<number>(50);
 
   readonly positionChange = outputFromObservable(
-    toObservable(this.splitterService.position).pipe(skip(1))
+    toObservable(this.splitterService.position).pipe(skip(1)),
   );
 
   private readonly isDragging$ = toObservable(this.splitterService.isDragging).pipe(skip(1));
 
   readonly dragStart = outputFromObservable(
-    this.isDragging$.pipe(filter(v => v), map(() => void 0 as void))
+    this.isDragging$.pipe(
+      filter((v) => v),
+      map(() => void 0 as void),
+    ),
   );
   readonly dragEnd = outputFromObservable(
-    this.isDragging$.pipe(filter(v => !v), map(() => void 0 as void))
+    this.isDragging$.pipe(
+      filter((v) => !v),
+      map(() => void 0 as void),
+    ),
   );
 
   constructor() {

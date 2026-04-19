@@ -1,0 +1,147 @@
+<app-demo-page
+  badge="Primitive"
+  title="Overlay"
+  description="Portal-based positioning system with smart auto-flip, click-outside handling, and scroll management. Build dropdowns, popovers, and menus with full control."
+  [features]="[
+    { title: '12 Placements', description: 'All position combinations' },
+    { title: 'Auto-flip', description: 'Smart viewport detection' },
+    { title: 'Click Outside', description: 'Automatic close handling' },
+    { title: 'Scroll Close', description: 'Close on scroll option' },
+  ]"
+>
+  <div class="demos">
+    <section class="demo-section">
+      <h2 class="demo-section__title">Menu Dropdown</h2>
+      <p class="demo-section__desc">
+        Classic dropdown menu with keyboard navigation support. Click outside, press Escape, or
+        scroll to close.
+      </p>
+
+      <app-code-block [code]="dropdownCode">
+        <div preview class="demo-preview">
+          <button
+            qzOverlayTrigger
+            [overlayTemplate]="dropdownTpl"
+            placement="bottom-start"
+            class="btn btn--primary"
+          >
+            Open menu
+            <span class="btn__chevron">▾</span>
+          </button>
+
+          <ng-template #dropdownTpl>
+            <div class="dropdown">
+              <div class="dropdown__label">Actions</div>
+              @for (item of menuItems; track item.label) {
+                <button class="dropdown__item" [class.dropdown__item--danger]="item.danger">
+                  <span>{{ item.icon }}</span>
+                  <span class="dropdown__item-text">{{ item.label }}</span>
+                  @if (item.shortcut) {
+                    <kbd class="dropdown__shortcut">{{ item.shortcut }}</kbd>
+                  }
+                </button>
+              }
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Auto-flip & Placements</h2>
+      <p class="demo-section__desc">
+        The overlay automatically flips when near viewport edges. Try scrolling or resizing the
+        window.
+      </p>
+
+      <app-code-block [code]="placementsCode">
+        <div preview class="demo-preview">
+          <div class="placements-grid">
+            @for (p of placements; track p) {
+              <button
+                qzOverlayTrigger
+                [overlayTemplate]="popoverTpl"
+                [placement]="p"
+                [flip]="true"
+                class="btn btn--ghost"
+              >
+                {{ p }}
+              </button>
+            }
+          </div>
+
+          <ng-template #popoverTpl>
+            <div class="popover">
+              <div class="popover__arrow"></div>
+              <strong>Popover</strong>
+              <p>Positioned with flip enabled</p>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Select / Combobox</h2>
+      <p class="demo-section__desc">
+        Match anchor width for select-like components. The overlay stretches to match the trigger
+        width.
+      </p>
+
+      <app-code-block [code]="selectCode">
+        <div preview class="demo-preview">
+          <button
+            qzOverlayTrigger
+            [overlayTemplate]="selectTpl"
+            placement="bottom-start"
+            [matchAnchorWidth]="true"
+            class="btn btn--select"
+          >
+            <span>{{ selectedOption() }}</span>
+            <span class="btn__chevron">▾</span>
+          </button>
+
+          <ng-template #selectTpl>
+            <div class="select-list">
+              @for (opt of selectOptions; track opt) {
+                <button
+                  class="select-list__item"
+                  [class.select-list__item--active]="selectedOption() === opt"
+                  (click)="selectedOption.set(opt)"
+                >
+                  {{ opt }}
+                </button>
+              }
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Programmatic Usage</h2>
+      <p class="demo-section__desc">
+        Create overlays programmatically using OverlayService. Useful for tooltips on dynamic
+        content.
+      </p>
+
+      <app-code-block [code]="programmaticCode">
+        <div preview class="demo-preview">
+          <button #progAnchor class="btn btn--secondary" (click)="toggleProgrammatic()">
+            {{ progRef?.isOpen ? 'Close overlay' : 'Open overlay' }}
+          </button>
+
+          <ng-template #progTpl>
+            <div class="notification">
+              <span class="notification__icon">✦</span>
+              <div>
+                <strong>Programmatic overlay</strong>
+                <p>Created via OverlayService.create()</p>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>
