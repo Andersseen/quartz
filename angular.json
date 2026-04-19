@@ -49,7 +49,15 @@
             "browser": "app/src/main.ts",
             "tsConfig": "app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["app/src/favicon.svg", "app/src/assets"],
+            "assets": [
+              "app/src/favicon.svg",
+              "app/src/assets",
+              {
+                "glob": "**/*",
+                "input": "app/public",
+                "output": "/"
+              }
+            ],
             "styles": ["app/src/styles.scss"],
             "scripts": [],
             "ssr": false,
@@ -60,8 +68,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",

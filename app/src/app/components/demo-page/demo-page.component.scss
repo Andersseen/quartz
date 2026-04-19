@@ -5,6 +5,10 @@
 .demo-page {
   min-height: 100vh;
   padding: 3rem;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
 }
 
 .demo-page__header {
@@ -32,6 +36,10 @@
   color: #ffffff;
   margin: 0 0 1rem;
   letter-spacing: -0.03em;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
 }
 
 .demo-page__description {
@@ -44,7 +52,7 @@
 
 .demo-page__features {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -53,7 +61,8 @@
   background: #0f0f13;
   border: 1px solid #1e1e2a;
   border-radius: 8px;
-  min-width: 180px;
+  min-width: 160px;
+  flex: 1 1 160px;
 }
 
 .demo-page__feature-title {

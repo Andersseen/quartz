@@ -13,10 +13,13 @@ interface NavItem {
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.sidebar-open]': 'open()' },
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
+  open = input(false);
+
   components = input<NavItem[]>([
     { path: '/overlay', label: 'Overlay', icon: '◎' },
     { path: '/dialog', label: 'Dialog', icon: '◻' },

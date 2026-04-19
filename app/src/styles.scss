@@ -221,3 +221,151 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+// ─── Headless Demo System ────────────────────────────────────────────────────
+// Components in Quartz are logic-only (like CDK). Demos use these classes to
+// visualise component boundaries with labelled dashed borders so users
+// understand the structure without confusing it with real UI.
+
+:root {
+  --hd-border: 1px dashed rgba(139, 92, 246, 0.5);
+  --hd-label-bg: rgba(139, 92, 246, 0.12);
+  --hd-label-color: #a78bfa;
+  --hd-label-font: 0.65rem;
+  --hd-secondary-border: 1px dashed rgba(99, 102, 241, 0.4);
+  --hd-secondary-label-bg: rgba(99, 102, 241, 0.1);
+  --hd-secondary-label-color: #818cf8;
+  --hd-handle-border: 1px dashed rgba(217, 70, 239, 0.5);
+  --hd-handle-label-bg: rgba(217, 70, 239, 0.1);
+  --hd-handle-label-color: #e879f9;
+  --hd-surface: rgba(255, 255, 255, 0.025);
+  --hd-surface-hover: rgba(139, 92, 246, 0.04);
+}
+
+// Container — the root directive element
+.hd {
+  position: relative;
+  border: var(--hd-border);
+  border-radius: 8px;
+  background: var(--hd-surface);
+
+  // Directive label pinned inside the top-left corner.
+  // Keeping it inside avoids overflow:hidden clipping by parent containers
+  // and prevents labels from overlapping between adjacent siblings.
+  &::before {
+    content: attr(data-directive);
+    position: absolute;
+    top: 0.3rem;
+    left: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    background: var(--hd-label-bg);
+    color: var(--hd-label-color);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: var(--hd-label-font);
+    font-weight: 600;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 2;
+    line-height: 1.4;
+  }
+
+  // Secondary child element (e.g. Panel)
+  &--panel {
+    border: var(--hd-secondary-border);
+    background: var(--hd-surface);
+    border-radius: 6px;
+    &::before {
+      background: var(--hd-secondary-label-bg);
+      color: var(--hd-secondary-label-color);
+    }
+  }
+
+  // Interactive handle element — too narrow for a top label, so suppress ::before
+  // and show the directive name as a data-tooltip or rely on the handle-dots indicator.
+  &--handle {
+    border: var(--hd-handle-border);
+    background: rgba(217, 70, 239, 0.04);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: col-resize;
+    &::before {
+      // Position at bottom edge so it doesn't overlap adjacent panels
+      top: auto;
+      bottom: 0.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--hd-handle-label-bg);
+      color: var(--hd-handle-label-color);
+    }
+    &:hover {
+      background: rgba(217, 70, 239, 0.08);
+    }
+  }
+
+  &--handle-v {
+    cursor: row-resize;
+    &::before {
+      bottom: auto;
+      top: 50%;
+      left: 0.4rem;
+      transform: translateY(-50%);
+    }
+  }
+
+  // Content inside a headless element — adds padding + label spacing
+  &__body {
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  // Small meta line (e.g. "Width: 40%")
+  &__meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    margin-top: 0.25rem;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Wrapper that centres a headless demo and constrains width
+.hd-demo {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+// Tag chip used to show which directive/input is being demonstrated
+.hd-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  background: rgba(139, 92, 246, 0.1);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  &--input {
+    background: rgba(99, 102, 241, 0.1);
+    color: #818cf8;
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+  &--output {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+}

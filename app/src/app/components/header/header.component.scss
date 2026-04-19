@@ -63,6 +63,43 @@
   }
 }
 
+// Hamburger — hidden on desktop, shown inside pill on mobile
+.header__hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover { color: #fff; background: rgba(255,255,255,0.08); }
+}
+
+@media (max-width: 768px) {
+  .header {
+    top: 0.75rem;
+    // Widen the pill on mobile so hamburger + logo fit
+    width: calc(100% - 1.5rem);
+    left: 0.75rem;
+    transform: none;
+  }
+
+  .header__inner {
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    justify-content: space-between;
+  }
+
+  .header__hamburger { display: flex; }
+  .header__nav { display: none; }  // sidebar handles nav on mobile
+}
+
 .header__actions {
   display: flex;
   align-items: center;

@@ -26,15 +26,36 @@ export const SORTABLE_SNIPPET = `<!-- Sortable List -->
 
 </div>`;
 
-export const SIMPLE_SNIPPET = `<!-- Draggable -->
+export const FREE_DRAG_SNIPPET = `<!-- Bounded container -->
+<div
+  class="canvas"
+  (pointermove)="onMove($event)"
+  (pointerup)="onRelease()">
+
+  <!-- Freely positioned token -->
+  @for (node of nodes(); track node.id) {
+    <div
+      class="token"
+      [style.left.px]="node.x"
+      [style.top.px]="node.y"
+      (pointerdown)="onGrab($event, node.id)">
+      {{ node.label }}
+    </div>
+  }
+</div>`;
+
+export const UPLOAD_SNIPPET = `<!-- Draggable file chip -->
 <div
   qzDraggable
-  [qzDraggableData]="{ message: 'Hello!' }"
-  (qzDragStart)="onDragStart($event)">
-  Drag me!
+  [qzDraggableData]="file"
+  qzDraggableType="file">
+  {{ file.name }}
 </div>
 
-<!-- Drop Zone -->
-<div qzDropZone (qzDrop)="onDrop($event)">
-  Drop here
+<!-- Upload drop zone — accepts only 'file' type -->
+<div
+  qzDropZone
+  [qzDropZoneAccept]="['file']"
+  (qzDrop)="onFileDrop($event)">
+  Drop files to upload
 </div>`;
