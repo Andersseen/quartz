@@ -186,5 +186,43 @@
       </app-code-block>
     </section>
 
+    <!-- ── 4. Free Position Drag ──────────────────────────────────────── -->
+    <section class="demo-section">
+      <h2 class="demo-section__title">Free Position Drag</h2>
+      <p class="demo-section__desc">
+        Drag tokens freely within a bounded canvas using pointer events.
+        No drop zones — position is updated live with pointer capture.
+      </p>
+
+      <div class="demo-tags">
+        <span class="hd-tag">(pointerdown) grab</span>
+        <span class="hd-tag">(pointermove) move</span>
+        <span class="hd-tag">(pointerup) release</span>
+      </div>
+
+      <app-code-block [code]="freeDragCode">
+        <div preview class="free-canvas-wrap">
+          <div
+            class="free-canvas"
+            #freeCanvas
+            (pointermove)="onNodeMove($event)"
+            (pointerup)="onNodeRelease()"
+          >
+            @for (node of freeNodes(); track node.id) {
+              <div
+                class="free-node"
+                [style.left.px]="node.x"
+                [style.top.px]="node.y"
+                [style.background]="node.color"
+                (pointerdown)="onNodeGrab($event, node.id)"
+              >
+                {{ node.label }}
+              </div>
+            }
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
   </div>
 </app-demo-page>

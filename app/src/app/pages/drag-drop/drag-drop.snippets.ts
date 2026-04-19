@@ -26,6 +26,24 @@ export const SORTABLE_SNIPPET = `<!-- Sortable List -->
 
 </div>`;
 
+export const FREE_DRAG_SNIPPET = `<!-- Bounded container -->
+<div
+  class="canvas"
+  (pointermove)="onMove($event)"
+  (pointerup)="onRelease()">
+
+  <!-- Freely positioned token -->
+  @for (node of nodes(); track node.id) {
+    <div
+      class="token"
+      [style.left.px]="node.x"
+      [style.top.px]="node.y"
+      (pointerdown)="onGrab($event, node.id)">
+      {{ node.label }}
+    </div>
+  }
+</div>`;
+
 export const UPLOAD_SNIPPET = `<!-- Draggable file chip -->
 <div
   qzDraggable

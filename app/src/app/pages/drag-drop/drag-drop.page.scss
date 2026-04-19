@@ -422,3 +422,48 @@
   margin: 0;
   line-height: 1.4;
 }
+
+// ── Free Position Drag ──────────────────────────────────────────────────────
+
+.free-canvas-wrap {
+  padding: 1rem;
+  width: 100%;
+}
+
+.free-canvas {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  background: #0a0a0c;
+  border: 1px solid #1e1e2a;
+  border-radius: 12px;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.free-node {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.15s, transform 0.1s;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    cursor: grabbing;
+    transform: scale(1.08);
+  }
+}

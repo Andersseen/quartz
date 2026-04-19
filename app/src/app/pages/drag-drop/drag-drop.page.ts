@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, inject, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, NgZone, viewChild, ElementRef } from '@angular/core';
 import {
   DraggableDirective,
   DropZoneDirective,
@@ -8,7 +8,7 @@ import {
 } from 'quartz';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
-import { KANBAN_SNIPPET, SORTABLE_SNIPPET, UPLOAD_SNIPPET } from './drag-drop.snippets';
+import { KANBAN_SNIPPET, SORTABLE_SNIPPET, UPLOAD_SNIPPET, FREE_DRAG_SNIPPET } from './drag-drop.snippets';
 
 interface Task {
   id: string;
@@ -145,10 +145,55 @@ export default class DragDropPage {
     ]);
   }
 
+  // ─── Free position drag ───────────────────────────────────────────────────
+  readonly freeCanvas = viewChild<ElementRef<HTMLElement>>('freeCanvas');
+
+  readonly freeNodes = signal([
+    { id: 'n1', label: 'A', color: '#7c3aed', x: 32, y: 32 },
+    { id: 'n2', label: 'B', color: '#2563eb', x: 140, y: 60 },
+    { id: 'n3', label: 'C', color: '#059669', x: 68, y: 130 },
+    { id: 'n4', label: 'D', color: '#d97706', x: 220, y: 100 },
+  ]);
+
+  private activeNodeId: string | null = null;
+  private grabOffsetX = 0;
+  private grabOffsetY = 0;
+
+  onNodeGrab(event: PointerEvent, nodeId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const canvas = this.freeCanvas()?.nativeElement;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const node = this.freeNodes().find(n => n.id === nodeId)!;
+    this.activeNodeId = nodeId;
+    this.grabOffsetX = event.clientX - rect.left - node.x;
+    this.grabOffsetY = event.clientY - rect.top - node.y;
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+  }
+
+  onNodeMove(event: PointerEvent): void {
+    if (!this.activeNodeId) return;
+    const canvas = this.freeCanvas()?.nativeElement;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const size = 48;
+    const x = Math.max(0, Math.min(event.clientX - rect.left - this.grabOffsetX, rect.width - size));
+    const y = Math.max(0, Math.min(event.clientY - rect.top - this.grabOffsetY, rect.height - size));
+    this.freeNodes.update(nodes =>
+      nodes.map(n => n.id === this.activeNodeId ? { ...n, x, y } : n)
+    );
+  }
+
+  onNodeRelease(): void {
+    this.activeNodeId = null;
+  }
+
   // ─── Snippets ─────────────────────────────────────────────────────────────
   readonly kanbanCode = KANBAN_SNIPPET;
   readonly sortableCode = SORTABLE_SNIPPET;
   readonly uploadCode = UPLOAD_SNIPPET;
+  readonly freeDragCode = FREE_DRAG_SNIPPET;
 
   onDragStart(_event: QzDragInfo): void {}
 }

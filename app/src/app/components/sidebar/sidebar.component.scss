@@ -74,6 +74,12 @@
 
 .sidebar__section {
   margin-bottom: 1.5rem;
+
+  &--nav {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #1e1e2a;
+  }
 }
 
 .sidebar__section-title {
