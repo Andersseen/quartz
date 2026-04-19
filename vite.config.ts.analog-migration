@@ -1,0 +1,53 @@
+/**
+ * AnalogJS migration reference config.
+ *
+ * When ready to migrate:
+ *   1. Install deps: pnpm add @analogjs/platform @tailwindcss/vite vite
+ *   2. Rename this file to vite.config.ts
+ *   3. Remove angular.json demo app entry (build handled by Vite/Analog)
+ *   4. Move app/src/app/pages/* into src/app/pages/ following Analog
+ *      file-based routing conventions:
+ *
+ *      Angular route            → Analog file
+ *      ─────────────────────────────────────────────
+ *      /                        src/app/pages/index.page.ts
+ *      /docs                    src/app/pages/docs.page.ts
+ *      layout + /overlay        src/app/pages/(docs).page.ts  (layout)
+ *                               src/app/pages/(docs)/overlay.page.ts
+ *      layout + /dialog         src/app/pages/(docs)/dialog.page.ts
+ *      layout + /splitter       src/app/pages/(docs)/splitter.page.ts
+ *      layout + /toast          src/app/pages/(docs)/toast.page.ts
+ *      layout + /drag-drop      src/app/pages/(docs)/drag-drop.page.ts
+ *      layout + /listbox        src/app/pages/(docs)/listbox.page.ts
+ *      layout + /tooltip        src/app/pages/(docs)/tooltip.page.ts
+ *
+ *   5. Library path alias: 'quartz' → packages/quartz/src/public-api.ts
+ */
+
+import analog from '@analogjs/platform';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+
+export default defineConfig({
+  ssr: {
+    noExternal: ['@analogjs/router'],
+  },
+  plugins: [
+    tailwindcss(),
+    analog({
+      ssr: true,
+      nitro: {
+        preset: 'cloudflare-pages',
+        externals: {
+          inline: ['@analogjs/router'],
+        },
+      },
+    }),
+  ],
+  resolve: {
+    alias: {
+      quartz: resolve(__dirname, 'packages/quartz/src/public-api.ts'),
+    },
+  },
+});

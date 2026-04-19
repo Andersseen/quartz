@@ -1,8 +1,21 @@
-import { Component, ChangeDetectionStrategy, input, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  CUSTOM_ELEMENTS_SCHEMA,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { EditorLoaderService } from '../../services/editor-loader.service';
 
 @Component({
   selector: 'app-code-block',
   imports: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="code-block">
@@ -24,9 +37,9 @@ import { Component, ChangeDetectionStrategy, input, signal } from '@angular/core
           </button>
         </div>
         @if (activeTab() === 'code') {
-          <button class="code-block__copy" (click)="copyCode()">
+          <button class="code-block__copy" (click)="copyCode()" [attr.aria-label]="copied() ? 'Copied' : 'Copy code'">
             @if (copied()) {
-              <span>✓ Copied</span>
+              <span>&#10003; Copied</span>
             } @else {
               <span>Copy</span>
             }
@@ -40,7 +53,22 @@ import { Component, ChangeDetectionStrategy, input, signal } from '@angular/core
             <ng-content select="[preview]" />
           </div>
         } @else {
-          <pre class="code-block__code"><code>{{ code() }}</code></pre>
+          <div class="code-block__editor-wrap">
+            @if (editorLoaded()) {
+              <vertex-editor
+                [attr.value]="code()"
+                language="typescript"
+                [attr.theme]="editorTheme()"
+                lineNumbers="true"
+                readonly="true"
+                style="display: block; height: 380px; overflow: auto;"
+              ></vertex-editor>
+            } @else {
+              <div class="code-block__editor-placeholder">
+                <span>Loading editor…</span>
+              </div>
+            }
+          </div>
         }
       </div>
     </div>
@@ -123,25 +151,52 @@ import { Component, ChangeDetectionStrategy, input, signal } from '@angular/core
         min-height: 200px;
       }
 
-      .code-block__code {
-        margin: 0;
-        padding: 1.5rem;
-        background: #0a0a0c;
-        color: #e5e7eb;
-        font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
-        font-size: 0.8125rem;
-        line-height: 1.7;
-        overflow-x: auto;
-        white-space: pre-wrap;
-        word-break: break-all;
+      .code-block__editor-wrap {
+        height: 380px;
+        overflow: hidden;
+      }
+
+      .code-block__editor-placeholder {
+        height: 380px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 0.875rem;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
       }
     `,
   ],
 })
-export class CodeBlockComponent {
+export class CodeBlockComponent implements OnInit {
   code = input.required<string>();
   activeTab = signal<'preview' | 'code'>('preview');
   copied = signal(false);
+  editorLoaded = signal(false);
+  editorTheme = signal<'light' | 'dark'>('dark');
+
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly editorLoader = inject(EditorLoaderService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  async ngOnInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    await this.editorLoader.loadEditor();
+    this.editorLoaded.set(true);
+    this.editorTheme.set(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+
+    const observer = new MutationObserver(() => {
+      this.editorTheme.set(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    });
+    observer.observe(document.documentElement, { attributeFilter: ['class'] });
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
 
   copyCode(): void {
     navigator.clipboard.writeText(this.code());

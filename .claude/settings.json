@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/andriipap/Andersseen/Web/Projects/volt-ui/**)",
+      "Bash(chmod +x /Users/andriipap/Andersseen/Web/Projects/quartz/cli/bin/quartz.js)",
+      "Bash(node /Users/andriipap/Andersseen/Web/Projects/quartz/cli/bin/quartz.js list)",
+      "Bash(node /Users/andriipap/Andersseen/Web/Projects/quartz/cli/bin/quartz.js add splitter --output /tmp/test-quartz-add --verbose)",
+      "Read(//tmp/test-quartz-add/**)",
+      "Bash(pnpm typecheck *)"
+    ],
+    "additionalDirectories": [
+      "/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"
+    ]
+  }
+}

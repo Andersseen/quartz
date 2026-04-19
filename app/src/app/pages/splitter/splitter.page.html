@@ -13,47 +13,46 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Horizontal Splitter</h2>
       <p class="demo-section__desc">
-        Side-by-side panels with a draggable vertical handle. Use arrow keys or drag to resize.
+        Side-by-side panels with a draggable handle. Drag or use
+        <kbd>←</kbd><kbd>→</kbd> arrow keys to resize.
       </p>
 
+      <div class="demo-tags">
+        <span class="hd-tag">[qzSplitterContainer]</span>
+        <span class="hd-tag--input hd-tag">orientation</span>
+        <span class="hd-tag--input hd-tag">minSize / maxSize</span>
+        <span class="hd-tag--output hd-tag">(positionChange)</span>
+      </div>
+
       <app-code-block [code]="horizontalCode">
-        <div preview class="demo-preview">
-          <div class="splitter-frame">
+        <div preview class="hd-demo">
+          <div
+            qzSplitterContainer
+            orientation="horizontal"
+            [minSize]="20"
+            [maxSize]="80"
+            [defaultPosition]="40"
+            (positionChange)="hPosition.set($event)"
+            class="hd splitter-container"
+            data-directive="qzSplitterContainer"
+          >
+            <div qzSplitterPanel="true" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+              <div class="hd__body">
+                <div class="hd__label">Left Panel</div>
+                <div class="hd__meta">width: {{ hPosition() | number: '1.0-0' }}%</div>
+              </div>
+            </div>
+
             <div
-              qzSplitterContainer
-              orientation="horizontal"
-              [minSize]="20"
-              [maxSize]="80"
-              [defaultPosition]="40"
-              (positionChange)="hPosition.set($event)"
-              class="splitter-wrapper"
-            >
-              <div qzSplitterPanel="true" class="panel panel--left">
-                <div class="panel__content">
-                  <div class="panel__icon">🗂️</div>
-                  <h3 class="panel__title">Explorer</h3>
-                  <p class="panel__text">File tree, project navigator, or sidebar content.</p>
-                  <div class="panel__stat">
-                    <span>Width</span>
-                    <strong>{{ hPosition() | number: '1.0-0' }}%</strong>
-                  </div>
-                </div>
-              </div>
+              qzSplitterHandle
+              class="hd hd--handle splitter-handle--h"
+              data-directive="qzSplitterHandle"
+            ></div>
 
-              <div qzSplitterHandle class="handle handle--vertical">
-                <div class="handle__grip"><span></span><span></span><span></span></div>
-              </div>
-
-              <div qzSplitterPanel="false" class="panel panel--right">
-                <div class="panel__content">
-                  <div class="panel__icon">✏️</div>
-                  <h3 class="panel__title">Editor</h3>
-                  <p class="panel__text">Main content area that fills remaining space.</p>
-                  <div class="panel__stat">
-                    <span>Width</span>
-                    <strong>{{ 100 - hPosition() | number: '1.0-0' }}%</strong>
-                  </div>
-                </div>
+            <div qzSplitterPanel="false" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+              <div class="hd__body">
+                <div class="hd__label">Right Panel</div>
+                <div class="hd__meta">width: {{ 100 - hPosition() | number: '1.0-0' }}%</div>
               </div>
             </div>
           </div>
@@ -64,47 +63,45 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Vertical Splitter</h2>
       <p class="demo-section__desc">
-        Stacked panels with a draggable horizontal handle. Ideal for terminal/output layouts.
+        Stacked panels with a horizontal handle. Ideal for editor / terminal
+        layouts. Use <kbd>↑</kbd><kbd>↓</kbd> arrow keys to resize.
       </p>
 
+      <div class="demo-tags">
+        <span class="hd-tag">[qzSplitterContainer]</span>
+        <span class="hd-tag--input hd-tag">orientation="vertical"</span>
+        <span class="hd-tag--output hd-tag">(positionChange)</span>
+      </div>
+
       <app-code-block [code]="verticalCode">
-        <div preview class="demo-preview">
-          <div class="splitter-frame">
+        <div preview class="hd-demo">
+          <div
+            qzSplitterContainer
+            orientation="vertical"
+            [minSize]="20"
+            [maxSize]="80"
+            [defaultPosition]="55"
+            (positionChange)="vPosition.set($event)"
+            class="hd splitter-container splitter-container--v"
+            data-directive="qzSplitterContainer"
+          >
+            <div qzSplitterPanel="true" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+              <div class="hd__body">
+                <div class="hd__label">Top Panel</div>
+                <div class="hd__meta">height: {{ vPosition() | number: '1.0-0' }}%</div>
+              </div>
+            </div>
+
             <div
-              qzSplitterContainer
-              orientation="vertical"
-              [minSize]="20"
-              [maxSize]="80"
-              [defaultPosition]="55"
-              (positionChange)="vPosition.set($event)"
-              class="splitter-wrapper"
-            >
-              <div qzSplitterPanel="true" class="panel panel--top">
-                <div class="panel__content">
-                  <div class="panel__icon">📄</div>
-                  <h3 class="panel__title">Source</h3>
-                  <p class="panel__text">Top panel — code editor or primary content.</p>
-                  <div class="panel__stat">
-                    <span>Height</span>
-                    <strong>{{ vPosition() | number: '1.0-0' }}%</strong>
-                  </div>
-                </div>
-              </div>
+              qzSplitterHandle
+              class="hd hd--handle hd--handle-v splitter-handle--v"
+              data-directive="qzSplitterHandle"
+            ></div>
 
-              <div qzSplitterHandle class="handle handle--horizontal">
-                <div class="handle__grip"><span></span><span></span><span></span></div>
-              </div>
-
-              <div qzSplitterPanel="false" class="panel panel--bottom">
-                <div class="panel__content">
-                  <div class="panel__icon">🖥️</div>
-                  <h3 class="panel__title">Terminal</h3>
-                  <p class="panel__text">Bottom panel — output or console.</p>
-                  <div class="panel__stat">
-                    <span>Height</span>
-                    <strong>{{ 100 - vPosition() | number: '1.0-0' }}%</strong>
-                  </div>
-                </div>
+            <div qzSplitterPanel="false" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+              <div class="hd__body">
+                <div class="hd__label">Bottom Panel</div>
+                <div class="hd__meta">height: {{ 100 - vPosition() | number: '1.0-0' }}%</div>
               </div>
             </div>
           </div>

@@ -16,7 +16,7 @@
 
     <nav class="header__nav">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="header__link">Home</a>
-      <a routerLink="/components" routerLinkActive="active" class="header__link">Componentes</a>
+      <a routerLink="/overlay" [class.active]="isComponentRoute()" class="header__link">Componentes</a>
       <a routerLink="/docs" routerLinkActive="active" class="header__link">Docs</a>
     </nav>
 
