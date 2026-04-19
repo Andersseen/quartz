@@ -71,6 +71,11 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
   for (const name of ordered) {
     if (done.has(name)) continue;
     const entry = REGISTRY[name];
+    if (entry.soon) {
+      console.log(`⏳  ${name} — not yet available (coming soon)`);
+      done.add(name);
+      continue;
+    }
     console.log(`→  ${name}`);
 
     const { destDir, copied } = copyFiles(name, entry, outputDir, verbose);
