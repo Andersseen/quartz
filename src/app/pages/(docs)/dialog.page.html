@@ -10,18 +10,16 @@
   ]"
 >
   <div class="demos">
-
     <!-- Modal Dialog -->
     <section class="demo-section">
       <h2 class="demo-section__title">Centered Modal</h2>
       <p class="demo-section__desc">
-        Classic modal dialog rendered in a portal on the body. Closes on backdrop click or Escape key.
+        Classic modal dialog rendered in a portal on the body. Closes on backdrop click or Escape
+        key.
       </p>
       <app-code-block [code]="modalCode">
         <div preview class="demo-preview demo-preview--center">
-          <button class="btn btn--primary" (click)="openModal()">
-            <span>◻</span> Open Modal
-          </button>
+          <button class="btn btn--primary" (click)="openModal()"><span>◻</span> Open Modal</button>
         </div>
       </app-code-block>
     </section>
@@ -30,7 +28,8 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Side Drawers</h2>
       <p class="demo-section__desc">
-        Slide-in panels from any edge of the viewport. Pass <code>width</code> or <code>height</code>
+        Slide-in panels from any edge of the viewport. Pass <code>width</code> or
+        <code>height</code>
         to size the panel.
       </p>
       <app-code-block [code]="drawerCode">
@@ -71,11 +70,12 @@
       </p>
       <app-code-block [code]="dialogRefCode">
         <div preview class="demo-preview demo-preview--center">
-          <button class="btn btn--primary" (click)="openModal()">Open &amp; observe lifecycle</button>
+          <button class="btn btn--primary" (click)="openModal()">
+            Open &amp; observe lifecycle
+          </button>
         </div>
       </app-code-block>
     </section>
-
   </div>
 </app-demo-page>
 
@@ -90,7 +90,10 @@
       </div>
     </div>
     <div class="qz-dialog__body">
-      <p>This is a headless dialog panel. Quartz handles the portal, backdrop, and keyboard events. You own the design completely.</p>
+      <p>
+        This is a headless dialog panel. Quartz handles the portal, backdrop, and keyboard events.
+        You own the design completely.
+      </p>
       <p>Press <kbd>Escape</kbd> or click the backdrop to close.</p>
     </div>
     <div class="qz-dialog__footer">
@@ -108,7 +111,9 @@
       <button class="qz-drawer__close" (click)="ref.close()">✕</button>
     </div>
     <div class="qz-drawer__body">
-      <p>This drawer slides in from the <strong>{{ activeDrawer() }}</strong> edge.</p>
+      <p>
+        This drawer slides in from the <strong>{{ activeDrawer() }}</strong> edge.
+      </p>
       <p>The panel width/height is fully configurable via the <code>DialogConfig</code>.</p>
       <div class="qz-drawer__options">
         <div class="qz-drawer__option">

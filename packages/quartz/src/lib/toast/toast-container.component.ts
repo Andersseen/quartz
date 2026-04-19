@@ -28,72 +28,78 @@ import { ToastPosition } from './toast.model';
       </div>
     }
   `,
-  styles: [`
-    :host {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 9999;
-    }
+  styles: [
+    `
+      :host {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
 
-    .qz-toast-container {
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 16px;
-      max-width: 400px;
-      pointer-events: auto;
-    }
+      .qz-toast-container {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+        max-width: 400px;
+        pointer-events: auto;
+      }
 
-    .qz-toast-container--top-left {
-      top: 0;
-      left: 0;
-    }
+      .qz-toast-container--top-left {
+        top: 0;
+        left: 0;
+      }
 
-    .qz-toast-container--top-center {
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+      .qz-toast-container--top-center {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
 
-    .qz-toast-container--top-right {
-      top: 0;
-      right: 0;
-    }
+      .qz-toast-container--top-right {
+        top: 0;
+        right: 0;
+      }
 
-    .qz-toast-container--bottom-left {
-      bottom: 0;
-      left: 0;
-      flex-direction: column-reverse;
-    }
+      .qz-toast-container--bottom-left {
+        bottom: 0;
+        left: 0;
+        flex-direction: column-reverse;
+      }
 
-    .qz-toast-container--bottom-center {
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      flex-direction: column-reverse;
-    }
+      .qz-toast-container--bottom-center {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: column-reverse;
+      }
 
-    .qz-toast-container--bottom-right {
-      bottom: 0;
-      right: 0;
-      flex-direction: column-reverse;
-    }
-  `],
+      .qz-toast-container--bottom-right {
+        bottom: 0;
+        right: 0;
+        flex-direction: column-reverse;
+      }
+    `,
+  ],
   host: {
     '[class.qz-toast-portal]': 'true',
-  }
+  },
 })
 export class ToastContainerComponent {
   protected readonly toastService = inject(ToastService);
 
   readonly positions: ToastPosition[] = [
-    'top-left', 'top-center', 'top-right',
-    'bottom-left', 'bottom-center', 'bottom-right'
+    'top-left',
+    'top-center',
+    'top-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right',
   ];
 
   calculateProgress(toast: { duration: number; remainingTime: number }): number {

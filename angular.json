@@ -27,10 +27,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "packages/quartz/**/*.ts",
-              "packages/quartz/**/*.html"
-            ]
+            "lintFilePatterns": ["packages/quartz/**/*.ts", "packages/quartz/**/*.html"]
           }
         }
       }

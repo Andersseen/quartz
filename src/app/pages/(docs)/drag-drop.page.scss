@@ -91,7 +91,9 @@
   border: 1px solid #2a2a3a;
   border-radius: 8px;
   cursor: grab;
-  transition: border-color 0.15s, transform 0.15s;
+  transition:
+    border-color 0.15s,
+    transform 0.15s;
   user-select: none;
 
   &:hover {
@@ -142,7 +144,9 @@
   border: 2px dashed #2a2a3a;
   border-radius: 12px;
   padding: 1rem;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
   display: flex;
   flex-direction: column;
   min-height: 180px;
@@ -195,7 +199,10 @@
   }
 }
 
-.upload-item__icon { font-size: 1rem; flex-shrink: 0; }
+.upload-item__icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
 
 .upload-item__body {
   flex: 1;
@@ -224,7 +231,10 @@
   color: #6b7280;
   font-variant-numeric: tabular-nums;
 
-  &--done { color: #22c55e; font-weight: 600; }
+  &--done {
+    color: #22c55e;
+    font-weight: 600;
+  }
 }
 
 .upload-progress {
@@ -253,7 +263,10 @@
   transition: all 0.15s;
   align-self: flex-end;
 
-  &:hover { border-color: #7c3aed; color: #a78bfa; }
+  &:hover {
+    border-color: #7c3aed;
+    color: #a78bfa;
+  }
 }
 
 // ── Sortable List ───────────────────────────────────────────────────────────
@@ -278,8 +291,13 @@
   transition: border-color 0.15s;
   user-select: none;
 
-  &:hover { border-color: #3a3a4a; }
-  &.qz-dragging { opacity: 0.45; cursor: grabbing; }
+  &:hover {
+    border-color: #3a3a4a;
+  }
+  &.qz-dragging {
+    opacity: 0.45;
+    cursor: grabbing;
+  }
 }
 
 .sortable-item__handle {
@@ -326,7 +344,9 @@
   border-radius: 12px;
   padding: 1rem;
   min-height: 200px;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 
   &.qz-drag-over {
     border-color: #7c3aed;
@@ -354,9 +374,15 @@
   font-weight: 700;
   color: #fff;
 
-  &--todo { background: #4b5563; }
-  &--in-progress { background: #3b82f6; }
-  &--done { background: #22c55e; }
+  &--todo {
+    background: #4b5563;
+  }
+  &--in-progress {
+    background: #3b82f6;
+  }
+  &--done {
+    background: #22c55e;
+  }
 }
 
 .kanban__title {
@@ -381,8 +407,13 @@
   transition: border-color 0.15s;
   user-select: none;
 
-  &:hover { border-color: #3a3a4a; }
-  &.qz-dragging { opacity: 0.45; cursor: grabbing; }
+  &:hover {
+    border-color: #3a3a4a;
+  }
+  &.qz-dragging {
+    opacity: 0.45;
+    cursor: grabbing;
+  }
 }
 
 .task-card__header {
@@ -397,9 +428,15 @@
   height: 7px;
   border-radius: 50%;
 
-  &--low { background: #22c55e; }
-  &--medium { background: #f59e0b; }
-  &--high { background: #ef4444; }
+  &--low {
+    background: #22c55e;
+  }
+  &--medium {
+    background: #f59e0b;
+  }
+  &--high {
+    background: #ef4444;
+  }
 }
 
 .task-card__id {
@@ -455,7 +492,9 @@
   cursor: grab;
   user-select: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: box-shadow 0.15s, transform 0.1s;
+  transition:
+    box-shadow 0.15s,
+    transform 0.1s;
 
   &:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);

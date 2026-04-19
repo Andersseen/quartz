@@ -2,7 +2,6 @@ import { bootstrapApplication, BootstrapContext } from '@angular/platform-browse
 import { App } from './app/app.component';
 import { appConfig } from './app/app.config';
 
-const bootstrap = (context: BootstrapContext) =>
-    bootstrapApplication(App, appConfig, context);
+const bootstrap = (context: BootstrapContext) => bootstrapApplication(App, appConfig, context);
 
 export default bootstrap;

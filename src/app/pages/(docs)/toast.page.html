@@ -18,13 +18,9 @@
 
       <app-code-block [code]="typesCode">
         <div preview class="demo-preview demo-preview--row">
-          <button (click)="showSuccess()" class="btn btn--success">
-            <span>✓</span> Success
-          </button>
+          <button (click)="showSuccess()" class="btn btn--success"><span>✓</span> Success</button>
           <button (click)="showError()" class="btn btn--error"><span>✕</span> Error</button>
-          <button (click)="showWarning()" class="btn btn--warning">
-            <span>⚠</span> Warning
-          </button>
+          <button (click)="showWarning()" class="btn btn--warning"><span>⚠</span> Warning</button>
           <button (click)="showInfo()" class="btn btn--info"><span>ℹ</span> Info</button>
         </div>
       </app-code-block>
@@ -33,8 +29,7 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Positions</h2>
       <p class="demo-section__desc">
-        Place toasts in any corner or center of the screen. Each position maintains its own
-        queue.
+        Place toasts in any corner or center of the screen. Each position maintains its own queue.
       </p>
 
       <app-code-block [code]="positionsCode">
@@ -67,15 +62,12 @@
     <section class="demo-section">
       <h2 class="demo-section__title">API Usage</h2>
       <p class="demo-section__desc">
-        Full control with the ToastService. Create toasts with titles, messages, and custom
-        options.
+        Full control with the ToastService. Create toasts with titles, messages, and custom options.
       </p>
 
       <app-code-block [code]="apiCode">
         <div preview class="demo-preview demo-preview--center">
-          <button (click)="showWithTitle()" class="btn btn--primary">
-            Show Toast with Title
-          </button>
+          <button (click)="showWithTitle()" class="btn btn--primary">Show Toast with Title</button>
         </div>
       </app-code-block>
     </section>

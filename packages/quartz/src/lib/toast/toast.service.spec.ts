@@ -25,7 +25,7 @@ describe('ToastService', () => {
   it('should show success toast', () => {
     const id = service.success('Test Message', 'Title');
     expect(id).toBeDefined();
-    
+
     const toasts = service.toasts();
     expect(toasts.length).toBe(1);
     expect(toasts[0].type).toBe('success');
@@ -55,7 +55,7 @@ describe('ToastService', () => {
   it('should map toast to correct position', () => {
     service.info('Top Left', undefined, { position: 'top-left' });
     service.info('Bottom Right', undefined, { position: 'bottom-right' });
-    
+
     const byPosition = service.toastsByPosition();
     expect(byPosition.get('top-left')?.length).toBe(1);
     expect(byPosition.get('bottom-right')?.length).toBe(1);
@@ -69,9 +69,9 @@ describe('ToastService', () => {
     service.pause(id);
 
     expect(service.toasts()[0].isPaused).toBe(true);
-    
+
     // Fast forward another 2 seconds, it shouldn't be dismissed because it's paused
-    vi.advanceTimersByTime(2000); 
+    vi.advanceTimersByTime(2000);
     expect(service.toasts().length).toBe(1);
 
     service.resume(id);

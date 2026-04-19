@@ -10,7 +10,6 @@
   ]"
 >
   <div class="demos">
-
     <!-- ── 1. File Upload Simulation ───────────────────────────────────── -->
     <section class="demo-section">
       <h2 class="demo-section__title">File Upload Zone</h2>
@@ -27,7 +26,6 @@
 
       <app-code-block [code]="uploadCode">
         <div preview class="file-demo">
-
           <!-- Source chips -->
           <div class="file-sources">
             <p class="file-sources__label">Files to upload</p>
@@ -93,7 +91,6 @@
               <button class="upload-reset" (click)="resetUpload()">Reset</button>
             }
           </div>
-
         </div>
       </app-code-block>
     </section>
@@ -120,7 +117,12 @@
             (qzDrop)="onReorder($event)"
           >
             @for (item of sortableItems(); track item.id) {
-              <div class="sortable-item" qzDraggable [qzDraggableData]="item" qzDraggableType="sortable">
+              <div
+                class="sortable-item"
+                qzDraggable
+                [qzDraggableData]="item"
+                qzDraggableType="sortable"
+              >
                 <span class="sortable-item__handle">⠿</span>
                 <span class="sortable-item__number">{{ item.id }}</span>
                 <span class="sortable-item__text">{{ item.text }}</span>
@@ -171,7 +173,10 @@
                       qzDraggableType="task"
                     >
                       <div class="task-card__header">
-                        <span class="task-card__priority" [class]="'task-card__priority--' + task.priority"></span>
+                        <span
+                          class="task-card__priority"
+                          [class]="'task-card__priority--' + task.priority"
+                        ></span>
                         <span class="task-card__id">{{ task.id }}</span>
                       </div>
                       <h4 class="task-card__title">{{ task.title }}</h4>
@@ -190,8 +195,8 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Free Position Drag</h2>
       <p class="demo-section__desc">
-        Drag tokens freely within a bounded canvas using pointer events.
-        No drop zones — position is updated live with pointer capture.
+        Drag tokens freely within a bounded canvas using pointer events. No drop zones — position is
+        updated live with pointer capture.
       </p>
 
       <div class="demo-tags">
@@ -223,6 +228,5 @@
         </div>
       </app-code-block>
     </section>
-
   </div>
 </app-demo-page>

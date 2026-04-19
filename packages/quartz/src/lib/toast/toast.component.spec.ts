@@ -15,15 +15,15 @@ describe('ToastComponent', () => {
     position: 'top-right',
     createdAt: new Date(),
     remainingTime: 3000,
-    isPaused: false
+    isPaused: false,
   };
 
   it('should render toast message', async () => {
     await render(ToastComponent, {
       inputs: {
         toast: mockToast,
-        progress: 100
-      }
+        progress: 100,
+      },
     });
 
     expect(screen.getByText('Test Message')).toBeInTheDocument();
@@ -33,8 +33,8 @@ describe('ToastComponent', () => {
     await render(ToastComponent, {
       inputs: {
         toast: mockToast,
-        progress: 100
-      }
+        progress: 100,
+      },
     });
 
     const toastElement = screen.getByRole('alert');
@@ -45,13 +45,13 @@ describe('ToastComponent', () => {
     const { fixture } = await render(ToastComponent, {
       inputs: {
         toast: mockToast,
-        progress: 100
-      }
+        progress: 100,
+      },
     });
 
     const pauseSpy = vi.spyOn(fixture.componentInstance.qzPause, 'emit');
     const toastElement = screen.getByRole('alert');
-    
+
     toastElement.dispatchEvent(new MouseEvent('mouseenter'));
     expect(pauseSpy).toHaveBeenCalled();
   });
@@ -60,13 +60,13 @@ describe('ToastComponent', () => {
     const { fixture } = await render(ToastComponent, {
       inputs: {
         toast: mockToast,
-        progress: 100
-      }
+        progress: 100,
+      },
     });
 
     const resumeSpy = vi.spyOn(fixture.componentInstance.qzResume, 'emit');
     const toastElement = screen.getByRole('alert');
-    
+
     toastElement.dispatchEvent(new MouseEvent('mouseleave'));
     expect(resumeSpy).toHaveBeenCalled();
   });

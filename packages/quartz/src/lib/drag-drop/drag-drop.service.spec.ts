@@ -29,7 +29,7 @@ describe('DragDropService', () => {
     expect(service.dragData()).toEqual(mockData);
     expect(service.sourceElement()).toBe(mockElement);
     expect(service.dragType()).toBe('MOCK_TYPE');
-    
+
     // Testing generic typed data fetcher
     expect(service.getDragData<{ user: string }>()).toEqual(mockData);
   });
@@ -37,7 +37,7 @@ describe('DragDropService', () => {
   it('should reset drag state exactly when ending', () => {
     const mockElement = document.createElement('div');
     service.startDrag('item1', mockElement);
-    
+
     expect(service.isDragging()).toBe(true);
 
     service.endDrag(true); // dropped

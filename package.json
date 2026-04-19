@@ -2,9 +2,8 @@
   "name": "quartz",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "start": "vite",
-    "build": "ng build quartz",
+    "build:lib": "ng build quartz",
     "build:demo": "vite build",
     "pages:build": "vite build",
     "pages:deploy": "pnpm pages:build && wrangler pages deploy",
@@ -19,7 +18,16 @@
     "format": "prettier --write \"**/*.{ts,html,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\"",
     "quartz": "node cli/bin/quartz.js",
-    "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs public --local"
+    "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs public --local",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,html}": [
+      "eslint --fix"
+    ],
+    "*.{ts,html,scss,json,md}": [
+      "prettier --write"
+    ]
   },
   "prettier": {
     "printWidth": 100,
@@ -71,7 +79,9 @@
     "@vitest/coverage-v8": "^4.1.2",
     "eslint": "8.57.1",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
+    "lint-staged": "^16.4.0",
     "ng-packagr": "^21.2.2",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",

@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, signal, inject, NgZone, viewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  inject,
+  NgZone,
+  viewChild,
+  ElementRef,
+} from '@angular/core';
 import {
   DraggableDirective,
   DropZoneDirective,
@@ -8,7 +16,12 @@ import {
 } from 'quartz';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
-import { KANBAN_SNIPPET, SORTABLE_SNIPPET, UPLOAD_SNIPPET, FREE_DRAG_SNIPPET } from './drag-drop.snippets';
+import {
+  KANBAN_SNIPPET,
+  SORTABLE_SNIPPET,
+  UPLOAD_SNIPPET,
+  FREE_DRAG_SNIPPET,
+} from './drag-drop.snippets';
 
 interface Task {
   id: string;
@@ -50,22 +63,52 @@ export default class DragDropPage {
   ];
 
   tasks = signal<Task[]>([
-    { id: 'T-1', title: 'Design System', description: 'Component library foundation', status: 'done', priority: 'high' },
-    { id: 'T-2', title: 'Dark Mode', description: 'Implement theme switching', status: 'in-progress', priority: 'medium' },
-    { id: 'T-3', title: 'Documentation', description: 'Write API docs', status: 'todo', priority: 'low' },
-    { id: 'T-4', title: 'Accessibility', description: 'ARIA & keyboard nav', status: 'todo', priority: 'high' },
-    { id: 'T-5', title: 'Unit Tests', description: 'Achieve 90% coverage', status: 'in-progress', priority: 'medium' },
+    {
+      id: 'T-1',
+      title: 'Design System',
+      description: 'Component library foundation',
+      status: 'done',
+      priority: 'high',
+    },
+    {
+      id: 'T-2',
+      title: 'Dark Mode',
+      description: 'Implement theme switching',
+      status: 'in-progress',
+      priority: 'medium',
+    },
+    {
+      id: 'T-3',
+      title: 'Documentation',
+      description: 'Write API docs',
+      status: 'todo',
+      priority: 'low',
+    },
+    {
+      id: 'T-4',
+      title: 'Accessibility',
+      description: 'ARIA & keyboard nav',
+      status: 'todo',
+      priority: 'high',
+    },
+    {
+      id: 'T-5',
+      title: 'Unit Tests',
+      description: 'Achieve 90% coverage',
+      status: 'in-progress',
+      priority: 'medium',
+    },
   ]);
 
   getTasksByStatus(status: string): Task[] {
-    return this.tasks().filter(t => t.status === status);
+    return this.tasks().filter((t) => t.status === status);
   }
 
   onTaskDrop(event: QzDropInfo, newStatus: string): void {
     const task = event.data as Task;
     if (!task) return;
-    this.tasks.update(tasks =>
-      tasks.map(t => t.id === task.id ? { ...t, status: newStatus as Task['status'] } : t)
+    this.tasks.update((tasks) =>
+      tasks.map((t) => (t.id === task.id ? { ...t, status: newStatus as Task['status'] } : t)),
     );
   }
 
@@ -82,8 +125,8 @@ export default class DragDropPage {
     const item = event.data as { id: string; text: string };
     const newIndex = event.index;
     if (!item || newIndex === undefined) return;
-    this.sortableItems.update(items => {
-      const oldIndex = items.findIndex(i => i.id === item.id);
+    this.sortableItems.update((items) => {
+      const oldIndex = items.findIndex((i) => i.id === item.id);
       if (oldIndex === -1) return items;
       const next = [...items];
       next.splice(oldIndex, 1);
@@ -107,11 +150,11 @@ export default class DragDropPage {
     if (!file) return;
 
     // Remove from source list
-    this.fileItems.update(items => items.filter(f => f.id !== file.id));
+    this.fileItems.update((items) => items.filter((f) => f.id !== file.id));
 
     // Add to queue with progress 0
     const entry: UploadEntry = { ...file, progress: 0, done: false };
-    this.uploadQueue.update(q => [...q, entry]);
+    this.uploadQueue.update((q) => [...q, entry]);
 
     // Animate progress
     this.zone.runOutsideAngular(() => {
@@ -119,14 +162,14 @@ export default class DragDropPage {
       const interval = setInterval(() => {
         progress += 8;
         this.zone.run(() => {
-          this.uploadQueue.update(q =>
-            q.map(e => e.id === file.id ? { ...e, progress: Math.min(progress, 100) } : e)
+          this.uploadQueue.update((q) =>
+            q.map((e) => (e.id === file.id ? { ...e, progress: Math.min(progress, 100) } : e)),
           );
           if (progress >= 100) {
             clearInterval(interval);
             setTimeout(() => {
-              this.uploadQueue.update(q =>
-                q.map(e => e.id === file.id ? { ...e, done: true } : e)
+              this.uploadQueue.update((q) =>
+                q.map((e) => (e.id === file.id ? { ...e, done: true } : e)),
               );
             }, 200);
           }
@@ -165,7 +208,7 @@ export default class DragDropPage {
     const canvas = this.freeCanvas()?.nativeElement;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const node = this.freeNodes().find(n => n.id === nodeId)!;
+    const node = this.freeNodes().find((n) => n.id === nodeId)!;
     this.activeNodeId = nodeId;
     this.grabOffsetX = event.clientX - rect.left - node.x;
     this.grabOffsetY = event.clientY - rect.top - node.y;
@@ -178,10 +221,16 @@ export default class DragDropPage {
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const size = 48;
-    const x = Math.max(0, Math.min(event.clientX - rect.left - this.grabOffsetX, rect.width - size));
-    const y = Math.max(0, Math.min(event.clientY - rect.top - this.grabOffsetY, rect.height - size));
-    this.freeNodes.update(nodes =>
-      nodes.map(n => n.id === this.activeNodeId ? { ...n, x, y } : n)
+    const x = Math.max(
+      0,
+      Math.min(event.clientX - rect.left - this.grabOffsetX, rect.width - size),
+    );
+    const y = Math.max(
+      0,
+      Math.min(event.clientY - rect.top - this.grabOffsetY, rect.height - size),
+    );
+    this.freeNodes.update((nodes) =>
+      nodes.map((n) => (n.id === this.activeNodeId ? { ...n, x, y } : n)),
     );
   }
 

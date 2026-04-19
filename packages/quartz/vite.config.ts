@@ -16,7 +16,7 @@ export default defineConfig(() => ({
       reportsDirectory: '../../coverage/quartz',
       all: true,
       include: ['src/lib/**/*.ts'],
-      exclude: ['**/*.spec.ts', '**/index.ts', '**/test-setup.ts']
-    }
-  }
+      exclude: ['**/*.spec.ts', '**/index.ts', '**/test-setup.ts'],
+    },
+  },
 }));

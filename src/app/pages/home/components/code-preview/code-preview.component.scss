@@ -48,9 +48,15 @@
   border-radius: 50%;
 }
 
-.home__code-dot.red { background: #ff5f56; }
-.home__code-dot.yellow { background: #ffbd2e; }
-.home__code-dot.green { background: #27c93f; }
+.home__code-dot.red {
+  background: #ff5f56;
+}
+.home__code-dot.yellow {
+  background: #ffbd2e;
+}
+.home__code-dot.green {
+  background: #27c93f;
+}
 
 .home__code-tab {
   margin-left: 1rem;
@@ -72,9 +78,16 @@
   color: #e5e7eb;
 }
 
-.keyword { color: #c678dd; }
-.string { color: #98c379; }
-.comment { color: #5c6370; font-style: italic; }
+.keyword {
+  color: #c678dd;
+}
+.string {
+  color: #98c379;
+}
+.comment {
+  color: #5c6370;
+  font-style: italic;
+}
 
 @media (max-width: 900px) {
   .home__code-container {

@@ -5,8 +5,13 @@ import { filter, map, startWith } from 'rxjs';
 import { LayoutService } from '../../services/layout.service';
 
 const COMPONENT_ROUTES = [
-  '/overlay', '/dialog', '/splitter', '/toast',
-  '/listbox', '/tooltip', '/drag-drop',
+  '/overlay',
+  '/dialog',
+  '/splitter',
+  '/toast',
+  '/listbox',
+  '/tooltip',
+  '/drag-drop',
 ];
 
 @Component({
@@ -22,14 +27,14 @@ export class HeaderComponent {
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
-      filter(e => e instanceof NavigationEnd),
-      map(e => (e as NavigationEnd).urlAfterRedirects),
+      filter((e) => e instanceof NavigationEnd),
+      map((e) => (e as NavigationEnd).urlAfterRedirects),
       startWith(this.router.url),
     ),
     { initialValue: this.router.url },
   );
 
   readonly isComponentRoute = computed(() =>
-    COMPONENT_ROUTES.some(p => this.currentUrl().startsWith(p))
+    COMPONENT_ROUTES.some((p) => this.currentUrl().startsWith(p)),
   );
 }

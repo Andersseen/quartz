@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';

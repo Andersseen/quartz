@@ -76,9 +76,14 @@
   cursor: pointer;
   border-radius: 8px;
   flex-shrink: 0;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
 
-  &:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 
 @media (max-width: 768px) {
@@ -96,8 +101,12 @@
     justify-content: space-between;
   }
 
-  .header__hamburger { display: flex; }
-  .header__nav { display: none; }  // sidebar handles nav on mobile
+  .header__hamburger {
+    display: flex;
+  }
+  .header__nav {
+    display: none;
+  } // sidebar handles nav on mobile
 }
 
 .header__actions {

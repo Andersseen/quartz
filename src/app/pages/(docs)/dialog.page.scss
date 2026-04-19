@@ -74,7 +74,9 @@
   background: #7c3aed;
   color: #fff;
 
-  &:hover { background: #6d28d9; }
+  &:hover {
+    background: #6d28d9;
+  }
 }
 
 .btn--secondary {
@@ -82,7 +84,9 @@
   color: #e5e7eb;
   border: 1px solid #2a2a3a;
 
-  &:hover { background: #2a2a3a; }
+  &:hover {
+    background: #2a2a3a;
+  }
 
   &.btn--active {
     border-color: #7c3aed;
@@ -95,7 +99,10 @@
   color: #9ca3af;
   border: 1px solid #2a2a3a;
 
-  &:hover { background: #1e1e2a; color: #e5e7eb; }
+  &:hover {
+    background: #1e1e2a;
+    color: #e5e7eb;
+  }
 }
 
 // ── Modal Panel ─────────────────────────────────────────────────────────────
@@ -115,10 +122,18 @@
   height: 100%;
   width: 100%;
 
-  &--left   { animation: slide-in-left   0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-  &--right  { animation: slide-in-right  0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-  &--top    { animation: slide-in-top    0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-  &--bottom { animation: slide-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  &--left {
+    animation: slide-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &--right {
+    animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &--top {
+    animation: slide-in-top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  &--bottom {
+    animation: slide-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 // ── Modal Content ────────────────────────────────────────────────────────────
@@ -176,7 +191,9 @@
       color: #9ca3af;
       line-height: 1.6;
 
-      &:last-child { margin-bottom: 0; }
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     kbd {
@@ -244,7 +261,9 @@
       color: #9ca3af;
       line-height: 1.6;
 
-      strong { color: #e5e7eb; }
+      strong {
+        color: #e5e7eb;
+      }
       code {
         font-family: 'Fira Code', monospace;
         background: rgba(255, 255, 255, 0.05);
@@ -309,26 +328,48 @@
 
 // ── Animations ───────────────────────────────────────────────────────────────
 @keyframes dialog-in {
-  from { opacity: 0; transform: scale(0.95) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes slide-in-left {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-in-right {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-in-top {
-  from { transform: translateY(-100%); }
-  to   { transform: translateY(0); }
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-in-bottom {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

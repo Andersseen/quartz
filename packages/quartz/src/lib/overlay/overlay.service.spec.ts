@@ -23,9 +23,9 @@ describe('OverlayService', () => {
     // The container lazily creates when invoking `.create()`
     const mockTemplateRef = {} as TemplateRef<unknown>;
     const mockViewContainerRef = {
-      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {} })
+      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {} }),
     } as unknown as ViewContainerRef;
-    
+
     // We append the anchor so we can get bounded rects from it
     const anchor = document.createElement('div');
     document.body.appendChild(anchor);
@@ -38,7 +38,7 @@ describe('OverlayService', () => {
 
     // Call it again to test physical singleton logic
     service.create(mockTemplateRef, mockViewContainerRef, anchor);
-    
+
     const secondCallNodes = document.querySelectorAll('[data-qz-overlay-container]');
     expect(secondCallNodes.length).toBe(1); // Still exactly one DOM layer
 

@@ -11,7 +11,7 @@ export class OverlayService {
     if (!this.#containerEl) {
       this.#containerEl = this.document.createElement('div');
       this.#containerEl.setAttribute('data-qz-overlay-container', '');
-      
+
       const style = this.#containerEl.style;
       style.setProperty('position', 'fixed');
       style.setProperty('top', '0');

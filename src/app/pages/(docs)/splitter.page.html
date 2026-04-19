@@ -36,7 +36,11 @@
             class="hd splitter-container"
             data-directive="qzSplitterContainer"
           >
-            <div qzSplitterPanel="true" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+            <div
+              qzSplitterPanel="true"
+              class="hd hd--panel splitter-panel"
+              data-directive="qzSplitterPanel"
+            >
               <div class="hd__body">
                 <div class="hd__label">Left Panel</div>
                 <div class="hd__meta">width: {{ hPosition() | number: '1.0-0' }}%</div>
@@ -49,7 +53,11 @@
               data-directive="qzSplitterHandle"
             ></div>
 
-            <div qzSplitterPanel="false" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+            <div
+              qzSplitterPanel="false"
+              class="hd hd--panel splitter-panel"
+              data-directive="qzSplitterPanel"
+            >
               <div class="hd__body">
                 <div class="hd__label">Right Panel</div>
                 <div class="hd__meta">width: {{ 100 - hPosition() | number: '1.0-0' }}%</div>
@@ -63,8 +71,8 @@
     <section class="demo-section">
       <h2 class="demo-section__title">Vertical Splitter</h2>
       <p class="demo-section__desc">
-        Stacked panels with a horizontal handle. Ideal for editor / terminal
-        layouts. Use <kbd>↑</kbd><kbd>↓</kbd> arrow keys to resize.
+        Stacked panels with a horizontal handle. Ideal for editor / terminal layouts. Use
+        <kbd>↑</kbd><kbd>↓</kbd> arrow keys to resize.
       </p>
 
       <div class="demo-tags">
@@ -85,7 +93,11 @@
             class="hd splitter-container splitter-container--v"
             data-directive="qzSplitterContainer"
           >
-            <div qzSplitterPanel="true" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+            <div
+              qzSplitterPanel="true"
+              class="hd hd--panel splitter-panel"
+              data-directive="qzSplitterPanel"
+            >
               <div class="hd__body">
                 <div class="hd__label">Top Panel</div>
                 <div class="hd__meta">height: {{ vPosition() | number: '1.0-0' }}%</div>
@@ -98,7 +110,11 @@
               data-directive="qzSplitterHandle"
             ></div>
 
-            <div qzSplitterPanel="false" class="hd hd--panel splitter-panel" data-directive="qzSplitterPanel">
+            <div
+              qzSplitterPanel="false"
+              class="hd hd--panel splitter-panel"
+              data-directive="qzSplitterPanel"
+            >
               <div class="hd__body">
                 <div class="hd__label">Bottom Panel</div>
                 <div class="hd__meta">height: {{ 100 - vPosition() | number: '1.0-0' }}%</div>
