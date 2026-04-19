@@ -1,6 +1,23 @@
 :host {
   display: block;
   height: 100%;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    transform: translateX(-260px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Applied when layout passes [open]="true" → parent adds class via Angular
+:host(.sidebar-open) {
+  @media (max-width: 768px) {
+    transform: translateX(0);
+  }
 }
 
 .sidebar {

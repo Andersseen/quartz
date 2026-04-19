@@ -26,15 +26,18 @@ export const SORTABLE_SNIPPET = `<!-- Sortable List -->
 
 </div>`;
 
-export const SIMPLE_SNIPPET = `<!-- Draggable -->
+export const UPLOAD_SNIPPET = `<!-- Draggable file chip -->
 <div
   qzDraggable
-  [qzDraggableData]="{ message: 'Hello!' }"
-  (qzDragStart)="onDragStart($event)">
-  Drag me!
+  [qzDraggableData]="file"
+  qzDraggableType="file">
+  {{ file.name }}
 </div>
 
-<!-- Drop Zone -->
-<div qzDropZone (qzDrop)="onDrop($event)">
-  Drop here
+<!-- Upload drop zone — accepts only 'file' type -->
+<div
+  qzDropZone
+  [qzDropZoneAccept]="['file']"
+  (qzDrop)="onFileDrop($event)">
+  Drop files to upload
 </div>`;
