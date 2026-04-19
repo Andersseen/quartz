@@ -3,23 +3,23 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve demo",
+    "start": "vite",
     "build": "ng build quartz",
-    "build:demo": "ng build demo",
-    "pages:build": "ng build demo --configuration production",
+    "build:demo": "vite build",
+    "pages:build": "vite build",
     "pages:deploy": "pnpm pages:build && wrangler pages deploy",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit -p packages/quartz/tsconfig.lib.json && tsc --noEmit -p app/tsconfig.app.json",
+    "typecheck": "tsc --noEmit -p packages/quartz/tsconfig.lib.json && tsc --noEmit -p tsconfig.app.json",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "lint": "eslint \"{packages/quartz,app}/**/*.{ts,html}\"",
+    "lint": "eslint \"{packages/quartz,src}/**/*.{ts,html}\"",
     "format": "prettier --write \"**/*.{ts,html,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\"",
     "quartz": "node cli/bin/quartz.js",
-    "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs app/public --local"
+    "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs public --local"
   },
   "prettier": {
     "printWidth": 100,
@@ -35,14 +35,18 @@
   },
   "private": true,
   "dependencies": {
+    "@analogjs/platform": "^2.4.8",
+    "@analogjs/router": "^2.4.8",
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
     "@angular/core": "^21.0.0",
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
     "@angular/router": "^21.0.0",
+    "@tailwindcss/vite": "^4.2.2",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "vite": "^8.0.8"
   },
   "devDependencies": {
     "@analogjs/vitest-angular": "^2.4.0",
