@@ -8,19 +8,26 @@ import {
   ElementRef,
   inject,
 } from '@angular/core';
-import { OverlayTriggerDirective, OverlayService, OverlayRef, type OverlayPlacement } from 'quartz';
+import {
+  OverlayTriggerDirective,
+  OverlayService,
+  OverlayRef,
+  TooltipDirective,
+  type OverlayPlacement,
+} from 'quartz';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {
   DROPDOWN_SNIPPET,
   PLACEMENTS_SNIPPET,
   SELECT_SNIPPET,
+  TOOLTIP_SNIPPET,
   PROGRAMMATIC_SNIPPET,
 } from './overlay.snippets';
 
 @Component({
   selector: 'app-overlay-page',
-  imports: [OverlayTriggerDirective, DemoPageComponent, CodeBlockComponent],
+  imports: [OverlayTriggerDirective, TooltipDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './overlay.page.html',
   styleUrl: './overlay.page.scss',
@@ -62,6 +69,7 @@ export default class OverlayPage {
   readonly dropdownCode = DROPDOWN_SNIPPET;
   readonly placementsCode = PLACEMENTS_SNIPPET;
   readonly selectCode = SELECT_SNIPPET;
+  readonly tooltipCode = TOOLTIP_SNIPPET;
   readonly programmaticCode = PROGRAMMATIC_SNIPPET;
 
   toggleProgrammatic(): void {

@@ -119,10 +119,35 @@
     </section>
 
     <section class="demo-section">
+      <h2 class="demo-section__title">Hover Tooltips</h2>
+      <p class="demo-section__desc">
+        The same positioning engine powers hover-activated tooltips. Attach to icons, badges, or any
+        element — no click required. Automatically closes on scroll.
+      </p>
+
+      <app-code-block [code]="tooltipCode">
+        <div preview class="demo-preview demo-preview--row">
+          <div class="hint-bar">
+            <span class="hint-icon" qzTooltip="Save document" tooltipPlacement="top">💾</span>
+            <span class="hint-icon" qzTooltip="Share with team" tooltipPlacement="top">🔗</span>
+            <span class="hint-icon" qzTooltip="Print preview" tooltipPlacement="top">🖨️</span>
+            <span class="hint-divider"></span>
+            <span class="badge" qzTooltip="3 pending reviews" tooltipPlacement="top">3</span>
+            <span
+              class="badge badge--green"
+              qzTooltip="All systems operational"
+              tooltipPlacement="top"
+              >●</span
+            >
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
       <h2 class="demo-section__title">Programmatic Usage</h2>
       <p class="demo-section__desc">
-        Create overlays programmatically using OverlayService. Useful for tooltips on dynamic
-        content.
+        Create overlays programmatically using OverlayService. Useful for dynamic content.
       </p>
 
       <app-code-block [code]="programmaticCode">

@@ -42,3 +42,11 @@ export type {
   QzDragOverInfo,
   DragDropOrientation,
 } from './lib/drag-drop';
+
+// Tooltip
+export { TooltipDirective, TooltipService, DEFAULT_TOOLTIP_CONFIG } from './lib/tooltip';
+export type { TooltipConfig, TooltipPlacement } from './lib/tooltip';
+
+// Tree
+export { TreeComponent, TreeNodeComponent, TreeService, DEFAULT_TREE_CONFIG } from './lib/tree';
+export type { TreeNode, TreeConfig, TreeNodeContext } from './lib/tree';
