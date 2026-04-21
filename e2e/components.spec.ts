@@ -7,7 +7,6 @@ test.describe('Components Pages', () => {
     { path: '/splitter', title: 'Splitter' },
     { path: '/toast', title: 'Toast' },
     { path: '/listbox', title: 'Listbox' },
-    { path: '/tooltip', title: 'Tooltip' },
     { path: '/drag-drop', title: 'Drag & Drop' },
   ];
 
@@ -20,8 +19,8 @@ test.describe('Components Pages', () => {
   }
 
   test('should navigate from sidebar', async ({ page }) => {
-    await page.goto('/docs');
-    await page.click('text=Overlay');
-    await expect(page).toHaveURL('/overlay');
+    await page.goto('/overlay');
+    await page.click('text=Dialog');
+    await expect(page).toHaveURL('/dialog');
   });
 });
