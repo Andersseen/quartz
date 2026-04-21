@@ -12,6 +12,9 @@ const COMPONENT_ROUTES = [
   '/listbox',
   '/tooltip',
   '/drag-drop',
+  '/tree',
+  '/virtual-scroll',
+  '/viewport',
 ];
 
 @Component({

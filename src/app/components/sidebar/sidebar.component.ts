@@ -27,6 +27,8 @@ export class SidebarComponent {
     { path: '/toast', label: 'Toast', icon: '🔔' },
     { path: '/drag-drop', label: 'Drag & Drop', icon: '✥' },
     { path: '/tree', label: 'Tree', icon: '🌳' },
+    { path: '/virtual-scroll', label: 'Virtual Scroll', icon: '▤' },
+    { path: '/viewport', label: 'Viewport', icon: '◱' },
     { path: '/listbox', label: 'Listbox', icon: '☰', soon: true },
   ]);
 }

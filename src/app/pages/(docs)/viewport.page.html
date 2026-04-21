@@ -1,0 +1,89 @@
+<app-demo-page
+  badge="Responsive"
+  title="Viewport"
+  description="Reactive viewport dimensions and breakpoint matching powered by Angular signals. No RxJS, no subscriptions — just signals that update automatically."
+  [features]="[
+    { title: 'Signals', description: 'width & height as read-only signals' },
+    { title: 'Breakpoints', description: 'xs / sm / md / lg / xl matching' },
+    { title: 'Custom Queries', description: 'observe(), minWidth(), maxWidth()' },
+    { title: 'SSR Safe', description: 'No window access during server render' },
+  ]"
+>
+  <div class="demos">
+    <section class="demo-section">
+      <h2 class="demo-section__title">Live Dimensions</h2>
+      <p class="demo-section__desc">
+        Resize your browser window — these values update instantly through signals.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="demo-preview demo-preview--center">
+          <div class="vp-live">
+            <div class="vp-metric">
+              <span class="vp-metric__label">Width</span>
+              <span class="vp-metric__value">{{ viewport.width() }}px</span>
+            </div>
+            <div class="vp-metric">
+              <span class="vp-metric__label">Height</span>
+              <span class="vp-metric__value">{{ viewport.height() }}px</span>
+            </div>
+            <div class="vp-metric">
+              <span class="vp-metric__label">Aspect</span>
+              <span class="vp-metric__value">{{ viewport.aspectRatio() | number: '1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Breakpoint Matching</h2>
+      <p class="demo-section__desc">
+        Predefined breakpoints and custom queries via <code>observe()</code>.
+      </p>
+
+      <app-code-block [code]="matchCode">
+        <div preview class="demo-preview demo-preview--center">
+          <div class="vp-breakpoints">
+            <div class="vp-chip" [class.vp-chip--active]="viewport.match().xs">xs</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.match().sm">sm</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.match().md">md</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.match().lg">lg</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.match().xl">xl</div>
+          </div>
+
+          <div class="vp-custom">
+            <div class="vp-chip" [class.vp-chip--active]="viewport.isMobile()">Mobile</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.isTablet()">Tablet</div>
+            <div class="vp-chip" [class.vp-chip--active]="viewport.isDesktop()">Desktop</div>
+            <div class="vp-chip" [class.vp-chip--active]="customMin()">≥ 900px</div>
+            <div class="vp-chip" [class.vp-chip--active]="customMax()">≤ 600px</div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">Directive Usage</h2>
+      <p class="demo-section__desc">
+        Apply <code>qzViewportMatch</code> to any element to get responsive classes automatically.
+      </p>
+
+      <app-code-block [code]="apiCode">
+        <div preview class="demo-preview demo-preview--center">
+          <div qzViewportMatch class="vp-box" [class.vp-box--mobile]="viewport.isMobile()">
+            <span class="vp-box__label">
+              @if (viewport.isMobile()) {
+                📱 Mobile Layout
+              } @else if (viewport.isTablet()) {
+                📱 Tablet Layout
+              } @else {
+                🖥️ Desktop Layout
+              }
+            </span>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

@@ -50,3 +50,11 @@ export type { TooltipConfig, TooltipPlacement } from './lib/tooltip';
 // Tree
 export { TreeComponent, TreeNodeComponent, TreeService, DEFAULT_TREE_CONFIG } from './lib/tree';
 export type { TreeNode, TreeConfig, TreeNodeContext } from './lib/tree';
+
+// Virtual Scroll
+export { VirtualScrollDirective } from './lib/virtual-scroll';
+export type { VirtualScrollConfig, VirtualScrollRow } from './lib/virtual-scroll';
+
+// Viewport
+export { ViewportService, ViewportMatchDirective, DEFAULT_BREAKPOINTS } from './lib/viewport';
+export type { ViewportBreakpoint, ViewportBreakpoints, ViewportMatchResult } from './lib/viewport';
