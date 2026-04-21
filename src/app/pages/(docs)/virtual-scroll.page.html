@@ -1,0 +1,124 @@
+<app-demo-page
+  badge="Performance"
+  title="Virtual Scroll"
+  description="Efficiently render massive lists by only mounting DOM nodes that are visible in the viewport. Fully headless — you control the markup and styling."
+  [features]="[
+    { title: 'Fixed Size', description: 'Optimized for uniform item heights' },
+    { title: 'Buffer', description: 'Prerender items outside viewport' },
+    { title: 'Scroll To Index', description: 'Programmatic navigation' },
+    { title: 'Resize Aware', description: 'Recalculates on viewport resize' },
+  ]"
+>
+  <div class="demos">
+    <section class="demo-section">
+      <h2 class="demo-section__title">10 000 Items</h2>
+      <p class="demo-section__desc">
+        This preview keeps the full scroll height, but only renders the rows around the current
+        viewport. Scroll the list or jump to a distant index to see the rendered range update.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="demo-preview">
+          <div class="vs-demo-shell">
+            <div
+              class="vs-viewport"
+              qzVirtualScroll
+              [items]="users()"
+              [itemSize]="itemSize"
+              [buffer]="4"
+              #vs="qzVirtualScroll"
+            >
+              <div class="vs-content" [style.height.px]="vs.contentHeight()">
+                @for (row of vs.visibleItems(); track row.index) {
+                  <div class="vs-row" [style.top.px]="row.offset">
+                    <span class="vs-row__index">{{ row.index + 1 }}</span>
+                    <span class="vs-row__name">{{ row.item.name }}</span>
+                    <span class="vs-row__email">{{ row.item.email }}</span>
+                    <span class="vs-row__role">{{ row.item.role }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="vs-toolbar" aria-label="Virtual scroll stats">
+              <div class="vs-stat">
+                <span class="vs-stat__label">Rendered now</span>
+                <strong class="vs-stat__value">{{ vs.visibleItems().length }}</strong>
+                <span class="vs-stat__meta">of {{ vs.count() }} total rows</span>
+              </div>
+
+              <div class="vs-stat">
+                <span class="vs-stat__label">Visible range</span>
+                <strong class="vs-stat__value">
+                  {{ vs.startIndex() + 1 }} - {{ vs.endIndex() + 1 }}
+                </strong>
+                <span class="vs-stat__meta">buffered around the viewport</span>
+              </div>
+
+              <div class="vs-stat">
+                <span class="vs-stat__label">Scroll height</span>
+                <strong class="vs-stat__value">{{ vs.contentHeight() }} px</strong>
+                <span class="vs-stat__meta">without mounting 10 000 DOM nodes</span>
+              </div>
+            </div>
+
+            <div class="vs-actions vs-actions--spread">
+              <button class="btn btn--ghost" (click)="vs.scrollToIndex(0)">Top</button>
+              <button class="btn btn--ghost" (click)="vs.scrollToIndex(2500)">25%</button>
+              <button class="btn btn--ghost" (click)="vs.scrollToIndex(5000)">Middle</button>
+              <button class="btn btn--ghost" (click)="vs.scrollToIndex(vs.count() - 1)">
+                Bottom
+              </button>
+            </div>
+
+            <p class="vs-footnote">
+              Each row is {{ itemSize }}px tall. Quartz keeps the full scrollable space, then swaps
+              only the visible slice into the DOM.
+            </p>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="demo-section__title">What The Directive Exposes</h2>
+      <p class="demo-section__desc">
+        These are the key values and methods you use to build your own UI on top of the directive.
+      </p>
+
+      <app-code-block [code]="apiCode">
+        <div preview class="demo-preview">
+          <div class="api-grid">
+            <article class="api-card">
+              <div class="api-card__label">visibleItems()</div>
+              <div class="api-card__value">{{ vs.visibleItems().length }} rows mounted</div>
+              <p class="api-card__desc">The slice you actually render in your template.</p>
+            </article>
+
+            <article class="api-card">
+              <div class="api-card__label">startIndex() / endIndex()</div>
+              <div class="api-card__value">{{ vs.startIndex() + 1 }} - {{ vs.endIndex() + 1 }}</div>
+              <p class="api-card__desc">Useful for sticky counters, analytics, or debugging.</p>
+            </article>
+
+            <article class="api-card">
+              <div class="api-card__label">scrollToIndex()</div>
+              <div class="api-card__value">Jump anywhere instantly</div>
+              <p class="api-card__desc">
+                Wire buttons, search, or keyboard shortcuts to move through huge lists.
+              </p>
+            </article>
+
+            <article class="api-card">
+              <div class="api-card__label">contentHeight()</div>
+              <div class="api-card__value">{{ vs.contentHeight() }} px</div>
+              <p class="api-card__desc">
+                Preserves natural scrollbar behavior even though only a few rows exist in the DOM.
+              </p>
+            </article>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>
