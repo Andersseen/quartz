@@ -25,6 +25,18 @@ export const SELECT_SNIPPET = `<button qzOverlayTrigger
   Select option
 </button>`;
 
+export const TOOLTIP_SNIPPET = `<!-- Hover tooltip via OverlayService -->
+<span
+  qzTooltip="Save changes"
+  tooltipPlacement="top">
+  💾
+</span>
+
+<!-- Template-based tooltip -->
+<button [qzTooltip]="statsTpl" tooltipPlacement="bottom">
+  View Stats
+</button>`;
+
 export const PROGRAMMATIC_SNIPPET = `const overlayRef = this.overlayService.create(
   templateRef,
   viewContainerRef,
