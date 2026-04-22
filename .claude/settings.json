@@ -1,4 +1,5 @@
 {
+  "enabledMcpjsonServers": ["playwright", "angular-docs", "context7"],
   "permissions": {
     "allow": [
       "Read(//Users/andriipap/Andersseen/Web/Projects/volt-ui/**)",
@@ -11,7 +12,15 @@
       "Read(//Users/andriipap/Andersseen/Web/Projects/**)",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('name:', d.get\\('name'\\)\\); print\\('scripts:', json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\); print\\('bin:', json.dumps\\(d.get\\('bin',{}\\), indent=2\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('mcpServers',{}\\), indent=2\\)\\)\")",
+      "Bash(npx --yes @playwright/mcp --version)",
+      "Bash(npm list *)",
+      "Read(//Users/andriipap/**)",
+      "Bash(npm view *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('name:', d.get\\('name'\\)\\); print\\('version:', d.get\\('version'\\)\\); print\\('description:', d.get\\('description'\\)\\); print\\('bin:', json.dumps\\(d.get\\('bin',{}\\)\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('name:', d.get\\('name'\\)\\); print\\('version:', d.get\\('version'\\)\\); print\\('bin:', json.dumps\\(d.get\\('bin',{}\\)\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; results=json.load\\(sys.stdin\\); [print\\(r['name'], '-', r.get\\('description',''\\)\\) for r in results[:5]]\")"
     ],
     "additionalDirectories": ["/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"]
   }

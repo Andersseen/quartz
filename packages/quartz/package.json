@@ -1,6 +1,41 @@
 {
-  "name": "@yourscope/quartz",
+  "name": "@andersseen/quartz",
   "version": "0.0.1",
+  "description": "Headless, unstyled Angular 21 UI primitives — overlay, dialog, splitter, toast, drag-drop, tooltip, tree, virtual scroll, viewport",
+  "keywords": [
+    "angular",
+    "headless",
+    "ui",
+    "components",
+    "overlay",
+    "dialog",
+    "splitter",
+    "toast",
+    "drag-drop",
+    "tooltip",
+    "tree",
+    "virtual-scroll",
+    "viewport",
+    "a11y",
+    "zoneless",
+    "signals"
+  ],
+  "author": {
+    "name": "Andersseen",
+    "url": "https://github.com/Andersseen"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Andersseen/quartz.git"
+  },
+  "homepage": "https://quartz-ui.pages.dev",
+  "bugs": {
+    "url": "https://github.com/Andersseen/quartz/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0"
@@ -11,7 +46,6 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "sass": "./src/styles/_index.scss",
       "types": "./src/public-api.d.ts",
       "default": "./fesm2022/quartz.mjs"
     }

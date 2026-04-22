@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "description": "Browser automation via Playwright — for running, debugging and inspecting E2E tests"
+    },
+    "angular-docs": {
+      "command": "npx",
+      "args": ["-y", "angular-mcp-server@latest"],
+      "description": "Angular documentation access — API reference, guides, migration notes for Angular 21"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "description": "Live library docs lookup — resolves up-to-date docs for Vitest, Playwright, AnalogJS, ng-packagr, and others"
+    }
+  }
+}
