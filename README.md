@@ -1,59 +1,147 @@
-# Quartz
+# Quartz UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+Headless, unstyled Angular 21 UI primitives. You own the styles — Quartz owns the behaviour.
 
-## Development server
+[![npm](https://img.shields.io/npm/v/@andersseen/quartz)](https://www.npmjs.com/package/@andersseen/quartz)
+[![license](https://img.shields.io/github/license/Andersseen/quartz)](LICENSE)
+[![angular](https://img.shields.io/badge/angular-21-red)](https://angular.dev)
 
-To start a local development server, run:
+**[Docs & demos →](https://quartz-ui.pages.dev)**
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Primitives
 
-## Code scaffolding
+| Primitive        | Description                                                             |
+| ---------------- | ----------------------------------------------------------------------- |
+| `overlay`        | Portal-based positioning system for dropdowns, menus, and popovers      |
+| `dialog`         | Service-driven dialog and drawer with backdrop and focus trap           |
+| `splitter`       | Resizable panel system with keyboard navigation and touch support       |
+| `toast`          | Lightweight notification system with position groups and auto-dismiss   |
+| `drag-drop`      | Accessible drag and drop with keyboard support                          |
+| `tooltip`        | Accessible tooltip with configurable placement _(coming soon)_          |
+| `listbox`        | WAI-ARIA listbox with keyboard navigation and selection _(coming soon)_ |
+| `tree`           | Collapsible tree with keyboard navigation and selection                 |
+| `virtual-scroll` | Windowed rendering for long lists                                       |
+| `viewport`       | Reactive breakpoint service with `ViewportMatchDirective`               |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+All primitives are **zoneless** (Angular signals), **standalone**, and **tree-shakeable**.
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Getting started
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Option A — npm package
 
 ```bash
-ng test
+npm install @andersseen/quartz
 ```
 
-## Running end-to-end tests
+```ts
+// app.config.ts
+import { provideZonelessChangeDetection } from '@angular/core';
 
-For end-to-end (e2e) testing, run:
+export const appConfig: ApplicationConfig = {
+  providers: [provideZonelessChangeDetection()],
+};
+```
+
+```ts
+// your.component.ts
+import { OverlayTriggerDirective } from '@andersseen/quartz';
+
+@Component({
+  imports: [OverlayTriggerDirective],
+  template: `
+    <button qzOverlayTrigger [overlayTemplate]="tpl" placement="bottom-start">Open dropdown</button>
+
+    <ng-template #tpl>
+      <ul class="my-menu">
+        ...
+      </ul>
+    </ng-template>
+  `,
+})
+export class MyComponent {}
+```
+
+### Option B — copy source with the CLI
+
+The CLI copies the raw TypeScript source into your project so you own the code and can modify it freely. Clone the Quartz repo and run from within it:
 
 ```bash
-ng e2e
+git clone https://github.com/Andersseen/quartz.git
+cd quartz && pnpm install
+
+# List available primitives
+pnpm quartz list
+
+# Add one or more (transitive deps resolved automatically)
+pnpm quartz add overlay
+pnpm quartz add overlay dialog splitter
+
+# Custom output directory
+pnpm quartz add toast --output src/app/ui
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Files are copied into your project's `src/lib/components/<name>/` (auto-detected) or the path you specify with `--output`.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Peer requirements
+
+| Dependency        | Version   |
+| ----------------- | --------- |
+| `@angular/core`   | `^21.0.0` |
+| `@angular/common` | `^21.0.0` |
+| Node.js           | `>=20`    |
+
+---
+
+## Local development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Dev server — http://localhost:5173
+pnpm start
+
+# Build the library (output: dist/quartz/)
+pnpm build:lib
+
+# Unit tests (Vitest)
+pnpm test
+pnpm test:watch
+
+# E2E tests (Playwright — starts dev server automatically)
+pnpm e2e
+pnpm e2e:ui
+
+# Type check
+pnpm typecheck
+
+# Lint & format
+pnpm lint
+pnpm format
+```
+
+### Adding a new primitive
+
+1. Create `packages/quartz/src/lib/<name>/` following the existing pattern.
+2. Export from `packages/quartz/src/public-api.ts`.
+3. Register in `cli/registry.js` (name, files, optional `deps`).
+4. Add a demo page under `src/app/pages/(docs)/<name>.page.ts`.
+
+### Publishing
+
+```bash
+# Ensure you're logged in: npm login
+pnpm publish:lib
+```
+
+---
+
+## License
+
+[MIT](LICENSE) © Andersseen
