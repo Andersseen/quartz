@@ -47,12 +47,12 @@ Pre-commit hook runs `lint-staged` (ESLint + Prettier on staged files), `typeche
 # Publish to npm
 
 ```bash
-# One-shot: build lib then publish dist/quartz to npm as @andersseen/quartz
+# One-shot: build lib then publish dist/quartz to npm as quartz-ui
 pnpm publish:lib
 
 # Or manually:
 pnpm build:lib
-npm publish dist/quartz --access public
+npm publish ./dist/quartz --access public
 ```
 
 Requires being logged in to npm (`npm login`) with access to the `@andersseen` scope. The published package is `dist/quartz/` — the monorepo root is never published (`"private": true`).
