@@ -1,5 +1,5 @@
 {
-  "name": "quartz-ui",
+  "name": "quartz-headless",
   "version": "0.0.1",
   "description": "Headless, unstyled Angular 21 UI primitives — overlay, dialog, splitter, toast, drag-drop, tooltip, tree, virtual scroll, viewport",
   "keywords": [
@@ -29,7 +29,7 @@
     "type": "git",
     "url": "https://github.com/Andersseen/quartz.git"
   },
-  "homepage": "https://quartz-ui.pages.dev",
+  "homepage": "https://quartz-headless.pages.dev",
   "bugs": {
     "url": "https://github.com/Andersseen/quartz/issues"
   },

@@ -47,7 +47,7 @@ Pre-commit hook runs `lint-staged` (ESLint + Prettier on staged files), `typeche
 # Publish to npm
 
 ```bash
-# One-shot: build lib then publish dist/quartz to npm as quartz-ui
+# One-shot: build lib then publish dist/quartz to npm as quartz-headless
 pnpm publish:lib
 
 # Or manually:

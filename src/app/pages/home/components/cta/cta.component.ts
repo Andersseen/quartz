@@ -12,7 +12,7 @@ export class HomeCtaComponent {
   copied = signal<boolean>(false);
 
   copyInstallCommand() {
-    navigator.clipboard.writeText('npm install quartz-ui');
+    navigator.clipboard.writeText('npm install quartz-headless');
     this.copied.set(true);
     setTimeout(() => {
       this.copied.set(false);

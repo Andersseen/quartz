@@ -1,12 +1,12 @@
-# Quartz UI
+# Quartz Headless
 
 Headless, unstyled Angular 21 UI primitives. You own the styles — Quartz owns the behaviour.
 
-[![npm](https://img.shields.io/npm/v/quartz-ui)](https://www.npmjs.com/package/quartz-ui)
+[![npm](https://img.shields.io/npm/v/quartz-headless)](https://www.npmjs.com/package/quartz-headless)
 [![license](https://img.shields.io/github/license/Andersseen/quartz)](LICENSE)
 [![angular](https://img.shields.io/badge/angular-21-red)](https://angular.dev)
 
-**[Docs & demos →](https://quartz-ui.pages.dev)**
+**[Docs & demos →](https://quartz-headless.pages.dev)**
 
 ---
 
@@ -34,7 +34,7 @@ All primitives are **zoneless** (Angular signals), **standalone**, and **tree-sh
 ### Option A — npm package
 
 ```bash
-npm install quartz-ui
+npm install quartz-headless
 ```
 
 ```ts
@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
 
 ```ts
 // your.component.ts
-import { OverlayTriggerDirective } from 'quartz-ui';
+import { OverlayTriggerDirective } from 'quartz-headless';
 
 @Component({
   imports: [OverlayTriggerDirective],
