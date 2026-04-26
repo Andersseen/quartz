@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "vite",
-    "build:lib": "ng build quartz",
+    "build:lib": "ng build quartz && cp README.md dist/quartz/ && cp LICENSE dist/quartz/",
     "build:demo": "vite build",
     "pages:build": "vite build",
     "pages:deploy": "pnpm pages:build && wrangler pages deploy",
