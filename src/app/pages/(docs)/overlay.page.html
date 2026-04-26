@@ -19,15 +19,15 @@
 
       <app-code-block [code]="dropdownCode">
         <div preview class="demo-preview">
-          <button
+          <volt-button
+            variant="solid"
             qzOverlayTrigger
             [overlayTemplate]="dropdownTpl"
             placement="bottom-start"
-            class="btn btn--primary"
           >
+            <span slot="leading" class="btn__chevron">▾</span>
             Open menu
-            <span class="btn__chevron">▾</span>
-          </button>
+          </volt-button>
 
           <ng-template #dropdownTpl>
             <div class="dropdown">
@@ -58,15 +58,15 @@
         <div preview class="demo-preview">
           <div class="placements-grid">
             @for (p of placements; track p) {
-              <button
+              <volt-button
+                variant="ghost"
                 qzOverlayTrigger
                 [overlayTemplate]="popoverTpl"
                 [placement]="p"
                 [flip]="true"
-                class="btn btn--ghost"
               >
                 {{ p }}
-              </button>
+              </volt-button>
             }
           </div>
 
@@ -90,16 +90,16 @@
 
       <app-code-block [code]="selectCode">
         <div preview class="demo-preview">
-          <button
+          <volt-button
+            variant="outline"
             qzOverlayTrigger
             [overlayTemplate]="selectTpl"
             placement="bottom-start"
             [matchAnchorWidth]="true"
-            class="btn btn--select"
           >
-            <span>{{ selectedOption() }}</span>
+            <span slot="leading">{{ selectedOption() }}</span>
             <span class="btn__chevron">▾</span>
-          </button>
+          </volt-button>
 
           <ng-template #selectTpl>
             <div class="select-list">
@@ -152,9 +152,9 @@
 
       <app-code-block [code]="programmaticCode">
         <div preview class="demo-preview">
-          <button #progAnchor class="btn btn--secondary" (click)="toggleProgrammatic()">
+          <volt-button variant="outline" #progAnchor (click)="toggleProgrammatic()">
             {{ progRef?.isOpen ? 'Close overlay' : 'Open overlay' }}
-          </button>
+          </volt-button>
 
           <ng-template #progTpl>
             <div class="notification">

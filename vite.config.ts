@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => ({
     noExternal: ['@analogjs/router'],
   },
   plugins: [
-    tailwindcss(),
     analog({
       ssr: mode !== 'development',
       prerender: {
@@ -23,6 +22,7 @@ export default defineConfig(({ mode }) => ({
         },
       },
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {

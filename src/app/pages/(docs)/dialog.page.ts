@@ -16,10 +16,11 @@ import {
   BACKDROP_SNIPPET,
   DIALOG_REF_SNIPPET,
 } from './dialog.snippets';
+import { VoltButton } from '@voltui/components';
 
 @Component({
   selector: 'app-dialog-page',
-  imports: [DemoPageComponent, CodeBlockComponent],
+  imports: [DemoPageComponent, CodeBlockComponent, VoltButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dialog.page.html',
   styleUrl: './dialog.page.scss',

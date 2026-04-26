@@ -3,10 +3,11 @@ import { ToastService, ToastContainerComponent, type ToastPosition } from 'quart
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { TYPES_SNIPPET, POSITIONS_SNIPPET, DURATION_SNIPPET, API_SNIPPET } from './toast.snippets';
+import { VoltButton } from '@voltui/components';
 
 @Component({
   selector: 'app-toast-page',
-  imports: [ToastContainerComponent, DemoPageComponent, CodeBlockComponent],
+  imports: [ToastContainerComponent, DemoPageComponent, CodeBlockComponent, VoltButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './toast.page.html',
   styleUrl: './toast.page.scss',

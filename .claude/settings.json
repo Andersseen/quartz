@@ -23,7 +23,8 @@
       "Bash(git -C /Users/andriipap/Andersseen/Web/Projects/quartz remote get-url origin)",
       "Bash(pnpm --version)",
       "Bash(python3 -c \"import json; d=json.load\\(open\\('/Users/andriipap/Andersseen/Web/Projects/quartz/package.json'\\)\\); print\\(json.dumps\\({k: d[k] for k in ['name','private','engines','packageManager']}, indent=2\\)\\)\")",
-      "Bash(python3 -c \"import json; d=json.load\\(open\\('/Users/andriipap/Andersseen/Web/Projects/quartz/package.json'\\)\\); keys=['name','engines','packageManager']; print\\(json.dumps\\({k: d[k] for k in keys if k in d}, indent=2\\)\\)\")"
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/Users/andriipap/Andersseen/Web/Projects/quartz/package.json'\\)\\); keys=['name','engines','packageManager']; print\\(json.dumps\\({k: d[k] for k in keys if k in d}, indent=2\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)"
     ],
     "additionalDirectories": ["/Users/andriipap/Andersseen/Web/Projects/volt-ui/public"]
   },

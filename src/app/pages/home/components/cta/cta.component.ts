@@ -1,7 +1,9 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { VoltButton, VoltCard, VoltCardContent, VoltCardFooter } from '@voltui/components';
 
 @Component({
   selector: 'app-home-cta',
+  imports: [VoltButton, VoltCard, VoltCardContent, VoltCardFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cta.component.html',
   styleUrl: './cta.component.scss',

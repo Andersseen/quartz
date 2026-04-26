@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+@source "../node_modules/@voltui/components/fesm2022/voltui-components.mjs";
+
+@import '@voltui/components/themes/presets/dusk-sharp.css';
