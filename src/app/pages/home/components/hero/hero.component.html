@@ -16,11 +16,15 @@
     </p>
 
     <div class="home__actions">
-      <a routerLink="/docs" class="home__btn home__btn--primary">
-        Get Started
-        <span class="home__btn-icon">→</span>
+      <a routerLink="/docs">
+        <volt-button variant="solid">
+          Get Started
+          <span slot="trailing">→</span>
+        </volt-button>
       </a>
-      <a routerLink="/components" class="home__btn home__btn--secondary"> Explore Components </a>
+      <a routerLink="/components">
+        <volt-button variant="outline">Explore Components</volt-button>
+      </a>
     </div>
   </div>
 </main>

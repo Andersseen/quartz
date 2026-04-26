@@ -18,10 +18,18 @@
 
       <app-code-block [code]="typesCode">
         <div preview class="demo-preview demo-preview--row">
-          <button (click)="showSuccess()" class="btn btn--success"><span>✓</span> Success</button>
-          <button (click)="showError()" class="btn btn--error"><span>✕</span> Error</button>
-          <button (click)="showWarning()" class="btn btn--warning"><span>⚠</span> Warning</button>
-          <button (click)="showInfo()" class="btn btn--info"><span>ℹ</span> Info</button>
+          <volt-button (click)="showSuccess()" variant="outline"
+            ><span slot="leading">✓</span> Success</volt-button
+          >
+          <volt-button (click)="showError()" variant="destructive"
+            ><span slot="leading">✕</span> Error</volt-button
+          >
+          <volt-button (click)="showWarning()" variant="outline"
+            ><span slot="leading">⚠</span> Warning</volt-button
+          >
+          <volt-button (click)="showInfo()" variant="outline"
+            ><span slot="leading">ℹ</span> Info</volt-button
+          >
         </div>
       </app-code-block>
     </section>
@@ -35,9 +43,9 @@
       <app-code-block [code]="positionsCode">
         <div preview class="demo-preview demo-preview--grid">
           @for (pos of positions; track pos) {
-            <button (click)="showAtPosition(pos)" class="btn btn--ghost">
+            <volt-button (click)="showAtPosition(pos)" variant="ghost">
               {{ formatPosition(pos) }}
-            </button>
+            </volt-button>
           }
         </div>
       </app-code-block>
@@ -51,10 +59,10 @@
 
       <app-code-block [code]="durationCode">
         <div preview class="demo-preview demo-preview--row">
-          <button (click)="showWithDuration(2000)" class="btn btn--ghost">2 Seconds</button>
-          <button (click)="showWithDuration(5000)" class="btn btn--ghost">5 Seconds</button>
-          <button (click)="showPersistent()" class="btn btn--ghost">Persistent</button>
-          <button (click)="dismissAll()" class="btn btn--secondary">Dismiss All</button>
+          <volt-button (click)="showWithDuration(2000)" variant="ghost">2 Seconds</volt-button>
+          <volt-button (click)="showWithDuration(5000)" variant="ghost">5 Seconds</volt-button>
+          <volt-button (click)="showPersistent()" variant="ghost">Persistent</volt-button>
+          <volt-button (click)="dismissAll()" variant="outline">Dismiss All</volt-button>
         </div>
       </app-code-block>
     </section>
@@ -67,7 +75,7 @@
 
       <app-code-block [code]="apiCode">
         <div preview class="demo-preview demo-preview--center">
-          <button (click)="showWithTitle()" class="btn btn--primary">Show Toast with Title</button>
+          <volt-button (click)="showWithTitle()" variant="solid">Show Toast with Title</volt-button>
         </div>
       </app-code-block>
     </section>

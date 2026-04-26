@@ -1,4 +1,4 @@
-// Quartz UI - Headless primitives for Angular
+// Quartz Headless - primitives for Angular
 export const VERSION = '0.0.1';
 
 // Overlay

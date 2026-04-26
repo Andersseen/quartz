@@ -29,6 +29,5 @@ export class SidebarComponent {
     { path: '/tree', label: 'Tree', icon: '🌳' },
     { path: '/virtual-scroll', label: 'Virtual Scroll', icon: '▤' },
     { path: '/viewport', label: 'Viewport', icon: '◱' },
-    { path: '/listbox', label: 'Listbox', icon: '☰', soon: true },
   ]);
 }

@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { provideFileRouter, withExtraRoutes } from '@analogjs/router';
 import type { Routes } from '@angular/router';
+import { provideVoltTheme } from '@voltui/components';
 
 /**
  * Fallback route for /tree when AnalogJS file-based routing doesn't detect
@@ -49,5 +50,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideFileRouter(withExtraRoutes(extraRoutes)),
+    provideVoltTheme({ color: 'dusk', style: 'sharp', dark: true }),
   ],
 };

@@ -19,7 +19,9 @@
       </p>
       <app-code-block [code]="modalCode">
         <div preview class="demo-preview demo-preview--center">
-          <button class="btn btn--primary" (click)="openModal()"><span>◻</span> Open Modal</button>
+          <volt-button variant="solid" (click)="openModal()"
+            ><span slot="leading">◻</span> Open Modal</volt-button
+          >
         </div>
       </app-code-block>
     </section>
@@ -35,13 +37,9 @@
       <app-code-block [code]="drawerCode">
         <div preview class="demo-preview demo-preview--row">
           @for (item of drawerPositions; track item.pos) {
-            <button
-              class="btn btn--secondary"
-              [class.btn--active]="activeDrawer() === item.pos"
-              (click)="openDrawer(item.pos)"
-            >
+            <volt-button variant="outline" (click)="openDrawer(item.pos)">
               {{ item.icon }} {{ item.label }}
-            </button>
+            </volt-button>
           }
         </div>
       </app-code-block>
@@ -55,8 +53,8 @@
       </p>
       <app-code-block [code]="backdropCode">
         <div preview class="demo-preview demo-preview--row">
-          <button class="btn btn--ghost" (click)="openModal()">With Backdrop</button>
-          <button class="btn btn--ghost" (click)="openNoBackdrop()">No Backdrop</button>
+          <volt-button variant="ghost" (click)="openModal()">With Backdrop</volt-button>
+          <volt-button variant="ghost" (click)="openNoBackdrop()">No Backdrop</volt-button>
         </div>
       </app-code-block>
     </section>
@@ -70,9 +68,9 @@
       </p>
       <app-code-block [code]="dialogRefCode">
         <div preview class="demo-preview demo-preview--center">
-          <button class="btn btn--primary" (click)="openModal()">
+          <volt-button variant="solid" (click)="openModal()">
             Open &amp; observe lifecycle
-          </button>
+          </volt-button>
         </div>
       </app-code-block>
     </section>
@@ -97,8 +95,8 @@
       <p>Press <kbd>Escape</kbd> or click the backdrop to close.</p>
     </div>
     <div class="qz-dialog__footer">
-      <button class="btn btn--ghost btn--sm" (click)="ref.close()">Cancel</button>
-      <button class="btn btn--primary btn--sm" (click)="ref.close()">Confirm</button>
+      <volt-button variant="ghost" size="sm" (click)="ref.close()">Cancel</volt-button>
+      <volt-button variant="solid" size="sm" (click)="ref.close()">Confirm</volt-button>
     </div>
   </div>
 </ng-template>

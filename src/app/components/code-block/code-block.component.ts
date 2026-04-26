@@ -10,34 +10,38 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { EditorLoaderService } from '../../services/editor-loader.service';
+import { VoltButton } from '@voltui/components';
 
 @Component({
   selector: 'app-code-block',
-  imports: [],
+  imports: [VoltButton],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="code-block">
       <div class="code-block__header">
         <div class="code-block__tabs">
-          <button
-            class="code-block__tab"
+          <volt-button
+            variant="ghost"
+            size="sm"
             [class.code-block__tab--active]="activeTab() === 'preview'"
             (click)="activeTab.set('preview')"
           >
             Preview
-          </button>
-          <button
-            class="code-block__tab"
+          </volt-button>
+          <volt-button
+            variant="ghost"
+            size="sm"
             [class.code-block__tab--active]="activeTab() === 'code'"
             (click)="activeTab.set('code')"
           >
             Code
-          </button>
+          </volt-button>
         </div>
         @if (activeTab() === 'code') {
-          <button
-            class="code-block__copy"
+          <volt-button
+            variant="outline"
+            size="sm"
             (click)="copyCode()"
             [attr.aria-label]="copied() ? 'Copied' : 'Copy code'"
           >
@@ -46,7 +50,7 @@ import { EditorLoaderService } from '../../services/editor-loader.service';
             } @else {
               <span>Copy</span>
             }
-          </button>
+          </volt-button>
         }
       </div>
 
@@ -102,43 +106,10 @@ import { EditorLoaderService } from '../../services/editor-loader.service';
         gap: 0.25rem;
       }
 
-      .code-block__tab {
-        padding: 0.5rem 1rem;
-        border: none;
-        background: transparent;
-        color: #6b7280;
-        font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
-        border-radius: 6px;
-        transition: all 0.15s ease;
-      }
-
-      .code-block__tab:hover {
-        color: #e5e7eb;
-        background: #2a2a3a;
-      }
-
       .code-block__tab--active {
-        color: #a78bfa !important;
-        background: #1e1430 !important;
-      }
-
-      .code-block__copy {
-        padding: 0.375rem 0.875rem;
-        border: 1px solid #2a2a3a;
-        background: #0f0f13;
-        color: #9ca3af;
-        font-size: 0.75rem;
-        font-weight: 500;
-        cursor: pointer;
-        border-radius: 6px;
-        transition: all 0.15s ease;
-      }
-
-      .code-block__copy:hover {
-        border-color: #7c3aed;
-        color: #a78bfa;
+        --tw-text-opacity: 1;
+        color: rgb(167 139 250 / var(--tw-text-opacity)) !important;
+        background-color: rgb(30 20 48) !important;
       }
 
       .code-block__content {

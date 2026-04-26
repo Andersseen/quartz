@@ -24,10 +24,17 @@ import {
   TOOLTIP_SNIPPET,
   PROGRAMMATIC_SNIPPET,
 } from './overlay.snippets';
+import { VoltButton } from '@voltui/components';
 
 @Component({
   selector: 'app-overlay-page',
-  imports: [OverlayTriggerDirective, TooltipDirective, DemoPageComponent, CodeBlockComponent],
+  imports: [
+    OverlayTriggerDirective,
+    TooltipDirective,
+    DemoPageComponent,
+    CodeBlockComponent,
+    VoltButton,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './overlay.page.html',
   styleUrl: './overlay.page.scss',

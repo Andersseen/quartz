@@ -9,7 +9,6 @@ const COMPONENT_ROUTES = [
   '/dialog',
   '/splitter',
   '/toast',
-  '/listbox',
   '/tooltip',
   '/drag-drop',
   '/tree',
