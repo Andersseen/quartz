@@ -1,5 +1,4 @@
 // Quartz Headless - primitives for Angular
-export const VERSION = '0.0.1';
 
 // Overlay
 export { OverlayTriggerDirective, OverlayService, OverlayRef } from './lib/overlay';

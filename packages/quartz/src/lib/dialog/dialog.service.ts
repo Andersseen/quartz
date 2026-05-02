@@ -54,6 +54,8 @@ export class DialogService {
 
     // -- Panel element -----------------------------------------------------------
     const panelEl = this.document.createElement('div');
+    panelEl.setAttribute('role', 'dialog');
+    panelEl.setAttribute('aria-modal', 'true');
     panelEl.style.cssText = [
       'pointer-events:auto',
       'max-width:100%',
@@ -70,7 +72,7 @@ export class DialogService {
     let onKeyDown!: (e: KeyboardEvent) => void;
 
     const ref = new DialogRef(() => {
-      this.#performClose(ref, backdropEl, wrapperEl, viewRef, onKeyDown);
+      this.#performClose(ref, backdropEl, wrapperEl, viewRef, onKeyDown, previousActiveElement);
     });
 
     // -- Render template with DialogRef as $implicit context --------------------
@@ -85,6 +87,10 @@ export class DialogService {
     }
     wrapperEl.appendChild(panelEl);
 
+    // -- Focus management -------------------------------------------------------
+    const previousActiveElement = this.document.activeElement as HTMLElement | null;
+    this.#focusFirstFocusable(panelEl);
+
     // -- Scroll lock -------------------------------------------------------------
     if (this.#openDialogs.size === 0) {
       this.document.body.style.overflow = 'hidden';
@@ -97,9 +103,15 @@ export class DialogService {
     }
 
     onKeyDown = (event: KeyboardEvent) => {
-      if (!resolvedConfig.closeOnEscape || event.key !== 'Escape') return;
-      const dialogs = [...this.#openDialogs];
-      if (dialogs[dialogs.length - 1] === ref) ref.close();
+      if (event.key === 'Escape') {
+        if (!resolvedConfig.closeOnEscape) return;
+        const dialogs = [...this.#openDialogs];
+        if (dialogs[dialogs.length - 1] === ref) ref.close();
+        return;
+      }
+      if (event.key === 'Tab') {
+        this.#trapFocus(panelEl, event);
+      }
     };
     this.document.addEventListener('keydown', onKeyDown);
 
@@ -145,6 +157,7 @@ export class DialogService {
     wrapper: HTMLElement,
     view: EmbeddedViewRef<unknown>,
     onKeyDown: (e: KeyboardEvent) => void,
+    previousActiveElement: HTMLElement | null,
   ): void {
     if (!this.#openDialogs.has(ref)) return;
     this.#openDialogs.delete(ref);
@@ -154,6 +167,34 @@ export class DialogService {
     view.destroy();
     if (this.#openDialogs.size === 0) {
       this.document.body.style.overflow = '';
+    }
+    previousActiveElement?.focus();
+  }
+
+  #focusFirstFocusable(panel: HTMLElement): void {
+    const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const first = panel.querySelector<HTMLElement>(selector);
+    first?.focus();
+  }
+
+  #trapFocus(panel: HTMLElement, event: KeyboardEvent): void {
+    const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusable = Array.from(panel.querySelectorAll<HTMLElement>(selector));
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey) {
+      if (document.activeElement === first) {
+        last.focus();
+        event.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        event.preventDefault();
+      }
     }
   }
 }

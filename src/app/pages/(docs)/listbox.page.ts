@@ -6,6 +6,5 @@ import { DemoPageComponent } from '../../components/demo-page/demo-page.componen
   imports: [DemoPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './listbox.page.html',
-  styleUrl: './listbox.page.scss',
 })
 export default class ListboxPage {}

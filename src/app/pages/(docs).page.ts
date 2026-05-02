@@ -9,68 +9,25 @@ import { LayoutService } from '../services/layout.service';
   imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="layout" [class.layout--sidebar-open]="layout.sidebarOpen()">
+    <div class="flex min-h-screen bg-[#0a0a0c] overflow-x-hidden">
       <app-header />
 
-      <!-- Backdrop — closes sidebar on tap outside -->
-      <div class="layout__backdrop" (click)="layout.close()"></div>
+      <div
+        class="fixed inset-0 bg-black/60 z-[900] opacity-0 pointer-events-none transition-opacity duration-300 max-md:block hidden"
+        [class.opacity-100]="layout.sidebarOpen()"
+        [class.pointer-events-auto]="layout.sidebarOpen()"
+        (click)="layout.close()"
+      ></div>
 
       <app-sidebar [open]="layout.sidebarOpen()" />
 
-      <main class="layout__content">
+      <main
+        class="flex-1 ml-[260px] pt-28 min-h-screen min-w-0 px-8 pb-12 max-md:ml-0 max-md:pt-24 max-md:px-4"
+      >
         <router-outlet />
       </main>
     </div>
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-      }
-
-      .layout {
-        display: flex;
-        min-height: 100vh;
-        background: #0a0a0c;
-        overflow-x: hidden;
-      }
-
-      .layout__content {
-        flex: 1;
-        margin-left: 260px;
-        padding-top: 6rem;
-        min-height: 100vh;
-        min-width: 0;
-      }
-
-      .layout__backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 900;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s;
-      }
-
-      @media (max-width: 768px) {
-        .layout__content {
-          margin-left: 0;
-          padding-top: 5rem;
-        }
-
-        .layout__backdrop {
-          display: block;
-        }
-
-        .layout--sidebar-open .layout__backdrop {
-          opacity: 1;
-          pointer-events: auto;
-        }
-      }
-    `,
-  ],
 })
 export default class DocsLayout {
   readonly layout = inject(LayoutService);

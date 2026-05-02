@@ -9,69 +9,121 @@
     { title: 'Resize Aware', description: 'Recalculates on viewport resize' },
   ]"
 >
-  <div class="demos">
-    <section class="demo-section">
-      <h2 class="demo-section__title">10 000 Items</h2>
-      <p class="demo-section__desc">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">10 000 Items</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         This preview keeps the full scroll height, but only renders the rows around the current
         viewport. Scroll the list or jump to a distant index to see the rendered range update.
       </p>
 
       <app-code-block [code]="basicCode">
-        <div preview class="demo-preview">
-          <div class="vs-demo-shell">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <div class="w-full max-w-[760px] grid gap-4">
             <div
-              class="vs-viewport"
+              class="w-full h-[280px] overflow-auto border border-[#1e1e2a] rounded-[10px] bg-gradient-to-b from-[#0d0d12] to-[#0a0a0c] relative shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               qzVirtualScroll
               [items]="users()"
               [itemSize]="itemSize"
               [buffer]="4"
               #vs="qzVirtualScroll"
             >
-              <div class="vs-content" [style.height.px]="vs.contentHeight()">
+              <div class="relative w-full" [style.height.px]="vs.contentHeight()">
                 @for (row of vs.visibleItems(); track row.index) {
-                  <div class="vs-row" [style.top.px]="row.offset">
-                    <span class="vs-row__index">{{ row.index + 1 }}</span>
-                    <span class="vs-row__name">{{ row.item.name }}</span>
-                    <span class="vs-row__email">{{ row.item.email }}</span>
-                    <span class="vs-row__role">{{ row.item.role }}</span>
+                  <div
+                    class="absolute left-0 right-0 h-14 grid items-center gap-3 px-4 border-b border-[#1e1e2a] bg-[rgba(10,10,12,0.92)] box-border grid-cols-[52px_minmax(0,1fr)_minmax(0,1.1fr)_auto] even:bg-[rgba(15,15,19,0.92)] max-sm:grid-cols-[44px_minmax(0,1fr)_auto]"
+                    [style.top.px]="row.offset"
+                  >
+                    <span
+                      class="text-xs font-semibold text-[#7c3aed] w-10 text-right flex-shrink-0"
+                      >{{ row.index + 1 }}</span
+                    >
+                    <span
+                      class="flex-1 text-sm font-medium text-gray-200 overflow-hidden text-ellipsis whitespace-nowrap"
+                      >{{ row.item.name }}</span
+                    >
+                    <span
+                      class="hidden sm:block text-xs text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap max-w-[160px]"
+                      >{{ row.item.email }}</span
+                    >
+                    <span
+                      class="text-[0.7rem] font-semibold uppercase tracking-[0.04em] py-0.5 px-2 rounded bg-[rgba(139,92,246,0.12)] text-[#a78bfa] flex-shrink-0"
+                      >{{ row.item.role }}</span
+                    >
                   </div>
                 }
               </div>
             </div>
 
-            <div class="vs-toolbar" aria-label="Virtual scroll stats">
-              <div class="vs-stat">
-                <span class="vs-stat__label">Rendered now</span>
-                <strong class="vs-stat__value">{{ vs.visibleItems().length }}</strong>
-                <span class="vs-stat__meta">of {{ vs.count() }} total rows</span>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-3" aria-label="Virtual scroll stats">
+              <div class="grid gap-1 py-3.5 px-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+                <span
+                  class="text-[0.72rem] font-semibold tracking-[0.08em] uppercase text-[#8b90a3]"
+                  >Rendered now</span
+                >
+                <strong class="text-base font-bold text-gray-100">{{
+                  vs.visibleItems().length
+                }}</strong>
+                <span class="text-[0.78rem] leading-[1.4] text-gray-400"
+                  >of {{ vs.count() }} total rows</span
+                >
               </div>
 
-              <div class="vs-stat">
-                <span class="vs-stat__label">Visible range</span>
-                <strong class="vs-stat__value">
+              <div class="grid gap-1 py-3.5 px-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+                <span
+                  class="text-[0.72rem] font-semibold tracking-[0.08em] uppercase text-[#8b90a3]"
+                  >Visible range</span
+                >
+                <strong class="text-base font-bold text-gray-100">
                   {{ vs.startIndex() + 1 }} - {{ vs.endIndex() + 1 }}
                 </strong>
-                <span class="vs-stat__meta">buffered around the viewport</span>
+                <span class="text-[0.78rem] leading-[1.4] text-gray-400"
+                  >buffered around the viewport</span
+                >
               </div>
 
-              <div class="vs-stat">
-                <span class="vs-stat__label">Scroll height</span>
-                <strong class="vs-stat__value">{{ vs.contentHeight() }} px</strong>
-                <span class="vs-stat__meta">without mounting 10 000 DOM nodes</span>
+              <div class="grid gap-1 py-3.5 px-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+                <span
+                  class="text-[0.72rem] font-semibold tracking-[0.08em] uppercase text-[#8b90a3]"
+                  >Scroll height</span
+                >
+                <strong class="text-base font-bold text-gray-100"
+                  >{{ vs.contentHeight() }} px</strong
+                >
+                <span class="text-[0.78rem] leading-[1.4] text-gray-400"
+                  >without mounting 10 000 DOM nodes</span
+                >
               </div>
             </div>
 
-            <div class="vs-actions vs-actions--spread">
-              <button class="btn btn--ghost" (click)="vs.scrollToIndex(0)">Top</button>
-              <button class="btn btn--ghost" (click)="vs.scrollToIndex(2500)">25%</button>
-              <button class="btn btn--ghost" (click)="vs.scrollToIndex(5000)">Middle</button>
-              <button class="btn btn--ghost" (click)="vs.scrollToIndex(vs.count() - 1)">
+            <div class="flex gap-2 flex-wrap">
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="vs.scrollToIndex(0)"
+              >
+                Top
+              </button>
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="vs.scrollToIndex(2500)"
+              >
+                25%
+              </button>
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="vs.scrollToIndex(5000)"
+              >
+                Middle
+              </button>
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-lg text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="vs.scrollToIndex(vs.count() - 1)"
+              >
                 Bottom
               </button>
             </div>
 
-            <p class="vs-footnote">
+            <p class="m-0 text-[0.82rem] leading-[1.6] text-gray-400">
               Each row is {{ itemSize }}px tall. Quartz keeps the full scrollable space, then swaps
               only the visible slice into the DOM.
             </p>
@@ -80,39 +132,63 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">What The Directive Exposes</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">What The Directive Exposes</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         These are the key values and methods you use to build your own UI on top of the directive.
       </p>
 
       <app-code-block [code]="apiCode">
-        <div preview class="demo-preview">
-          <div class="api-grid">
-            <article class="api-card">
-              <div class="api-card__label">visibleItems()</div>
-              <div class="api-card__value">{{ vs.visibleItems().length }} rows mounted</div>
-              <p class="api-card__desc">The slice you actually render in your template.</p>
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <div class="w-full max-w-[760px] grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <article class="p-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+              <div
+                class="mb-2 text-[0.78rem] font-semibold tracking-[0.06em] uppercase text-[#8b90a3]"
+              >
+                visibleItems()
+              </div>
+              <div class="text-base font-bold text-gray-100">
+                {{ vs.visibleItems().length }} rows mounted
+              </div>
+              <p class="mt-2 mb-0 text-[0.82rem] leading-[1.55] text-gray-400">
+                The slice you actually render in your template.
+              </p>
             </article>
 
-            <article class="api-card">
-              <div class="api-card__label">startIndex() / endIndex()</div>
-              <div class="api-card__value">{{ vs.startIndex() + 1 }} - {{ vs.endIndex() + 1 }}</div>
-              <p class="api-card__desc">Useful for sticky counters, analytics, or debugging.</p>
+            <article class="p-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+              <div
+                class="mb-2 text-[0.78rem] font-semibold tracking-[0.06em] uppercase text-[#8b90a3]"
+              >
+                startIndex() / endIndex()
+              </div>
+              <div class="text-base font-bold text-gray-100">
+                {{ vs.startIndex() + 1 }} - {{ vs.endIndex() + 1 }}
+              </div>
+              <p class="mt-2 mb-0 text-[0.82rem] leading-[1.55] text-gray-400">
+                Useful for sticky counters, analytics, or debugging.
+              </p>
             </article>
 
-            <article class="api-card">
-              <div class="api-card__label">scrollToIndex()</div>
-              <div class="api-card__value">Jump anywhere instantly</div>
-              <p class="api-card__desc">
+            <article class="p-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+              <div
+                class="mb-2 text-[0.78rem] font-semibold tracking-[0.06em] uppercase text-[#8b90a3]"
+              >
+                scrollToIndex()
+              </div>
+              <div class="text-base font-bold text-gray-100">Jump anywhere instantly</div>
+              <p class="mt-2 mb-0 text-[0.82rem] leading-[1.55] text-gray-400">
                 Wire buttons, search, or keyboard shortcuts to move through huge lists.
               </p>
             </article>
 
-            <article class="api-card">
-              <div class="api-card__label">contentHeight()</div>
-              <div class="api-card__value">{{ vs.contentHeight() }} px</div>
-              <p class="api-card__desc">
+            <article class="p-4 border border-[#1e1e2a] rounded-xl bg-[#12121a]">
+              <div
+                class="mb-2 text-[0.78rem] font-semibold tracking-[0.06em] uppercase text-[#8b90a3]"
+              >
+                contentHeight()
+              </div>
+              <div class="text-base font-bold text-gray-100">{{ vs.contentHeight() }} px</div>
+              <p class="mt-2 mb-0 text-[0.82rem] leading-[1.55] text-gray-400">
                 Preserves natural scrollbar behavior even though only a few rows exist in the DOM.
               </p>
             </article>

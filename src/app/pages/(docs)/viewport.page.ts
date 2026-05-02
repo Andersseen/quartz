@@ -10,7 +10,6 @@ import { BASIC_SNIPPET, MATCH_SNIPPET, API_SNIPPET } from './viewport.snippets';
   imports: [DecimalPipe, ViewportMatchDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './viewport.page.html',
-  styleUrl: './viewport.page.scss',
 })
 export default class ViewportPage {
   readonly viewport = inject(ViewportService);

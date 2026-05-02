@@ -12,7 +12,6 @@ const REGISTRY = {
       'overlay/overlay.types.ts',
       'overlay/index.ts',
     ],
-    peerDeps: ['@angular/cdk'],
     docs: 'https://quartz-ui.pages.dev/overlay',
   },
   dialog: {
@@ -61,9 +60,13 @@ const REGISTRY = {
     docs: 'https://quartz-ui.pages.dev/drag-drop',
   },
   tooltip: {
-    description: 'Accessible tooltip with configurable placement (coming soon)',
-    soon: true,
-    files: [],
+    description: 'Accessible tooltip with configurable placement',
+    files: [
+      'tooltip/tooltip.directive.ts',
+      'tooltip/tooltip.service.ts',
+      'tooltip/tooltip.types.ts',
+      'tooltip/index.ts',
+    ],
     deps: ['overlay'],
     docs: 'https://quartz-ui.pages.dev/tooltip',
   },

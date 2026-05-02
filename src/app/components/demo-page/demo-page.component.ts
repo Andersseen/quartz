@@ -10,7 +10,6 @@ interface Feature {
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './demo-page.component.html',
-  styleUrl: './demo-page.component.scss',
 })
 export class DemoPageComponent {
   badge = input('Component');

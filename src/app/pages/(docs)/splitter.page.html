@@ -9,15 +9,15 @@
     { title: 'Constraints', description: 'Min/max size limits' },
   ]"
 >
-  <div class="demos">
-    <section class="demo-section">
-      <h2 class="demo-section__title">Horizontal Splitter</h2>
-      <p class="demo-section__desc">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Horizontal Splitter</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Side-by-side panels with a draggable handle. Drag or use
         <kbd>←</kbd><kbd>→</kbd> arrow keys to resize.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">[qzSplitterContainer]</span>
         <span class="hd-tag--input hd-tag">orientation</span>
         <span class="hd-tag--input hd-tag">minSize / maxSize</span>
@@ -68,14 +68,14 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Vertical Splitter</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Vertical Splitter</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Stacked panels with a horizontal handle. Ideal for editor / terminal layouts. Use
         <kbd>↑</kbd><kbd>↓</kbd> arrow keys to resize.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">[qzSplitterContainer]</span>
         <span class="hd-tag--input hd-tag">orientation="vertical"</span>
         <span class="hd-tag--output hd-tag">(positionChange)</span>

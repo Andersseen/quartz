@@ -1,22 +1,30 @@
-<div class="demo-page">
-  <header class="demo-page__header">
-    <div class="demo-page__badge">{{ badge() }}</div>
-    <h1 class="demo-page__title">{{ title() }}</h1>
-    <p class="demo-page__description">{{ description() }}</p>
+<div class="min-h-screen py-12 px-8 max-md:py-8 max-md:px-5">
+  <header class="max-w-5xl mx-auto mb-12 max-md:mb-8">
+    <div
+      class="inline-block text-[0.7rem] font-bold tracking-[0.12em] uppercase text-violet-400 bg-[#1e1430] border border-violet-900 rounded px-3 py-1 mb-4"
+    >
+      {{ badge() }}
+    </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+      {{ title() }}
+    </h1>
+    <p class="text-lg text-gray-500 mb-8 leading-relaxed max-w-2xl">{{ description() }}</p>
 
     @if (features().length > 0) {
-      <div class="demo-page__features">
+      <div class="flex gap-4 flex-wrap">
         @for (feature of features(); track feature.title) {
-          <div class="demo-page__feature">
-            <div class="demo-page__feature-title">{{ feature.title }}</div>
-            <div class="demo-page__feature-desc">{{ feature.description }}</div>
+          <div
+            class="p-4 px-5 bg-[#0f0f13] border border-[#1e1e2a] rounded-lg min-w-[160px] flex-1 flex-basis-[160px]"
+          >
+            <div class="text-sm font-semibold text-gray-200 mb-1">{{ feature.title }}</div>
+            <div class="text-xs text-gray-500">{{ feature.description }}</div>
           </div>
         }
       </div>
     }
   </header>
 
-  <main class="demo-page__content">
+  <main class="max-w-5xl mx-auto">
     <ng-content />
   </main>
 </div>

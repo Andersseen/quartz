@@ -21,7 +21,6 @@ const COMPONENT_ROUTES = [
   imports: [RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   private readonly router = inject(Router);

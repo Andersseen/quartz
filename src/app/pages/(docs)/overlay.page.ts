@@ -37,7 +37,6 @@ import { VoltButton } from '@voltui/components';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './overlay.page.html',
-  styleUrl: './overlay.page.scss',
 })
 export default class OverlayPage {
   private overlayService = inject(OverlayService);

@@ -1,7 +1,9 @@
-<aside class="sidebar">
-  <div class="sidebar__header">
-    <div class="sidebar__logo">
-      <svg width="28" height="28" viewBox="0 0 32 32" class="sidebar__logo-svg">
+<aside
+  class="flex flex-col h-full w-[260px] bg-[#0f0f13] border-r border-white/10 fixed left-0 top-0 bottom-0 max-md:relative"
+>
+  <div class="p-6 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <svg width="28" height="28" viewBox="0 0 32 32">
         <defs>
           <linearGradient id="qz-gradient-sidebar" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color: #10b981; stop-opacity: 1" />
@@ -23,52 +25,63 @@
           stroke-dasharray="1 3"
         />
       </svg>
-      <div class="sidebar__logo-text">
-        <span class="sidebar__logo-title">Quartz Headless</span>
-        <span class="sidebar__logo-subtitle">Headless Components</span>
+      <div class="flex flex-col">
+        <span class="text-lg font-bold text-white tracking-tight">Quartz Headless</span>
+        <span class="text-xs text-gray-500">Headless Components</span>
       </div>
     </div>
   </div>
 
-  <nav class="sidebar__nav">
-    <div class="sidebar__section sidebar__section--nav">
+  <nav class="flex-1 py-6 px-3 overflow-y-auto">
+    <div class="mb-6 pb-4 border-b border-[#1e1e2a]">
       <a
         routerLink="/"
-        routerLinkActive="sidebar__link--active"
+        routerLinkActive="bg-violet-500/10 text-violet-500"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="sidebar__link"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all mb-1"
       >
-        <span class="sidebar__link-icon">⌂</span>
+        <span class="text-base w-5 text-center flex-shrink-0">⌂</span>
         <span>Home</span>
       </a>
-      <a routerLink="/docs" routerLinkActive="sidebar__link--active" class="sidebar__link">
-        <span class="sidebar__link-icon">📖</span>
+      <a
+        routerLink="/docs"
+        routerLinkActive="bg-violet-500/10 text-violet-500"
+        class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all"
+      >
+        <span class="text-base w-5 text-center flex-shrink-0">📖</span>
         <span>Docs</span>
       </a>
     </div>
 
-    <div class="sidebar__section">
-      <span class="sidebar__section-title">Components</span>
+    <div class="mb-6">
+      <span
+        class="block text-[0.7rem] font-semibold uppercase tracking-widest text-gray-500 px-3 mb-2"
+        >Components</span
+      >
       @for (item of components(); track item.path) {
         <a
           [routerLink]="item.path"
-          routerLinkActive="sidebar__link--active"
-          class="sidebar__link"
-          [class.sidebar__link--soon]="item.soon"
+          routerLinkActive="bg-violet-500/10 text-violet-500"
+          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all mb-1 relative"
+          [class.opacity-50]="item.soon"
+          [class.pointer-events-none]="item.soon"
         >
-          <span class="sidebar__link-icon">{{ item.icon }}</span>
+          <span class="text-base w-5 text-center flex-shrink-0">{{ item.icon }}</span>
           <span>{{ item.label }}</span>
           @if (item.soon) {
-            <span class="sidebar__soon-badge">Soon</span>
+            <span
+              class="ml-auto text-[0.65rem] font-semibold uppercase tracking-wide text-gray-500 bg-[#1e1e2a] px-1.5 py-0.5 rounded"
+              >Soon</span
+            >
           }
         </a>
       }
     </div>
   </nav>
 
-  <div class="sidebar__footer">
-    <div class="sidebar__version">
-      <span class="sidebar__version-dot"></span>
+  <div class="px-6 py-4 border-t border-[#1e1e2a]">
+    <div class="flex items-center gap-2 text-xs text-gray-500">
+      <span class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e]"></span>
       <span>v0.0.1</span>
     </div>
   </div>

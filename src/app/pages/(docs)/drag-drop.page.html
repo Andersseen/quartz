@@ -9,16 +9,16 @@
     { title: 'Touch ready', description: 'Mobile compatible' },
   ]"
 >
-  <div class="demos">
+  <div class="flex flex-col gap-12">
     <!-- ── 1. File Upload Simulation ───────────────────────────────────── -->
-    <section class="demo-section">
-      <h2 class="demo-section__title">File Upload Zone</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">File Upload Zone</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Drag a file chip and drop it onto the upload zone. The drop zone only accepts
         <code>qzDraggableType="file"</code> items. Progress is simulated after each drop.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">[qzDropZoneAccept]="['file']"</span>
         <span class="hd-tag--output hd-tag">(qzDrop)</span>
         <span class="hd-tag--input hd-tag">qzDraggableType="file"</span>
@@ -96,20 +96,20 @@
     </section>
 
     <!-- ── 2. Sortable List ─────────────────────────────────────────────── -->
-    <section class="demo-section">
-      <h2 class="demo-section__title">Sortable List</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Sortable List</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Drag items to reorder within a single container.
         <code>[qzDropZoneSortable]="true"</code> calculates the insertion index automatically.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">[qzDropZoneSortable]="true"</span>
         <span class="hd-tag--output hd-tag">(qzDrop) → index</span>
       </div>
 
       <app-code-block [code]="sortableCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <div
             class="sortable-list"
             qzDropZone
@@ -134,21 +134,21 @@
     </section>
 
     <!-- ── 3. Kanban — between containers ──────────────────────────────── -->
-    <section class="demo-section">
-      <h2 class="demo-section__title">Between Containers (Kanban)</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Between Containers (Kanban)</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Each column is a separate drop zone that accepts only <code>qzDraggableType="task"</code>.
         Drag cards across columns to change their status.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">[qzDropZoneAccept]="['task']"</span>
         <span class="hd-tag--output hd-tag">(qzDrop) per column</span>
         <span class="hd-tag--input hd-tag">qzDraggableType="task"</span>
       </div>
 
       <app-code-block [code]="kanbanCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <div class="kanban">
             @for (column of columns; track column.id) {
               <div
@@ -192,14 +192,14 @@
     </section>
 
     <!-- ── 4. Free Position Drag ──────────────────────────────────────── -->
-    <section class="demo-section">
-      <h2 class="demo-section__title">Free Position Drag</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Free Position Drag</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Drag tokens freely within a bounded canvas using pointer events. No drop zones — position is
         updated live with pointer capture.
       </p>
 
-      <div class="demo-tags">
+      <div class="flex flex-wrap gap-2 mb-5">
         <span class="hd-tag">(pointerdown) grab</span>
         <span class="hd-tag">(pointermove) move</span>
         <span class="hd-tag">(pointerup) release</span>

@@ -10,7 +10,6 @@ import { VoltButton } from '@voltui/components';
   imports: [ToastContainerComponent, DemoPageComponent, CodeBlockComponent, VoltButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './toast.page.html',
-  styleUrl: './toast.page.scss',
 })
 export default class ToastPage {
   private toastService = inject(ToastService);

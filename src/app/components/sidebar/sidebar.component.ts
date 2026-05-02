@@ -13,9 +13,8 @@ interface NavItem {
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '[class.sidebar-open]': 'open()' },
+  host: { '[class.translate-x-0]': 'open()', '[class.-translate-x-full]': '!open()' },
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
   open = input(false);

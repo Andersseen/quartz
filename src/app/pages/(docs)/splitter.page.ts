@@ -21,7 +21,6 @@ import { HORIZONTAL_SNIPPET, VERTICAL_SNIPPET } from './splitter.snippets';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './splitter.page.html',
-  styleUrl: './splitter.page.scss',
 })
 export default class SplitterPage {
   hPosition = signal(40);

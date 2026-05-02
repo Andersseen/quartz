@@ -9,15 +9,15 @@
     { title: 'Actions', description: 'Button support' },
   ]"
 >
-  <div class="demos">
-    <section class="demo-section">
-      <h2 class="demo-section__title">Toast Types</h2>
-      <p class="demo-section__desc">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Toast Types</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Four built-in types with distinct colors and icons: Success, Error, Warning, and Info.
       </p>
 
       <app-code-block [code]="typesCode">
-        <div preview class="demo-preview demo-preview--row">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
           <volt-button (click)="showSuccess()" variant="outline"
             ><span slot="leading">✓</span> Success</volt-button
           >
@@ -34,14 +34,14 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Positions</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Positions</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Place toasts in any corner or center of the screen. Each position maintains its own queue.
       </p>
 
       <app-code-block [code]="positionsCode">
-        <div preview class="demo-preview demo-preview--grid">
+        <div preview class="grid grid-cols-3 gap-3 max-w-[400px] mx-auto">
           @for (pos of positions; track pos) {
             <volt-button (click)="showAtPosition(pos)" variant="ghost">
               {{ formatPosition(pos) }}
@@ -51,14 +51,14 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Duration Control</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Duration Control</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Set custom durations or create persistent toasts that require manual dismissal.
       </p>
 
       <app-code-block [code]="durationCode">
-        <div preview class="demo-preview demo-preview--row">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
           <volt-button (click)="showWithDuration(2000)" variant="ghost">2 Seconds</volt-button>
           <volt-button (click)="showWithDuration(5000)" variant="ghost">5 Seconds</volt-button>
           <volt-button (click)="showPersistent()" variant="ghost">Persistent</volt-button>
@@ -67,14 +67,14 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">API Usage</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">API Usage</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Full control with the ToastService. Create toasts with titles, messages, and custom options.
       </p>
 
       <app-code-block [code]="apiCode">
-        <div preview class="demo-preview demo-preview--center">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
           <volt-button (click)="showWithTitle()" variant="solid">Show Toast with Title</volt-button>
         </div>
       </app-code-block>

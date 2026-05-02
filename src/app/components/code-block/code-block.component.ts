@@ -18,13 +18,14 @@ import { VoltButton } from '@voltui/components';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="code-block">
-      <div class="code-block__header">
-        <div class="code-block__tabs">
+    <div class="border border-[#1e1e2a] rounded-xl overflow-hidden bg-[#0f0f13]">
+      <div class="flex items-center justify-between p-2 bg-[#1e1e2a] border-b border-[#2a2a3a]">
+        <div class="flex gap-1">
           <volt-button
             variant="ghost"
             size="sm"
-            [class.code-block__tab--active]="activeTab() === 'preview'"
+            [class.text-violet-400]="activeTab() === 'preview'"
+            [class.bg-[#1e1430]]="activeTab() === 'preview'"
             (click)="activeTab.set('preview')"
           >
             Preview
@@ -32,7 +33,8 @@ import { VoltButton } from '@voltui/components';
           <volt-button
             variant="ghost"
             size="sm"
-            [class.code-block__tab--active]="activeTab() === 'code'"
+            [class.text-violet-400]="activeTab() === 'code'"
+            [class.bg-[#1e1430]]="activeTab() === 'code'"
             (click)="activeTab.set('code')"
           >
             Code
@@ -54,13 +56,13 @@ import { VoltButton } from '@voltui/components';
         }
       </div>
 
-      <div class="code-block__content">
+      <div class="min-h-[200px]">
         @if (activeTab() === 'preview') {
-          <div class="code-block__preview">
+          <div class="p-8 flex items-center justify-center min-h-[200px]">
             <ng-content select="[preview]" />
           </div>
         } @else {
-          <div class="code-block__editor-wrap">
+          <div class="h-[380px] overflow-hidden">
             @if (editorLoaded()) {
               <vertex-editor
                 [attr.value]="code()"
@@ -70,7 +72,9 @@ import { VoltButton } from '@voltui/components';
                 style="display: block; height: 380px; overflow: auto;"
               ></vertex-editor>
             } @else {
-              <div class="code-block__editor-placeholder">
+              <div
+                class="h-[380px] flex items-center justify-center text-gray-500 text-sm animate-pulse"
+              >
                 <span>Loading editor…</span>
               </div>
             }
@@ -79,81 +83,9 @@ import { VoltButton } from '@voltui/components';
       </div>
     </div>
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-      }
-
-      .code-block {
-        border: 1px solid #1e1e2a;
-        border-radius: 12px;
-        overflow: hidden;
-        background: #0f0f13;
-      }
-
-      .code-block__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.5rem;
-        background: #1e1e2a;
-        border-bottom: 1px solid #2a2a3a;
-      }
-
-      .code-block__tabs {
-        display: flex;
-        gap: 0.25rem;
-      }
-
-      .code-block__tab--active {
-        --tw-text-opacity: 1;
-        color: rgb(167 139 250 / var(--tw-text-opacity)) !important;
-        background-color: rgb(30 20 48) !important;
-      }
-
-      .code-block__content {
-        min-height: 200px;
-      }
-
-      .code-block__preview {
-        padding: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 200px;
-      }
-
-      .code-block__editor-wrap {
-        height: 380px;
-        overflow: hidden;
-      }
-
-      .code-block__editor-placeholder {
-        height: 380px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6b7280;
-        font-size: 0.875rem;
-        animation: pulse 1.5s ease-in-out infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.4;
-        }
-      }
-    `,
-  ],
 })
 export class CodeBlockComponent implements OnInit {
   code = input.required<string>();
-  // Most quartz demos are Angular templates — pass 'typescript' for .ts snippets
   language = input<'html' | 'typescript'>('html');
   activeTab = signal<'preview' | 'code'>('preview');
   copied = signal(false);

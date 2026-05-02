@@ -1,35 +1,20 @@
 @use 'sass:math';
 
+/* ─── Theme Variables ──────────────────────────────────────────────────────── */
 :root {
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-
-  // Colors
   --bg-primary: #0a0a0c;
   --bg-secondary: #0f0f13;
   --bg-tertiary: #161620;
-
   --primary: #8b5cf6;
   --primary-hover: #7c3aed;
-  --primary-glow: rgba(139, 92, 246, 0.4);
-
-  --accent: #d946ef;
-  --accent-glow: rgba(217, 70, 239, 0.3);
-
   --text-primary: #ffffff;
   --text-secondary: #9ca3af;
   --text-muted: #6b7280;
-
   --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.15);
-
-  --glass-bg: rgba(15, 15, 19, 0.75);
-  --glass-blur: 16px;
-  --glass-border: rgba(255, 255, 255, 0.08);
-
-  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ─── Global Reset ─────────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -37,208 +22,159 @@
 }
 
 body {
-  font-family: var(--font-family);
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-osx-grayscale: grayscale;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-}
-
-// Global Utilities
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.bg-blur-blob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-  filter: blur(80px);
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.bg-blur-blob--accent {
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  width: 400px;
-  height: 400px;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 20px var(--primary-glow);
-  }
-  50% {
-    box-shadow: 0 0 40px var(--primary-glow);
-  }
-  100% {
-    box-shadow: 0 0 20px var(--primary-glow);
-  }
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  transition: var(--transition-fast);
 }
 
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: #0a0a0c;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border: 2px solid var(--bg-primary);
+  background: #161620;
+  border: 2px solid #0a0a0c;
   border-radius: 5px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-// Reusable Grid & Card System
-.qz-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 2rem;
-  padding: 1rem 0;
-}
-
-.qz-card {
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  display: flex !important;
-  flex-direction: column;
-
-  &:hover {
-    border-color: var(--primary);
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+/* ─── Keyframes ────────────────────────────────────────────────────────────── */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-
-  &--soon {
-    opacity: 0.5;
-    cursor: not-allowed;
+  50% {
+    transform: translateY(-20px);
   }
 }
 
-.qz-card-glow {
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+  }
 }
 
-.qz-card:hover .qz-card-glow {
-  opacity: 1;
-}
-
-.qz-card-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-}
-
-.qz-card-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+/* ─── Toast Styles (headless library – styled by consumer) ─────────────────── */
+qz-toast {
   display: block;
 }
 
-.qz-card-desc {
-  color: var(--text-secondary);
-  font-size: 1.0625rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  flex-grow: 1;
-}
-
-.qz-card-tags {
+.qz-toast {
   display: flex;
-  gap: 0.75rem;
-  margin-top: auto;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: white;
+  border-left: 4px solid #ccc;
+  min-width: 300px;
+  max-width: 400px;
+  position: relative;
+  overflow: hidden;
 }
 
-.qz-card-tag {
-  padding: 0.375rem 0.875rem;
-  background: rgba(139, 92, 246, 0.1);
-  color: var(--primary);
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+.qz-toast--success {
+  border-left-color: #4caf50;
+}
+.qz-toast--error {
+  border-left-color: #f44336;
+}
+.qz-toast--warning {
+  border-left-color: #ff9800;
+}
+.qz-toast--info {
+  border-left-color: #2196f3;
 }
 
-.qz-card-badge {
+.qz-toast__progress {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  padding: 0.25rem 0.75rem;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.7rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.qz-toast__progress-bar {
+  height: 100%;
+  background: currentColor;
+  opacity: 0.3;
+  transition: width 0.1s linear;
+}
+.qz-toast--success .qz-toast__progress-bar {
+  color: #4caf50;
+}
+.qz-toast--error .qz-toast__progress-bar {
+  color: #f44336;
+}
+.qz-toast--warning .qz-toast__progress-bar {
+  color: #ff9800;
+}
+.qz-toast--info .qz-toast__progress-bar {
+  color: #2196f3;
+}
+
+.qz-toast__content {
+  flex: 1;
+  min-width: 0;
+}
+.qz-toast__title {
   font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #333;
+}
+.qz-toast__message {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+.qz-toast__close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: -4px -4px -4px 0;
+  color: #999;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.qz-toast__close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
 }
 
-@media (max-width: 768px) {
-  .qz-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-// ─── Headless Demo System ────────────────────────────────────────────────────
-// Components in Quartz are logic-only (like CDK). Demos use these classes to
-// visualise component boundaries with labelled dashed borders so users
-// understand the structure without confusing it with real UI.
-
+/* ─── Headless Demo System ─────────────────────────────────────────────────── */
 :root {
   --hd-border: 1px dashed rgba(139, 92, 246, 0.5);
   --hd-label-bg: rgba(139, 92, 246, 0.12);
@@ -254,16 +190,12 @@ a {
   --hd-surface-hover: rgba(139, 92, 246, 0.04);
 }
 
-// Container — the root directive element
 .hd {
   position: relative;
   border: var(--hd-border);
   border-radius: 8px;
   background: var(--hd-surface);
 
-  // Directive label pinned inside the top-left corner.
-  // Keeping it inside avoids overflow:hidden clipping by parent containers
-  // and prevents labels from overlapping between adjacent siblings.
   &::before {
     content: attr(data-directive);
     position: absolute;
@@ -282,7 +214,6 @@ a {
     line-height: 1.4;
   }
 
-  // Secondary child element (e.g. Panel)
   &--panel {
     border: var(--hd-secondary-border);
     background: var(--hd-surface);
@@ -293,8 +224,6 @@ a {
     }
   }
 
-  // Interactive handle element — too narrow for a top label, so suppress ::before
-  // and show the directive name as a data-tooltip or rely on the handle-dots indicator.
   &--handle {
     border: var(--hd-handle-border);
     background: rgba(217, 70, 239, 0.04);
@@ -304,7 +233,6 @@ a {
     justify-content: center;
     cursor: col-resize;
     &::before {
-      // Position at bottom edge so it doesn't overlap adjacent panels
       top: auto;
       bottom: 0.25rem;
       left: 50%;
@@ -327,16 +255,14 @@ a {
     }
   }
 
-  // Content inside a headless element — adds padding + label spacing
   &__body {
     padding: 1rem;
     margin-top: 0.5rem;
   }
 
-  // Small meta line (e.g. "Width: 40%")
   &__meta {
     font-size: 0.7rem;
-    color: var(--text-muted);
+    color: #6b7280;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     margin-top: 0.25rem;
   }
@@ -344,12 +270,11 @@ a {
   &__label {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: #9ca3af;
     margin-bottom: 0.25rem;
   }
 }
 
-// Wrapper that centres a headless demo and constrains width
 .hd-demo {
   width: 100%;
   max-width: 640px;
@@ -357,7 +282,6 @@ a {
   padding: 1.5rem 0;
 }
 
-// Tag chip used to show which directive/input is being demonstrated
 .hd-tag {
   display: inline-flex;
   align-items: center;
@@ -370,6 +294,7 @@ a {
   font-size: 0.7rem;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-weight: 600;
+
   &--input {
     background: rgba(99, 102, 241, 0.1);
     color: #818cf8;

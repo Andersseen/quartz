@@ -26,6 +26,5 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './docs.page.html',
-  styleUrl: './docs.page.scss',
 })
 export default class DocsPage {}

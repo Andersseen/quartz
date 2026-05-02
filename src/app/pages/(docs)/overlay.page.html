@@ -9,16 +9,16 @@
     { title: 'Scroll Close', description: 'Close on scroll option' },
   ]"
 >
-  <div class="demos">
-    <section class="demo-section">
-      <h2 class="demo-section__title">Menu Dropdown</h2>
-      <p class="demo-section__desc">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Menu Dropdown</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Classic dropdown menu with keyboard navigation support. Click outside, press Escape, or
         scroll to close.
       </p>
 
       <app-code-block [code]="dropdownCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <volt-button
             variant="solid"
             qzOverlayTrigger
@@ -47,15 +47,15 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Auto-flip & Placements</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Auto-flip & Placements</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         The overlay automatically flips when near viewport edges. Try scrolling or resizing the
         window.
       </p>
 
       <app-code-block [code]="placementsCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <div class="placements-grid">
             @for (p of placements; track p) {
               <volt-button
@@ -81,15 +81,15 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Select / Combobox</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Select / Combobox</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Match anchor width for select-like components. The overlay stretches to match the trigger
         width.
       </p>
 
       <app-code-block [code]="selectCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <volt-button
             variant="outline"
             qzOverlayTrigger
@@ -118,15 +118,15 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Hover Tooltips</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Hover Tooltips</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         The same positioning engine powers hover-activated tooltips. Attach to icons, badges, or any
         element — no click required. Automatically closes on scroll.
       </p>
 
       <app-code-block [code]="tooltipCode">
-        <div preview class="demo-preview demo-preview--row">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
           <div class="hint-bar">
             <span class="hint-icon" qzTooltip="Save document" tooltipPlacement="top">💾</span>
             <span class="hint-icon" qzTooltip="Share with team" tooltipPlacement="top">🔗</span>
@@ -144,14 +144,14 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Programmatic Usage</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Programmatic Usage</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Create overlays programmatically using OverlayService. Useful for dynamic content.
       </p>
 
       <app-code-block [code]="programmaticCode">
-        <div preview class="demo-preview">
+        <div preview class="flex items-center gap-4 flex-wrap">
           <volt-button variant="outline" #progAnchor (click)="toggleProgrammatic()">
             {{ progRef?.isOpen ? 'Close overlay' : 'Open overlay' }}
           </volt-button>
