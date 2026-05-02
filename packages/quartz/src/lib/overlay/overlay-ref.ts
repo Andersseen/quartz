@@ -1,15 +1,24 @@
 import { TemplateRef, ViewContainerRef, EmbeddedViewRef } from '@angular/core';
 import { Subject } from 'rxjs';
-import { OverlayConfig, OverlayPosition } from './overlay.types';
+import {
+  OverlayAnchor,
+  OverlayConfig,
+  OverlayPosition,
+  OverlayVirtualAnchor,
+} from './overlay.types';
 import { calculatePosition } from './overlay-position';
 
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
   private wrapperEl: HTMLElement | null = null;
   private scrollParents: (Element | Document)[] = [];
+  private anchor: OverlayAnchor;
 
   #closed$ = new Subject<void>();
   readonly closed$ = this.#closed$.asObservable();
+
+  #mounted$ = new Subject<HTMLElement>();
+  readonly mounted$ = this.#mounted$.asObservable();
 
   #position$ = new Subject<OverlayPosition>();
   readonly position$ = this.#position$.asObservable();
@@ -17,10 +26,13 @@ export class OverlayRef {
   constructor(
     private templateRef: TemplateRef<unknown>,
     private viewContainerRef: ViewContainerRef,
-    private hostEl: HTMLElement,
+    anchor: OverlayAnchor,
     private containerEl: HTMLElement,
     private config: OverlayConfig,
-  ) {}
+    private document: Document,
+  ) {
+    this.anchor = anchor;
+  }
 
   get isOpen(): boolean {
     return this.wrapperEl !== null;
@@ -30,7 +42,7 @@ export class OverlayRef {
     if (this.isOpen) return;
 
     // Create wrapper and append to container (body portal)
-    this.wrapperEl = document.createElement('div');
+    this.wrapperEl = this.document.createElement('div');
     this.wrapperEl.style.cssText = `
       position: fixed;
       top: 0;
@@ -45,14 +57,21 @@ export class OverlayRef {
     this.viewRef.detectChanges();
 
     for (const node of this.viewRef.rootNodes) {
-      if (node instanceof HTMLElement) {
-        node.style.pointerEvents = 'auto';
-        this.wrapperEl.appendChild(node);
+      if (isElementNode(node)) {
+        const element = node as HTMLElement;
+        element.style.pointerEvents = 'auto';
+        this.wrapperEl.appendChild(element);
       }
     }
 
+    const firstChild = this.wrapperEl.firstElementChild as HTMLElement | null;
+    if (firstChild) {
+      this.#mounted$.next(firstChild);
+    }
+
     // Position after render so we have real dimensions
-    requestAnimationFrame(() => {
+    this.queueFrame(() => {
+      if (!this.isOpen) return;
       this.updatePosition();
       this.attachListeners();
     });
@@ -79,13 +98,23 @@ export class OverlayRef {
     this.isOpen ? this.close() : this.open();
   }
 
+  setVirtualAnchor(anchor: OverlayVirtualAnchor): void {
+    this.anchor = anchor;
+    this.updatePosition();
+  }
+
+  setAnchor(anchor: OverlayAnchor): void {
+    this.anchor = anchor;
+    this.updatePosition();
+  }
+
   updatePosition(): void {
     if (!this.wrapperEl) return;
 
     const firstChild = this.wrapperEl.firstElementChild as HTMLElement | null;
     if (!firstChild) return;
 
-    const anchorRect = this.hostEl.getBoundingClientRect();
+    const anchorRect = this.getAnchorRect();
 
     if (this.config.matchAnchorWidth) {
       firstChild.style.width = `${anchorRect.width}px`;
@@ -97,6 +126,7 @@ export class OverlayRef {
       this.config.placement,
       this.config.offset,
       this.config.flip,
+      this.getViewport(),
     );
 
     this.wrapperEl.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
@@ -109,7 +139,9 @@ export class OverlayRef {
     if (!this.config.closeOnClickOutside) return;
     const target = event.target as Node;
     const overlayEl = this.wrapperEl;
-    if (overlayEl && !overlayEl.contains(target) && !this.hostEl.contains(target)) {
+    const anchorEl = this.getAnchorElement();
+    const isInsideAnchor = anchorEl?.contains(target) ?? false;
+    if (overlayEl && !overlayEl.contains(target) && !isInsideAnchor) {
       this.close();
     }
   };
@@ -131,16 +163,16 @@ export class OverlayRef {
     if (this.config.closeOnClickOutside) {
       // Use setTimeout to avoid catching the same click that opened the overlay
       setTimeout(() => {
-        document.addEventListener('mousedown', this.onClickOutside, true);
+        this.document.addEventListener('mousedown', this.onClickOutside, true);
       });
     }
 
     if (this.config.closeOnEscape) {
-      document.addEventListener('keydown', this.onEscape, true);
+      this.document.addEventListener('keydown', this.onEscape, true);
     }
 
     if (this.config.closeOnScroll) {
-      this.scrollParents = getScrollParents(this.hostEl);
+      this.scrollParents = getScrollParents(this.anchor, this.document);
       for (const parent of this.scrollParents) {
         parent.addEventListener('scroll', this.onScroll, { passive: true });
       }
@@ -148,26 +180,82 @@ export class OverlayRef {
   }
 
   private detachListeners(): void {
-    document.removeEventListener('mousedown', this.onClickOutside, true);
-    document.removeEventListener('keydown', this.onEscape, true);
+    this.document.removeEventListener('mousedown', this.onClickOutside, true);
+    this.document.removeEventListener('keydown', this.onEscape, true);
     for (const parent of this.scrollParents) {
       parent.removeEventListener('scroll', this.onScroll);
     }
     this.scrollParents = [];
   }
 
+  private getAnchorElement(): HTMLElement | null {
+    return isVirtualAnchor(this.anchor) ? null : this.anchor;
+  }
+
+  private getAnchorRect(): DOMRect {
+    if (!isVirtualAnchor(this.anchor)) {
+      return this.anchor.getBoundingClientRect();
+    }
+
+    const width = this.anchor.width ?? 0;
+    const height = this.anchor.height ?? 0;
+    const ViewDOMRect = this.document.defaultView?.DOMRect;
+
+    if (ViewDOMRect) {
+      return new ViewDOMRect(this.anchor.x, this.anchor.y, width, height);
+    }
+
+    return {
+      x: this.anchor.x,
+      y: this.anchor.y,
+      top: this.anchor.y,
+      left: this.anchor.x,
+      right: this.anchor.x + width,
+      bottom: this.anchor.y + height,
+      width,
+      height,
+      toJSON: () => ({}),
+    } as DOMRect;
+  }
+
+  private getViewport(): { width: number; height: number } {
+    const view = this.document.defaultView;
+    return {
+      width: view?.innerWidth ?? this.document.documentElement.clientWidth,
+      height: view?.innerHeight ?? this.document.documentElement.clientHeight,
+    };
+  }
+
+  private queueFrame(callback: () => void): void {
+    const view = this.document.defaultView;
+    if (view?.requestAnimationFrame) {
+      view.requestAnimationFrame(callback);
+      return;
+    }
+    setTimeout(callback);
+  }
+
   destroy(): void {
     this.close();
     this.#closed$.complete();
+    this.#mounted$.complete();
     this.#position$.complete();
   }
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function getScrollParents(el: HTMLElement): (Element | Document)[] {
+function isVirtualAnchor(anchor: OverlayAnchor): anchor is OverlayVirtualAnchor {
+  return 'x' in anchor && 'y' in anchor;
+}
+
+function isElementNode(node: unknown): node is Element {
+  return !!node && typeof node === 'object' && 'nodeType' in node && node.nodeType === 1;
+}
+
+function getScrollParents(anchor: OverlayAnchor, document: Document): (Element | Document)[] {
   const parents: (Element | Document)[] = [];
-  let current: Element | null = el.parentElement;
+  let current: Element | null = isVirtualAnchor(anchor) ? null : anchor.parentElement;
 
   while (current && current !== document.body) {
     const { overflow, overflowX, overflowY } = getComputedStyle(current);
@@ -177,6 +265,6 @@ function getScrollParents(el: HTMLElement): (Element | Document)[] {
     current = current.parentElement;
   }
 
-  parents.push(globalThis.document);
+  parents.push(document);
   return parents;
 }

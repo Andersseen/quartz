@@ -4,7 +4,9 @@ export { OverlayRef } from './overlay-ref';
 export { calculatePosition } from './overlay-position';
 export type {
   OverlayConfig,
+  OverlayAnchor,
   OverlayPlacement,
   OverlayFlipAxis,
   OverlayPosition,
+  OverlayVirtualAnchor,
 } from './overlay.types';
