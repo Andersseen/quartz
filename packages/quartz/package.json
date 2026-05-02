@@ -1,6 +1,6 @@
 {
   "name": "quartz-headless",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Headless, unstyled Angular 21 UI primitives — overlay, dialog, splitter, toast, drag-drop, tooltip, tree, virtual scroll, viewport",
   "keywords": [
     "angular",
