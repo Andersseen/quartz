@@ -16,7 +16,6 @@ interface User {
   imports: [VirtualScrollDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './virtual-scroll.page.html',
-  styleUrl: './virtual-scroll.page.scss',
 })
 export default class VirtualScrollPage {
   readonly basicCode = BASIC_SNIPPET;

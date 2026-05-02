@@ -17,7 +17,20 @@ import { HomeFooterComponent } from './home/components/footer/footer.component';
     HomeFooterComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './index.page.html',
-  styleUrl: './index.page.scss',
+  template: `
+    <div class="relative min-h-screen overflow-x-hidden">
+      <div class="bg-blur-blob -top-[100px] -left-[100px]"></div>
+      <div class="bg-blur-blob bg-blur-blob--accent top-[200px] -right-[100px]"></div>
+
+      <app-header />
+      <div class="pt-24">
+        <app-home-hero />
+      </div>
+      <app-home-features />
+      <app-home-code-preview />
+      <app-home-cta />
+      <app-home-footer />
+    </div>
+  `,
 })
 export default class HomePage {}

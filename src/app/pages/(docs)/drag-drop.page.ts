@@ -49,7 +49,6 @@ interface UploadEntry extends FileItem {
   imports: [DraggableDirective, DropZoneDirective, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './drag-drop.page.html',
-  styleUrl: './drag-drop.page.scss',
 })
 export default class DragDropPage {
   private readonly zone = inject(NgZone);

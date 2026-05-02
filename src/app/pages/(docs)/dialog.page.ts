@@ -23,7 +23,6 @@ import { VoltButton } from '@voltui/components';
   imports: [DemoPageComponent, CodeBlockComponent, VoltButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dialog.page.html',
-  styleUrl: './dialog.page.scss',
 })
 export default class DialogPage {
   private dialogService = inject(DialogService);

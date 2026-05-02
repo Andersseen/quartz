@@ -73,11 +73,14 @@ export function calculatePosition(
   placement: OverlayPlacement,
   offset: number,
   flip: boolean,
+  viewport: { width: number; height: number } = {
+    width: globalThis.window?.innerWidth ?? 0,
+    height: globalThis.window?.innerHeight ?? 0,
+  },
 ): OverlayPosition {
   const ow = overlayEl.offsetWidth;
   const oh = overlayEl.offsetHeight;
   const overlay = { width: ow, height: oh };
-  const viewport = { width: window.innerWidth, height: window.innerHeight };
 
   let resolvedPlacement = placement;
   let pos = computeRaw(anchorRect, overlay, placement, offset);

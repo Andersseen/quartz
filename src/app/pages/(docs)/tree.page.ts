@@ -9,7 +9,6 @@ import { BASIC_SNIPPET, EXPANDED_SNIPPET, CUSTOM_SNIPPET, API_SNIPPET } from './
   imports: [TreeComponent, DemoPageComponent, CodeBlockComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tree.page.html',
-  styleUrl: './tree.page.scss',
 })
 export default class TreePage {
   readonly basicCode = BASIC_SNIPPET;

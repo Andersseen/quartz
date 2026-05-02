@@ -1,6 +1,11 @@
 import { Injectable, TemplateRef, ViewContainerRef, inject, DOCUMENT } from '@angular/core';
 import { OverlayRef } from './overlay-ref';
-import { OverlayConfig, DEFAULT_OVERLAY_CONFIG } from './overlay.types';
+import {
+  OverlayAnchor,
+  OverlayConfig,
+  OverlayVirtualAnchor,
+  DEFAULT_OVERLAY_CONFIG,
+} from './overlay.types';
 
 @Injectable({ providedIn: 'root' })
 export class OverlayService {
@@ -27,22 +32,36 @@ export class OverlayService {
   }
 
   /**
-   * Creates an OverlayRef for a given anchor element and template.
+   * Creates an OverlayRef for a given anchor element or virtual coordinate anchor and template.
    * Call .open() / .close() / .toggle() on the returned ref.
    */
   create(
     templateRef: TemplateRef<unknown>,
     viewContainerRef: ViewContainerRef,
-    anchorEl: HTMLElement,
+    anchor: OverlayAnchor,
     config: Partial<OverlayConfig> = {},
   ): OverlayRef {
     const resolvedConfig: OverlayConfig = { ...DEFAULT_OVERLAY_CONFIG, ...config };
     return new OverlayRef(
       templateRef,
       viewContainerRef,
-      anchorEl,
+      anchor,
       this.containerEl,
       resolvedConfig,
+      this.document,
     );
+  }
+
+  /**
+   * Convenience helper for context menus and pointer-driven popovers.
+   * Coordinates are viewport-relative, matching MouseEvent.clientX/clientY.
+   */
+  createAt(
+    templateRef: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    anchor: OverlayVirtualAnchor,
+    config: Partial<OverlayConfig> = {},
+  ): OverlayRef {
+    return this.create(templateRef, viewContainerRef, anchor, config);
   }
 }

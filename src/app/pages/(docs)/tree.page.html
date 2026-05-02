@@ -9,48 +9,54 @@
     { title: 'Headless', description: 'You bring the styles' },
   ]"
 >
-  <div class="demos">
-    <section class="demo-section">
-      <h2 class="demo-section__title">Basic Tree</h2>
-      <p class="demo-section__desc">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Basic Tree</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Pass an array of <code>TreeNode</code> objects. Each node can have an optional
         <code>children</code> array. Click a node to select it; click the arrow to expand.
       </p>
 
       <app-code-block [code]="basicCode">
-        <div preview class="demo-preview">
-          <div class="tree-panel">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <div
+            class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+          >
             <qz-tree [nodes]="fileNodes" />
           </div>
         </div>
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Pre-expanded Nodes</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Pre-expanded Nodes</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Set <code>expanded: true</code> on any node to start with its children visible.
       </p>
 
       <app-code-block [code]="expandedCode">
-        <div preview class="demo-preview">
-          <div class="tree-panel">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <div
+            class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+          >
             <qz-tree [nodes]="expandedNodes" />
           </div>
         </div>
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">Custom Node Template</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Custom Node Template</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Provide a custom <code>ng-template</code> to render nodes your way — icons, badges,
         checkboxes, or any HTML you need.
       </p>
 
       <app-code-block [code]="customCode">
-        <div preview class="demo-preview">
-          <div class="tree-panel">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <div
+            class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+          >
             <qz-tree [nodes]="customNodes">
               <ng-template
                 let-node
@@ -59,8 +65,12 @@
                 let-selected="selected"
               >
                 <div
-                  class="custom-node"
-                  [class.custom-node--selected]="selected"
+                  [class]="
+                    'flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-100 text-sm ' +
+                    (selected
+                      ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
+                      : 'text-gray-200 hover:bg-white/5')
+                  "
                   [style.padding-left.px]="level * 24"
                   (click)="node.select()"
                   (keydown.enter)="node.select()"
@@ -70,7 +80,7 @@
                 >
                   @if (node.hasChildren) {
                     <span
-                      class="custom-node__toggle"
+                      class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] text-gray-500 cursor-pointer flex-shrink-0"
                       tabindex="0"
                       role="button"
                       (click)="node.toggle(); $event.stopPropagation()"
@@ -79,12 +89,12 @@
                       {{ expanded ? '▼' : '▶' }}
                     </span>
                   } @else {
-                    <span class="custom-node__spacer"></span>
+                    <span class="w-4 flex-shrink-0"></span>
                   }
-                  <span class="custom-node__icon">
+                  <span class="text-base flex-shrink-0">
                     {{ node.hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
                   </span>
-                  <span class="custom-node__label">{{ node.label }}</span>
+                  <span class="flex-1 min-w-0">{{ node.label }}</span>
                 </div>
               </ng-template>
             </qz-tree>
@@ -93,24 +103,35 @@
       </app-code-block>
     </section>
 
-    <section class="demo-section">
-      <h2 class="demo-section__title">API Usage</h2>
-      <p class="demo-section__desc">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">API Usage</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
         Inject <code>TreeService</code> to programmatically expand, collapse, or select nodes.
       </p>
 
       <app-code-block [code]="apiCode">
-        <div preview class="demo-preview demo-preview--center">
-          <div class="tree-panel tree-panel--api">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          <div
+            class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 pb-3 min-w-[320px] max-w-[400px] w-full"
+          >
             <qz-tree [nodes]="fileNodes" #apiTree />
-            <div class="tree-actions">
-              <button class="btn btn--ghost" (click)="apiTree.treeService.expandAll()">
+            <div class="flex gap-2 mt-4 pt-3 border-t border-[#1e1e2a]">
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="apiTree.treeService.expandAll()"
+              >
                 Expand All
               </button>
-              <button class="btn btn--ghost" (click)="apiTree.treeService.collapseAll()">
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="apiTree.treeService.collapseAll()"
+              >
                 Collapse All
               </button>
-              <button class="btn btn--ghost" (click)="apiTree.treeService.clearSelection()">
+              <button
+                class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+                (click)="apiTree.treeService.clearSelection()"
+              >
                 Clear Selection
               </button>
             </div>

@@ -1,88 +1,107 @@
-<app-header />
+<div class="py-32 px-8 max-w-4xl mx-auto max-md:py-16 max-md:px-4">
+  <header class="mb-20 text-center">
+    <h1
+      class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent"
+    >
+      Getting Started
+    </h1>
+    <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+      Quartz Headless is a collection of unstyled, accessible, and high-performance Angular
+      primitives. Follow these steps to integrate them into your project.
+    </p>
+  </header>
 
-<div class="docs">
-  <div class="docs__content">
-    <header class="docs__header">
-      <h1 class="docs__title text-gradient">Getting Started</h1>
-      <p class="docs__subtitle">
-        Quartz Headless is a collection of unstyled, accessible, and high-performance Angular
-        primitives. Follow these steps to integrate them into your project.
-      </p>
-    </header>
-
-    <div class="docs__grid">
-      <!-- Installation Section -->
-      <volt-card>
-        <volt-card-header>
-          <volt-card-title>1. Installation</volt-card-title>
-          <volt-card-description>
-            Add the core package to your project using your preferred package manager.
-          </volt-card-description>
-        </volt-card-header>
-        <volt-card-content>
-          <div class="install-card">
-            <div class="install-card__tabs">
-              <volt-button variant="ghost" size="sm" class="active">pnpm</volt-button>
-              <volt-button variant="ghost" size="sm">npm</volt-button>
-              <volt-button variant="ghost" size="sm">yarn</volt-button>
-            </div>
-            <div class="install-card__body">
-              <code class="install-card__code">pnpm add @quartz/ui</code>
-              <volt-button variant="outline" size="sm" title="Copy to clipboard">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </volt-button>
-            </div>
+  <div class="flex flex-col gap-24">
+    <volt-card>
+      <volt-card-header>
+        <volt-card-title>1. Installation</volt-card-title>
+        <volt-card-description>
+          Add the core package to your project using your preferred package manager.
+        </volt-card-description>
+      </volt-card-header>
+      <volt-card-content>
+        <div class="bg-[#0f0f13] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+          <div class="flex bg-white/[0.02] border-b border-white/10">
+            <volt-button
+              variant="ghost"
+              size="sm"
+              class="flex-1 rounded-none border-r border-white/10"
+              >pnpm</volt-button
+            >
+            <volt-button
+              variant="ghost"
+              size="sm"
+              class="flex-1 rounded-none border-r border-white/10"
+              >npm</volt-button
+            >
+            <volt-button variant="ghost" size="sm" class="flex-1 rounded-none">yarn</volt-button>
           </div>
-        </volt-card-content>
-      </volt-card>
+          <div class="p-6 flex items-center justify-between gap-4">
+            <code class="font-mono text-lg text-white">pnpm add @quartz/ui</code>
+            <volt-button variant="outline" size="sm" title="Copy to clipboard">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </volt-button>
+          </div>
+        </div>
+      </volt-card-content>
+    </volt-card>
 
-      <!-- Styles Configuration -->
-      <volt-card>
-        <volt-card-header>
-          <volt-card-title>2. Styles Configuration</volt-card-title>
-          <volt-card-description>
-            Quartz Headless is CSS-agnostic. However, we recommend setting up a basic CSS reset and
-            a color palette in your <code class="inline-code">styles.scss</code>.
-          </volt-card-description>
-        </volt-card-header>
-        <volt-card-content>
-          <div class="code-header">styles.scss</div>
-          <div class="code-block">
-            <pre><code>// Quartz Headless doesn't require any specific CSS imports.
+    <volt-card>
+      <volt-card-header>
+        <volt-card-title>2. Styles Configuration</volt-card-title>
+        <volt-card-description>
+          Quartz Headless is CSS-agnostic. However, we recommend setting up a basic CSS reset and a
+          color palette in your
+          <code class="bg-violet-500/10 text-violet-400 px-1.5 py-0.5 rounded text-sm"
+            >styles.scss</code
+          >.
+        </volt-card-description>
+      </volt-card-header>
+      <volt-card-content>
+        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 pl-2">
+          styles.scss
+        </div>
+        <div
+          class="bg-[#0f0f13] border border-white/10 rounded-xl p-6 overflow-x-auto font-mono text-sm text-gray-400"
+        >
+          <pre><code>// Quartz Headless doesn't require any specific CSS imports.
 // You are free to use Tailwind, CSS Modules, or Vanilla CSS.
 
 :root {{ '{' }}
   --qz-primary: #8b5cf6;
   --qz-primary-glow: rgba(139, 92, 246, 0.4);
 {{ '}' }}</code></pre>
-          </div>
-        </volt-card-content>
-      </volt-card>
+        </div>
+      </volt-card-content>
+    </volt-card>
 
-      <!-- Usage Section -->
-      <volt-card>
-        <volt-card-header>
-          <volt-card-title>3. Basic Usage</volt-card-title>
-          <volt-card-description>
-            Import the standalone primitive you need and start building.
-          </volt-card-description>
-        </volt-card-header>
-        <volt-card-content>
-          <div class="code-header">app.component.ts</div>
-          <div class="code-block">
-            <pre><code>import {{ '{' }} QzOverlay {{ '}' }} from '@quartz/ui/overlay';
+    <volt-card>
+      <volt-card-header>
+        <volt-card-title>3. Basic Usage</volt-card-title>
+        <volt-card-description>
+          Import the standalone primitive you need and start building.
+        </volt-card-description>
+      </volt-card-header>
+      <volt-card-content>
+        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 pl-2">
+          app.component.ts
+        </div>
+        <div
+          class="bg-[#0f0f13] border border-white/10 rounded-xl p-6 overflow-x-auto font-mono text-sm text-gray-400"
+        >
+          <pre><code>import {{ '{' }} QzOverlay {{ '}' }} from '@quartz/ui/overlay';
 
 @Component({{ '{' }}
   selector: 'app-root',
@@ -96,41 +115,45 @@
   \`
 {{ '}' }})
 export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
-          </div>
-        </volt-card-content>
-      </volt-card>
-    </div>
-
-    <footer class="docs__footer">
-      <volt-card class="glass-panel dark-glow">
-        <volt-card-header>
-          <volt-card-title>Next Steps</volt-card-title>
-        </volt-card-header>
-        <volt-card-content>
-          <p>
-            Now that you've installed the core, check out the component showcase to see what you can
-            build.
-          </p>
-        </volt-card-content>
-        <volt-card-footer>
-          <a routerLink="/components" class="btn-explore">
-            Explore Components
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-        </volt-card-footer>
-      </volt-card>
-    </footer>
+        </div>
+      </volt-card-content>
+    </volt-card>
   </div>
+
+  <footer class="mt-32">
+    <volt-card
+      class="p-16 text-center flex flex-col items-center gap-6 bg-gradient-to-br from-violet-500/10 to-transparent max-md:p-8"
+    >
+      <volt-card-header>
+        <volt-card-title class="text-3xl font-extrabold tracking-tight">Next Steps</volt-card-title>
+      </volt-card-header>
+      <volt-card-content>
+        <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
+          Now that you've installed the core, check out the component showcase to see what you can
+          build.
+        </p>
+      </volt-card-content>
+      <volt-card-footer>
+        <a
+          routerLink="/components"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-all duration-300"
+        >
+          Explore Components
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </volt-card-footer>
+    </volt-card>
+  </footer>
 </div>

@@ -1,9 +1,14 @@
 // Quartz Headless - primitives for Angular
-export const VERSION = '0.0.1';
 
 // Overlay
 export { OverlayTriggerDirective, OverlayService, OverlayRef } from './lib/overlay';
-export type { OverlayPlacement, OverlayConfig, OverlayPosition } from './lib/overlay';
+export type {
+  OverlayAnchor,
+  OverlayPlacement,
+  OverlayConfig,
+  OverlayPosition,
+  OverlayVirtualAnchor,
+} from './lib/overlay';
 
 // Dialog & Drawer
 export { DialogService, DialogRef, type DialogPosition, type DialogConfig } from './lib/dialog';

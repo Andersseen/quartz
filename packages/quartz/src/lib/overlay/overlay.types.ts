@@ -33,6 +33,19 @@ export interface OverlayConfig {
   matchAnchorWidth: boolean;
 }
 
+export interface OverlayVirtualAnchor {
+  /** Viewport-relative x coordinate, usually MouseEvent.clientX */
+  x: number;
+  /** Viewport-relative y coordinate, usually MouseEvent.clientY */
+  y: number;
+  /** Optional virtual anchor width. Default: 0 */
+  width?: number;
+  /** Optional virtual anchor height. Default: 0 */
+  height?: number;
+}
+
+export type OverlayAnchor = HTMLElement | OverlayVirtualAnchor;
+
 export const DEFAULT_OVERLAY_CONFIG: OverlayConfig = {
   placement: 'bottom-start',
   offset: 4,
