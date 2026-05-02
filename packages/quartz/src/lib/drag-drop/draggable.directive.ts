@@ -3,7 +3,6 @@ import {
   ElementRef,
   inject,
   signal,
-  effect,
   booleanAttribute,
   computed,
   input,
@@ -53,19 +52,6 @@ export class DraggableDirective {
   private dragImage: HTMLElement | null = null;
 
   readonly isDisabled = computed(() => this.qzDraggableDisabled());
-
-  constructor() {
-    effect(() => {
-      const isDisabled = this.isDisabled();
-      const element = this.elementRef.nativeElement;
-      this.renderer.setAttribute(element, 'aria-grabbed', 'false');
-      if (isDisabled) {
-        this.renderer.removeAttribute(element, 'draggable');
-      } else {
-        this.renderer.setAttribute(element, 'draggable', 'true');
-      }
-    });
-  }
 
   private getConfig(): DragDropConfig {
     const cfg = this.qzDraggable();

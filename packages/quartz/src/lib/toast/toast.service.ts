@@ -138,15 +138,7 @@ export class ToastService implements OnDestroy {
 
         return toasts
           .map((toast) => {
-            if (toast.isPaused || toast.duration === 0) {
-              if (toast.isPaused) {
-                return {
-                  ...toast,
-                  createdAt: new Date(now - (toast.duration - toast.remainingTime)),
-                };
-              }
-              return toast;
-            }
+            if (toast.isPaused || toast.duration === 0) return toast;
 
             const elapsed = now - toast.createdAt.getTime();
             const remaining = Math.max(0, toast.duration - elapsed);

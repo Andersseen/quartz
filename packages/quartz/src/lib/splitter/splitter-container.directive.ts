@@ -49,6 +49,8 @@ export class SplitterContainerDirective {
   );
 
   constructor() {
+    let positionInitialized = false;
+
     effect(() => {
       this.splitterService.updateConfig({
         minSize: this.minSize(),
@@ -56,13 +58,16 @@ export class SplitterContainerDirective {
         step: this.step(),
         defaultPosition: this.defaultPosition(),
       });
+
+      if (!positionInitialized) {
+        positionInitialized = true;
+        this.splitterService.setPosition(this.defaultPosition());
+      }
     });
 
     effect(() => {
       this.splitterService.setOrientation(this.orientation());
     });
-
-    this.splitterService.setPosition(this.defaultPosition());
   }
 
   updateContainerRect(): void {

@@ -36,7 +36,8 @@ export class SplitterService {
   setPosition(position: number): void {
     const cfg = this.config();
     const clamped = Math.max(cfg.minSize, Math.min(cfg.maxSize, position));
-    const stepped = Math.round(clamped / cfg.step) * cfg.step;
+    const step = cfg.step > 0 ? cfg.step : 1;
+    const stepped = Math.round(clamped / step) * step;
     this.#position.set(stepped);
   }
 

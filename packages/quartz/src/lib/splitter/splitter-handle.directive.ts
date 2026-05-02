@@ -1,4 +1,4 @@
-import { Directive, ElementRef, inject, effect, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, inject, Renderer2, OnDestroy } from '@angular/core';
 import { SplitterService } from './splitter.service';
 import { SplitterContainerDirective } from './splitter-container.directive';
 
@@ -33,14 +33,6 @@ export class SplitterHandleDirective implements OnDestroy {
 
   private isDragging = false;
   private unlisteners: (() => void)[] = [];
-
-  constructor() {
-    effect(() => {
-      if (this.splitterService.isDragging()) {
-        this.updateContainerRect();
-      }
-    });
-  }
 
   ngOnDestroy(): void {
     this.removeListeners();

@@ -5,6 +5,7 @@ import {
   signal,
   computed,
   booleanAttribute,
+  effect,
   input,
   output,
 } from '@angular/core';
@@ -56,6 +57,15 @@ export class DropZoneDirective {
   readonly isDragOver = this._isDragOver.asReadonly();
 
   private dragCounter = 0;
+
+  constructor() {
+    effect(() => {
+      if (!this.dragDropService.isDragging() && this.dragCounter > 0) {
+        this.dragCounter = 0;
+        this._isDragOver.set(false);
+      }
+    });
+  }
 
   readonly canDrop = computed(() => {
     if (this.disabled()) return false;

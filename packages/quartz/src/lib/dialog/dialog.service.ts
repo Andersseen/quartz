@@ -97,7 +97,9 @@ export class DialogService {
     }
 
     onKeyDown = (event: KeyboardEvent) => {
-      if (resolvedConfig.closeOnEscape && event.key === 'Escape') ref.close();
+      if (!resolvedConfig.closeOnEscape || event.key !== 'Escape') return;
+      const dialogs = [...this.#openDialogs];
+      if (dialogs[dialogs.length - 1] === ref) ref.close();
     };
     this.document.addEventListener('keydown', onKeyDown);
 
