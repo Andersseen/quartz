@@ -13,13 +13,14 @@ test.describe('Layout', () => {
     await page.goto('/overlay');
     const menuButton = page.locator('button[aria-label="Toggle navigation"]').first();
     await menuButton.click();
-    await expect(page.locator('app-sidebar.sidebar-open')).toBeVisible();
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.getByRole('complementary')).toBeVisible();
   });
 
   test('should have working header on all pages', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('text=Quartz UI').first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Quartz Headless' })).toBeVisible();
     await page.goto('/docs');
-    await expect(page.locator('text=Quartz UI').first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Quartz Headless' })).toBeVisible();
   });
 });

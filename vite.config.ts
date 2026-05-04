@@ -6,6 +6,11 @@ import { resolve } from 'path';
 
 export default defineConfig(({ mode }) => ({
   publicDir: 'public',
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
   ssr: {
     noExternal: ['@analogjs/router'],
   },
