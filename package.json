@@ -63,6 +63,7 @@
     "vite": "^8.0.8"
   },
   "devDependencies": {
+    "@analogjs/vite-plugin-angular": "^2.4.8",
     "@analogjs/vitest-angular": "^2.4.0",
     "@angular-devkit/build-angular": "^21.2.6",
     "@angular-eslint/builder": "21.3.1",

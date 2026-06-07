@@ -10,6 +10,8 @@ import {
   effect,
   ChangeDetectorRef,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { OverlayRef } from '../overlay';
 import { TooltipService } from './tooltip.service';
 import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
@@ -47,6 +49,7 @@ export class TooltipDirective implements OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly tooltipService = inject(TooltipService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly document = inject(DOCUMENT);
 
   // ── Inputs ──────────────────────────────────────────────────────────────
 
@@ -68,6 +71,7 @@ export class TooltipDirective implements OnDestroy {
   private hideTimer: number | null = null;
   private isHoveringTooltip = false;
   private scrollListeners: Array<{ target: EventTarget; handler: EventListener }> = [];
+  private overlayMountedSubscription: Subscription | null = null;
 
   readonly tooltipId = signal<string | null>(null);
 
@@ -90,7 +94,10 @@ export class TooltipDirective implements OnDestroy {
     this.clearHideTimer();
     if (this.isVisible()) return;
 
-    this.showTimer = window.setTimeout(() => {
+    const view = this.document.defaultView;
+    if (!view) return;
+
+    this.showTimer = view.setTimeout(() => {
       this.render();
     }, this.tooltipDelay());
   }
@@ -103,7 +110,13 @@ export class TooltipDirective implements OnDestroy {
     const delay =
       this.tooltipInteractive() && this.isHoveringTooltip ? 200 : this.tooltipHideDelay();
 
-    this.hideTimer = window.setTimeout(() => {
+    const view = this.document.defaultView;
+    if (!view) {
+      this.destroyTooltip();
+      return;
+    }
+
+    this.hideTimer = view.setTimeout(() => {
       if (this.tooltipInteractive() && this.isHoveringTooltip) return;
       this.destroyTooltip();
     }, delay);
@@ -139,8 +152,7 @@ export class TooltipDirective implements OnDestroy {
     this.textTooltipEl.id = this.tooltipId()!;
     this.cdr.markForCheck();
 
-    // Position
-    requestAnimationFrame(() => {
+    this.queueFrame(() => {
       if (!this.textTooltipEl) return;
       const anchorRect = this.elementRef.nativeElement.getBoundingClientRect();
       const pos = calculatePosition(
@@ -176,19 +188,20 @@ export class TooltipDirective implements OnDestroy {
       },
     );
 
-    const wrapper = this.overlayRef['wrapperEl'] as HTMLElement | null;
-    if (wrapper?.firstElementChild) {
-      const child = wrapper.firstElementChild as HTMLElement;
+    this.overlayMountedSubscription = this.overlayRef.mounted$.subscribe((child) => {
       child.id = this.generateId();
       this.tooltipId.set(child.id);
       child.setAttribute('role', 'tooltip');
       this.cdr.markForCheck();
-    }
+    });
 
     this.overlayRef.open();
   }
 
   private destroyTooltip(): void {
+    this.overlayMountedSubscription?.unsubscribe();
+    this.overlayMountedSubscription = null;
+
     if (this.textTooltipEl) {
       this.textTooltipEl.removeEventListener('mouseenter', this.onTooltipMouseEnter);
       this.textTooltipEl.removeEventListener('mouseleave', this.onTooltipMouseLeave);
@@ -214,7 +227,7 @@ export class TooltipDirective implements OnDestroy {
     };
 
     // Listen on scrollable parents + window
-    const parents = getScrollParents(this.elementRef.nativeElement);
+    const parents = getScrollParents(this.elementRef.nativeElement, this.document);
     for (const parent of parents) {
       parent.addEventListener('scroll', onScroll, { passive: true });
       this.scrollListeners.push({ target: parent, handler: onScroll });
@@ -244,6 +257,16 @@ export class TooltipDirective implements OnDestroy {
 
   private generateId(): string {
     return 'qz-tooltip-' + Math.random().toString(36).substring(2, 9);
+  }
+
+  private queueFrame(callback: () => void): void {
+    const view = this.document.defaultView;
+    if (view?.requestAnimationFrame) {
+      view.requestAnimationFrame(callback);
+      return;
+    }
+
+    callback();
   }
 
   private onTooltipMouseEnter = (): void => {
@@ -281,18 +304,21 @@ export class TooltipDirective implements OnDestroy {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function getScrollParents(el: HTMLElement): (Element | Document)[] {
+function getScrollParents(el: HTMLElement, document: Document): (Element | Document)[] {
   const parents: (Element | Document)[] = [];
   let current: Element | null = el.parentElement;
 
   while (current && current !== document.body) {
-    const { overflow, overflowX, overflowY } = getComputedStyle(current);
+    const style = document.defaultView?.getComputedStyle(current);
+    if (!style) break;
+
+    const { overflow, overflowX, overflowY } = style;
     if (/auto|scroll|overlay/.test(overflow + overflowX + overflowY)) {
       parents.push(current);
     }
     current = current.parentElement;
   }
 
-  parents.push(globalThis.document);
+  parents.push(document);
   return parents;
 }
