@@ -9,6 +9,7 @@ import {
   output,
   Renderer2,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { DragDropService } from './drag-drop.service';
 import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.types';
 
@@ -29,6 +30,7 @@ export class DraggableDirective {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private dragDropService = inject(DragDropService);
   private renderer = inject(Renderer2);
+  private document = inject(DOCUMENT);
 
   /** Configuration object */
   readonly qzDraggable = input<DragDropConfig | string>({});
@@ -59,7 +61,7 @@ export class DraggableDirective {
   }
 
   onDragStart(event: DragEvent): void {
-    if (this.isDisabled()) {
+    if (this.isDisabled() || !this.isAllowedHandle(event)) {
       event.preventDefault();
       return;
     }
@@ -95,7 +97,7 @@ export class DraggableDirective {
     this.renderer.setAttribute(element, 'aria-grabbed', 'false');
 
     if (this.dragImage) {
-      this.renderer.removeChild(document.body, this.dragImage);
+      this.renderer.removeChild(this.document.body, this.dragImage);
       this.dragImage = null;
     }
 
@@ -113,7 +115,7 @@ export class DraggableDirective {
 
   private createDragImage(original: HTMLElement): void {
     if (this.dragImage) {
-      this.renderer.removeChild(document.body, this.dragImage);
+      this.renderer.removeChild(this.document.body, this.dragImage);
     }
 
     this.dragImage = original.cloneNode(true) as HTMLElement;
@@ -125,6 +127,17 @@ export class DraggableDirective {
     this.renderer.setStyle(this.dragImage, 'z-index', '9999');
     this.renderer.setStyle(this.dragImage, 'width', original.offsetWidth + 'px');
 
-    this.renderer.appendChild(document.body, this.dragImage);
+    this.renderer.appendChild(this.document.body, this.dragImage);
+  }
+
+  private isAllowedHandle(event: DragEvent): boolean {
+    const selector = this.qzDraggableHandle() ?? this.getConfig().handle;
+    if (!selector) return true;
+
+    const target = event.target;
+    if (!(target instanceof Element)) return false;
+
+    const handle = target.closest(selector);
+    return !!handle && this.elementRef.nativeElement.contains(handle);
   }
 }

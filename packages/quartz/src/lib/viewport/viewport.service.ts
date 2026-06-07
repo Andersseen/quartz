@@ -1,4 +1,5 @@
-import { computed, Injectable, signal, type Signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { computed, inject, Injectable, signal, type Signal } from '@angular/core';
 import { DEFAULT_BREAKPOINTS, type ViewportMatchResult } from './viewport.types';
 
 /**
@@ -7,6 +8,8 @@ import { DEFAULT_BREAKPOINTS, type ViewportMatchResult } from './viewport.types'
  */
 @Injectable({ providedIn: 'root' })
 export class ViewportService {
+  private readonly document = inject(DOCUMENT);
+
   /** Current viewport width in pixels. */
   readonly width = signal(0);
 
@@ -48,11 +51,11 @@ export class ViewportService {
   private readonly mediaSignals = new Map<string, Signal<boolean>>();
 
   private resizeObserver: ResizeObserver | null = null;
+  private resizeHandler: (() => void) | null = null;
   private observing = false;
 
   constructor() {
-    // SSR-safe initialization: only access window in browser
-    if (typeof window !== 'undefined') {
+    if (this.document.defaultView) {
       this.#init();
     }
   }
@@ -65,7 +68,14 @@ export class ViewportService {
     const existing = this.mediaSignals.get(query);
     if (existing) return existing;
 
-    const mql = window.matchMedia(query);
+    const view = this.document.defaultView;
+    if (!view?.matchMedia) {
+      const s = signal(false).asReadonly();
+      this.mediaSignals.set(query, s);
+      return s;
+    }
+
+    const mql = view.matchMedia(query);
     const s = signal(mql.matches);
 
     const handler = (e: MediaQueryListEvent) => s.set(e.matches);
@@ -104,6 +114,12 @@ export class ViewportService {
     this.resizeObserver?.disconnect();
     this.observing = false;
 
+    const view = this.document.defaultView;
+    if (view && this.resizeHandler) {
+      view.removeEventListener('resize', this.resizeHandler);
+      this.resizeHandler = null;
+    }
+
     for (const [query, mql] of this.mediaMatchers) {
       const listener = this.mediaListeners.get(query);
       if (listener) mql.removeEventListener('change', listener);
@@ -114,20 +130,25 @@ export class ViewportService {
   }
 
   #init(): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+
     const updateSize = () => {
-      this.width.set(window.innerWidth);
-      this.height.set(window.innerHeight);
+      this.width.set(view.innerWidth);
+      this.height.set(view.innerHeight);
     };
 
     updateSize();
 
-    if (typeof ResizeObserver !== 'undefined') {
+    const ViewResizeObserver = view.ResizeObserver;
+    if (ViewResizeObserver) {
       // Observe documentElement for size changes (includes zoom, devicePixelRatio changes)
-      this.resizeObserver = new ResizeObserver(() => updateSize());
-      this.resizeObserver.observe(document.documentElement);
+      this.resizeObserver = new ViewResizeObserver(() => updateSize());
+      this.resizeObserver.observe(this.document.documentElement);
       this.observing = true;
     } else {
-      window.addEventListener('resize', updateSize);
+      this.resizeHandler = updateSize;
+      view.addEventListener('resize', updateSize);
     }
   }
 }

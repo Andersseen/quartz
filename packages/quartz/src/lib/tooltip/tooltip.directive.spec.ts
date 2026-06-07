@@ -76,4 +76,31 @@ describe('TooltipDirective', () => {
     expect(tooltip).not.toBeNull();
     expect(button.getAttribute('aria-describedby')).toBe(tooltip?.id);
   });
+
+  it('should wire aria-describedby for template tooltips', async () => {
+    @Component({
+      standalone: true,
+      imports: [TooltipDirective],
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      template: `
+        <button [qzTooltip]="tooltip">Hover me</button>
+        <ng-template #tooltip>
+          <div class="rich-tooltip">Rich tooltip</div>
+        </ng-template>
+      `,
+    })
+    class TemplateHost {}
+
+    const { fixture } = await render(TemplateHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    fixture.detectChanges();
+
+    const tooltip = document.querySelector('.rich-tooltip');
+    expect(tooltip).not.toBeNull();
+    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+    expect(button.getAttribute('aria-describedby')).toBe(tooltip?.id);
+  });
 });

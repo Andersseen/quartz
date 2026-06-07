@@ -1,7 +1,7 @@
-<aside
+<volt-sidebar
   class="flex flex-col h-full w-[260px] bg-[#0f0f13] border-r border-white/10 fixed left-0 top-0 bottom-0 max-md:relative"
 >
-  <div class="p-6 border-b border-white/10">
+  <volt-sidebar-header>
     <div class="flex items-center gap-3">
       <svg width="28" height="28" viewBox="0 0 32 32">
         <defs>
@@ -30,59 +30,64 @@
         <span class="text-xs text-gray-500">Headless Components</span>
       </div>
     </div>
-  </div>
+  </volt-sidebar-header>
 
-  <nav class="flex-1 py-6 px-3 overflow-y-auto">
-    <div class="mb-6 pb-4 border-b border-[#1e1e2a]">
-      <a
-        routerLink="/"
-        routerLinkActive="bg-violet-500/10 text-violet-500"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all mb-1"
-      >
-        <span class="text-base w-5 text-center flex-shrink-0">⌂</span>
-        <span>Home</span>
-      </a>
-      <a
-        routerLink="/docs"
-        routerLinkActive="bg-violet-500/10 text-violet-500"
-        class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all"
-      >
-        <span class="text-base w-5 text-center flex-shrink-0">📖</span>
-        <span>Docs</span>
-      </a>
-    </div>
+  <volt-sidebar-content>
+    <volt-sidebar-group>
+      <volt-sidebar-item routerLink="/" label="Home" [exact]="true">
+        <lmn-home slot="icon" [size]="16" />
+      </volt-sidebar-item>
+      <volt-sidebar-item routerLink="/docs" label="Docs">
+        <lmn-bookmark slot="icon" [size]="16" />
+      </volt-sidebar-item>
+    </volt-sidebar-group>
 
-    <div class="mb-6">
-      <span
-        class="block text-[0.7rem] font-semibold uppercase tracking-widest text-gray-500 px-3 mb-2"
-        >Components</span
-      >
+    <volt-sidebar-group label="Components">
       @for (item of components(); track item.path) {
-        <a
+        <volt-sidebar-item
           [routerLink]="item.path"
-          routerLinkActive="bg-violet-500/10 text-violet-500"
-          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-gray-400 text-sm font-medium hover:bg-[#1e1e2a] hover:text-gray-200 transition-all mb-1 relative"
+          [label]="item.label"
           [class.opacity-50]="item.soon"
           [class.pointer-events-none]="item.soon"
         >
-          <span class="text-base w-5 text-center flex-shrink-0">{{ item.icon }}</span>
-          <span>{{ item.label }}</span>
-          @if (item.soon) {
-            <span
-              class="ml-auto text-[0.65rem] font-semibold uppercase tracking-wide text-gray-500 bg-[#1e1e2a] px-1.5 py-0.5 rounded"
-              >Soon</span
-            >
+          @switch (item.icon) {
+            @case ('bell') {
+              <lmn-bell slot="icon" [size]="16" />
+            }
+            @case ('database') {
+              <lmn-database slot="icon" [size]="16" />
+            }
+            @case ('grid') {
+              <lmn-grid slot="icon" [size]="16" />
+            }
+            @case ('list') {
+              <lmn-list slot="icon" [size]="16" />
+            }
+            @case ('file') {
+              <lmn-file slot="icon" [size]="16" />
+            }
+            @case ('refresh') {
+              <lmn-refresh-cw slot="icon" [size]="16" />
+            }
+            @case ('zap') {
+              <lmn-zap slot="icon" [size]="16" />
+            }
+            @default {
+              <lmn-package slot="icon" [size]="16" />
+            }
           }
-        </a>
+          @if (item.soon) {
+            <volt-badge slot="trailing" variant="secondary">Soon</volt-badge>
+          }
+        </volt-sidebar-item>
       }
-    </div>
-  </nav>
+    </volt-sidebar-group>
+  </volt-sidebar-content>
 
-  <div class="px-6 py-4 border-t border-[#1e1e2a]">
+  <volt-sidebar-footer>
     <div class="flex items-center gap-2 text-xs text-gray-500">
       <span class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e]"></span>
       <span>v0.0.1</span>
     </div>
-  </div>
-</aside>
+  </volt-sidebar-footer>
+</volt-sidebar>

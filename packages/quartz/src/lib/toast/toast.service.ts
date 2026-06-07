@@ -131,8 +131,10 @@ export class ToastService implements OnDestroy {
 
   private startTimer(): void {
     const TICK = 100;
+    const view = this.document.defaultView;
+    if (!view) return;
 
-    this.timerId = window.setInterval(() => {
+    this.timerId = view.setInterval(() => {
       this.#toasts.update((toasts) => {
         const now = new Date().getTime();
 
@@ -152,7 +154,7 @@ export class ToastService implements OnDestroy {
 
   ngOnDestroy(): void {
     if (this.timerId) {
-      clearInterval(this.timerId);
+      this.document.defaultView?.clearInterval(this.timerId);
     }
   }
 }

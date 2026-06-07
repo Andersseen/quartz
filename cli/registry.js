@@ -12,7 +12,7 @@ const REGISTRY = {
       'overlay/overlay.types.ts',
       'overlay/index.ts',
     ],
-    docs: 'https://quartz-ui.pages.dev/overlay',
+    docs: 'https://quartz-headless.pages.dev/overlay',
   },
   dialog: {
     description: 'Service-driven dialog and drawer with portal rendering',
@@ -23,7 +23,7 @@ const REGISTRY = {
       'dialog/index.ts',
     ],
     deps: ['overlay'],
-    docs: 'https://quartz-ui.pages.dev/dialog',
+    docs: 'https://quartz-headless.pages.dev/dialog',
   },
   splitter: {
     description: 'Resizable panel system with keyboard navigation and touch support',
@@ -35,7 +35,7 @@ const REGISTRY = {
       'splitter/splitter.types.ts',
       'splitter/index.ts',
     ],
-    docs: 'https://quartz-ui.pages.dev/splitter',
+    docs: 'https://quartz-headless.pages.dev/splitter',
   },
   toast: {
     description: 'Lightweight toast notification system',
@@ -46,7 +46,7 @@ const REGISTRY = {
       'toast/toast.model.ts',
       'toast/index.ts',
     ],
-    docs: 'https://quartz-ui.pages.dev/toast',
+    docs: 'https://quartz-headless.pages.dev/toast',
   },
   'drag-drop': {
     description: 'Accessible drag and drop with keyboard support',
@@ -57,7 +57,7 @@ const REGISTRY = {
       'drag-drop/drag-drop.types.ts',
       'drag-drop/index.ts',
     ],
-    docs: 'https://quartz-ui.pages.dev/drag-drop',
+    docs: 'https://quartz-headless.pages.dev/drag-drop',
   },
   tooltip: {
     description: 'Accessible tooltip with configurable placement',
@@ -68,13 +68,43 @@ const REGISTRY = {
       'tooltip/index.ts',
     ],
     deps: ['overlay'],
-    docs: 'https://quartz-ui.pages.dev/tooltip',
+    docs: 'https://quartz-headless.pages.dev/tooltip',
+  },
+  tree: {
+    description: 'Collapsible tree with keyboard navigation and selection',
+    files: [
+      'tree/tree.component.ts',
+      'tree/tree-node.component.ts',
+      'tree/tree.service.ts',
+      'tree/tree.types.ts',
+      'tree/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/tree',
+  },
+  'virtual-scroll': {
+    description: 'Windowed rendering for long lists',
+    files: [
+      'virtual-scroll/virtual-scroll.directive.ts',
+      'virtual-scroll/virtual-scroll.types.ts',
+      'virtual-scroll/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/virtual-scroll',
+  },
+  viewport: {
+    description: 'Reactive breakpoint service with viewport match directive',
+    files: [
+      'viewport/viewport.service.ts',
+      'viewport/viewport-match.directive.ts',
+      'viewport/viewport.types.ts',
+      'viewport/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/viewport',
   },
   listbox: {
     description: 'WAI-ARIA listbox with keyboard navigation and selection (coming soon)',
     soon: true,
     files: [],
-    docs: 'https://quartz-ui.pages.dev/listbox',
+    docs: 'https://quartz-headless.pages.dev/listbox',
   },
 };
 

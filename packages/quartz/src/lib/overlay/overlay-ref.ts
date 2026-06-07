@@ -258,7 +258,10 @@ function getScrollParents(anchor: OverlayAnchor, document: Document): (Element |
   let current: Element | null = isVirtualAnchor(anchor) ? null : anchor.parentElement;
 
   while (current && current !== document.body) {
-    const { overflow, overflowX, overflowY } = getComputedStyle(current);
+    const style = document.defaultView?.getComputedStyle(current);
+    if (!style) break;
+
+    const { overflow, overflowX, overflowY } = style;
     if (/auto|scroll|overlay/.test(overflow + overflowX + overflowY)) {
       parents.push(current);
     }

@@ -186,12 +186,12 @@ export class DialogService {
     const last = focusable[focusable.length - 1];
 
     if (event.shiftKey) {
-      if (document.activeElement === first) {
+      if (this.document.activeElement === first) {
         last.focus();
         event.preventDefault();
       }
     } else {
-      if (document.activeElement === last) {
+      if (this.document.activeElement === last) {
         first.focus();
         event.preventDefault();
       }
