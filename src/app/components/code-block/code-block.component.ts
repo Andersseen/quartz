@@ -10,58 +10,80 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { EditorLoaderService } from '../../services/editor-loader.service';
-import { VoltButton } from '@voltui/components';
+import {
+  VoltBadge,
+  VoltButton,
+  VoltTabs,
+  VoltTabsContent,
+  VoltTabsList,
+  VoltTabsTrigger,
+} from '@voltui/components';
+import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-icons';
 
 @Component({
   selector: 'app-code-block',
-  imports: [VoltButton],
+  imports: [
+    VoltBadge,
+    VoltButton,
+    VoltTabs,
+    VoltTabsContent,
+    VoltTabsList,
+    VoltTabsTrigger,
+    LmnCheckIcon,
+    LmnCopyIcon,
+    LmnEyeIcon,
+    LmnTerminalIcon,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="border border-[#1e1e2a] rounded-xl overflow-hidden bg-[#0f0f13]">
-      <div class="flex items-center justify-between p-2 bg-[#1e1e2a] border-b border-[#2a2a3a]">
-        <div class="flex gap-1">
-          <volt-button
-            variant="ghost"
-            size="sm"
-            [class.text-violet-400]="activeTab() === 'preview'"
-            [class.bg-[#1e1430]]="activeTab() === 'preview'"
-            (click)="activeTab.set('preview')"
-          >
-            Preview
-          </volt-button>
-          <volt-button
-            variant="ghost"
-            size="sm"
-            [class.text-violet-400]="activeTab() === 'code'"
-            [class.bg-[#1e1430]]="activeTab() === 'code'"
-            (click)="activeTab.set('code')"
-          >
-            Code
-          </volt-button>
-        </div>
-        @if (activeTab() === 'code') {
-          <volt-button
-            variant="outline"
-            size="sm"
-            (click)="copyCode()"
-            [attr.aria-label]="copied() ? 'Copied' : 'Copy code'"
-          >
-            @if (copied()) {
-              <span>&#10003; Copied</span>
-            } @else {
-              <span>Copy</span>
-            }
-          </volt-button>
-        }
-      </div>
+    <div class="relative border border-[#1e1e2a] rounded-xl overflow-hidden bg-[#0f0f13]">
+      <volt-tabs [value]="activeTab()" (valueChange)="selectTab($event)" class="block">
+        <div class="flex items-center justify-between p-2 bg-[#1e1e2a] border-b border-[#2a2a3a]">
+          <volt-tabs-list>
+            <volt-tabs-trigger value="preview">
+              <span class="inline-flex items-center gap-2">
+                <lmn-eye [size]="16" />
+                Preview
+              </span>
+            </volt-tabs-trigger>
+            <volt-tabs-trigger value="code">
+              <span class="inline-flex items-center gap-2">
+                <lmn-terminal [size]="16" />
+                Code
+              </span>
+            </volt-tabs-trigger>
+          </volt-tabs-list>
 
-      <div class="min-h-[200px]">
-        @if (activeTab() === 'preview') {
+          <volt-badge variant="outline">{{ language() }}</volt-badge>
+        </div>
+
+        @if (activeTab() === 'code') {
+          <div class="absolute right-4 mt-3 z-10">
+            <volt-button
+              variant="outline"
+              size="sm"
+              (click)="copyCode()"
+              [attr.aria-label]="copied() ? 'Copied' : 'Copy code'"
+            >
+              @if (copied()) {
+                <lmn-check slot="leading" [size]="16" />
+                <span>Copied</span>
+              } @else {
+                <lmn-copy slot="leading" [size]="16" />
+                <span>Copy</span>
+              }
+            </volt-button>
+          </div>
+        }
+
+        <volt-tabs-content value="preview">
           <div class="p-8 flex items-center justify-center min-h-[200px]">
             <ng-content select="[preview]" />
           </div>
-        } @else {
+        </volt-tabs-content>
+
+        <volt-tabs-content value="code">
           <div class="h-[380px] overflow-hidden">
             @if (editorLoaded()) {
               <vertex-editor
@@ -79,8 +101,8 @@ import { VoltButton } from '@voltui/components';
               </div>
             }
           </div>
-        }
-      </div>
+        </volt-tabs-content>
+      </volt-tabs>
     </div>
   `,
 })
@@ -98,6 +120,12 @@ export class CodeBlockComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId)) return;
     await this.editorLoader.loadEditor();
     this.editorLoaded.set(true);
+  }
+
+  selectTab(value: string | undefined): void {
+    if (value === 'preview' || value === 'code') {
+      this.activeTab.set(value);
+    }
   }
 
   copyCode(): void {

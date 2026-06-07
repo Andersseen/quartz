@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/ro
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { LayoutService } from '../../services/layout.service';
+import { LmnGithubIcon, LmnMenuIcon, LmnXIcon } from 'lumen-icons';
 
 const COMPONENT_ROUTES = [
   '/overlay',
@@ -18,7 +19,7 @@ const COMPONENT_ROUTES = [
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, LmnGithubIcon, LmnMenuIcon, LmnXIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
 })

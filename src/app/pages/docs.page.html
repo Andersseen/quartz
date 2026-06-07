@@ -41,19 +41,7 @@
           <div class="p-6 flex items-center justify-between gap-4">
             <code class="font-mono text-lg text-white">pnpm add @quartz/ui</code>
             <volt-button variant="outline" size="sm" title="Copy to clipboard">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
+              <lmn-copy [size]="20" />
             </volt-button>
           </div>
         </div>
@@ -141,19 +129,7 @@ export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
           class="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-all duration-300"
         >
           Explore Components
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
+          <lmn-arrow-right [size]="20" />
         </a>
       </volt-card-footer>
     </volt-card>

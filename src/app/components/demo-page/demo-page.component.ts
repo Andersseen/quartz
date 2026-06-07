@@ -1,4 +1,12 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import {
+  VoltBadge,
+  VoltCard,
+  VoltCardContent,
+  VoltCardDescription,
+  VoltCardHeader,
+  VoltCardTitle,
+} from '@voltui/components';
 
 interface Feature {
   title: string;
@@ -7,7 +15,14 @@ interface Feature {
 
 @Component({
   selector: 'app-demo-page',
-  imports: [],
+  imports: [
+    VoltBadge,
+    VoltCard,
+    VoltCardContent,
+    VoltCardDescription,
+    VoltCardHeader,
+    VoltCardTitle,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './demo-page.component.html',
 })

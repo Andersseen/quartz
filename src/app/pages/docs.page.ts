@@ -10,6 +10,7 @@ import {
   VoltCardContent,
   VoltCardFooter,
 } from '@voltui/components';
+import { LmnArrowRightIcon, LmnCopyIcon } from 'lumen-icons';
 
 @Component({
   selector: 'app-docs',
@@ -23,6 +24,8 @@ import {
     VoltCardDescription,
     VoltCardContent,
     VoltCardFooter,
+    LmnArrowRightIcon,
+    LmnCopyIcon,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './docs.page.html',
