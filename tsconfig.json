@@ -23,7 +23,8 @@
     "lib": ["ES2022", "dom"],
     "paths": {
       "@quartz/*": ["./packages/quartz/src/*"],
-      "quartz": ["./packages/quartz/src/public-api.ts"]
+      "quartz": ["./packages/quartz/src/public-api.ts"],
+      "quartz-web": ["./packages/quartz-web/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

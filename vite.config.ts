@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       quartz: resolve(__dirname, 'packages/quartz/src/public-api.ts'),
+      'quartz-web': resolve(__dirname, 'packages/quartz-web/src/index.ts'),
     },
   },
 }));
