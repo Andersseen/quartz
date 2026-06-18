@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/quartz-web",
+    "types": ["vitest/globals", "node", "@testing-library/jest-dom"]
+  },
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+}

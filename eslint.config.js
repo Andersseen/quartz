@@ -19,7 +19,7 @@ module.exports = [
     languageOptions: {
       parser: typescriptEslintParser,
       parserOptions: {
-        project: ["./tsconfig.json", "./packages/quartz/tsconfig.lib.json", "./packages/quartz/tsconfig.spec.json", "./tsconfig.app.json", "./tsconfig.spec.json"],
+        project: ["./tsconfig.json", "./packages/quartz/tsconfig.lib.json", "./packages/quartz/tsconfig.spec.json", "./packages/quartz-web/tsconfig.json", "./packages/quartz-web/tsconfig.spec.json", "./tsconfig.app.json", "./tsconfig.spec.json"],
       },
     },
     plugins: {

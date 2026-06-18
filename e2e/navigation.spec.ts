@@ -41,4 +41,11 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Dialog').first()).toBeVisible();
     await expect(page.locator('text=Splitter').first()).toBeVisible();
   });
+
+  test('should navigate to web-agnostic page from header', async ({ page }) => {
+    await page.goto('/');
+    await page.click('header nav a:has-text("Web Agnostic")');
+    await expect(page).toHaveURL('/web-agnostic');
+    await expect(page.getByRole('heading', { name: 'Web Agnostic', level: 1 })).toBeVisible();
+  });
 });
