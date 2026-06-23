@@ -53,6 +53,8 @@ export class VirtualScrollDirective<T> implements OnDestroy {
   /** Measured height of the viewport element. */
   #viewportHeight = signal(0);
 
+  #resizeObserver: ResizeObserver | null = null;
+
   /** Total scrollable content height. */
   readonly contentHeight = computed(() => {
     const count = this.items().length;
@@ -121,12 +123,19 @@ export class VirtualScrollDirective<T> implements OnDestroy {
 
     // Re-measure on window resize (container may change size via CSS media queries)
     window.addEventListener('resize', this.#onResize);
+
+    // Re-measure using ResizeObserver to handle container size changes directly (e.g. sidebars, dynamic layouts)
+    if (typeof ResizeObserver !== 'undefined') {
+      this.#resizeObserver = new ResizeObserver(() => this.#measure());
+      this.#resizeObserver.observe(host);
+    }
   }
 
   ngOnDestroy(): void {
     const host = this.elementRef.nativeElement;
     host.removeEventListener('scroll', this.#onScroll);
     window.removeEventListener('resize', this.#onResize);
+    this.#resizeObserver?.disconnect();
   }
 
   /** Scroll the viewport so that the item at index is visible. */

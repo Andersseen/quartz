@@ -9,8 +9,8 @@ export class TreeService {
   #config = signal<TreeConfig>(DEFAULT_TREE_CONFIG);
 
   readonly nodes = computed(() => this.#nodes());
-  readonly expandedIds = computed(() => new Set(this.#expandedIds()));
-  readonly selectedIds = computed(() => new Set(this.#selectedIds()));
+  readonly expandedIds = computed(() => this.#expandedIds());
+  readonly selectedIds = computed(() => this.#selectedIds());
 
   readonly selectedNodes = computed(() => {
     const result: TreeNode[] = [];

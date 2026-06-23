@@ -39,6 +39,9 @@ export function createDraggable(
     }
 
     dragImage = original.cloneNode(true) as HTMLElement;
+    dragImage.removeAttribute('id');
+    dragImage.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+
     setStyles(dragImage, {
       position: 'fixed',
       top: '-1000px',
