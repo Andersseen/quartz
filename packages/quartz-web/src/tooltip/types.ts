@@ -25,6 +25,8 @@ export interface TooltipConfig {
   offset: number;
   /** When true the tooltip will not be shown. Default: false. */
   disabled: boolean;
+  /** Whether to allow hovering the tooltip content. Default: false. */
+  interactive: boolean;
 }
 
 export const DEFAULT_TOOLTIP_CONFIG: TooltipConfig = {
@@ -34,4 +36,5 @@ export const DEFAULT_TOOLTIP_CONFIG: TooltipConfig = {
   hideDelay: 0,
   offset: 8,
   disabled: false,
+  interactive: false,
 };

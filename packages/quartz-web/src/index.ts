@@ -20,3 +20,13 @@ export type {
   QzDragOverInfo,
   DragDropOrientation,
 } from './drag-drop/types';
+
+// Tooltip
+export { createTooltip, type TooltipInstance } from './tooltip/create-tooltip';
+export type { TooltipConfig, TooltipPlacement } from './tooltip/types';
+export { DEFAULT_TOOLTIP_CONFIG } from './tooltip/types';
+
+// Dialog
+export { createDialog, type DialogRef } from './dialog/create-dialog';
+export type { DialogConfig, DialogPosition } from './dialog/types';
+export { DEFAULT_DIALOG_CONFIG } from './dialog/types';

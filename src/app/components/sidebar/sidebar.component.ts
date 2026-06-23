@@ -1,4 +1,7 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, inject, computed } from '@angular/core';
+import { Router, NavigationEnd, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, startWith } from 'rxjs';
 import {
   VoltBadge,
   VoltSidebar,
@@ -21,26 +24,6 @@ import {
   LmnZapIcon,
 } from 'lumen-icons';
 
-type NavIcon =
-  | 'bell'
-  | 'bookmark'
-  | 'database'
-  | 'file'
-  | 'grid'
-  | 'home'
-  | 'list'
-  | 'package'
-  | 'refresh'
-  | 'zap';
-
-interface NavItem {
-  path: string;
-  label: string;
-  icon: NavIcon;
-  description?: string;
-  soon?: boolean;
-}
-
 @Component({
   selector: 'app-sidebar',
   imports: [
@@ -61,6 +44,7 @@ interface NavItem {
     LmnPackageIcon,
     LmnRefreshCwIcon,
     LmnZapIcon,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class.translate-x-0]': 'open()', '[class.-translate-x-full]': '!open()' },
@@ -69,14 +53,91 @@ interface NavItem {
 export class SidebarComponent {
   open = input(false);
 
-  components = input<NavItem[]>([
-    { path: '/overlay', label: 'Overlay', icon: 'package' },
-    { path: '/dialog', label: 'Dialog', icon: 'file' },
-    { path: '/splitter', label: 'Splitter', icon: 'grid' },
-    { path: '/toast', label: 'Toast', icon: 'bell' },
-    { path: '/drag-drop', label: 'Drag & Drop', icon: 'zap' },
-    { path: '/tree', label: 'Tree', icon: 'list' },
-    { path: '/virtual-scroll', label: 'Virtual Scroll', icon: 'refresh' },
-    { path: '/viewport', label: 'Viewport', icon: 'database' },
-  ]);
+  private readonly router = inject(Router);
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map((e) => (e as NavigationEnd).urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  readonly isAgnostic = computed(() => this.currentUrl().startsWith('/web-agnostic'));
+
+  readonly menuItems = computed(() => {
+    if (this.isAgnostic()) {
+      return [
+        {
+          path: '/web-agnostic',
+          fragment: 'splitter',
+          label: 'Splitter',
+          icon: 'grid' as const,
+          soon: false,
+        },
+        {
+          path: '/web-agnostic',
+          fragment: 'drag-drop',
+          label: 'Drag & Drop',
+          icon: 'zap' as const,
+          soon: false,
+        },
+        {
+          path: '/web-agnostic',
+          fragment: 'dialog',
+          label: 'Dialog',
+          icon: 'file' as const,
+          soon: false,
+        },
+        {
+          path: '/web-agnostic',
+          fragment: 'tooltip',
+          label: 'Tooltip',
+          icon: 'package' as const,
+          soon: false,
+        },
+      ];
+    }
+    return [
+      {
+        path: '/overlay',
+        label: 'Overlay',
+        icon: 'package' as const,
+        soon: false,
+        fragment: undefined,
+      },
+      { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false, fragment: undefined },
+      {
+        path: '/splitter',
+        label: 'Splitter',
+        icon: 'grid' as const,
+        soon: false,
+        fragment: undefined,
+      },
+      { path: '/toast', label: 'Toast', icon: 'bell' as const, soon: false, fragment: undefined },
+      {
+        path: '/drag-drop',
+        label: 'Drag & Drop',
+        icon: 'zap' as const,
+        soon: false,
+        fragment: undefined,
+      },
+      { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false, fragment: undefined },
+      {
+        path: '/virtual-scroll',
+        label: 'Virtual Scroll',
+        icon: 'refresh' as const,
+        soon: false,
+        fragment: undefined,
+      },
+      {
+        path: '/viewport',
+        label: 'Viewport',
+        icon: 'database' as const,
+        soon: false,
+        fragment: undefined,
+      },
+    ];
+  });
 }

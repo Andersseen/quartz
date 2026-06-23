@@ -43,9 +43,10 @@
     </volt-sidebar-group>
 
     <volt-sidebar-group label="Components">
-      @for (item of components(); track item.path) {
+      @for (item of menuItems(); track item.label) {
         <volt-sidebar-item
           [routerLink]="item.path"
+          [fragment]="item.fragment"
           [label]="item.label"
           [class.opacity-50]="item.soon"
           [class.pointer-events-none]="item.soon"

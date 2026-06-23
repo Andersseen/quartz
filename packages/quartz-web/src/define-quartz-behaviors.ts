@@ -2,6 +2,11 @@ import { createDraggable } from './drag-drop/create-draggable';
 import { createDropZone } from './drag-drop/create-drop-zone';
 import { createSplitter } from './splitter/create-splitter';
 import type { SplitterOrientation } from './splitter/types';
+import { createTooltip } from './tooltip/create-tooltip';
+import type { TooltipPlacement } from './tooltip/types';
+import { createDialog } from './dialog/create-dialog';
+import type { DialogPosition } from './dialog/types';
+import { listen } from './utils/dom';
 
 export interface QuartzBehaviorsOptions {
   /** Root element to scan. Defaults to `document.body`. */
@@ -85,6 +90,90 @@ function initDropZones(root: HTMLElement, instances: QuartzInstance[]): void {
   });
 }
 
+function initTooltips(root: HTMLElement, instances: QuartzInstance[]): void {
+  root.querySelectorAll<HTMLElement>('[qz-tooltip]').forEach((element) => {
+    const content = element.getAttribute('qz-tooltip') || '';
+    const placement = (element.getAttribute('qz-tooltip-placement') as TooltipPlacement) || 'top';
+    const showDelay = parseNumber(
+      element.getAttribute('qz-tooltip-delay') || element.getAttribute('qz-tooltip-show-delay'),
+      200,
+    );
+    const hideDelay = parseNumber(element.getAttribute('qz-tooltip-hide-delay'), 0);
+    const offset = parseNumber(element.getAttribute('qz-tooltip-offset'), 8);
+    const disabled = element.hasAttribute('qz-tooltip-disabled');
+    const interactive = element.hasAttribute('qz-tooltip-interactive');
+
+    instances.push(
+      createTooltip(element, {
+        content,
+        placement,
+        showDelay,
+        hideDelay,
+        offset,
+        disabled,
+        interactive,
+      }),
+    );
+  });
+}
+
+function initDialogs(root: HTMLElement, instances: QuartzInstance[]): void {
+  root.querySelectorAll<HTMLElement>('[qz-dialog-trigger]').forEach((trigger) => {
+    const targetId = trigger.getAttribute('qz-dialog-trigger');
+    if (!targetId) return;
+
+    const cleanup = listen(trigger, 'click', () => {
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) {
+        console.warn(`qz-dialog: target element with ID "${targetId}" not found.`);
+        return;
+      }
+
+      const position = (trigger.getAttribute('qz-dialog-position') ||
+        targetEl.getAttribute('qz-dialog-position') ||
+        'center') as DialogPosition;
+      const backdrop =
+        trigger.getAttribute('qz-dialog-backdrop') !== 'false' &&
+        targetEl.getAttribute('qz-dialog-backdrop') !== 'false';
+      const closeOnBackdropClick =
+        trigger.getAttribute('qz-dialog-close-on-backdrop') !== 'false' &&
+        targetEl.getAttribute('qz-dialog-close-on-backdrop') !== 'false';
+      const closeOnEscape =
+        trigger.getAttribute('qz-dialog-close-on-escape') !== 'false' &&
+        targetEl.getAttribute('qz-dialog-close-on-escape') !== 'false';
+      const width =
+        trigger.getAttribute('qz-dialog-width') ||
+        targetEl.getAttribute('qz-dialog-width') ||
+        undefined;
+      const height =
+        trigger.getAttribute('qz-dialog-height') ||
+        targetEl.getAttribute('qz-dialog-height') ||
+        undefined;
+      const panelClass =
+        trigger.getAttribute('qz-dialog-panel-class') ||
+        targetEl.getAttribute('qz-dialog-panel-class') ||
+        undefined;
+      const backdropClass =
+        trigger.getAttribute('qz-dialog-backdrop-class') ||
+        targetEl.getAttribute('qz-dialog-backdrop-class') ||
+        undefined;
+
+      createDialog(targetEl, {
+        position,
+        backdrop,
+        closeOnBackdropClick,
+        closeOnEscape,
+        width,
+        height,
+        panelClass,
+        backdropClass,
+      });
+    });
+
+    instances.push({ destroy: cleanup });
+  });
+}
+
 /**
  * Scans the DOM for `[qz-*]` attributes and wires up Quartz behaviors.
  * Returns a cleanup function that destroys all created instances.
@@ -96,6 +185,8 @@ export function defineQuartzBehaviors(options: QuartzBehaviorsOptions = {}): () 
   initSplitters(root, instances);
   initDraggables(root, instances);
   initDropZones(root, instances);
+  initTooltips(root, instances);
+  initDialogs(root, instances);
 
   let observer: MutationObserver | null = null;
 
@@ -107,6 +198,8 @@ export function defineQuartzBehaviors(options: QuartzBehaviorsOptions = {}): () 
             initSplitters(node, instances);
             initDraggables(node, instances);
             initDropZones(node, instances);
+            initTooltips(node, instances);
+            initDialogs(node, instances);
           }
         }
       }
