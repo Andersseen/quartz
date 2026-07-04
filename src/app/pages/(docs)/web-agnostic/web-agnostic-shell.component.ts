@@ -7,10 +7,8 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { defineQuartzBehaviors } from 'quartz-web';
 import { DemoPageComponent } from '../../../components/demo-page/demo-page.component';
-import { CodeBlockComponent } from '../../../components/code-block/code-block.component';
 import { WebAgnosticStateService } from './web-agnostic-state.service';
 
 interface Feature {
@@ -20,7 +18,7 @@ interface Feature {
 
 @Component({
   selector: 'app-web-agnostic-shell',
-  imports: [DemoPageComponent, CodeBlockComponent, DecimalPipe],
+  imports: [DemoPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-demo-page

@@ -1,5 +1,7 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, startWith } from 'rxjs';
 import {
   VoltBadge,
   VoltSidebar,
@@ -50,6 +52,23 @@ import {
 })
 export class SidebarComponent {
   open = input(false);
+
+  private readonly router = inject(Router);
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map((e) => (e as NavigationEnd).urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  readonly isWebAgnosticRoute = computed(() => this.currentUrl().startsWith('/web-agnostic'));
+
+  readonly groupLabel = computed(() =>
+    this.isWebAgnosticRoute() ? 'Web Agnostic' : 'Angular Components',
+  );
 
   readonly angularItems = [
     {
@@ -120,5 +139,7 @@ export class SidebarComponent {
     },
   ];
 
-  readonly menuItems = computed(() => [...this.angularItems, ...this.agnosticItems]);
+  readonly menuItems = computed(() =>
+    this.isWebAgnosticRoute() ? this.agnosticItems : this.angularItems,
+  );
 }

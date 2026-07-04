@@ -73,6 +73,7 @@ export function createDialog(
   // -- Append Content -----------------------------------------------------------
   let originalPlaceholder: Comment | null = null;
   let elementToRestore: HTMLElement | null = null;
+  let originalHiddenClass = false;
 
   if (content instanceof HTMLTemplateElement) {
     const clone = document.importNode(content.content, true);
@@ -84,6 +85,11 @@ export function createDialog(
     const originalDisplay = content.style.display;
     if (originalDisplay === 'none') {
       content.style.display = '';
+    }
+    // Tailwind/common utility classes hide the source element in the page.
+    originalHiddenClass = content.classList.contains('hidden');
+    if (originalHiddenClass) {
+      content.classList.remove('hidden');
     }
     panelEl.appendChild(content);
   } else if (typeof content === 'string') {
@@ -121,6 +127,9 @@ export function createDialog(
 
       // Restore element if it was temporarily reparented
       if (elementToRestore && originalPlaceholder) {
+        if (originalHiddenClass) {
+          elementToRestore.classList.add('hidden');
+        }
         originalPlaceholder.parentNode?.replaceChild(elementToRestore, originalPlaceholder);
       }
 

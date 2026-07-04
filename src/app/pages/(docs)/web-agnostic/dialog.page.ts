@@ -26,7 +26,7 @@ import { CodeBlockComponent } from '../../../components/code-block/code-block.co
           </p>
 
           <app-code-block [code]="dialogCode">
-            <div preview class="hd-demo">
+            <div preview class="hd-demo flex items-center justify-center">
               <button
                 qz-dialog-trigger="demo-dialog"
                 class="bg-[#1e1e2a] hover:bg-[#2a2a3a] text-white px-4 py-2 rounded-lg transition-colors"

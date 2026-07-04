@@ -15,7 +15,7 @@ import { CodeBlockComponent } from '../../../components/code-block/code-block.co
         { title: 'Attribute Content', description: 'qz-tooltip' },
         { title: 'Placement', description: 'top, bottom, left, right' },
         { title: 'Delay', description: 'Configurable show/hide delay' },
-        { title: 'Accessible', description: 'role="tooltip"' },
+        { title: 'Accessible', description: 'ARIA role tooltip' },
       ]"
     >
       <div class="flex flex-col gap-12">
@@ -26,7 +26,7 @@ import { CodeBlockComponent } from '../../../components/code-block/code-block.co
           </p>
 
           <app-code-block [code]="tooltipCode">
-            <div preview class="hd-demo">
+            <div preview class="hd-demo flex items-center justify-center">
               <button
                 qz-tooltip="Save your changes"
                 qz-tooltip-placement="top"
