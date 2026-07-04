@@ -74,12 +74,7 @@ export class OverlayTriggerDirective implements OnDestroy {
 
   open(): void {
     const tpl = this.overlayTemplate();
-    if (!tpl) {
-      console.warn('[qzOverlayTrigger] No overlayTemplate provided.');
-      return;
-    }
-
-    if (this.overlayRef?.isOpen) return;
+    if (!tpl || this.overlayRef?.isOpen) return;
 
     // Recreate ref with current config so inputs are always fresh
     this.overlayRef?.destroy();

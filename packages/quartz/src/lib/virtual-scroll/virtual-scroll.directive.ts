@@ -7,7 +7,9 @@ import {
   OnDestroy,
   inject,
   afterNextRender,
+  PLATFORM_ID,
 } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import type { VirtualScrollRow } from './virtual-scroll.types';
 
 /**
@@ -37,6 +39,9 @@ import type { VirtualScrollRow } from './virtual-scroll.types';
 })
 export class VirtualScrollDirective<T> implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly document = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   /** Full array of items to virtualize. */
   readonly items = input.required<T[]>();
@@ -122,10 +127,13 @@ export class VirtualScrollDirective<T> implements OnDestroy {
     afterNextRender(() => this.#measure());
 
     // Re-measure on window resize (container may change size via CSS media queries)
-    window.addEventListener('resize', this.#onResize);
+    const view = this.document.defaultView;
+    if (view) {
+      view.addEventListener('resize', this.#onResize);
+    }
 
     // Re-measure using ResizeObserver to handle container size changes directly (e.g. sidebars, dynamic layouts)
-    if (typeof ResizeObserver !== 'undefined') {
+    if (this.isBrowser && typeof ResizeObserver !== 'undefined') {
       this.#resizeObserver = new ResizeObserver(() => this.#measure());
       this.#resizeObserver.observe(host);
     }
@@ -134,7 +142,7 @@ export class VirtualScrollDirective<T> implements OnDestroy {
   ngOnDestroy(): void {
     const host = this.elementRef.nativeElement;
     host.removeEventListener('scroll', this.#onScroll);
-    window.removeEventListener('resize', this.#onResize);
+    this.document.defaultView?.removeEventListener('resize', this.#onResize);
     this.#resizeObserver?.disconnect();
   }
 

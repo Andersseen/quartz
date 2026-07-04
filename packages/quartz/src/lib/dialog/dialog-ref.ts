@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 export class DialogRef {
-  #closed$ = new Subject<void>();
+  #closed$ = new ReplaySubject<void>(1);
   readonly closed$ = this.#closed$.asObservable();
 
   #isClosed = false;

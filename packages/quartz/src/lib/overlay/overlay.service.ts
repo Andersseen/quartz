@@ -12,7 +12,12 @@ export class OverlayService {
   private document = inject(DOCUMENT);
   #containerEl: HTMLElement | null = null;
 
-  private get containerEl(): HTMLElement {
+  private get containerEl(): HTMLElement | null {
+    // SSR guard: do not create DOM elements when there is no browser window.
+    if (!this.document.defaultView) {
+      return null;
+    }
+
     if (!this.#containerEl) {
       this.#containerEl = this.document.createElement('div');
       this.#containerEl.setAttribute('data-qz-overlay-container', '');
@@ -34,6 +39,9 @@ export class OverlayService {
   /**
    * Creates an OverlayRef for a given anchor element or virtual coordinate anchor and template.
    * Call .open() / .close() / .toggle() on the returned ref.
+   *
+   * Safe to call during SSR: the overlay is not attached to the DOM until the browser environment
+   * is available.
    */
   create(
     templateRef: TemplateRef<unknown>,

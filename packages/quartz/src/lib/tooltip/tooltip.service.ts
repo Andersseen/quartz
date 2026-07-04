@@ -37,6 +37,9 @@ export class TooltipService {
   /**
    * Creates a simple text tooltip element for string-based tooltips.
    * Returns the HTMLElement that was created and appended to body.
+   *
+   * Safe to call during SSR: returns a detached element so the tooltip can be
+   * positioned later in the browser without throwing on the server.
    */
   createTextElement(text: string): HTMLElement {
     const el = this.document.createElement('div');
@@ -50,7 +53,11 @@ export class TooltipService {
       z-index: 9999;
       pointer-events: none;
     `;
-    this.document.body.appendChild(el);
+
+    if (this.document.defaultView && this.document.body) {
+      this.document.body.appendChild(el);
+    }
+
     return el;
   }
 }

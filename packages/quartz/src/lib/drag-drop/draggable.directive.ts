@@ -8,8 +8,9 @@ import {
   input,
   output,
   Renderer2,
+  PLATFORM_ID,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DragDropService } from './drag-drop.service';
 import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.types';
 
@@ -31,6 +32,8 @@ export class DraggableDirective {
   private dragDropService = inject(DragDropService);
   private renderer = inject(Renderer2);
   private document = inject(DOCUMENT);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   /** Configuration object */
   readonly qzDraggable = input<DragDropConfig | string>({});
@@ -96,10 +99,7 @@ export class DraggableDirective {
     const element = this.elementRef.nativeElement;
     this.renderer.setAttribute(element, 'aria-grabbed', 'false');
 
-    if (this.dragImage) {
-      this.renderer.removeChild(this.document.body, this.dragImage);
-      this.dragImage = null;
-    }
+    this.removeDragImage();
 
     const dropped = event.dataTransfer?.dropEffect !== 'none';
 
@@ -114,8 +114,10 @@ export class DraggableDirective {
   }
 
   private createDragImage(original: HTMLElement): void {
-    if (this.dragImage) {
-      this.renderer.removeChild(this.document.body, this.dragImage);
+    this.removeDragImage();
+
+    if (!this.isBrowser || !this.document.body) {
+      return;
     }
 
     this.dragImage = original.cloneNode(true) as HTMLElement;
@@ -128,6 +130,17 @@ export class DraggableDirective {
     this.renderer.setStyle(this.dragImage, 'width', original.offsetWidth + 'px');
 
     this.renderer.appendChild(this.document.body, this.dragImage);
+  }
+
+  private removeDragImage(): void {
+    if (!this.dragImage) {
+      return;
+    }
+
+    if (this.document.body) {
+      this.renderer.removeChild(this.document.body, this.dragImage);
+    }
+    this.dragImage = null;
   }
 
   private isAllowedHandle(event: DragEvent): boolean {
