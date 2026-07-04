@@ -21,6 +21,14 @@ export class DialogService {
   ): DialogRef {
     const resolvedConfig: DialogConfig = { ...DEFAULT_DIALOG_CONFIG, ...config };
 
+    // SSR guard: do not manipulate the DOM when there is no browser window.
+    // Return a closed no-op ref so consumers can still subscribe to closed$ safely.
+    if (!this.document.defaultView) {
+      const noOpRef = new DialogRef(() => void 0);
+      noOpRef.close();
+      return noOpRef;
+    }
+
     // -- Backdrop ----------------------------------------------------------------
     let backdropEl: HTMLElement | null = null;
     if (resolvedConfig.backdrop) {

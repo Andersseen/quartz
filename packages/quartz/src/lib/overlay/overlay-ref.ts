@@ -27,7 +27,7 @@ export class OverlayRef {
     private templateRef: TemplateRef<unknown>,
     private viewContainerRef: ViewContainerRef,
     anchor: OverlayAnchor,
-    private containerEl: HTMLElement,
+    private containerEl: HTMLElement | null,
     private config: OverlayConfig,
     private document: Document,
   ) {
@@ -40,6 +40,11 @@ export class OverlayRef {
 
   open(): void {
     if (this.isOpen) return;
+
+    // SSR guard: do not attach to the DOM when there is no browser window.
+    if (!this.document.defaultView || !this.containerEl) {
+      return;
+    }
 
     // Create wrapper and append to container (body portal)
     this.wrapperEl = this.document.createElement('div');

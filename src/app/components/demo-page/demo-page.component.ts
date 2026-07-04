@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import {
   VoltBadge,
   VoltCard,
-  VoltCardContent,
   VoltCardDescription,
   VoltCardHeader,
   VoltCardTitle,
@@ -15,14 +14,7 @@ interface Feature {
 
 @Component({
   selector: 'app-demo-page',
-  imports: [
-    VoltBadge,
-    VoltCard,
-    VoltCardContent,
-    VoltCardDescription,
-    VoltCardHeader,
-    VoltCardTitle,
-  ],
+  imports: [VoltBadge, VoltCard, VoltCardDescription, VoltCardHeader, VoltCardTitle],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './demo-page.component.html',
 })

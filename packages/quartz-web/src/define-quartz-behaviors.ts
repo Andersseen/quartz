@@ -125,7 +125,6 @@ function initDialogs(root: HTMLElement, instances: QuartzInstance[]): void {
     const cleanup = listen(trigger, 'click', () => {
       const targetEl = document.getElementById(targetId);
       if (!targetEl) {
-        console.warn(`qz-dialog: target element with ID "${targetId}" not found.`);
         return;
       }
 

@@ -55,6 +55,7 @@ export class ViewportService {
   private observing = false;
 
   constructor() {
+    // SSR guard: only attach browser observers when a window is available.
     if (this.document.defaultView) {
       this.#init();
     }
