@@ -67,11 +67,15 @@ import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-ic
               [attr.aria-label]="copied() ? 'Copied' : 'Copy code'"
             >
               @if (copied()) {
-                <lmn-check slot="leading" [size]="16" />
-                <span>Copied</span>
+                <span slot="leading" class="inline-flex items-center gap-2">
+                  <lmn-check [size]="16" />
+                  <span>Copied</span>
+                </span>
               } @else {
-                <lmn-copy slot="leading" [size]="16" />
-                <span>Copy</span>
+                <span slot="leading" class="inline-flex items-center gap-2">
+                  <lmn-copy [size]="16" />
+                  <span>Copy</span>
+                </span>
               }
             </volt-button>
           </div>
