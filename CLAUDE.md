@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## AI working docs — read before starting work
+
+`docs/ai/` contains the extended agent documentation. Start every session by reading
+`docs/ai/CONTEXT.md` (why the project exists) and `docs/ai/STATE.md` (current status —
+update it when status changes). Before writing code, follow `docs/ai/BEST_PRACTICES.md`;
+for features, use the spec-driven workflow in `docs/ai/WORKFLOW.md` with templates in
+`docs/ai/specs/`. See `docs/ai/README.md` for the reading order per task type.
+
 ## Commands
 
 ```bash
@@ -100,7 +108,7 @@ lib/<name>/
 
 ### CLI (`cli/`)
 
-The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/src/lib/` into consumer projects. `registry.js` is the single source of truth for which files belong to each component and their transitive `deps`. When adding a new primitive, register it there. `tooltip` and `listbox` are currently marked `soon: true` — they appear in the registry but the copy step is skipped.
+The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/src/lib/` into consumer projects. `registry.js` is the single source of truth for which files belong to each component and their transitive `deps`. When adding a new primitive, register it there. `listbox` is currently marked `soon: true` — it appears in the registry but the copy step is skipped.
 
 ### Path aliases
 
