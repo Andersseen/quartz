@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-07-06** (commit `95edb64 feat: update sidebar`)
+> **Last updated: 2026-07-06** (P0 fixes in progress)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -14,24 +14,20 @@
 
 ## Primitive status matrix
 
-| Primitive      | Lib code        | Unit tests | Demo page           | CLI registry              | Notes                                                                                |
-| -------------- | --------------- | ---------- | ------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
-| overlay        | ✅              | ✅         | ✅                  | ✅                        | Foundation for dialog + tooltip                                                      |
-| dialog         | ✅              | ✅ (+SSR)  | ✅                  | ✅ deps:[overlay]         | Includes drawer positioning                                                          |
-| splitter       | ✅              | ✅         | ✅                  | ✅                        | Container-scoped service pattern                                                     |
-| toast          | ✅              | ✅         | ✅                  | ✅                        | Uses `toast.model.ts` (not `.types.ts` — naming deviation)                           |
-| drag-drop      | ✅              | ✅         | ✅                  | ✅                        |                                                                                      |
-| tooltip        | ✅              | ✅         | ❌ no page          | ✅ deps:[overlay]         | Implemented recently; **demo page missing** (`(docs)/tooltip.page.ts` doesn't exist) |
-| tree           | ✅              | ✅         | ✅                  | ✅                        | Needs manual extraRoute (already added)                                              |
-| virtual-scroll | ✅              | ✅         | ✅                  | ✅                        | Has ResizeObserver support                                                           |
-| viewport       | ✅              | ✅         | ✅                  | ✅                        |                                                                                      |
-| listbox        | ❌ empty folder | ❌         | 🚧 placeholder page | 🚧 `soon: true`, files:[] | **Next primitive to build**                                                          |
+| Primitive      | Lib code | Unit tests | Demo page  | CLI registry      | Notes                                                                                |
+| -------------- | -------- | ---------- | ---------- | ----------------- | ------------------------------------------------------------------------------------ |
+| overlay        | ✅       | ✅         | ✅         | ✅                | Foundation for dialog + tooltip                                                      |
+| dialog         | ✅       | ✅ (+SSR)  | ✅         | ✅ deps:[overlay] | Includes drawer positioning                                                          |
+| splitter       | ✅       | ✅         | ✅         | ✅                | Container-scoped service pattern                                                     |
+| toast          | ✅       | ✅         | ✅         | ✅                | Uses `toast.model.ts` (not `.types.ts` — naming deviation)                           |
+| drag-drop      | ✅       | ✅         | ✅         | ✅                |                                                                                      |
+| tooltip        | ✅       | ✅         | ❌ no page | ✅ deps:[overlay] | Implemented recently; **demo page missing** (`(docs)/tooltip.page.ts` doesn't exist) |
+| tree           | ✅       | ✅         | ✅         | ✅                | Needs manual extraRoute (already added)                                              |
+| virtual-scroll | ✅       | ✅         | ✅         | ✅                | Has ResizeObserver support                                                           |
+| viewport       | ✅       | ✅         | ✅         | ✅                |                                                                                      |
 
 ## In progress / next up
 
-- **listbox**: declared in README and registry as "coming soon". Folder
-  `packages/quartz/src/lib/listbox/` is empty; demo page is a placeholder. This is the
-  obvious next feature — write a spec in `docs/ai/specs/` before starting.
 - **tooltip demo page**: tooltip is implemented and exported but has no
   `(docs)/tooltip.page.ts` — the docs URL referenced by the CLI (`…/tooltip`) 404s.
 - **quartz-web** (`packages/quartz-web/`): experimental framework-agnostic behaviors

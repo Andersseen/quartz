@@ -12,18 +12,17 @@ Headless, unstyled Angular 21 UI primitives. You own the styles — Quartz owns 
 
 ## Primitives
 
-| Primitive        | Description                                                             |
-| ---------------- | ----------------------------------------------------------------------- |
-| `overlay`        | Portal-based positioning system for dropdowns, menus, and popovers      |
-| `dialog`         | Service-driven dialog and drawer with backdrop and focus trap           |
-| `splitter`       | Resizable panel system with keyboard navigation and touch support       |
-| `toast`          | Lightweight notification system with position groups and auto-dismiss   |
-| `drag-drop`      | Accessible drag and drop with keyboard support                          |
-| `tooltip`        | Accessible tooltip with configurable placement                          |
-| `listbox`        | WAI-ARIA listbox with keyboard navigation and selection _(coming soon)_ |
-| `tree`           | Collapsible tree with keyboard navigation and selection                 |
-| `virtual-scroll` | Windowed rendering for long lists                                       |
-| `viewport`       | Reactive breakpoint service with `ViewportMatchDirective`               |
+| Primitive        | Description                                                           |
+| ---------------- | --------------------------------------------------------------------- |
+| `overlay`        | Portal-based positioning system for dropdowns, menus, and popovers    |
+| `dialog`         | Service-driven dialog and drawer with backdrop and focus trap         |
+| `splitter`       | Resizable panel system with keyboard navigation and touch support     |
+| `toast`          | Lightweight notification system with position groups and auto-dismiss |
+| `drag-drop`      | Accessible drag and drop with keyboard support                        |
+| `tooltip`        | Accessible tooltip with configurable placement                        |
+| `tree`           | Collapsible tree with keyboard navigation and selection               |
+| `virtual-scroll` | Windowed rendering for long lists                                     |
+| `viewport`       | Reactive breakpoint service with `ViewportMatchDirective`             |
 
 All primitives are **zoneless** (Angular signals), **standalone**, and **tree-shakeable**.
 

@@ -6,7 +6,6 @@ test.describe('Components Pages', () => {
     { path: '/dialog', title: 'Dialog' },
     { path: '/splitter', title: 'Splitter' },
     { path: '/toast', title: 'Toast' },
-    { path: '/listbox', title: 'Listbox' },
     { path: '/drag-drop', title: 'Drag & Drop' },
     { path: '/web-agnostic', title: 'Web Agnostic' },
   ];

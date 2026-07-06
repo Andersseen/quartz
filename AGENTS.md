@@ -103,7 +103,7 @@ lib/<name>/
 
 ### CLI (`cli/`)
 
-The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/src/lib/` into consumer projects. `registry.js` is the single source of truth for which files belong to each component and their transitive `deps`. When adding a new primitive, register it there. `tooltip` and `listbox` are currently marked `soon: true` — they appear in the registry but the copy step is skipped.
+The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/src/lib/` into consumer projects. `registry.js` is the single source of truth for which files belong to each component and their transitive `deps`. When adding a new primitive, register it there.
 
 ### Path aliases
 

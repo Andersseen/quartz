@@ -41,12 +41,13 @@ export class WebAgnosticShellComponent implements OnDestroy {
   readonly features = input<Feature[]>([]);
 
   private cleanup: (() => void) | null = null;
+  private splitterListener: ((event: Event) => void) | null = null;
 
   constructor() {
     afterNextRender(() => {
       this.cleanup = defineQuartzBehaviors({ root: this.elementRef.nativeElement });
 
-      this.elementRef.nativeElement.addEventListener('qz-splitter-change', (event: Event) => {
+      this.splitterListener = (event: Event) => {
         const customEvent = event as CustomEvent;
         const detail = customEvent.detail;
         const container = customEvent.target as HTMLElement;
@@ -55,11 +56,20 @@ export class WebAgnosticShellComponent implements OnDestroy {
         } else {
           this.state.vPosition.set(detail.position);
         }
-      });
+      };
+
+      this.elementRef.nativeElement.addEventListener('qz-splitter-change', this.splitterListener);
     });
   }
 
   ngOnDestroy(): void {
+    if (this.splitterListener) {
+      this.elementRef.nativeElement.removeEventListener(
+        'qz-splitter-change',
+        this.splitterListener,
+      );
+      this.splitterListener = null;
+    }
     this.cleanup?.();
     this.cleanup = null;
   }
