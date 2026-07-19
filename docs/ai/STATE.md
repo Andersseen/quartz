@@ -30,10 +30,6 @@
 
 - **tooltip demo page**: tooltip is implemented and exported but has no
   `(docs)/tooltip.page.ts` — the docs URL referenced by the CLI (`…/tooltip`) 404s.
-- **quartz-web** (`packages/quartz-web/`): experimental framework-agnostic behaviors
-  (overlay, dialog, splitter, drag-drop, tooltip as `qz-*` HTML attributes). Not published,
-  evolving toward a possible `quartz-core`. Recent work added "web attributes"
-  (PR #14 `feature/web-agnostic`) and a demo page `(docs)/web-agnostic.page.ts`.
 
 ## Known issues / gotchas (live)
 
@@ -50,6 +46,5 @@
 
 - PR #15 `feature/lib-updates` — dialog + tooltip implementation, signal return types,
   ResizeObserver in virtual scroll, tooltip types.
-- PR #14 `feature/web-agnostic` — quartz-web attribute API.
 - PR #12 `feature/tailiwnd` — Tailwind 4 in the demo app.
 - PR #11 `feature/add-volt-ui` — demo app chrome migrated to `@voltui/components`.

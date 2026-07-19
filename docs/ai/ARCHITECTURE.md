@@ -8,7 +8,6 @@ quartz/
 │   └── src/
 │       ├── public-api.ts   # single public surface — everything exported goes here
 │       └── lib/<primitive>/
-├── packages/quartz-web/    # EXPERIMENTAL framework-agnostic testbed (not published)
 ├── src/                    # DEMO/DOCS APP (AnalogJS, deployed to Cloudflare Pages)
 │   └── app/pages/          # file-based routing; (docs) group = component pages
 ├── cli/                    # `quartz add` copy-source CLI
@@ -102,11 +101,3 @@ will get broken copies.
 | E2E        | Playwright (`e2e/`), auto-starts dev server via `webServer` config                                                                                      |
 | Type check | two tsconfigs: `packages/quartz/tsconfig.lib.json` + `tsconfig.app.json`                                                                                |
 | Publish    | `pnpm publish:lib` → publishes `dist/quartz/` only; root pkg is private                                                                                 |
-
-## `packages/quartz-web/` (experimental — touch only if asked)
-
-Framework-agnostic re-implementation of overlay/dialog/splitter/drag-drop/tooltip as plain
-HTML attributes (`qz-splitter`, `qz-tooltip`, …) activated by `defineQuartzBehaviors()`,
-plus imperative `create*()` APIs. Not published, no Angular. It is a testbed for a possible
-future `quartz-core`. Do not add Angular imports there, and do not let the Angular lib
-depend on it.

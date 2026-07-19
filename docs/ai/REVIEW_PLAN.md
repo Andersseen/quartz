@@ -58,19 +58,7 @@ pnpm exec vitest run --coverage
   - `pnpm quartz list` no longer shows a non-existent component.
   - No 404 link to `/listbox` from sidebar.
 
-### P0.3 Clean up global listener leak in `WebAgnosticShellComponent`
-
-- **Scope**: `src/app` (demo)
-- **Problem**: `qz-splitter-change` listener is added in `afterNextRender` but never removed.
-- **Files**: `src/app/pages/(docs)/web-agnostic/web-agnostic-shell.component.ts`
-- **Action**:
-  1. Store the listener function as a class field.
-  2. Remove it in `ngOnDestroy`.
-  3. Also verify `defineQuartzBehaviors` cleanup is called (already is, but double-check).
-- **Acceptance**:
-  - Unit test or manual verification: navigating away from `/web-agnostic` removes the listener.
-
-### P0.4 Fix focus trap and a11y in `DialogService`
+### P0.3 Fix focus trap and a11y in `DialogService`
 
 - **Scope**: `packages/quartz`
 - **Problem**: Focus trap selector misses `contenteditable`, `audio[controls]`, `video[controls]`, `summary`, `details`, and shadow DOM focusables. No `aria-labelledby`/`aria-describedby` auto-generation.
@@ -172,22 +160,7 @@ pnpm exec vitest run --coverage
 - **Acceptance**:
   - No unused public API surface.
 
-### P2.2 Unify tooltip defaults between Angular and web
-
-- **Scope**: `packages/quartz`, `packages/quartz-web`
-- **Problem**: `showDelay` and `hideDelay` defaults differ.
-- **Files**:
-  - `packages/quartz/src/lib/tooltip/tooltip.types.ts`
-  - `packages/quartz-web/src/tooltip/create-tooltip.ts`
-- **Action**:
-  1. Choose canonical defaults (suggest `showDelay: 200`, `hideDelay: 100`).
-  2. Apply to both packages.
-  3. Document in demo snippets.
-- **Acceptance**:
-  - Both packages use the same defaults.
-  - Tests updated.
-
-### P2.3 Rename `toast.model.ts` to `toast.types.ts`
+### P2.2 Rename `toast.model.ts` to `toast.types.ts`
 
 - **Scope**: `packages/quartz`
 - **Problem**: Naming inconsistency with every other primitive.
@@ -238,7 +211,7 @@ pnpm exec vitest run --coverage
 
 ### P3.1 Remove unused code
 
-- **Scope**: `packages/quartz`, `packages/quartz-web`
+- **Scope**: `packages/quartz`
 - **Problem**: Dead exports/interfaces.
 - **Files**:
   - `packages/quartz/src/lib/overlay/overlay.types.ts` — `OverlayFlipAxis` if unused.

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
@@ -64,11 +64,7 @@ export class SidebarComponent {
     { initialValue: this.router.url },
   );
 
-  readonly isWebAgnosticRoute = computed(() => this.currentUrl().startsWith('/web-agnostic'));
-
-  readonly groupLabel = computed(() =>
-    this.isWebAgnosticRoute() ? 'Web Agnostic' : 'Angular Components',
-  );
+  readonly groupLabel = 'Angular Components';
 
   readonly angularItems = [
     {
@@ -106,40 +102,5 @@ export class SidebarComponent {
     },
   ];
 
-  readonly agnosticItems = [
-    {
-      path: '/web-agnostic',
-      label: 'Overview',
-      icon: 'package' as const,
-      soon: false,
-    },
-    {
-      path: '/web-agnostic/splitter',
-      label: 'Splitter',
-      icon: 'grid' as const,
-      soon: false,
-    },
-    {
-      path: '/web-agnostic/drag-drop',
-      label: 'Drag & Drop',
-      icon: 'zap' as const,
-      soon: false,
-    },
-    {
-      path: '/web-agnostic/dialog',
-      label: 'Dialog',
-      icon: 'file' as const,
-      soon: false,
-    },
-    {
-      path: '/web-agnostic/tooltip',
-      label: 'Tooltip',
-      icon: 'package' as const,
-      soon: false,
-    },
-  ];
-
-  readonly menuItems = computed(() =>
-    this.isWebAgnosticRoute() ? this.agnosticItems : this.angularItems,
-  );
+  readonly menuItems = this.angularItems;
 }

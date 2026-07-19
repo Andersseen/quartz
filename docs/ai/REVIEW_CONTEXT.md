@@ -5,7 +5,7 @@
 
 ## TL;DR
 
-Quartz is a modern Angular 21 headless UI primitives monorepo with an experimental vanilla-web layer. Tests, lint, typecheck, and library build all pass, but the codebase has real technical debt: subscription leaks, missing/incomplete accessibility, low branch test coverage, a placeholder `listbox`, and a CLI that copies files without fixing imports.
+Quartz is a modern Angular 21 headless UI primitives monorepo. Tests, lint, typecheck, and library build all pass, but the codebase has real technical debt: subscription leaks, missing/incomplete accessibility, low branch test coverage, a placeholder `listbox`, and a CLI that copies files without fixing imports.
 
 ---
 
@@ -25,13 +25,6 @@ Quartz is a modern Angular 21 headless UI primitives monorepo with an experiment
 │       ├── virtual-scroll/   # Fixed-size windowing
 │       ├── viewport/         # Breakpoint service + directive
 │       └── listbox/          # EMPTY — placeholder only
-├── packages/quartz-web/      # Vanilla JS behaviors (qz-* attributes)
-│   ├── define-quartz-behaviors.ts
-│   ├── dialog/
-│   ├── drag-drop/
-│   ├── splitter/
-│   ├── tooltip/
-│   └── utils/
 ├── src/app/                  # AnalogJS demo/docs app
 │   └── pages/(docs)/         # One page per primitive
 ├── cli/                      # Copy-source CLI
@@ -95,13 +88,7 @@ Quartz is a modern Angular 21 headless UI primitives monorepo with an experiment
   - Sidebar links to `/listbox`
 - **Impact**: Promises functionality that does not exist.
 
-### 3. Listener leak in demo app
-
-- **File**: `src/app/pages/(docs)/web-agnostic/web-agnostic-shell.component.ts:49`
-- **Issue**: `addEventListener('qz-splitter-change', ...)` is never removed in `ngOnDestroy`.
-- **Impact**: Memory leak in demo app.
-
-### 4. Dialog focus trap is incomplete
+### 3. Dialog focus trap is incomplete
 
 - **File**: `packages/quartz/src/lib/dialog/dialog.service.ts:183,189`
 - **Issue**: Selector `'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'` misses `contenteditable`, `audio[controls]`, `video[controls]`, `summary`, and shadow-DOM focusables.
@@ -155,14 +142,7 @@ Quartz is a modern Angular 21 headless UI primitives monorepo with an experiment
 - **Files**: `packages/quartz/src/lib/virtual-scroll/virtual-scroll.types.ts`, `virtual-scroll.directive.ts`
 - **Issue**: Public API type promises variable-size scrolling that does not exist.
 
-### 11. Tooltip defaults differ between Angular and web
-
-- **Files**:
-  - `packages/quartz/src/lib/tooltip/tooltip.types.ts`
-  - `packages/quartz-web/src/tooltip/create-tooltip.ts`
-- **Issue**: `showDelay`/`hideDelay` defaults are inconsistent.
-
-### 12. Naming inconsistency
+### 11. Naming inconsistency
 
 - **File**: `packages/quartz/src/lib/toast/toast.model.ts`
 - **Issue**: Should be `toast.types.ts` to match every other primitive.
@@ -188,8 +168,6 @@ Quartz is a modern Angular 21 headless UI primitives monorepo with an experiment
 | `drop-zone.directive.ts`       | 0% (no Angular spec) | Critical drag-drop primitive          |
 | `tree.service.ts`              | 44.3%                | Complex selection/expansion logic     |
 | `viewport.service.ts`          | 63.15%               | Media-query logic mostly untested     |
-| `drag-drop` web                | ~30%                 | Experimental but needs baseline       |
-| `define-quartz-behaviors.ts`   | 40.5%                | Entry point of web layer              |
 
 ---
 
@@ -294,7 +272,6 @@ pnpm quartz list
 
 - Library published as `quartz-headless` v0.0.3.
 - Root monorepo package stays private.
-- `quartz-web` is experimental and not published.
 - Tailwind 4 is used only in the demo app.
 - Pre-commit hook runs `lint-staged` + `typecheck` + `pnpm test`.
 

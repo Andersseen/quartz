@@ -11,7 +11,6 @@ pnpm start
 # Build
 pnpm build:lib        # ng-packagr → dist/quartz (Angular library only)
 pnpm build:demo       # Vite build (demo app)
-cd packages/quartz-web && pnpm exec vite build  # Vanilla lib → dist/quartz-web (ESM + UMD)
 
 # Tests
 pnpm test             # Run all Vitest tests (lib + app) once
@@ -60,11 +59,9 @@ Requires being logged in to npm (`npm login`) with access to the `@andersseen` s
 
 ## Architecture
 
-### Three-part monorepo
+### Two-part monorepo
 
 **Angular library** (`packages/quartz/`): unstyled, headless Angular primitives built with `ng-packagr`. Output: `dist/quartz/`. Each primitive lives in its own folder under `src/lib/` with an `index.ts` barrel. Public surface is `src/public-api.ts`.
-
-**Vanilla web library** (`packages/quartz-web/`): experimental, framework-agnostic behaviors exposed as HTML attributes. The primary entry point is `defineQuartzBehaviors(root?)`, which scans for `[qz-*]` attributes and wires up the corresponding behaviors (e.g. `qz-splitter`, `qz-draggable`, `qz-drop-zone`). Low-level imperative APIs (`createSplitter()`, `createDraggable()`, `createDropZone()`) remain available for advanced use cases. Built with Vite lib mode. Output: `dist/quartz-web/`. No Angular runtime dependency. This is a testbed for primitives that may later move into a shared `quartz-core`.
 
 **Demo/docs app** (`src/`): AnalogJS (Vite + Angular) app on Cloudflare Pages. File-based routing under `src/app/pages/`. The `(docs)` route group wraps all component pages in a shared layout. New pages added to `(docs)/` sometimes need a manual extra-route entry in `src/app/app.config.ts` due to a Vite cache issue — see the comment in that file.
 
@@ -109,10 +106,8 @@ The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/sr
 
 `quartz` resolves to `packages/quartz/src/public-api.ts` in both the app's `tsconfig.json` paths and Vite `resolve.alias`. The library build ignores this alias (ng-packagr uses its own tsconfig).
 
-`quartz-web` resolves to `packages/quartz-web/src/index.ts` in both `tsconfig.json` paths and Vite `resolve.alias`.
-
 ### Testing
 
-Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. The library's vitest config (`packages/quartz/vite.config.ts`), the vanilla web vitest config (`packages/quartz-web/vite.config.ts`), and the app's config (`vitest.app.config.ts`) are all registered as Vitest workspaces in the root `vitest.config.ts`.
+Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. The library's vitest config (`packages/quartz/vite.config.ts`) and the app's config (`vitest.app.config.ts`) are registered as Vitest workspaces in the root `vitest.config.ts`.
 
 E2E tests in `e2e/` use Playwright against a running dev server (auto-started by `webServer` config). Tests target `localhost:5173`.

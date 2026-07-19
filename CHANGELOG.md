@@ -12,14 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SSR safety guards across all Angular primitives: `OverlayService`, `DialogService`, `TooltipService`, `ToastService`, `ViewportService`, `VirtualScrollDirective`, and `DraggableDirective` now avoid touching the DOM when `document.defaultView` is not available.
 - Lazy toast timer: `ToastService` only starts its internal interval while there are active toasts, reducing runtime overhead.
 - Comprehensive unit tests for `DialogService`, including browser behavior and an SSR-specific spec.
-- README for the experimental `@quartz/web` package.
-- Web Agnostic demo now uses real nested routing (`/web-agnostic/splitter`, `/web-agnostic/drag-drop`, etc.) with a dedicated layout and sidebar section.
 - This changelog.
 
 ### Changed
 
 - `DialogRef.closed$` now uses a `ReplaySubject(1)` so late subscribers still receive the close event, including for SSR no-op refs.
-- Sidebar always displays both Angular Components and Web Agnostic sections for consistent navigation.
 
 ### Fixed
 
