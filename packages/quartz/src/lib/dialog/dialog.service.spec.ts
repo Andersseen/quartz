@@ -182,7 +182,7 @@ describe('DialogService', () => {
     ref.close();
   });
 
-  it('should expose DialogRef as $implicit context to the template', () => {
+  it('should expose DialogRef and ARIA IDs as template context', () => {
     const panel = document.createElement('div');
     let contextRef: unknown;
 
@@ -200,7 +200,47 @@ describe('DialogService', () => {
 
     const ref = service.open(templateRef, viewContainerRef);
 
-    expect(contextRef).toEqual({ $implicit: ref });
+    expect(contextRef).toEqual({
+      $implicit: ref,
+      ariaLabelledBy: expect.stringContaining('qz-dialog-title-'),
+      ariaDescribedBy: expect.stringContaining('qz-dialog-desc-'),
+    });
+
+    ref.close();
+  });
+
+  it('should apply custom aria-labelledby and aria-describedby', () => {
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef, {
+      ariaLabelledBy: 'my-title',
+      ariaDescribedBy: 'my-desc',
+    });
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.getAttribute('aria-labelledby')).toBe('my-title');
+    expect(panelEl?.getAttribute('aria-describedby')).toBe('my-desc');
+
+    ref.close();
+  });
+
+  it('should trap focus including contenteditable elements', () => {
+    const contenteditable = document.createElement('div');
+    contenteditable.setAttribute('contenteditable', 'true');
+
+    const panel = document.createElement('div');
+    panel.appendChild(contenteditable);
+
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+    const ref = service.open(templateRef, viewContainerRef);
+
+    expect(document.activeElement).toBe(contenteditable);
+
+    contenteditable.focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }));
+
+    expect(document.activeElement).toBe(contenteditable);
 
     ref.close();
   });

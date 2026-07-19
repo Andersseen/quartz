@@ -100,12 +100,6 @@ const REGISTRY = {
     ],
     docs: 'https://quartz-headless.pages.dev/viewport',
   },
-  listbox: {
-    description: 'WAI-ARIA listbox with keyboard navigation and selection (coming soon)',
-    soon: true,
-    files: [],
-    docs: 'https://quartz-headless.pages.dev/listbox',
-  },
 };
 
 module.exports = { REGISTRY };

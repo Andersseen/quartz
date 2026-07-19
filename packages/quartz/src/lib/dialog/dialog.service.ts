@@ -9,6 +9,22 @@ import {
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
 
+let dialogId = 0;
+
+const FOCUSABLE_SELECTOR = [
+  'button:not([disabled])',
+  '[href]',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"]):not([disabled])',
+  '[contenteditable]:not([contenteditable="false"])',
+  'audio[controls]',
+  'video[controls]',
+  'summary:not([tabindex="-1"])',
+  'details[tabindex]:not([tabindex="-1"]) summary',
+].join(', ');
+
 @Injectable({ providedIn: 'root' })
 export class DialogService {
   private document = inject(DOCUMENT);
@@ -28,6 +44,10 @@ export class DialogService {
       noOpRef.close();
       return noOpRef;
     }
+
+    const instanceId = ++dialogId;
+    const ariaLabelledBy = resolvedConfig.ariaLabelledBy ?? `qz-dialog-title-${instanceId}`;
+    const ariaDescribedBy = resolvedConfig.ariaDescribedBy ?? `qz-dialog-desc-${instanceId}`;
 
     // -- Backdrop ----------------------------------------------------------------
     let backdropEl: HTMLElement | null = null;
@@ -64,6 +84,10 @@ export class DialogService {
     const panelEl = this.document.createElement('div');
     panelEl.setAttribute('role', 'dialog');
     panelEl.setAttribute('aria-modal', 'true');
+    panelEl.setAttribute('aria-labelledby', ariaLabelledBy);
+    if (ariaDescribedBy) {
+      panelEl.setAttribute('aria-describedby', ariaDescribedBy);
+    }
     panelEl.style.cssText = [
       'pointer-events:auto',
       'max-width:100%',
@@ -85,8 +109,12 @@ export class DialogService {
 
     // -- Render template with DialogRef as $implicit context --------------------
     const viewRef = viewContainerRef.createEmbeddedView(
-      templateRef as TemplateRef<{ $implicit: DialogRef }>,
-      { $implicit: ref },
+      templateRef as TemplateRef<{
+        $implicit: DialogRef;
+        ariaLabelledBy: string;
+        ariaDescribedBy: string;
+      }>,
+      { $implicit: ref, ariaLabelledBy, ariaDescribedBy },
     );
     viewRef.detectChanges();
 
@@ -180,14 +208,12 @@ export class DialogService {
   }
 
   #focusFirstFocusable(panel: HTMLElement): void {
-    const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const first = panel.querySelector<HTMLElement>(selector);
+    const first = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
     first?.focus();
   }
 
   #trapFocus(panel: HTMLElement, event: KeyboardEvent): void {
-    const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusable = Array.from(panel.querySelectorAll<HTMLElement>(selector));
+    const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
     if (focusable.length === 0) return;
 
     const first = focusable[0];

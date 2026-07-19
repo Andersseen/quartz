@@ -28,9 +28,6 @@ the shadcn/ui distribution model (copy the source into your project).
 - A live docs/demo site — <https://quartz-headless.pages.dev> — built with AnalogJS and
   deployed to Cloudflare Pages, where every primitive has an interactive demo page with
   code snippets.
-- Long-term (experimental): framework-agnostic versions of the same behaviours in
-  `packages/quartz-web/` (plain DOM attributes, no Angular), possibly converging into a
-  shared `quartz-core` someday.
 
 ## Non-goals (do NOT drift here)
 

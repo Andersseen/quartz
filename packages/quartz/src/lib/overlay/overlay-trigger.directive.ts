@@ -9,6 +9,7 @@ import {
   TemplateRef,
   signal,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { OverlayService } from './overlay.service';
 import { OverlayRef } from './overlay-ref';
 import { OverlayConfig, OverlayPlacement } from './overlay.types';
@@ -66,6 +67,7 @@ export class OverlayTriggerDirective implements OnDestroy {
   // ── State ────────────────────────────────────────────────────────────────
 
   private overlayRef: OverlayRef | null = null;
+  private closedSub: Subscription | null = null;
 
   private readonly _isOpen = signal(false);
   readonly isOpen = this._isOpen.asReadonly();
@@ -77,6 +79,7 @@ export class OverlayTriggerDirective implements OnDestroy {
     if (!tpl || this.overlayRef?.isOpen) return;
 
     // Recreate ref with current config so inputs are always fresh
+    this.unsubscribeClosed();
     this.overlayRef?.destroy();
     this.overlayRef = this.overlayService.create(
       tpl,
@@ -85,7 +88,7 @@ export class OverlayTriggerDirective implements OnDestroy {
       this.buildConfig(),
     );
 
-    this.overlayRef.closed$.subscribe(() => {
+    this.closedSub = this.overlayRef.closed$.subscribe(() => {
       this._isOpen.set(false);
       this.closed.emit();
     });
@@ -111,7 +114,15 @@ export class OverlayTriggerDirective implements OnDestroy {
   // ── Lifecycle ────────────────────────────────────────────────────────────
 
   ngOnDestroy(): void {
+    this.unsubscribeClosed();
     this.overlayRef?.destroy();
+  }
+
+  // ── Private ──────────────────────────────────────────────────────────────
+
+  private unsubscribeClosed(): void {
+    this.closedSub?.unsubscribe();
+    this.closedSub = null;
   }
 
   // ── Private ──────────────────────────────────────────────────────────────
