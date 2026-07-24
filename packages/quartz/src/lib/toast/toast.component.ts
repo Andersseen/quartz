@@ -1,15 +1,14 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
-import { Toast } from './toast.model';
+import { Toast } from './toast.types';
 
 @Component({
   selector: 'qz-toast',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       class="qz-toast"
       [class]="'qz-toast--' + toast().type"
-      role="alert"
-      [attr.aria-live]="toast().type === 'error' ? 'assertive' : 'polite'"
       (mouseenter)="onMouseEnter()"
       (mouseleave)="onMouseLeave()"
     >
@@ -45,20 +44,20 @@ import { Toast } from './toast.model';
 export class ToastComponent {
   toast = input.required<Toast>();
   dismiss = output<void>();
-  qzPause = output<void>();
-  qzResume = output<void>();
+  paused = output<void>();
+  resumed = output<void>();
 
   progress = input<number>(100);
 
   onMouseEnter(): void {
     if (this.toast().pauseOnHover) {
-      this.qzPause.emit();
+      this.paused.emit();
     }
   }
 
   onMouseLeave(): void {
     if (this.toast().pauseOnHover) {
-      this.qzResume.emit();
+      this.resumed.emit();
     }
   }
 }

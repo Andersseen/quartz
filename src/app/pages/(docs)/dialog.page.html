@@ -78,13 +78,20 @@
 </app-demo-page>
 
 <!-- Modal Template -->
-<ng-template #modalTemplate let-ref>
+<ng-template
+  #modalTemplate
+  let-ref
+  let-ariaLabelledBy="ariaLabelledBy"
+  let-ariaDescribedBy="ariaDescribedBy"
+>
   <div class="qz-dialog">
     <div class="qz-dialog__header">
       <div class="qz-dialog__icon">◻</div>
       <div>
-        <h4 class="qz-dialog__title">Confirm Action</h4>
-        <p class="qz-dialog__subtitle">This dialog was created via <code>DialogService</code>.</p>
+        <h4 [attr.id]="ariaLabelledBy" class="qz-dialog__title">Confirm Action</h4>
+        <p [attr.id]="ariaDescribedBy" class="qz-dialog__subtitle">
+          This dialog was created via <code>DialogService</code>.
+        </p>
       </div>
     </div>
     <div class="qz-dialog__body">
@@ -102,10 +109,15 @@
 </ng-template>
 
 <!-- Drawer Template -->
-<ng-template #drawerTemplate let-ref>
+<ng-template
+  #drawerTemplate
+  let-ref
+  let-ariaLabelledBy="ariaLabelledBy"
+  let-ariaDescribedBy="ariaDescribedBy"
+>
   <div class="qz-drawer">
     <div class="qz-drawer__header">
-      <h4 class="qz-drawer__title">Settings Panel</h4>
+      <h4 [attr.id]="ariaLabelledBy" class="qz-drawer__title">Settings Panel</h4>
       <button class="qz-drawer__close" (click)="ref.close()">✕</button>
     </div>
     <div class="qz-drawer__body">

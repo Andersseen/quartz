@@ -5,8 +5,6 @@ export interface DragDropConfig {
   disabled?: boolean;
   /** Drag handle selector */
   handle?: string;
-  /** Animation duration in ms */
-  animationDuration?: number;
 }
 
 export interface DropZoneConfig {
@@ -45,5 +43,3 @@ export interface QzDragOverInfo {
   event: DragEvent;
   position: 'before' | 'after' | 'inside';
 }
-
-export type DragDropOrientation = 'horizontal' | 'vertical';

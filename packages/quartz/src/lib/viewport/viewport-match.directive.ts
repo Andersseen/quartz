@@ -2,8 +2,9 @@ import { Directive, input, computed, inject } from '@angular/core';
 import { ViewportService } from './viewport.service';
 
 /**
- * Structural/behavioral directive that applies CSS classes based on
- * viewport breakpoints. Useful for responsive logic without media queries.
+ * Structural/behavioral directive that exposes viewport breakpoint signals and
+ * applies CSS classes based on the default breakpoints. Useful for responsive
+ * logic without media queries.
  *
  * @usage
  * ```html
@@ -11,12 +12,9 @@ import { ViewportService } from './viewport.service';
  *   Content adapts to viewport
  * </div>
  *
- * <!-- Or use the directive outputs -->
- * <div
- *   qzViewportMatch
- *   (onMobileChange)="handleMobile($event)"
- *   (onDesktopChange)="handleDesktop($event)"
- * >
+ * <!-- Custom min/max width matching -->
+ * <div qzViewportMatch [minWidth]="768" [maxWidth]="1200">
+ *   {{ matches() ? 'In range' : 'Out of range' }}
  * </div>
  * ```
  */

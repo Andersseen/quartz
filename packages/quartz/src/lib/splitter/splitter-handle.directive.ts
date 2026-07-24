@@ -4,6 +4,7 @@ import { SplitterContainerDirective } from './splitter-container.directive';
 
 @Directive({
   selector: '[qzSplitterHandle]',
+  standalone: true,
   host: {
     '[class.qz-splitter-handle]': 'true',
     '[class.qz-splitter-handle--dragging]': 'splitterService.isDragging()',

@@ -1,4 +1,4 @@
-import { OverlayPlacement, OverlayPosition } from './overlay.types';
+import { OverlayFlipAxis, OverlayPlacement, OverlayPosition } from './overlay.types';
 
 const FLIP_MAP: Record<OverlayPlacement, OverlayPlacement> = {
   top: 'bottom',
@@ -73,11 +73,13 @@ export function calculatePosition(
   placement: OverlayPlacement,
   offset: number,
   flip: boolean,
-  viewport: { width: number; height: number } = {
+  flipAxis: OverlayFlipAxis = 'main',
+  viewport?: { width: number; height: number },
+): OverlayPosition {
+  const resolvedViewport = viewport ?? {
     width: globalThis.window?.innerWidth ?? 0,
     height: globalThis.window?.innerHeight ?? 0,
-  },
-): OverlayPosition {
+  };
   const ow = overlayEl.offsetWidth;
   const oh = overlayEl.offsetHeight;
   const overlay = { width: ow, height: oh };
@@ -85,10 +87,14 @@ export function calculatePosition(
   let resolvedPlacement = placement;
   let pos = computeRaw(anchorRect, overlay, placement, offset);
 
-  if (flip && !fitsInViewport(pos, overlay, viewport)) {
+  // `flipAxis` controls which axis may be flipped. The current implementation
+  // supports main-axis flipping; cross-axis and both-axis flipping are not yet
+  // implemented and fall back to main-axis behavior. `none` disables flipping.
+  const canFlip = flip && flipAxis !== 'none';
+  if (canFlip && !fitsInViewport(pos, overlay, resolvedViewport)) {
     const flipped = FLIP_MAP[placement];
     const flippedPos = computeRaw(anchorRect, overlay, flipped, offset);
-    if (fitsInViewport(flippedPos, overlay, viewport)) {
+    if (fitsInViewport(flippedPos, overlay, resolvedViewport)) {
       pos = flippedPos;
       resolvedPlacement = flipped;
     }
@@ -96,8 +102,8 @@ export function calculatePosition(
 
   // Clamp to viewport with margin
   const margin = 8;
-  pos.left = Math.max(margin, Math.min(pos.left, viewport.width - ow - margin));
-  pos.top = Math.max(margin, Math.min(pos.top, viewport.height - oh - margin));
+  pos.left = Math.max(margin, Math.min(pos.left, resolvedViewport.width - ow - margin));
+  pos.top = Math.max(margin, Math.min(pos.top, resolvedViewport.height - oh - margin));
 
   return { top: pos.top, left: pos.left, placement: resolvedPlacement };
 }

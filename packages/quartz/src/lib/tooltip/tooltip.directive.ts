@@ -8,7 +8,6 @@ import {
   OnDestroy,
   signal,
   effect,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -16,6 +15,8 @@ import { OverlayRef } from '../overlay';
 import { TooltipService } from './tooltip.service';
 import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
 import { calculatePosition } from '../overlay';
+
+let tooltipIdCounter = 0;
 
 /**
  * Headless tooltip directive. Attach to any element to show a tooltip on hover/focus.
@@ -36,6 +37,7 @@ import { calculatePosition } from '../overlay';
 @Directive({
   selector: '[qzTooltip]',
   exportAs: 'qzTooltip',
+  standalone: true,
   host: {
     '[attr.aria-describedby]': 'tooltipId()',
     '(mouseenter)': 'onMouseEnter()',
@@ -48,7 +50,6 @@ export class TooltipDirective implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly tooltipService = inject(TooltipService);
-  private readonly cdr = inject(ChangeDetectorRef);
   private readonly document = inject(DOCUMENT);
 
   // ── Inputs ──────────────────────────────────────────────────────────────
@@ -67,10 +68,15 @@ export class TooltipDirective implements OnDestroy {
 
   private overlayRef: OverlayRef | null = null;
   private textTooltipEl: HTMLElement | null = null;
+  private templateTooltipChild: HTMLElement | null = null;
   private showTimer: number | null = null;
   private hideTimer: number | null = null;
   private isHoveringTooltip = false;
-  private scrollListeners: Array<{ target: EventTarget; handler: EventListener }> = [];
+  private scrollListeners: Array<{
+    target: EventTarget;
+    handler: EventListener;
+    options: AddEventListenerOptions;
+  }> = [];
   private overlayMountedSubscription: Subscription | null = null;
 
   readonly tooltipId = signal<string | null>(null);
@@ -150,7 +156,6 @@ export class TooltipDirective implements OnDestroy {
     this.textTooltipEl = this.tooltipService.createTextElement(text);
     this.tooltipId.set(this.textTooltipEl.id || this.generateId());
     this.textTooltipEl.id = this.tooltipId()!;
-    this.cdr.markForCheck();
 
     this.queueFrame(() => {
       if (!this.textTooltipEl) return;
@@ -192,7 +197,12 @@ export class TooltipDirective implements OnDestroy {
       child.id = this.generateId();
       this.tooltipId.set(child.id);
       child.setAttribute('role', 'tooltip');
-      this.cdr.markForCheck();
+      this.templateTooltipChild = child;
+
+      if (this.tooltipInteractive()) {
+        child.addEventListener('mouseenter', this.onTooltipMouseEnter);
+        child.addEventListener('mouseleave', this.onTooltipMouseLeave);
+      }
     });
 
     this.overlayRef.open();
@@ -207,6 +217,12 @@ export class TooltipDirective implements OnDestroy {
       this.textTooltipEl.removeEventListener('mouseleave', this.onTooltipMouseLeave);
       this.textTooltipEl.remove();
       this.textTooltipEl = null;
+    }
+
+    if (this.templateTooltipChild) {
+      this.templateTooltipChild.removeEventListener('mouseenter', this.onTooltipMouseEnter);
+      this.templateTooltipChild.removeEventListener('mouseleave', this.onTooltipMouseLeave);
+      this.templateTooltipChild = null;
     }
 
     if (this.overlayRef) {
@@ -228,15 +244,16 @@ export class TooltipDirective implements OnDestroy {
 
     // Listen on scrollable parents + window
     const parents = getScrollParents(this.elementRef.nativeElement, this.document);
+    const options: AddEventListenerOptions = { passive: true };
     for (const parent of parents) {
-      parent.addEventListener('scroll', onScroll, { passive: true });
-      this.scrollListeners.push({ target: parent, handler: onScroll });
+      parent.addEventListener('scroll', onScroll, options);
+      this.scrollListeners.push({ target: parent, handler: onScroll, options });
     }
   }
 
   private detachScrollListeners(): void {
-    for (const { target, handler } of this.scrollListeners) {
-      target.removeEventListener('scroll', handler);
+    for (const { target, handler, options } of this.scrollListeners) {
+      target.removeEventListener('scroll', handler, options);
     }
     this.scrollListeners = [];
   }
@@ -256,7 +273,7 @@ export class TooltipDirective implements OnDestroy {
   }
 
   private generateId(): string {
-    return 'qz-tooltip-' + Math.random().toString(36).substring(2, 9);
+    return `qz-tooltip-${++tooltipIdCounter}`;
   }
 
   private queueFrame(callback: () => void): void {

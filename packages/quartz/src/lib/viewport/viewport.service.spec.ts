@@ -25,37 +25,33 @@ describe('ViewportService', () => {
   });
 
   it('should compute aspectRatio', () => {
-    service.width.set(1920);
-    service.height.set(1080);
+    service.setSize(1920, 1080);
     expect(service.aspectRatio()).toBeCloseTo(1.777, 2);
   });
 
   it('should detect mobile when width < 768', () => {
-    service.width.set(500);
-    service.height.set(800);
+    service.setSize(500, 800);
     expect(service.isMobile()).toBe(true);
     expect(service.isTablet()).toBe(false);
     expect(service.isDesktop()).toBe(false);
   });
 
   it('should detect tablet when width is between 768 and 1023', () => {
-    service.width.set(800);
-    service.height.set(600);
+    service.setSize(800, 600);
     expect(service.isMobile()).toBe(false);
     expect(service.isTablet()).toBe(true);
     expect(service.isDesktop()).toBe(false);
   });
 
   it('should detect desktop when width >= 1024', () => {
-    service.width.set(1440);
-    service.height.set(900);
+    service.setSize(1440, 900);
     expect(service.isMobile()).toBe(false);
     expect(service.isTablet()).toBe(false);
     expect(service.isDesktop()).toBe(true);
   });
 
   it('should match breakpoints correctly', () => {
-    service.width.set(900);
+    service.setSize(900, 600);
     const match = service.match();
     expect(match.xs).toBe(true);
     expect(match.sm).toBe(true);

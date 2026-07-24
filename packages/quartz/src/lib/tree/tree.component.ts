@@ -4,7 +4,6 @@ import {
   input,
   TemplateRef,
   effect,
-  OnInit,
   inject,
 } from '@angular/core';
 import { TreeNode, TreeConfig } from './tree.types';
@@ -24,13 +23,21 @@ export interface TreeNodeContext {
 
 @Component({
   selector: 'qz-tree',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TreeService],
   imports: [TreeNodeComponent],
   template: `
     <div class="qz-tree" role="tree">
-      @for (node of treeService.nodes(); track node.id) {
-        <qz-tree-node [node]="node" [level]="0" [template]="nodeTemplate()" />
+      @for (node of treeService.nodes(); track node.id; let i = $index, count = $count) {
+        <qz-tree-node
+          [node]="node"
+          [level]="0"
+          [setsize]="count"
+          [posinset]="i + 1"
+          [isFirst]="i === 0"
+          [template]="nodeTemplate()"
+        />
       }
     </div>
   `,
@@ -49,7 +56,7 @@ export interface TreeNodeContext {
     '[class.qz-tree-host]': 'true',
   },
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent {
   readonly nodes = input.required<TreeNode[]>();
   readonly config = input<Partial<TreeConfig>>({});
   readonly nodeTemplate = input<TemplateRef<TreeNodeContext> | null>(null);
@@ -57,6 +64,8 @@ export class TreeComponent implements OnInit {
   readonly treeService = inject(TreeService);
 
   constructor() {
+    // Single source of truth for (re)initialization: runs on mount and whenever
+    // `nodes` or `config` change. Previously an `ngOnInit` duplicated this call.
     effect(() => {
       const n = this.nodes();
       const c = this.config();
@@ -64,9 +73,5 @@ export class TreeComponent implements OnInit {
         this.treeService.init(n, c);
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.treeService.init(this.nodes(), this.config());
   }
 }

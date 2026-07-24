@@ -11,8 +11,9 @@ import { calculatePosition } from './overlay-position';
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
   private wrapperEl: HTMLElement | null = null;
-  private scrollParents: (Element | Document)[] = [];
+  private scrollParents: { target: Element | Document; options: AddEventListenerOptions }[] = [];
   private anchor: OverlayAnchor;
+  private clickOutsideTimer: ReturnType<typeof setTimeout> | null = null;
 
   #closed$ = new Subject<void>();
   readonly closed$ = this.#closed$.asObservable();
@@ -131,6 +132,7 @@ export class OverlayRef {
       this.config.placement,
       this.config.offset,
       this.config.flip,
+      this.config.flipAxis,
       this.getViewport(),
     );
 
@@ -167,7 +169,9 @@ export class OverlayRef {
   private attachListeners(): void {
     if (this.config.closeOnClickOutside) {
       // Use setTimeout to avoid catching the same click that opened the overlay
-      setTimeout(() => {
+      this.clickOutsideTimer = setTimeout(() => {
+        this.clickOutsideTimer = null;
+        if (!this.isOpen) return;
         this.document.addEventListener('mousedown', this.onClickOutside, true);
       });
     }
@@ -177,18 +181,25 @@ export class OverlayRef {
     }
 
     if (this.config.closeOnScroll) {
-      this.scrollParents = getScrollParents(this.anchor, this.document);
-      for (const parent of this.scrollParents) {
-        parent.addEventListener('scroll', this.onScroll, { passive: true });
+      const parents = getScrollParents(this.anchor, this.document);
+      const options: AddEventListenerOptions = { passive: true };
+      for (const parent of parents) {
+        parent.addEventListener('scroll', this.onScroll, options);
+        this.scrollParents.push({ target: parent, options });
       }
     }
   }
 
   private detachListeners(): void {
+    if (this.clickOutsideTimer !== null) {
+      clearTimeout(this.clickOutsideTimer);
+      this.clickOutsideTimer = null;
+    }
+
     this.document.removeEventListener('mousedown', this.onClickOutside, true);
     this.document.removeEventListener('keydown', this.onEscape, true);
-    for (const parent of this.scrollParents) {
-      parent.removeEventListener('scroll', this.onScroll);
+    for (const { target, options } of this.scrollParents) {
+      target.removeEventListener('scroll', this.onScroll, options);
     }
     this.scrollParents = [];
   }

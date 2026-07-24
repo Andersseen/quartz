@@ -3,6 +3,12 @@
 > Generated from code review session on 2026-07-06.
 > Pass this file + `REVIEW_CONTEXT.md` to a new agent to continue without re-auditing.
 
+> **Progress (2026-07-24):** DONE — P0.1, P0.2, P0.3, P1.1, P1.2, P1.3, P1.4, P2.1, P2.2,
+> P2.5, P2.6, P3.1, P3.2. NOT YET DONE — P1.5 (TreeService coverage target), P3.3 (route-cache
+> investigation), P3.4 (ReplaySubject vs Subject). P2.4 addressed via a CLI safety net that
+> auto-resolves cross-component imports (an end-to-end compile test is still a nice-to-have).
+> Verify with `pnpm test && pnpm lint && pnpm typecheck && pnpm build:lib` (82 tests passing).
+
 ## How to use this plan
 
 Each item has:

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { computed, inject, Injectable, signal, type Signal } from '@angular/core';
+import { computed, inject, Injectable, OnDestroy, signal, type Signal } from '@angular/core';
 import { DEFAULT_BREAKPOINTS, type ViewportMatchResult } from './viewport.types';
 
 /**
@@ -7,14 +7,17 @@ import { DEFAULT_BREAKPOINTS, type ViewportMatchResult } from './viewport.types'
  * using reactive signals. Tree-shakeable and side-effect free.
  */
 @Injectable({ providedIn: 'root' })
-export class ViewportService {
+export class ViewportService implements OnDestroy {
   private readonly document = inject(DOCUMENT);
 
+  #width = signal(0);
+  #height = signal(0);
+
   /** Current viewport width in pixels. */
-  readonly width = signal(0);
+  readonly width = this.#width.asReadonly();
 
   /** Current viewport height in pixels. */
-  readonly height = signal(0);
+  readonly height = this.#height.asReadonly();
 
   /** Aspect ratio (width / height). */
   readonly aspectRatio = computed(() => {
@@ -110,9 +113,19 @@ export class ViewportService {
     return this.observe(`(min-width: ${min}px) and (max-width: ${max}px)`);
   }
 
+  /**
+   * Programmatically set viewport dimensions.
+   * Intended for testing; in production dimensions are observed from the window.
+   */
+  setSize(width: number, height: number): void {
+    this.#width.set(width);
+    this.#height.set(height);
+  }
+
   /** Clean up all observers. Useful for testing. */
   destroy(): void {
     this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
     this.observing = false;
 
     const view = this.document.defaultView;
@@ -130,13 +143,17 @@ export class ViewportService {
     this.mediaSignals.clear();
   }
 
+  ngOnDestroy(): void {
+    this.destroy();
+  }
+
   #init(): void {
     const view = this.document.defaultView;
     if (!view) return;
 
     const updateSize = () => {
-      this.width.set(view.innerWidth);
-      this.height.set(view.innerHeight);
+      this.#width.set(view.innerWidth);
+      this.#height.set(view.innerHeight);
     };
 
     updateSize();

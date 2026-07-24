@@ -135,11 +135,11 @@ jobs:
       - name: Build Demo
         run: pnpm run pages:build
 
+      # Single source of truth: project name + output dir come from wrangler.toml,
+      # the same config the local `pnpm pages:deploy` script uses.
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: quartz-ui
-          directory: dist/analog/public
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy

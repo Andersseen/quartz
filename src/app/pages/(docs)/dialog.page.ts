@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DialogService, DialogRef, type DialogPosition } from 'quartz';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
@@ -51,7 +52,7 @@ export default class DialogPage {
       panelClass: 'qz-dialog-panel',
       width: '480px',
     });
-    ref.closed$.subscribe(() => this.activeDrawer.set(null));
+    ref.closed$.pipe(takeUntilDestroyed()).subscribe(() => this.activeDrawer.set(null));
   }
 
   openDrawer(pos: DialogPosition): void {
@@ -62,7 +63,7 @@ export default class DialogPage {
       width: pos === 'left' || pos === 'right' ? '360px' : undefined,
       height: pos === 'top' || pos === 'bottom' ? '280px' : undefined,
     });
-    ref.closed$.subscribe(() => this.activeDrawer.set(null));
+    ref.closed$.pipe(takeUntilDestroyed()).subscribe(() => this.activeDrawer.set(null));
   }
 
   openNoBackdrop(): void {

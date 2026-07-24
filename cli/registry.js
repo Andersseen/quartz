@@ -43,7 +43,7 @@ const REGISTRY = {
       'toast/toast.service.ts',
       'toast/toast.component.ts',
       'toast/toast-container.component.ts',
-      'toast/toast.model.ts',
+      'toast/toast.types.ts',
       'toast/index.ts',
     ],
     docs: 'https://quartz-headless.pages.dev/toast',

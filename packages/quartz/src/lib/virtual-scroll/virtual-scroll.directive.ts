@@ -116,12 +116,13 @@ export class VirtualScrollDirective<T> implements OnDestroy {
   readonly count = computed(() => this.items().length);
 
   #onResize = (): void => this.#measure();
+  #scrollOptions: AddEventListenerOptions = { passive: true };
 
   constructor() {
     const host = this.elementRef.nativeElement;
 
     // Listen to scroll events
-    host.addEventListener('scroll', this.#onScroll, { passive: true });
+    host.addEventListener('scroll', this.#onScroll, this.#scrollOptions);
 
     // Measure after first paint to ensure layout is computed
     afterNextRender(() => this.#measure());
@@ -141,7 +142,7 @@ export class VirtualScrollDirective<T> implements OnDestroy {
 
   ngOnDestroy(): void {
     const host = this.elementRef.nativeElement;
-    host.removeEventListener('scroll', this.#onScroll);
+    host.removeEventListener('scroll', this.#onScroll, this.#scrollOptions);
     this.document.defaultView?.removeEventListener('resize', this.#onResize);
     this.#resizeObserver?.disconnect();
   }

@@ -1,4 +1,4 @@
-name = "quartz-ui"
+name = "quartz-headless"
 pages_build_output_dir = "dist/analog/public"
 
 [vars]

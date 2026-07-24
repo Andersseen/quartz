@@ -1,9 +1,30 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-07-06** (P0 fixes in progress)
+> **Last updated: 2026-07-24** (review-plan remediation — HEAD `1d20b94` + uncommitted work)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
+
+## Review-plan remediation status (see `REVIEW_PLAN.md`)
+
+All P0 items are done. This session additionally completed:
+
+- **P1.1** Tree now follows the WAI-ARIA Tree pattern: roving tabindex, arrow/Home/End
+  navigation, type-ahead, and `aria-level`/`aria-setsize`/`aria-posinset` (default template).
+- **P1.2** removed the duplicate `TreeComponent` init (`effect` is the single source).
+- **P1.3** `markForCheck()` removed from the tooltip. **P1.4** directive specs added for
+  overlay-trigger (+ keyboard), splitter container/handle/panel, and drop-zone.
+- **P2.1** removed unimplemented `VirtualScrollConfig.itemSizeFn`. **P2.2** `toast.model.ts`
+  renamed to `toast.types.ts`. **P2.5** splitter handle ARIA (already present). **P2.6**
+  keyboard activation on `OverlayTriggerDirective` (Enter/Space, guarded for native hosts).
+- **P3.1** dead exports removed (`TooltipInstance`, `DragDropOrientation`, `animationDuration`).
+  **P3.2** dialog snippet uses `inject()`.
+- **P2.4** the CLI now scans copied files and auto-resolves any `../x` cross-component import,
+  so `quartz add` output stays compilable even if a registry `deps` entry drifts.
+
+Remaining plan items not yet done: **P1.5** (TreeService coverage target), **P2.4** could add
+an end-to-end compile test, **P3.3** (AnalogJS route-cache workaround investigation),
+**P3.4** (ReplaySubject vs Subject consistency). Tests: 82 passing.
 
 ## Version & publish status
 
@@ -19,10 +40,10 @@
 | overlay        | ✅       | ✅         | ✅         | ✅                | Foundation for dialog + tooltip                                                      |
 | dialog         | ✅       | ✅ (+SSR)  | ✅         | ✅ deps:[overlay] | Includes drawer positioning                                                          |
 | splitter       | ✅       | ✅         | ✅         | ✅                | Container-scoped service pattern                                                     |
-| toast          | ✅       | ✅         | ✅         | ✅                | Uses `toast.model.ts` (not `.types.ts` — naming deviation)                           |
+| toast          | ✅       | ✅         | ✅         | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                            |
 | drag-drop      | ✅       | ✅         | ✅         | ✅                |                                                                                      |
 | tooltip        | ✅       | ✅         | ❌ no page | ✅ deps:[overlay] | Implemented recently; **demo page missing** (`(docs)/tooltip.page.ts` doesn't exist) |
-| tree           | ✅       | ✅         | ✅         | ✅                | Needs manual extraRoute (already added)                                              |
+| tree           | ✅       | ✅         | ✅         | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Manual extraRoute        |
 | virtual-scroll | ✅       | ✅         | ✅         | ✅                | Has ResizeObserver support                                                           |
 | viewport       | ✅       | ✅         | ✅         | ✅                |                                                                                      |
 

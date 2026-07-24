@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import { version } from '../../../../packages/quartz/package.json';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import {
@@ -63,6 +64,8 @@ export class SidebarComponent {
     ),
     { initialValue: this.router.url },
   );
+
+  readonly version = version;
 
   readonly groupLabel = 'Angular Components';
 

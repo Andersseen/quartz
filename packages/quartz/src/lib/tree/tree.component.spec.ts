@@ -58,4 +58,59 @@ describe('TreeComponent', () => {
 
     expect(another.closest('.qz-tree-node')).toHaveClass('qz-tree-node--selected');
   });
+
+  it('should expose WAI-ARIA tree attributes', async () => {
+    await render(TestHost);
+    const items = screen.getAllByRole('treeitem');
+    // Two visible root items initially (children collapsed).
+    expect(items).toHaveLength(2);
+
+    const [root, another] = items;
+    expect(root).toHaveAttribute('aria-level', '1');
+    expect(root).toHaveAttribute('aria-setsize', '2');
+    expect(root).toHaveAttribute('aria-posinset', '1');
+    expect(root).toHaveAttribute('aria-expanded', 'false');
+    expect(another).toHaveAttribute('aria-posinset', '2');
+    expect(another).not.toHaveAttribute('aria-expanded');
+  });
+
+  it('should seed roving tabindex on the first node only', async () => {
+    await render(TestHost);
+    const [root, another] = screen.getAllByRole('treeitem');
+    expect(root).toHaveAttribute('tabindex', '0');
+    expect(another).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('should move the roving tabindex with ArrowDown', async () => {
+    const { fixture } = await render(TestHost);
+    const [root, another] = screen.getAllByRole('treeitem');
+
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    fixture.detectChanges();
+
+    expect(another).toHaveAttribute('tabindex', '0');
+    expect(root).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('should expand a collapsed node with ArrowRight', async () => {
+    const { fixture } = await render(TestHost);
+    const [root] = screen.getAllByRole('treeitem');
+    expect(screen.queryByText('Child 1')).toBeNull();
+
+    fireEvent.keyDown(root, { key: 'ArrowRight' });
+    fixture.detectChanges();
+
+    expect(screen.getByText('Child 1')).toBeInTheDocument();
+    expect(root).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('should select the active node with Enter', async () => {
+    const { fixture } = await render(TestHost);
+    const [, another] = screen.getAllByRole('treeitem');
+
+    fireEvent.keyDown(another, { key: 'Enter' });
+    fixture.detectChanges();
+
+    expect(another).toHaveAttribute('aria-selected', 'true');
+  });
 });

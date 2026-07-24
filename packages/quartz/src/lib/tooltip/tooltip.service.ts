@@ -2,11 +2,6 @@ import { Injectable, TemplateRef, ViewContainerRef, inject, DOCUMENT } from '@an
 import { OverlayService, OverlayRef } from '../overlay';
 import { TooltipConfig, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
 
-export interface TooltipInstance {
-  ref: OverlayRef;
-  anchor: HTMLElement;
-}
-
 @Injectable({ providedIn: 'root' })
 export class TooltipService {
   private readonly document = inject(DOCUMENT);

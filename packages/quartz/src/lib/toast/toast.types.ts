@@ -7,6 +7,15 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
+export const ALL_TOAST_POSITIONS: ToastPosition[] = [
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+];
+
 export interface ToastOptions {
   type?: ToastType;
   title?: string;
