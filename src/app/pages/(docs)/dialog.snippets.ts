@@ -1,5 +1,6 @@
 export const MODAL_SNIPPET = `// Inject the service
-constructor(private dialog: DialogService) {}
+private readonly dialog = inject(DialogService);
+private readonly vcr = inject(ViewContainerRef);
 
 // Open a centered modal
 open() {

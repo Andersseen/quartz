@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { vi, describe, it, expect } from 'vitest';
 import { ToastComponent } from './toast.component';
-import { Toast } from './toast.model';
+import { Toast } from './toast.types';
 
 describe('ToastComponent', () => {
   const mockToast: Toast = {
@@ -30,18 +30,6 @@ describe('ToastComponent', () => {
   });
 
   it('should have success class', async () => {
-    await render(ToastComponent, {
-      inputs: {
-        toast: mockToast,
-        progress: 100,
-      },
-    });
-
-    const toastElement = screen.getByRole('alert');
-    expect(toastElement).toHaveClass('qz-toast--success');
-  });
-
-  it('should emit pause on mouse enter', async () => {
     const { fixture } = await render(ToastComponent, {
       inputs: {
         toast: mockToast,
@@ -49,14 +37,26 @@ describe('ToastComponent', () => {
       },
     });
 
-    const pauseSpy = vi.spyOn(fixture.componentInstance.qzPause, 'emit');
-    const toastElement = screen.getByRole('alert');
+    const toastElement = fixture.nativeElement.querySelector('.qz-toast');
+    expect(toastElement).toHaveClass('qz-toast--success');
+  });
+
+  it('should emit paused on mouse enter', async () => {
+    const { fixture } = await render(ToastComponent, {
+      inputs: {
+        toast: mockToast,
+        progress: 100,
+      },
+    });
+
+    const pauseSpy = vi.spyOn(fixture.componentInstance.paused, 'emit');
+    const toastElement = fixture.nativeElement.querySelector('.qz-toast');
 
     toastElement.dispatchEvent(new MouseEvent('mouseenter'));
     expect(pauseSpy).toHaveBeenCalled();
   });
 
-  it('should emit resume on mouse leave', async () => {
+  it('should emit resumed on mouse leave', async () => {
     const { fixture } = await render(ToastComponent, {
       inputs: {
         toast: mockToast,
@@ -64,8 +64,8 @@ describe('ToastComponent', () => {
       },
     });
 
-    const resumeSpy = vi.spyOn(fixture.componentInstance.qzResume, 'emit');
-    const toastElement = screen.getByRole('alert');
+    const resumeSpy = vi.spyOn(fixture.componentInstance.resumed, 'emit');
+    const toastElement = fixture.nativeElement.querySelector('.qz-toast');
 
     toastElement.dispatchEvent(new MouseEvent('mouseleave'));
     expect(resumeSpy).toHaveBeenCalled();

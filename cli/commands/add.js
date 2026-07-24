@@ -18,6 +18,57 @@ function resolveOutputDir(cwd, outFlag) {
   return path.join(cwd, 'src/lib/components');
 }
 
+// Matches cross-component relative imports like `from '../overlay'` or
+// `from '../overlay/overlay-position'` — the leading `../` means a sibling
+// component folder in the copied output.
+const CROSS_IMPORT_RE = /from\s+['"]\.\.\/([^'"/]+)/g;
+
+function siblingComponentsReferenced(fileContent) {
+  const names = new Set();
+  let match;
+  while ((match = CROSS_IMPORT_RE.exec(fileContent)) !== null) {
+    names.add(match[1]);
+  }
+  return names;
+}
+
+/**
+ * Guarantees every cross-component `../x` import in the copied files resolves.
+ * Declared `deps` in the registry normally cover this, but scanning the actual
+ * source keeps the output compilable even if a `deps` entry drifts out of sync
+ * — and surfaces a clear warning when an import points at something unknown.
+ */
+function ensureCrossImportsResolved(outputDir, done, verbose) {
+  const warned = new Set();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const name of [...done]) {
+      const dir = path.join(outputDir, name);
+      if (!fs.existsSync(dir)) continue;
+      for (const file of fs.readdirSync(dir)) {
+        if (!file.endsWith('.ts')) continue;
+        const content = fs.readFileSync(path.join(dir, file), 'utf8');
+        for (const ref of siblingComponentsReferenced(content)) {
+          if (done.has(ref)) continue;
+          const entry = REGISTRY[ref];
+          if (!entry) {
+            if (!warned.has(ref)) {
+              console.warn(`  ⚠  ${name}/${file} imports "../${ref}" — no such component in the registry`);
+              warned.add(ref);
+            }
+            continue;
+          }
+          console.log(`＋  ${ref} — pulled in automatically (required by ${name})`);
+          copyFiles(ref, entry, outputDir, verbose);
+          done.add(ref);
+          changed = true;
+        }
+      }
+    }
+  }
+}
+
 function copyFiles(component, entry, outputDir, verbose) {
   const destDir = path.join(outputDir, component);
   fs.mkdirSync(destDir, { recursive: true });
@@ -89,6 +140,10 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
     }
     console.log('');
   }
+
+  // Safety net: make sure every cross-component import in the copied files
+  // resolves to a sibling folder that was actually copied.
+  ensureCrossImportsResolved(outputDir, done, verbose);
 
   console.log('Done! Components are unstyled — add your own styles or wrap with your design system.');
 }

@@ -12,7 +12,7 @@ import {
 import { Subscription } from 'rxjs';
 import { OverlayService } from './overlay.service';
 import { OverlayRef } from './overlay-ref';
-import { OverlayConfig, OverlayPlacement } from './overlay.types';
+import { OverlayConfig, OverlayFlipAxis, OverlayPlacement } from './overlay.types';
 
 /**
  * Mark a <ng-template> inside your component as the overlay content.
@@ -33,12 +33,14 @@ import { OverlayConfig, OverlayPlacement } from './overlay.types';
 @Directive({
   selector: '[qzOverlayTrigger]',
   exportAs: 'qzOverlay',
+  standalone: true,
   host: {
     '[class.qz-overlay-trigger]': 'true',
     '[class.qz-overlay-trigger--open]': 'isOpen()',
     '[attr.aria-expanded]': 'isOpen()',
     '[attr.aria-haspopup]': '"true"',
     '(click)': 'toggle()',
+    '(keydown)': 'onKeydown($event)',
   },
 })
 export class OverlayTriggerDirective implements OnDestroy {
@@ -54,6 +56,7 @@ export class OverlayTriggerDirective implements OnDestroy {
   readonly placement = input<OverlayPlacement>('bottom-start');
   readonly offset = input<number>(4);
   readonly flip = input<boolean>(true);
+  readonly flipAxis = input<OverlayFlipAxis>('main');
   readonly closeOnClickOutside = input<boolean>(true);
   readonly closeOnEscape = input<boolean>(true);
   readonly closeOnScroll = input<boolean>(true);
@@ -106,6 +109,21 @@ export class OverlayTriggerDirective implements OnDestroy {
     this.isOpen() ? this.close() : this.open();
   }
 
+  /**
+   * Keyboard activation for non-native hosts. Native `<button>`/`<a href>`
+   * already synthesize a click from Enter/Space, so we skip them to avoid a
+   * double toggle. The host must be focusable (e.g. `tabindex="0"`) to receive
+   * these events.
+   * @internal
+   */
+  onKeydown(event: KeyboardEvent): void {
+    if (this.isNativelyActivatable()) return;
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      this.toggle();
+    }
+  }
+
   /** Recompute position (e.g. after content changes size) */
   updatePosition(): void {
     this.overlayRef?.updatePosition();
@@ -125,6 +143,14 @@ export class OverlayTriggerDirective implements OnDestroy {
     this.closedSub = null;
   }
 
+  /** True when the host element already activates on Enter/Space natively. */
+  private isNativelyActivatable(): boolean {
+    const el = this.elementRef.nativeElement;
+    if (el.tagName === 'BUTTON') return true;
+    if (el.tagName === 'A' && el.hasAttribute('href')) return true;
+    return false;
+  }
+
   // ── Private ──────────────────────────────────────────────────────────────
 
   private buildConfig(): Partial<OverlayConfig> {
@@ -132,6 +158,7 @@ export class OverlayTriggerDirective implements OnDestroy {
       placement: this.placement(),
       offset: this.offset(),
       flip: this.flip(),
+      flipAxis: this.flipAxis(),
       closeOnClickOutside: this.closeOnClickOutside(),
       closeOnEscape: this.closeOnEscape(),
       closeOnScroll: this.closeOnScroll(),

@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ToastService } from './toast.service';
 import { ToastComponent } from './toast.component';
-import { ToastPosition } from './toast.model';
+import { ALL_TOAST_POSITIONS } from './toast.types';
 
 @Component({
   selector: 'qz-toast-container',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ToastComponent],
   template: `
@@ -21,8 +22,8 @@ import { ToastPosition } from './toast.model';
             [toast]="toast"
             [progress]="calculateProgress(toast)"
             (dismiss)="toastService.dismiss(toast.id)"
-            (qzPause)="toastService.pause(toast.id)"
-            (qzResume)="toastService.resume(toast.id)"
+            (paused)="toastService.pause(toast.id)"
+            (resumed)="toastService.resume(toast.id)"
           />
         }
       </div>
@@ -93,14 +94,7 @@ import { ToastPosition } from './toast.model';
 export class ToastContainerComponent {
   protected readonly toastService = inject(ToastService);
 
-  readonly positions: ToastPosition[] = [
-    'top-left',
-    'top-center',
-    'top-right',
-    'bottom-left',
-    'bottom-center',
-    'bottom-right',
-  ];
+  readonly positions = ALL_TOAST_POSITIONS;
 
   calculateProgress(toast: { duration: number; remainingTime: number }): number {
     if (toast.duration === 0) return 100;

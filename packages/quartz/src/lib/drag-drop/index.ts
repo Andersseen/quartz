@@ -8,5 +8,4 @@ export type {
   QzDragEndInfo,
   QzDropInfo,
   QzDragOverInfo,
-  DragDropOrientation,
 } from './drag-drop.types';

@@ -3,6 +3,7 @@ import { SplitterService } from './splitter.service';
 
 @Directive({
   selector: '[qzSplitterPanel]',
+  standalone: true,
   host: {
     '[class.qz-splitter-panel]': 'true',
     '[class.qz-splitter-panel--primary]': 'isPrimary()',

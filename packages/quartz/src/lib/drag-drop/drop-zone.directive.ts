@@ -14,6 +14,7 @@ import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.typ
 
 @Directive({
   selector: '[qzDropZone]',
+  standalone: true,
   host: {
     '[class.qz-drop-zone]': 'true',
     '[class.qz-drag-over]': 'isDragOver()',

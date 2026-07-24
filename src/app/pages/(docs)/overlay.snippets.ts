@@ -25,7 +25,7 @@ export const SELECT_SNIPPET = `<button qzOverlayTrigger
   Select option
 </button>`;
 
-export const TOOLTIP_SNIPPET = `<!-- Hover tooltip via OverlayService -->
+export const TOOLTIP_SNIPPET = `<!-- Hover tooltip via TooltipDirective -->
 <span
   qzTooltip="Save changes"
   tooltipPlacement="top">

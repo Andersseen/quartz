@@ -29,6 +29,7 @@ const FOCUSABLE_SELECTOR = [
 export class DialogService {
   private document = inject(DOCUMENT);
   #openDialogs = new Set<DialogRef>();
+  #originalBodyOverflow = '';
 
   open(
     templateRef: TemplateRef<unknown>,
@@ -129,6 +130,7 @@ export class DialogService {
 
     // -- Scroll lock -------------------------------------------------------------
     if (this.#openDialogs.size === 0) {
+      this.#originalBodyOverflow = this.document.body.style.overflow;
       this.document.body.style.overflow = 'hidden';
     }
     this.#openDialogs.add(ref);
@@ -202,7 +204,8 @@ export class DialogService {
     wrapper.remove();
     view.destroy();
     if (this.#openDialogs.size === 0) {
-      this.document.body.style.overflow = '';
+      this.document.body.style.overflow = this.#originalBodyOverflow;
+      this.#originalBodyOverflow = '';
     }
     previousActiveElement?.focus();
   }

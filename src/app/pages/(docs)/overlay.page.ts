@@ -93,7 +93,6 @@ export default class OverlayPage {
       placement: 'bottom-start',
       offset: 8,
     });
-    this.progRef.closed$.subscribe(() => {});
     this.progRef.open();
   }
 }

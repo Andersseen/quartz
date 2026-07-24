@@ -1,6 +1,12 @@
 import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Toast, ToastOptions, ToastPosition, DEFAULT_TOAST_OPTIONS } from './toast.model';
+import {
+  Toast,
+  ToastOptions,
+  ToastPosition,
+  ALL_TOAST_POSITIONS,
+  DEFAULT_TOAST_OPTIONS,
+} from './toast.types';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 9);
@@ -11,23 +17,13 @@ export class ToastService implements OnDestroy {
   private document = inject(DOCUMENT);
 
   #toasts = signal<Toast[]>([]);
-  #isInitialized = signal(false);
 
   readonly toasts = computed(() => this.#toasts());
-  readonly isInitialized = computed(() => this.#isInitialized());
 
   readonly toastsByPosition = computed(() => {
     const grouped = new Map<ToastPosition, Toast[]>();
-    const positions: ToastPosition[] = [
-      'top-left',
-      'top-center',
-      'top-right',
-      'bottom-left',
-      'bottom-center',
-      'bottom-right',
-    ];
 
-    positions.forEach((pos) => grouped.set(pos, []));
+    ALL_TOAST_POSITIONS.forEach((pos) => grouped.set(pos, []));
     this.#toasts().forEach((toast) => {
       const list = grouped.get(toast.position) || [];
       list.push(toast);

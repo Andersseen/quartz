@@ -18,6 +18,4 @@ export interface VirtualScrollConfig {
   itemSize: number;
   /** Extra items to render above and below the viewport (default 5). */
   buffer?: number;
-  /** Function to compute item height at runtime (variable-size mode). */
-  itemSizeFn?: (index: number, item: unknown) => number;
 }

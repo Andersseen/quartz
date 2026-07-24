@@ -5,14 +5,18 @@ import {
   TemplateRef,
   inject,
   computed,
+  effect,
+  viewChild,
+  ElementRef,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { TreeNode } from './tree.types';
 import { TreeService } from './tree.service';
 import { TreeNodeContext } from './tree.component';
 
 @Component({
   selector: 'qz-tree-node',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet],
   template: `
@@ -20,17 +24,25 @@ import { TreeNodeContext } from './tree.component';
       <ng-container *ngTemplateOutlet="template()!; context: getContext()"></ng-container>
     } @else {
       <div
+        #item
         class="qz-tree-node"
         role="treeitem"
+        [attr.tabindex]="tabindex()"
+        [attr.aria-level]="level() + 1"
+        [attr.aria-setsize]="setsize()"
+        [attr.aria-posinset]="posinset()"
         [attr.aria-expanded]="hasChildren() ? isExpanded() : null"
         [attr.aria-selected]="isSelected()"
+        [attr.aria-disabled]="node().disabled ? true : null"
         [class.qz-tree-node--expanded]="isExpanded()"
         [class.qz-tree-node--selected]="isSelected()"
         [style.padding-left.px]="level() * 20"
         (click)="onClick($event)"
+        (focus)="onFocus()"
+        (keydown)="onKeydown($event)"
       >
         @if (hasChildren()) {
-          <span class="qz-tree-node__toggle" (click)="onToggleClick($event)">
+          <span class="qz-tree-node__toggle" aria-hidden="true" (click)="onToggleClick($event)">
             {{ isExpanded() ? '▼' : '▶' }}
           </span>
         } @else {
@@ -42,8 +54,14 @@ import { TreeNodeContext } from './tree.component';
 
     @if (isExpanded() && node().children?.length) {
       <div class="qz-tree-node__children" role="group">
-        @for (child of node().children; track child.id) {
-          <qz-tree-node [node]="child" [level]="level() + 1" [template]="template()" />
+        @for (child of node().children; track child.id; let i = $index, count = $count) {
+          <qz-tree-node
+            [node]="child"
+            [level]="level() + 1"
+            [setsize]="count"
+            [posinset]="i + 1"
+            [template]="template()"
+          />
         }
       </div>
     }
@@ -101,10 +119,19 @@ import { TreeNodeContext } from './tree.component';
 })
 export class TreeNodeComponent {
   private readonly treeService = inject(TreeService);
+  private readonly document = inject(DOCUMENT);
 
   readonly node = input.required<TreeNode>();
   readonly level = input<number>(0);
   readonly template = input<TemplateRef<TreeNodeContext> | null>(null);
+  /** Number of sibling nodes at this level (for `aria-setsize`). */
+  readonly setsize = input<number>(1);
+  /** 1-based position among siblings (for `aria-posinset`). */
+  readonly posinset = input<number>(1);
+  /** True for the very first node in the tree — seeds the roving tabindex. */
+  readonly isFirst = input<boolean>(false);
+
+  private readonly itemEl = viewChild<ElementRef<HTMLElement>>('item');
 
   readonly isExpanded = computed(() => this.treeService.expandedIds().has(this.node().id));
   readonly isSelected = computed(() => this.treeService.selectedIds().has(this.node().id));
@@ -113,14 +140,79 @@ export class TreeNodeComponent {
     return !!(children && children.length > 0);
   });
 
+  /** Roving tabindex: only the active node (or the first, before any interaction) is tabbable. */
+  readonly tabindex = computed(() => {
+    const active = this.treeService.activeId();
+    if (active === null) return this.isFirst() ? 0 : -1;
+    return active === this.node().id ? 0 : -1;
+  });
+
+  constructor() {
+    // Move DOM focus to whichever node becomes active via keyboard navigation.
+    effect(() => {
+      if (this.treeService.activeId() !== this.node().id) return;
+      if (!this.document.defaultView) return; // SSR guard
+      this.itemEl()?.nativeElement.focus();
+    });
+  }
+
   onClick(_event: MouseEvent): void {
     if (this.node().disabled) return;
+    this.treeService.setActive(this.node().id);
     this.treeService.toggleSelection(this.node().id);
   }
 
   onToggleClick(event: MouseEvent): void {
     event.stopPropagation();
     this.treeService.toggle(this.node().id);
+  }
+
+  onFocus(): void {
+    this.treeService.setActive(this.node().id);
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    const id = this.node().id;
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.treeService.focusNext(id);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.treeService.focusPrevious(id);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        if (this.hasChildren()) {
+          if (this.isExpanded()) this.treeService.focusFirstChild(id);
+          else this.treeService.expand(id);
+        }
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        if (this.hasChildren() && this.isExpanded()) this.treeService.collapse(id);
+        else this.treeService.focusParent(id);
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.treeService.focusFirst();
+        break;
+      case 'End':
+        event.preventDefault();
+        this.treeService.focusLast();
+        break;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        if (!this.node().disabled) this.treeService.toggleSelection(id);
+        break;
+      default:
+        // Type-ahead on printable single characters (no modifier keys).
+        if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          this.treeService.typeahead(event.key, id);
+        }
+    }
   }
 
   getContext(): TreeNodeContext {

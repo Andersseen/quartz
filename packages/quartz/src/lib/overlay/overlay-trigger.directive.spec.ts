@@ -35,6 +35,19 @@ class EscapeHost {
   trigger!: OverlayTriggerDirective;
 }
 
+@Component({
+  standalone: true,
+  imports: [OverlayTriggerDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div tabindex="0" qzOverlayTrigger [overlayTemplate]="tpl">Open</div>
+    <ng-template #tpl>
+      <div class="overlay-content">Overlay body</div>
+    </ng-template>
+  `,
+})
+class DivHost {}
+
 describe('OverlayTriggerDirective', () => {
   afterEach(() => {
     document.querySelector('[data-qz-overlay-container]')?.remove();
@@ -74,6 +87,31 @@ describe('OverlayTriggerDirective', () => {
     }
 
     expect(closedSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('should open on Enter for a non-native host', async () => {
+    await render(DivHost);
+    const host = screen.getByText('Open');
+
+    expect(document.querySelector('.overlay-content')).toBeNull();
+
+    host.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await waitForOverlayFrame();
+
+    expect(document.querySelector('.overlay-content')).not.toBeNull();
+  });
+
+  it('should not activate on Enter for a native button (avoids double toggle)', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Open');
+
+    // Native buttons already synthesize a click from Enter/Space, so the
+    // directive must ignore keydown on them. In jsdom no click is synthesized,
+    // so the overlay must stay closed.
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await waitForOverlayFrame();
+
+    expect(document.querySelector('.overlay-content')).toBeNull();
   });
 
   it('should close on Escape key', async () => {

@@ -1,17 +1,29 @@
 // Quartz Headless - primitives for Angular
 
 // Overlay
-export { OverlayTriggerDirective, OverlayService, OverlayRef } from './lib/overlay';
+export {
+  OverlayTriggerDirective,
+  OverlayService,
+  OverlayRef,
+  DEFAULT_OVERLAY_CONFIG,
+} from './lib/overlay';
 export type {
   OverlayAnchor,
   OverlayPlacement,
   OverlayConfig,
   OverlayPosition,
   OverlayVirtualAnchor,
+  OverlayFlipAxis,
 } from './lib/overlay';
 
 // Dialog & Drawer
-export { DialogService, DialogRef, type DialogPosition, type DialogConfig } from './lib/dialog';
+export {
+  DialogService,
+  DialogRef,
+  DEFAULT_DIALOG_CONFIG,
+  type DialogPosition,
+  type DialogConfig,
+} from './lib/dialog';
 
 // Splitter
 export {
@@ -19,6 +31,7 @@ export {
   SplitterHandleDirective,
   SplitterPanelDirective,
   SplitterService,
+  DEFAULT_SPLITTER_CONFIG,
   type SplitterOrientation,
   type SplitterState,
   type SplitterConfig,
@@ -45,7 +58,6 @@ export type {
   QzDragEndInfo,
   QzDropInfo,
   QzDragOverInfo,
-  DragDropOrientation,
 } from './lib/drag-drop';
 
 // Tooltip

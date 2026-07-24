@@ -13,9 +13,9 @@ export interface SplitterConfig {
   defaultPosition: number;
 }
 
-export const DEFAULT_SPLITTER_CONFIG: SplitterConfig = {
+export const DEFAULT_SPLITTER_CONFIG: SplitterConfig = Object.freeze({
   minSize: 0,
   maxSize: 100,
   step: 1,
   defaultPosition: 50,
-};
+});

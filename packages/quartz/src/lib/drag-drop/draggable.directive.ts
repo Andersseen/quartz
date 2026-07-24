@@ -16,6 +16,7 @@ import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.type
 
 @Directive({
   selector: '[qzDraggable]',
+  standalone: true,
   host: {
     '[draggable]': '!isDisabled()',
     '[class.qz-draggable]': 'true',
