@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] — 2026-08-04
+
 ### Added
 
 - Tooltip documentation/demo page (`/tooltip`) with interactive examples for text, placement,
