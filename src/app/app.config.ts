@@ -43,6 +43,16 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'tooltip',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/tooltip.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

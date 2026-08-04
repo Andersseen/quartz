@@ -92,7 +92,7 @@ Files land in your project's `src/lib/components/<name>/` (auto-detected) or the
 | [`splitter`](https://quartz-headless.pages.dev/splitter)             | Resizable panels with keyboard, touch and ARIA slider semantics        |
 | [`toast`](https://quartz-headless.pages.dev/toast)                   | Notification system with position groups and auto-dismiss              |
 | [`drag-drop`](https://quartz-headless.pages.dev/drag-drop)           | Accessible drag &amp; drop with sortable drop zones                    |
-| [`tooltip`](https://quartz-headless.pages.dev)                       | Hover/focus tooltip with configurable placement                        |
+| [`tooltip`](https://quartz-headless.pages.dev/tooltip)               | Hover/focus tooltip with configurable placement                        |
 | [`tree`](https://quartz-headless.pages.dev/tree)                     | Tree view with roving tabindex &amp; full WAI-ARIA keyboard navigation |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | Windowed rendering for long lists                                      |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | Reactive breakpoint service + `ViewportMatchDirective`                 |

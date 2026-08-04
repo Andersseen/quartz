@@ -92,6 +92,9 @@ describe('OverlayService', () => {
 
     ref.open();
     await waitForOverlayFrame();
+    // The click-outside listener is attached via setTimeout to avoid catching
+    // the opening click; give it an extra tick to register.
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 

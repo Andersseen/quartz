@@ -13,6 +13,12 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Open Modal')).toBeVisible();
   });
 
+  test('should navigate to tooltip page', async ({ page }) => {
+    await page.goto('/tooltip');
+    await expect(page.getByRole('heading', { name: 'Tooltip', level: 1 })).toBeVisible();
+    await expect(page.locator('text=hover/focus tooltip')).toBeVisible();
+  });
+
   test('should navigate to splitter page', async ({ page }) => {
     await page.goto('/splitter');
     await expect(page.getByRole('heading', { name: 'Splitter', level: 1 })).toBeVisible();
@@ -39,6 +45,7 @@ test.describe('Navigation', () => {
     await page.goto('/overlay');
     await expect(page.locator('text=Overlay').first()).toBeVisible();
     await expect(page.locator('text=Dialog').first()).toBeVisible();
+    await expect(page.locator('text=Tooltip').first()).toBeVisible();
     await expect(page.locator('text=Splitter').first()).toBeVisible();
   });
 });
