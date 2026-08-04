@@ -63,8 +63,8 @@ jobs:
       - name: Verify Build Artifacts
         run: pnpm verify:build
 
-      - name: Run Unit Tests
-        run: pnpm test
+      - name: Run Unit Tests with Coverage
+        run: pnpm test:coverage
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
@@ -140,7 +140,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy
+          command: pages deploy --commit-dirty=true
           packageManager: pnpm
 
   publish:

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] — 2026-08-04
+
+### Fixed
+
+- Bump package version to `0.0.5` because `0.0.4` was already published to npm.
+- Add `--commit-dirty=true` to `wrangler pages deploy` to avoid the "uncommitted changes"
+  warning during the CI build.
+- Run `pnpm test:coverage` in CI so the coverage artifact is actually populated.
+
 ## [0.0.4] — 2026-08-04
 
 ### Added

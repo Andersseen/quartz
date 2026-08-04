@@ -23,14 +23,14 @@ and **P3.1–P3.2**. This hardening round additionally completed:
   (hover/focus/placement), tree (keyboard nav/selection), and splitter (keyboard resize).
 - CI aligned with `packageManager` (`pnpm@10.30.1`) and now runs `build:lib` +
   `verify:build` before unit tests.
-- Library version bumped to **v0.0.4** and CI now includes an npm publish job after
-  `unit-tests` + `e2e-tests` pass on `main`.
+- Library version bumped to **v0.0.5** (v0.0.4 was already published to npm) and CI now
+  includes an npm publish job after `unit-tests` + `e2e-tests` pass on `main`.
 
 Remaining plan items not yet done: **P3.4** (ReplaySubject vs Subject consistency).
 
 ## Version & publish status
 
-- Library `quartz-headless` **v0.0.3** on npm. Root monorepo package stays private.
+- Library `quartz-headless` **v0.0.5** on npm. Root monorepo package stays private.
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.
