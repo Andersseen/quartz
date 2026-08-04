@@ -133,6 +133,17 @@ jobs:
       - name: Build Demo
         run: pnpm run pages:build
 
+      # Create the Pages project if it does not exist yet. This is idempotent:
+      # if the project already exists the command fails safely and we continue.
+      - name: Ensure Cloudflare Pages project exists
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create quartz-headless --production-branch=main
+          packageManager: pnpm
+        continue-on-error: true
+
       # Single source of truth: project name + output dir come from wrangler.toml,
       # the same config the local `pnpm pages:deploy` script uses.
       - name: Deploy to Cloudflare Pages
