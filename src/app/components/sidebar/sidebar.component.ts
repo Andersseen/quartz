@@ -19,6 +19,7 @@ import {
   LmnFileIcon,
   LmnGridIcon,
   LmnHomeIcon,
+  LmnInfoIcon,
   LmnListIcon,
   LmnPackageIcon,
   LmnRefreshCwIcon,
@@ -41,6 +42,7 @@ import {
     LmnFileIcon,
     LmnGridIcon,
     LmnHomeIcon,
+    LmnInfoIcon,
     LmnListIcon,
     LmnPackageIcon,
     LmnRefreshCwIcon,
@@ -77,6 +79,7 @@ export class SidebarComponent {
       soon: false,
     },
     { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false },
+    { path: '/tooltip', label: 'Tooltip', icon: 'info' as const, soon: false },
     {
       path: '/splitter',
       label: 'Splitter',

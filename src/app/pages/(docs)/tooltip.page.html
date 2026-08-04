@@ -1,0 +1,137 @@
+<app-demo-page
+  badge="Primitive"
+  title="Tooltip"
+  description="Accessible, hover/focus tooltip with configurable placement, delays, rich templates, and interactive mode. Built on the same overlay engine as dialogs and menus."
+  [features]="[
+    { title: 'Hover & Focus', description: 'Opens on mouseenter or focus' },
+    { title: '12 Placements', description: 'All overlay positions supported' },
+    { title: 'Rich Templates', description: 'HTML content via ng-template' },
+    { title: 'Accessible', description: 'aria-describedby wiring' },
+  ]"
+>
+  <div class="flex flex-col gap-12">
+    <!-- Basic Text Tooltip -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Text Tooltip</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Attach <code>qzTooltip</code> to any element. The string content is rendered in a fixed
+        portal and positioned relative to the anchor.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          <button
+            class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg px-4 py-2 transition-colors"
+            qzTooltip="Save changes"
+            tooltipPlacement="top"
+            data-testid="tooltip-basic-trigger"
+            type="button"
+          >
+            Hover me
+          </button>
+        </div>
+      </app-code-block>
+    </section>
+
+    <!-- Placement -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Placement</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Use <code>tooltipPlacement</code> to choose the preferred side. The tooltip content flips
+        automatically when the anchor is near a viewport edge.
+      </p>
+
+      <app-code-block [code]="placementCode">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          @for (p of placements; track p.value) {
+            <volt-button
+              variant="outline"
+              [qzTooltip]="p.label + ' tooltip'"
+              [tooltipPlacement]="p.value"
+            >
+              {{ p.label }}
+            </volt-button>
+          }
+        </div>
+      </app-code-block>
+    </section>
+
+    <!-- Rich Template -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Rich Template</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Pass an <code>ng-template</code> to <code>[qzTooltip]</code> for structured HTML content.
+      </p>
+
+      <app-code-block [code]="richCode">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          <volt-button variant="outline" [qzTooltip]="statsTpl" tooltipPlacement="bottom">
+            View Stats
+          </volt-button>
+
+          <ng-template #statsTpl>
+            <div
+              class="bg-[#1e1e2a] text-gray-200 text-sm px-3 py-2 rounded-lg border border-[#2a2a3a] shadow-xl"
+            >
+              <strong>42</strong> new views today
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <!-- Interactive Mode -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Interactive Mode</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Enable <code>tooltipInteractive</code> to let users move the cursor into the tooltip content
+        without closing it. Useful for links or extra actions.
+      </p>
+
+      <app-code-block [code]="interactiveCode">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          <volt-button
+            variant="outline"
+            qzTooltip="Move the cursor here"
+            tooltipPlacement="top"
+            [tooltipInteractive]="true"
+          >
+            Interactive
+          </volt-button>
+        </div>
+      </app-code-block>
+    </section>
+
+    <!-- Delay -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Delay</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Adjust <code>tooltipDelay</code> and <code>tooltipHideDelay</code> to control how quickly
+        the tooltip appears and disappears.
+      </p>
+
+      <app-code-block [code]="delayCode">
+        <div preview class="flex items-center gap-4 flex-wrap justify-center">
+          <volt-button
+            variant="ghost"
+            qzTooltip="Fast feedback"
+            tooltipPlacement="top"
+            [tooltipDelay]="0"
+            [tooltipHideDelay]="0"
+          >
+            Instant
+          </volt-button>
+          <volt-button
+            variant="ghost"
+            qzTooltip="Slow and steady"
+            tooltipPlacement="top"
+            [tooltipDelay]="800"
+            [tooltipHideDelay]="400"
+          >
+            Delayed
+          </volt-button>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

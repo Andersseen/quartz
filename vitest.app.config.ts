@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   test: {
+    name: 'quartz-app',
     globals: true,
     setupFiles: ['./src/test-setup.ts'],
     environment: 'jsdom',

@@ -1,30 +1,32 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-07-24** (review-plan remediation — HEAD `1d20b94` + uncommitted work)
+> **Last updated: 2026-08-04** (hardening round — tooltip docs, TreeService coverage,
+> CLI/package smoke tests, E2E behavior coverage, CI alignment)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
 
 ## Review-plan remediation status (see `REVIEW_PLAN.md`)
 
-All P0 items are done. This session additionally completed:
+All P0 items are done. Previous session completed **P1.1–P1.4**, **P2.1–P2.2**, **P2.4–P2.6**
+and **P3.1–P3.2**. This hardening round additionally completed:
 
-- **P1.1** Tree now follows the WAI-ARIA Tree pattern: roving tabindex, arrow/Home/End
-  navigation, type-ahead, and `aria-level`/`aria-setsize`/`aria-posinset` (default template).
-- **P1.2** removed the duplicate `TreeComponent` init (`effect` is the single source).
-- **P1.3** `markForCheck()` removed from the tooltip. **P1.4** directive specs added for
-  overlay-trigger (+ keyboard), splitter container/handle/panel, and drop-zone.
-- **P2.1** removed unimplemented `VirtualScrollConfig.itemSizeFn`. **P2.2** `toast.model.ts`
-  renamed to `toast.types.ts`. **P2.5** splitter handle ARIA (already present). **P2.6**
-  keyboard activation on `OverlayTriggerDirective` (Enter/Space, guarded for native hosts).
-- **P3.1** dead exports removed (`TooltipInstance`, `DragDropOrientation`, `animationDuration`).
-  **P3.2** dialog snippet uses `inject()`.
-- **P2.4** the CLI now scans copied files and auto-resolves any `../x` cross-component import,
-  so `quartz add` output stays compilable even if a registry `deps` entry drifts.
+- **P1.5** `TreeService` coverage substantially improved (→ 44 new tests, now near 95%+).
+- **P2.4** end-to-end CLI smoke test added (`cli/cli.smoke.spec.js`) and wired into
+  `pnpm test` via a new Vitest workspace project.
+- **P3.3** route-cache workaround: new `(docs)/tooltip.page.ts` required a manual `extraRoutes`
+  entry in `src/app/app.config.ts`, confirming the workaround is still needed.
+- Added **package build smoke test** (`scripts/verify-build.js`) verifying `dist/quartz/`
+  contents and public API exports.
+- Added **tooltip docs/demo page** (`/tooltip`) with sidebar entry and snippets.
+- Expanded **E2E behavior coverage** for dialog (Escape/backdrop/focus trap), tooltip
+  (hover/focus/placement), tree (keyboard nav/selection), and splitter (keyboard resize).
+- CI aligned with `packageManager` (`pnpm@10.30.1`) and now runs `build:lib` +
+  `verify:build` before unit tests.
+- Library version bumped to **v0.0.4** and CI now includes an npm publish job after
+  `unit-tests` + `e2e-tests` pass on `main`.
 
-Remaining plan items not yet done: **P1.5** (TreeService coverage target), **P2.4** could add
-an end-to-end compile test, **P3.3** (AnalogJS route-cache workaround investigation),
-**P3.4** (ReplaySubject vs Subject consistency). Tests: 82 passing.
+Remaining plan items not yet done: **P3.4** (ReplaySubject vs Subject consistency).
 
 ## Version & publish status
 
@@ -35,36 +37,40 @@ an end-to-end compile test, **P3.3** (AnalogJS route-cache workaround investigat
 
 ## Primitive status matrix
 
-| Primitive      | Lib code | Unit tests | Demo page  | CLI registry      | Notes                                                                                |
-| -------------- | -------- | ---------- | ---------- | ----------------- | ------------------------------------------------------------------------------------ |
-| overlay        | ✅       | ✅         | ✅         | ✅                | Foundation for dialog + tooltip                                                      |
-| dialog         | ✅       | ✅ (+SSR)  | ✅         | ✅ deps:[overlay] | Includes drawer positioning                                                          |
-| splitter       | ✅       | ✅         | ✅         | ✅                | Container-scoped service pattern                                                     |
-| toast          | ✅       | ✅         | ✅         | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                            |
-| drag-drop      | ✅       | ✅         | ✅         | ✅                |                                                                                      |
-| tooltip        | ✅       | ✅         | ❌ no page | ✅ deps:[overlay] | Implemented recently; **demo page missing** (`(docs)/tooltip.page.ts` doesn't exist) |
-| tree           | ✅       | ✅         | ✅         | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Manual extraRoute        |
-| virtual-scroll | ✅       | ✅         | ✅         | ✅                | Has ResizeObserver support                                                           |
-| viewport       | ✅       | ✅         | ✅         | ✅                |                                                                                      |
+| Primitive      | Lib code | Unit tests | Demo page | CLI registry      | Notes                                                                         |
+| -------------- | -------- | ---------- | --------- | ----------------- | ----------------------------------------------------------------------------- |
+| overlay        | ✅       | ✅         | ✅        | ✅                | Foundation for dialog + tooltip                                               |
+| dialog         | ✅       | ✅ (+SSR)  | ✅        | ✅ deps:[overlay] | Includes drawer positioning                                                   |
+| splitter       | ✅       | ✅         | ✅        | ✅                | Container-scoped service pattern                                              |
+| toast          | ✅       | ✅         | ✅        | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                     |
+| drag-drop      | ✅       | ✅         | ✅        | ✅                |                                                                               |
+| tooltip        | ✅       | ✅         | ✅        | ✅ deps:[overlay] | Docs page now live at `/tooltip`                                              |
+| tree           | ✅       | ✅         | ✅        | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Manual extraRoute |
+| virtual-scroll | ✅       | ✅         | ✅        | ✅                | Has ResizeObserver support                                                    |
+| viewport       | ✅       | ✅         | ✅        | ✅                |                                                                               |
 
 ## In progress / next up
 
-- **tooltip demo page**: tooltip is implemented and exported but has no
-  `(docs)/tooltip.page.ts` — the docs URL referenced by the CLI (`…/tooltip`) 404s.
+- **P3.4** Decide on `ReplaySubject` vs `Subject` for `DialogRef`/`OverlayRef` and document
+  the choice with tests.
+- **Next major primitive**: `listbox` is still the planned next primitive, but intentionally
+  out of scope for this hardening round.
 
 ## Known issues / gotchas (live)
 
-- **AnalogJS route cache**: new `(docs)/*.page.ts` files sometimes need a manual entry in
+- **AnalogJS route cache**: new `(docs)/*.page.ts` files still need a manual entry in
   `extraRoutes` (`src/app/app.config.ts`). Currently listed there: tree, virtual-scroll,
-  viewport.
-- CLAUDE.md may lag reality on small details (it previously claimed tooltip was
-  `soon: true` in the CLI — it isn't anymore). When CLAUDE.md and the code disagree,
+  viewport, **tooltip**. Do not remove entries without re-verifying the route in a fresh
+  `.angular`/Vite cache.
+- CLAUDE.md may lag reality on small details. When CLAUDE.md and the code disagree,
   **the code wins**; then fix CLAUDE.md.
 - `package.json` has a machine-specific script `update-editor` pointing at a local Vertex
   path — ignore it, don't "fix" it, it's the author's local tooling.
 
 ## Recent history (context for "why is it like this")
 
+- Hardening round (2026-08-04) — tooltip docs, TreeService coverage, CLI/package smoke tests,
+  E2E behavior coverage, CI alignment.
 - PR #15 `feature/lib-updates` — dialog + tooltip implementation, signal return types,
   ResizeObserver in virtual scroll, tooltip types.
 - PR #12 `feature/tailiwnd` — Tailwind 4 in the demo app.

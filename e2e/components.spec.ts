@@ -3,7 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Components Pages', () => {
   const components = [
     { path: '/overlay', title: 'Overlay' },
-    { path: '/dialog', title: 'Dialog' },
+    { path: '/dialog', title: 'Dialog & Drawer' },
+    { path: '/tooltip', title: 'Tooltip' },
     { path: '/splitter', title: 'Splitter' },
     { path: '/toast', title: 'Toast' },
     { path: '/drag-drop', title: 'Drag & Drop' },
