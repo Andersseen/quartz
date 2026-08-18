@@ -17,6 +17,16 @@ test.describe('Home Page', () => {
     await expect(page.getByRole('link', { name: 'Browse primitives' })).toBeVisible();
   });
 
+  test('should keep the home layout within a mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+
+    await expect(page.getByRole('link', { name: /Start building/ })).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+      .toBe(true);
+  });
+
   test('should display features section', async ({ page }) => {
     await expect(page.getByText('Headless by default', { exact: true })).toBeVisible();
     await expect(page.getByText('Accessible behaviour', { exact: true })).toBeVisible();
