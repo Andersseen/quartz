@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Cloudflare Pages now deploys the static `dist/client` site rather than the failing SSR worker.
+  Client-side routes use a Pages SPA fallback.
+
 ## [0.2.0] — 2026-08-18
 
 ### Added

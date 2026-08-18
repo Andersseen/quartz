@@ -152,7 +152,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy --commit-dirty=true
+          command: pages deploy dist/client --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
   publish:

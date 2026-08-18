@@ -4,28 +4,18 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   publicDir: 'public',
   server: {
     hmr: {
       overlay: false,
     },
   },
-  ssr: {
-    noExternal: ['@analogjs/router'],
-  },
   plugins: [
     analog({
-      ssr: mode !== 'development',
-      prerender: {
-        routes: [],
-      },
-      nitro: {
-        preset: 'cloudflare-pages',
-        externals: {
-          inline: ['@analogjs/router'],
-        },
-      },
+      // The docs are a client-side application. Deploying it statically avoids
+      // shipping an SSR Pages worker and keeps every production route reliable.
+      ssr: false,
     }),
     tailwindcss(),
   ],

@@ -8,7 +8,7 @@
     "build:demo": "vite build",
     "verify:build": "node scripts/verify-build.js",
     "pages:build": "vite build",
-    "pages:deploy": "pnpm pages:build && wrangler pages deploy",
+    "pages:deploy": "pnpm pages:build && wrangler pages deploy dist/client",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
