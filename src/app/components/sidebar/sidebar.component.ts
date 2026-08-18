@@ -5,7 +5,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import {
   VoltBadge,
-  VoltSidebar,
   VoltSidebarContent,
   VoltSidebarFooter,
   VoltSidebarGroup,
@@ -30,7 +29,6 @@ import {
   selector: 'app-sidebar',
   imports: [
     VoltBadge,
-    VoltSidebar,
     VoltSidebarContent,
     VoltSidebarFooter,
     VoltSidebarGroup,

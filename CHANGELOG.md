@@ -28,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The component navigation sidebar remains sticky on desktop instead of scrolling away with the
   documentation content.
+- Component navigation now uses one responsive drawer implementation, restoring the mobile
+  sidebar after the Volt UI 1.0 upgrade.
+- E2E checks now assert the redesigned home copy and CTA labels instead of stale pre-redesign
+  content.
 
 ## [0.1.0] — 2026-08-18
 
