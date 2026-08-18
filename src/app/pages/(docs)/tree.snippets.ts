@@ -39,3 +39,39 @@ treeService.collapseAll();
 treeService.toggle('node-id');
 treeService.select('node-id');
 treeService.clearSelection();`;
+
+export const LAZY_SNIPPET = `// Only the first level is in memory; children arrive per expand.
+readonly nodes: TreeNode[] = [
+  { id: 'assets', label: 'assets/', hasChildren: true },
+  { id: 'robots.txt', label: 'robots.txt' },
+];
+
+readonly loadChildren: TreeLoadChildrenFn = async (node) => {
+  const res = await fetch(\`/api/list?prefix=\${node.id}\`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json(); // TreeNode[]
+};
+
+<qz-tree [nodes]="nodes" [loadChildren]="loadChildren" [nodeTemplate]="tpl" />
+
+<ng-template
+  #tpl
+  let-node
+  let-level="level"
+  let-expanded="expanded"
+  let-hasChildren="hasChildren"
+  let-loading="loading"
+  let-error="error"
+  let-toggle="toggle"
+  let-retry="retry"
+>
+  <div role="treeitem" [attr.aria-level]="level + 1" [attr.aria-busy]="loading() || null">
+    @if (hasChildren) {
+      <button (click)="error() ? retry() : toggle()">
+        {{ loading() ? '…' : error() ? '↻' : expanded ? '▼' : '▶' }}
+      </button>
+    }
+    {{ node.label }}
+    @if (error()) { <span>{{ $any(error()).message }}</span> }
+  </div>
+</ng-template>`;

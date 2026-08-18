@@ -1,7 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-04** (hardening round — tooltip docs, TreeService coverage,
-> CLI/package smoke tests, E2E behavior coverage, CI alignment)
+> **Last updated: 2026-08-18** (tree lazy loading — per-level `loadChildren`)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -37,17 +36,38 @@ Remaining plan items not yet done: **P3.4** (ReplaySubject vs Subject consistenc
 
 ## Primitive status matrix
 
-| Primitive      | Lib code | Unit tests | Demo page | CLI registry      | Notes                                                                         |
-| -------------- | -------- | ---------- | --------- | ----------------- | ----------------------------------------------------------------------------- |
-| overlay        | ✅       | ✅         | ✅        | ✅                | Foundation for dialog + tooltip                                               |
-| dialog         | ✅       | ✅ (+SSR)  | ✅        | ✅ deps:[overlay] | Includes drawer positioning                                                   |
-| splitter       | ✅       | ✅         | ✅        | ✅                | Container-scoped service pattern                                              |
-| toast          | ✅       | ✅         | ✅        | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                     |
-| drag-drop      | ✅       | ✅         | ✅        | ✅                |                                                                               |
-| tooltip        | ✅       | ✅         | ✅        | ✅ deps:[overlay] | Docs page now live at `/tooltip`                                              |
-| tree           | ✅       | ✅         | ✅        | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Manual extraRoute |
-| virtual-scroll | ✅       | ✅         | ✅        | ✅                | Has ResizeObserver support                                                    |
-| viewport       | ✅       | ✅         | ✅        | ✅                |                                                                               |
+| Primitive      | Lib code | Unit tests | Demo page | CLI registry      | Notes                                                                                                        |
+| -------------- | -------- | ---------- | --------- | ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| overlay        | ✅       | ✅         | ✅        | ✅                | Foundation for dialog + tooltip                                                                              |
+| dialog         | ✅       | ✅ (+SSR)  | ✅        | ✅ deps:[overlay] | Includes drawer positioning                                                                                  |
+| splitter       | ✅       | ✅         | ✅        | ✅                | Container-scoped service pattern                                                                             |
+| toast          | ✅       | ✅         | ✅        | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                                                    |
+| drag-drop      | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
+| tooltip        | ✅       | ✅         | ✅        | ✅ deps:[overlay] | Docs page now live at `/tooltip`                                                                             |
+| tree           | ✅       | ✅         | ✅        | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
+| virtual-scroll | ✅       | ✅         | ✅        | ✅                | Has ResizeObserver support                                                                                   |
+| viewport       | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
+
+## Tree lazy loading (2026-08-18)
+
+`qz-tree` gained an optional `loadChildren` input (`docs/ai/specs/tree-lazy-loading.md`).
+Nothing about the existing API changed — without the input the behaviour is byte-for-byte
+what it was. Worth knowing:
+
+- `TreeNode.hasChildren?: boolean` lets a node declare children before they are known;
+  when absent, expandability is still inferred from `children`.
+- Load state lives in `TreeService` (`loadState` / `isLoading` / `loadError` / `retry`) and
+  reaches consumer templates as **signals** on `TreeNodeContext`
+  (`loadState`, `loading`, `error`, `retry`).
+- A failed load leaves the node in `error` **and collapsed**; expanding it again (or
+  `retry()`) re-issues the request. A successful load never repeats.
+- **`expandAll()` never triggers loads** — it only expands already-loaded levels. Same for
+  `config.expandAll`. A node with `expanded: true` in the data _does_ load, because that is
+  a per-node request.
+- Gotcha discovered here: `TreeService.init()` now reads service-internal signals, so the
+  `TreeComponent` effects wrap their service calls in `untracked()`. Without it the init
+  effect subscribes to `expandedIds` and re-initializes (wiping expansion + loaded
+  children) on every expand. Keep imperative service calls out of effect tracking.
 
 ## In progress / next up
 
@@ -69,6 +89,8 @@ Remaining plan items not yet done: **P3.4** (ReplaySubject vs Subject consistenc
 
 ## Recent history (context for "why is it like this")
 
+- Tree lazy loading (2026-08-18) — `loadChildren` per-level fetching, `hasChildren` flag,
+  signal-based load state on `TreeNodeContext`, demo section on `/tree`.
 - Hardening round (2026-08-04) — tooltip docs, TreeService coverage, CLI/package smoke tests,
   E2E behavior coverage, CI alignment.
 - PR #15 `feature/lib-updates` — dialog + tooltip implementation, signal return types,

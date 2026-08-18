@@ -34,6 +34,8 @@ import { TreeNodeContext } from './tree.component';
         [attr.aria-expanded]="hasChildren() ? isExpanded() : null"
         [attr.aria-selected]="isSelected()"
         [attr.aria-disabled]="node().disabled ? true : null"
+        [attr.aria-busy]="isLoading() ? true : null"
+        [attr.data-qz-load-state]="loadState() === 'idle' ? null : loadState()"
         [class.qz-tree-node--expanded]="isExpanded()"
         [class.qz-tree-node--selected]="isSelected()"
         [style.padding-left.px]="level() * 20"
@@ -43,7 +45,7 @@ import { TreeNodeContext } from './tree.component';
       >
         @if (hasChildren()) {
           <span class="qz-tree-node__toggle" aria-hidden="true" (click)="onToggleClick($event)">
-            {{ isExpanded() ? '▼' : '▶' }}
+            {{ toggleGlyph() }}
           </span>
         } @else {
           <span class="qz-tree-node__spacer"></span>
@@ -135,9 +137,23 @@ export class TreeNodeComponent {
 
   readonly isExpanded = computed(() => this.treeService.expandedIds().has(this.node().id));
   readonly isSelected = computed(() => this.treeService.selectedIds().has(this.node().id));
-  readonly hasChildren = computed(() => {
-    const children = this.node().children;
-    return !!(children && children.length > 0);
+  /** True for loaded children *and* for a node that declares `hasChildren` before loading. */
+  readonly hasChildren = computed(() => this.treeService.hasChildren(this.node()));
+
+  readonly loadState = computed(() => this.treeService.loadState(this.node()));
+  readonly isLoading = computed(() => this.loadState() === 'loading');
+  readonly loadError = computed(() => this.treeService.loadError(this.node()));
+
+  /** Default-template affordance only: consumers with a `nodeTemplate` render their own. */
+  readonly toggleGlyph = computed(() => {
+    switch (this.loadState()) {
+      case 'loading':
+        return '⋯';
+      case 'error':
+        return '↻';
+      default:
+        return this.isExpanded() ? '▼' : '▶';
+    }
   });
 
   /** Roving tabindex: only the active node (or the first, before any interaction) is tabbable. */
@@ -164,6 +180,10 @@ export class TreeNodeComponent {
 
   onToggleClick(event: MouseEvent): void {
     event.stopPropagation();
+    if (this.loadState() === 'error') {
+      this.treeService.retry(this.node());
+      return;
+    }
     this.treeService.toggle(this.node().id);
   }
 
@@ -185,6 +205,7 @@ export class TreeNodeComponent {
       case 'ArrowRight':
         event.preventDefault();
         if (this.hasChildren()) {
+          // Expanding an unloaded node requests its children; on a failed node it retries.
           if (this.isExpanded()) this.treeService.focusFirstChild(id);
           else this.treeService.expand(id);
         }
@@ -226,6 +247,10 @@ export class TreeNodeComponent {
       hasChildren: this.hasChildren(),
       toggle: () => this.treeService.toggle(node.id),
       select: () => this.treeService.select(node.id),
+      loadState: this.loadState,
+      loading: this.isLoading,
+      error: this.loadError,
+      retry: () => this.treeService.retry(node),
     };
   }
 }
