@@ -258,6 +258,50 @@ describe('DialogService', () => {
 
     expect(document.querySelector('[data-qz-dialog-wrapper]')).toBeNull();
   });
+
+  it('should focus the panel itself when the dialog has nothing focusable', () => {
+    const panel = document.createElement('div');
+    panel.textContent = 'Just text';
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef);
+
+    const panelEl = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(panelEl).toHaveAttribute('tabindex', '-1');
+    expect(document.activeElement).toBe(panelEl);
+
+    ref.close();
+  });
+
+  it('should not reference generated aria ids that no element uses', () => {
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef);
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.hasAttribute('aria-labelledby')).toBe(false);
+    expect(panelEl?.hasAttribute('aria-describedby')).toBe(false);
+
+    ref.close();
+  });
+
+  it('should reference generated aria ids once the template binds them', () => {
+    const panel = document.createElement('div');
+    const title = document.createElement('h2');
+    title.id = 'qz-dialog-title-bound';
+    panel.appendChild(title);
+
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+    const ref = service.open(templateRef, viewContainerRef, {
+      ariaLabelledBy: 'qz-dialog-title-bound',
+    });
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.getAttribute('aria-labelledby')).toBe('qz-dialog-title-bound');
+
+    ref.close();
+  });
 });
 
 function createTemplateMocks(content: HTMLElement): {

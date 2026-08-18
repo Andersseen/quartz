@@ -8,8 +8,11 @@ import {
   DEFAULT_TOAST_OPTIONS,
 } from './toast.types';
 
+let toastIdCounter = 0;
+
+/** Monotonic ids: `track toast.id` breaks if two live toasts ever collide. */
 function generateId(): string {
-  return Math.random().toString(36).substring(2, 9);
+  return `qz-toast-${++toastIdCounter}`;
 }
 
 @Injectable({ providedIn: 'root' })

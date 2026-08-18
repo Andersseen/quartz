@@ -122,11 +122,12 @@ test.describe('Tree behavior', () => {
     await page.goto('/tree');
 
     const root = basicTree(page).getByRole('treeitem').filter({ hasText: 'quartz' });
-    await root.click();
+    // Focus rather than click: with `toggleOnClick` (default) a click would already
+    // expand the row, and this test is about keyboard navigation only.
+    await root.focus();
     await expect(root).toHaveAttribute('tabindex', '0');
 
     // Expand root so there are children to navigate.
-    await root.focus();
     await page.keyboard.press('ArrowRight');
 
     const firstChild = basicTree(page).getByRole('treeitem').filter({ hasText: 'src' });
@@ -174,5 +175,43 @@ test.describe('Splitter behavior', () => {
     });
 
     expect(after).toBeGreaterThan(before);
+  });
+});
+
+test.describe('Toast behavior', () => {
+  test('should not block clicks in the page corners while no toast is shown', async ({ page }) => {
+    await page.goto('/toast');
+
+    // The six aria-live regions are always in the DOM so announcements work. An empty
+    // one must never sit on top of the page and swallow clicks.
+    const blocked = await page.evaluate(() => {
+      const viewport = { w: window.innerWidth, h: window.innerHeight };
+      const points = [
+        [8, 8],
+        [viewport.w / 2, 8],
+        [viewport.w - 8, 8],
+        [8, viewport.h - 8],
+        [viewport.w / 2, viewport.h - 8],
+        [viewport.w - 8, viewport.h - 8],
+      ] as const;
+
+      return points
+        .map(([x, y]) => document.elementFromPoint(x, y))
+        .filter((el) => !!el?.closest('.qz-toast-container'))
+        .map((el) => (el as Element).className);
+    });
+
+    expect(blocked).toEqual([]);
+  });
+
+  test('should show a toast and let it be dismissed', async ({ page }) => {
+    await page.goto('/toast');
+
+    await page.getByRole('button', { name: 'Show Toast with Title' }).click();
+    const toast = page.locator('qz-toast').first();
+    await expect(toast).toBeVisible();
+
+    await toast.getByRole('button', { name: 'Close notification' }).click();
+    await expect(page.locator('qz-toast')).toHaveCount(0);
   });
 });

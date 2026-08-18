@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] — 2026-08-18
+
+### Added
+
+- **Tree lazy loading.** `qz-tree` accepts an optional `loadChildren: (node) => Promise<TreeNode[]>`
+  input. A node marked `hasChildren: true` fetches its children the first time it is expanded,
+  exactly once — collapsing and re-expanding renders from memory. Per-node state
+  (`idle | loading | loaded | error`) is exposed as signals on `TreeNodeContext`
+  (`loadState`, `loading`, `error`, `retry`) and on `TreeService`
+  (`loadState()`, `isLoading()`, `loadError()`, `retry()`, `hasChildren()`, `findNode()`).
+  A failed load leaves the node in `error` **and collapsed**; `expandAll()` never triggers
+  loads. New types: `TreeNodeLoadState`, `TreeLoadChildrenFn`; new field `TreeNode.hasChildren`.
+- `TreeService.config` — the resolved configuration is now readable.
+- `<qz-tree>` renders an `<ng-template>` projected as content, as an alternative to the
+  `[nodeTemplate]` input (the input still wins when both are present).
+- Escape dismisses an open tooltip (WAI-ARIA APG), for both text and template tooltips.
+- Demo: lazy-loading section on `/tree` backed by a fake object-storage listing, including
+  a branch that always fails so the error/retry path is visible.
+
+### Changed
+
+- **`TreeConfig.toggleOnClick` now does what it documents.** The option was read nowhere, so
+  clicking a row only selected it. With the documented default (`true`) a click on a parent
+  row now expands/collapses it as well as selecting it. Pass
+  `[config]="{ toggleOnClick: false }"` for the previous behaviour.
+- `DialogRef.closed$` (`ReplaySubject`) vs `OverlayRef.closed$` (`Subject`): the difference is
+  now deliberate, documented in both files and covered by tests — a dialog is one-shot so late
+  subscribers still get the close, an overlay is reusable so it must not replay. Closes P3.4.
+
+### Fixed
+
+- Toast position containers no longer swallow clicks. All six aria-live regions stay in the
+  DOM so announcements work, but an empty one is click-through — previously each page corner
+  had a ~32px dead zone that blocked the host application's own UI.
+- Toast ids are now monotonic instead of random, so two live toasts can never collide and
+  break `@for`'s `track toast.id`.
+- Dialogs with no focusable content take focus themselves (`tabindex="-1"` on the panel)
+  instead of leaving focus behind the modal.
+- The dialog no longer points `aria-labelledby` / `aria-describedby` at generated ids that
+  no element uses; explicitly configured ids are still applied as-is.
+- Tooltip: repeated hovers no longer stack show timers; disabling a visible tooltip hides it;
+  a text tooltip no longer flashes at the viewport origin before it is positioned.
+- Docs: the "Custom Node Template" example on `/tree` was never rendering (the projected
+  template was ignored and it read `toggle`/`select` off the node instead of the context).
+
 ## [0.0.5] — 2026-08-04
 
 ### Fixed

@@ -26,6 +26,32 @@ class TestHost {
   nodes = MOCK_NODES;
 }
 
+@Component({
+  standalone: true,
+  imports: [TreeComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<qz-tree [nodes]="nodes" [config]="{ toggleOnClick: false }" />`,
+})
+class NoToggleOnClickHost {
+  nodes = MOCK_NODES;
+}
+
+@Component({
+  standalone: true,
+  imports: [TreeComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <qz-tree [nodes]="nodes">
+      <ng-template let-node let-expanded="expanded" let-hasChildren="hasChildren">
+        <span>{{ hasChildren ? (expanded ? 'open' : 'closed') : 'leaf' }}:{{ node.label }}</span>
+      </ng-template>
+    </qz-tree>
+  `,
+})
+class ProjectedTemplateHost {
+  nodes = MOCK_NODES;
+}
+
 describe('TreeComponent', () => {
   it('should render root nodes', async () => {
     await render(TestHost);
@@ -112,5 +138,48 @@ describe('TreeComponent', () => {
     fixture.detectChanges();
 
     expect(another).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('should toggle expansion when the row is clicked (toggleOnClick default)', async () => {
+    const { fixture } = await render(TestHost);
+    const root = screen.getByText('Root');
+
+    expect(screen.queryByText('Child 1')).toBeNull();
+
+    fireEvent.click(root);
+    fixture.detectChanges();
+    expect(screen.getByText('Child 1')).toBeInTheDocument();
+
+    fireEvent.click(root);
+    fixture.detectChanges();
+    expect(screen.queryByText('Child 1')).toBeNull();
+  });
+
+  it('should still select the node it expands', async () => {
+    const { fixture } = await render(TestHost);
+    const root = screen.getByText('Root');
+
+    fireEvent.click(root);
+    fixture.detectChanges();
+
+    expect(root.closest('.qz-tree-node')).toHaveClass('qz-tree-node--selected');
+  });
+
+  it('should not toggle on click when toggleOnClick is false', async () => {
+    const { fixture } = await render(NoToggleOnClickHost);
+    const root = screen.getByText('Root');
+
+    fireEvent.click(root);
+    fixture.detectChanges();
+
+    expect(screen.queryByText('Child 1')).toBeNull();
+    expect(root.closest('.qz-tree-node')).toHaveClass('qz-tree-node--selected');
+  });
+
+  it('should render an ng-template projected into qz-tree', async () => {
+    await render(ProjectedTemplateHost);
+
+    expect(screen.getByText('closed:Root')).toBeInTheDocument();
+    expect(screen.getByText('leaf:Another')).toBeInTheDocument();
   });
 });

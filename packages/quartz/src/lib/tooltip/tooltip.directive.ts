@@ -85,9 +85,9 @@ export class TooltipDirective implements OnDestroy {
 
   constructor() {
     effect(() => {
-      const content = this.qzTooltip();
-      if (!content) {
-        this.hide();
+      // Losing the content — or being disabled while open — must take the tooltip down.
+      if (!this.qzTooltip() || this.tooltipDisabled()) {
+        this.hideImmediately();
       }
     });
   }
@@ -103,7 +103,10 @@ export class TooltipDirective implements OnDestroy {
     const view = this.document.defaultView;
     if (!view) return;
 
+    // Drop any pending show so repeated hovers cannot stack up timers.
+    this.clearShowTimer();
     this.showTimer = view.setTimeout(() => {
+      this.showTimer = null;
       this.render();
     }, this.tooltipDelay());
   }
@@ -129,10 +132,25 @@ export class TooltipDirective implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.hideImmediately();
+  }
+
+  /** Tear the tooltip down now, skipping the hide delay (Escape, destroy, disable). */
+  private hideImmediately(): void {
     this.clearShowTimer();
     this.clearHideTimer();
     this.destroyTooltip();
   }
+
+  /**
+   * WAI-ARIA APG: Escape dismisses a tooltip without moving focus, so a tooltip can
+   * never cover the content a keyboard user is trying to read.
+   */
+  private onEscape = (event: KeyboardEvent): void => {
+    if (event.key !== 'Escape') return;
+    if (!this.isVisible()) return;
+    this.hideImmediately();
+  };
 
   // ── Private ──────────────────────────────────────────────────────────────
 
@@ -157,21 +175,26 @@ export class TooltipDirective implements OnDestroy {
     this.tooltipId.set(this.textTooltipEl.id || this.generateId());
     this.textTooltipEl.id = this.tooltipId()!;
 
+    // Hidden until measured, otherwise it flashes at the viewport origin for a frame.
+    this.textTooltipEl.style.visibility = 'hidden';
     this.queueFrame(() => {
-      if (!this.textTooltipEl) return;
+      const el = this.textTooltipEl;
+      if (!el) return;
       const anchorRect = this.elementRef.nativeElement.getBoundingClientRect();
       const pos = calculatePosition(
         anchorRect,
-        this.textTooltipEl,
+        el,
         this.tooltipPlacement(),
         this.tooltipOffset(),
         true,
       );
-      this.textTooltipEl!.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
+      el.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
+      el.style.visibility = 'visible';
     });
 
-    // Close on scroll
+    // Close on scroll / Escape
     this.attachScrollListeners();
+    this.attachDismissListeners();
 
     // Interactive mode — allow hovering tooltip
     if (this.tooltipInteractive()) {
@@ -206,6 +229,8 @@ export class TooltipDirective implements OnDestroy {
     });
 
     this.overlayRef.open();
+    this.attachScrollListeners();
+    this.attachDismissListeners();
   }
 
   private destroyTooltip(): void {
@@ -231,8 +256,17 @@ export class TooltipDirective implements OnDestroy {
     }
 
     this.detachScrollListeners();
+    this.detachDismissListeners();
     this.tooltipId.set(null);
     this.isHoveringTooltip = false;
+  }
+
+  private attachDismissListeners(): void {
+    this.document.addEventListener('keydown', this.onEscape, true);
+  }
+
+  private detachDismissListeners(): void {
+    this.document.removeEventListener('keydown', this.onEscape, true);
   }
 
   private attachScrollListeners(): void {

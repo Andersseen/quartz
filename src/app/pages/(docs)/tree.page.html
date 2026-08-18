@@ -6,6 +6,7 @@
     { title: 'Expandable', description: 'Toggle nodes open/closed' },
     { title: 'Selection', description: 'Single & multi-select' },
     { title: 'Custom Templates', description: 'Full control over rendering' },
+    { title: 'Lazy Loading', description: 'Fetch children per level, once' },
     { title: 'Headless', description: 'You bring the styles' },
   ]"
 >
@@ -64,6 +65,9 @@
                 let-level="level"
                 let-expanded="expanded"
                 let-selected="selected"
+                let-hasChildren="hasChildren"
+                let-toggle="toggle"
+                let-select="select"
               >
                 <div
                   [class]="
@@ -73,19 +77,22 @@
                       : 'text-gray-200 hover:bg-white/5')
                   "
                   [style.padding-left.px]="level * 24"
-                  (click)="node.select()"
-                  (keydown.enter)="node.select()"
+                  (click)="select()"
+                  (keydown.enter)="select()"
                   tabindex="0"
                   role="treeitem"
+                  [attr.aria-level]="level + 1"
+                  [attr.aria-expanded]="hasChildren ? expanded : null"
                   [attr.aria-selected]="selected"
                 >
-                  @if (node.hasChildren) {
+                  @if (hasChildren) {
                     <span
                       class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] text-gray-500 cursor-pointer flex-shrink-0"
                       tabindex="0"
                       role="button"
-                      (click)="node.toggle(); $event.stopPropagation()"
-                      (keydown.enter)="node.toggle(); $event.stopPropagation()"
+                      [attr.aria-label]="'Toggle ' + node.label"
+                      (click)="toggle(); $event.stopPropagation()"
+                      (keydown.enter)="toggle(); $event.stopPropagation()"
                     >
                       {{ expanded ? '▼' : '▶' }}
                     </span>
@@ -93,13 +100,108 @@
                     <span class="w-4 flex-shrink-0"></span>
                   }
                   <span class="text-base flex-shrink-0">
-                    {{ node.hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
+                    {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
                   </span>
                   <span class="flex-1 min-w-0">{{ node.label }}</span>
                 </div>
               </ng-template>
             </qz-tree>
           </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Lazy Loading (per level)</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Pass <code>loadChildren</code> and mark unknown branches with
+        <code>hasChildren: true</code>. A node fetches its children the first time it is expanded
+        &mdash; <strong>once</strong>: collapsing and expanding again renders from memory. The
+        context exposes <code>loading</code>, <code>error</code> and <code>retry()</code> as
+        signals, so a failed branch stays collapsed with a retry affordance instead of spinning
+        forever. <code>expandAll()</code> deliberately only expands what is already loaded.
+      </p>
+
+      <app-code-block [code]="lazyCode">
+        <div preview class="flex flex-col gap-3">
+          <div
+            class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[420px] w-full"
+            data-testid="lazy-tree"
+          >
+            <ng-template
+              #lazyTpl
+              let-node
+              let-level="level"
+              let-expanded="expanded"
+              let-selected="selected"
+              let-hasChildren="hasChildren"
+              let-loading="loading"
+              let-error="error"
+              let-toggle="toggle"
+              let-select="select"
+              let-retry="retry"
+            >
+              <div
+                [class]="
+                  'flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-100 text-sm ' +
+                  (selected
+                    ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
+                    : 'text-gray-200 hover:bg-white/5')
+                "
+                [style.padding-left.px]="level * 20"
+                role="treeitem"
+                tabindex="0"
+                [attr.aria-level]="level + 1"
+                [attr.aria-expanded]="hasChildren ? expanded : null"
+                [attr.aria-selected]="selected"
+                [attr.aria-busy]="loading() ? true : null"
+                (click)="select()"
+                (keydown.enter)="select()"
+              >
+                @if (hasChildren) {
+                  <span
+                    class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] cursor-pointer flex-shrink-0"
+                    [class]="error() ? 'text-amber-400' : 'text-gray-500'"
+                    role="button"
+                    tabindex="0"
+                    [attr.aria-label]="
+                      error() ? 'Retry loading ' + node.label : 'Toggle ' + node.label
+                    "
+                    (click)="error() ? retry() : toggle(); $event.stopPropagation()"
+                    (keydown.enter)="error() ? retry() : toggle(); $event.stopPropagation()"
+                  >
+                    @if (loading()) {
+                      <span class="animate-pulse">◌</span>
+                    } @else if (error()) {
+                      ↻
+                    } @else {
+                      {{ expanded ? '▼' : '▶' }}
+                    }
+                  </span>
+                } @else {
+                  <span class="w-4 flex-shrink-0"></span>
+                }
+                <span class="text-base flex-shrink-0">
+                  {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
+                </span>
+                <span class="flex-1 min-w-0">{{ node.label }}</span>
+                @if (loading()) {
+                  <span class="text-[0.7rem] text-gray-500">loading…</span>
+                }
+                @if (error()) {
+                  <span class="text-[0.7rem] text-amber-400">{{ messageOf(error()) }}</span>
+                }
+              </div>
+            </ng-template>
+
+            <qz-tree [nodes]="lazyNodes" [loadChildren]="loadPrefix" [nodeTemplate]="lazyTpl" />
+          </div>
+          <p class="text-xs text-gray-500">
+            Requests issued:
+            <span class="text-gray-300 font-mono">{{ requestCount() }}</span>
+            &mdash; collapse a folder and open it again, the counter stays put.
+            <code>restricted/</code> always fails, click ↻ to retry.
+          </p>
         </div>
       </app-code-block>
     </section>

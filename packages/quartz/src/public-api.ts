@@ -66,7 +66,13 @@ export type { TooltipConfig, TooltipPlacement } from './lib/tooltip';
 
 // Tree
 export { TreeComponent, TreeNodeComponent, TreeService, DEFAULT_TREE_CONFIG } from './lib/tree';
-export type { TreeNode, TreeConfig, TreeNodeContext } from './lib/tree';
+export type {
+  TreeNode,
+  TreeConfig,
+  TreeNodeContext,
+  TreeNodeLoadState,
+  TreeLoadChildrenFn,
+} from './lib/tree';
 
 // Virtual Scroll
 export { VirtualScrollDirective } from './lib/virtual-scroll';

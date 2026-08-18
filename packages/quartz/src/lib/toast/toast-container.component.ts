@@ -41,6 +41,12 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
         z-index: 9999;
       }
 
+      /*
+       * The six position containers are always rendered so their aria-live regions
+       * exist before a toast is announced. That means an empty container must not
+       * capture pointer events, or every corner of the page would swallow clicks —
+       * only the toasts themselves are interactive.
+       */
       .qz-toast-container {
         position: fixed;
         display: flex;
@@ -48,6 +54,10 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
         gap: 8px;
         padding: 16px;
         max-width: 400px;
+        pointer-events: none;
+      }
+
+      .qz-toast-container qz-toast {
         pointer-events: auto;
       }
 

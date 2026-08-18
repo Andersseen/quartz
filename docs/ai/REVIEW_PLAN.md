@@ -3,11 +3,13 @@
 > Generated from code review session on 2026-07-06.
 > Pass this file + `REVIEW_CONTEXT.md` to a new agent to continue without re-auditing.
 
-> **Progress (2026-07-24):** DONE — P0.1, P0.2, P0.3, P1.1, P1.2, P1.3, P1.4, P2.1, P2.2,
-> P2.5, P2.6, P3.1, P3.2. NOT YET DONE — P1.5 (TreeService coverage target), P3.3 (route-cache
-> investigation), P3.4 (ReplaySubject vs Subject). P2.4 addressed via a CLI safety net that
-> auto-resolves cross-component imports (an end-to-end compile test is still a nice-to-have).
-> Verify with `pnpm test && pnpm lint && pnpm typecheck && pnpm build:lib` (82 tests passing).
+> **Progress (2026-08-18):** ALL ITEMS DONE. P1.5 (TreeService coverage) and P3.3 (route-cache
+> workaround confirmed) closed in the 2026-08-04 hardening round; **P3.4 closed 2026-08-18** —
+> `DialogRef` keeps `ReplaySubject` (one-shot, late subscribers must still see the close) and
+> `OverlayRef` keeps `Subject` (reusable, must not replay), documented in both files and
+> covered by tests. P2.4 addressed via a CLI safety net that auto-resolves cross-component
+> imports plus `cli/cli.smoke.spec.js`.
+> Verify with `pnpm test && pnpm lint && pnpm typecheck && pnpm build:lib` (172 tests passing).
 
 ## How to use this plan
 
@@ -263,6 +265,11 @@ pnpm exec vitest run --coverage
   2. Apply same pattern to both.
 - **Acceptance**:
   - Behavior documented in code comments and tests.
+- **Resolution (2026-08-18)**: the two are intentionally different, not inconsistent. A
+  `DialogRef` is one-shot, so `ReplaySubject(1)` keeps a late `firstValueFrom(closed$)` from
+  hanging forever; an `OverlayRef` is reusable, so replaying the previous close on every new
+  subscription would report a close that never happened. Both now carry a comment explaining
+  the choice, plus a test each (`dialog-ref.spec.ts`, `overlay.service.spec.ts`). **DONE.**
 
 ---
 

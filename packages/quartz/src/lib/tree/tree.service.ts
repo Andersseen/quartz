@@ -1,5 +1,11 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { TreeNode, TreeConfig, DEFAULT_TREE_CONFIG } from './tree.types';
+import { Injectable, signal, computed, untracked } from '@angular/core';
+import {
+  TreeNode,
+  TreeConfig,
+  TreeNodeLoadState,
+  TreeLoadChildrenFn,
+  DEFAULT_TREE_CONFIG,
+} from './tree.types';
 
 /** A node flattened into the currently-visible traversal order. */
 export interface FlatTreeNode {
@@ -21,10 +27,22 @@ export class TreeService {
   /** Node that currently owns the roving tabindex / DOM focus. */
   #activeId = signal<string | null>(null);
 
+  // ── Lazy loading state ────────────────────────────────────────────────────
+  /** Consumer-supplied loader. Plain field on purpose: it must not drive change detection. */
+  #loadChildren: TreeLoadChildrenFn | null = null;
+  #loadStates = signal<ReadonlyMap<string, TreeNodeLoadState>>(new Map());
+  #loadErrors = signal<ReadonlyMap<string, unknown>>(new Map());
+  /** Bumped on every `init()` so in-flight loads from a previous dataset are discarded. */
+  #generation = 0;
+
   readonly nodes = computed(() => this.#nodes());
   readonly expandedIds = computed(() => this.#expandedIds());
   readonly selectedIds = computed(() => this.#selectedIds());
   readonly activeId = computed(() => this.#activeId());
+  /** Resolved configuration (defaults merged with the `config` input). */
+  readonly config = computed(() => this.#config());
+  /** Per-node lazy-load state. Nodes never lazily loaded are absent from the map. */
+  readonly loadStates = computed(() => this.#loadStates());
 
   /** Visible nodes (respecting expansion) in top-to-bottom traversal order. */
   readonly visibleNodes = computed<FlatTreeNode[]>(() => {
@@ -63,8 +81,13 @@ export class TreeService {
     this.#config.set(merged);
     this.#nodes.set(nodes);
     this.#activeId.set(null);
+    // Any load still in flight belongs to the previous dataset — ignore its result.
+    this.#generation++;
+    this.#loadStates.set(new Map());
+    this.#loadErrors.set(new Map());
 
     if (merged.expandAll) {
+      // Only what is already loaded: `expandAll` must never trigger network work.
       const allIds = new Set<string>();
       const collect = (list: TreeNode[]) => {
         for (const n of list) {
@@ -80,7 +103,8 @@ export class TreeService {
       const expanded = new Set<string>();
       const collect = (list: TreeNode[]) => {
         for (const n of list) {
-          if (n.expanded && n.children?.length) {
+          // `expanded: true` is a per-node request, so an unloaded node opts into a load.
+          if (n.expanded && this.hasChildren(n)) {
             expanded.add(n.id);
           }
           if (n.children) collect(n.children);
@@ -89,6 +113,29 @@ export class TreeService {
       collect(nodes);
       this.#expandedIds.set(expanded);
     }
+
+    this.#loadExpandedNodes();
+  }
+
+  /**
+   * Whether a node can be expanded. `children` wins when present; otherwise the
+   * `hasChildren` flag lets a node declare children it has not loaded yet.
+   */
+  hasChildren(node: TreeNode): boolean {
+    return node.children ? node.children.length > 0 : (node.hasChildren ?? false);
+  }
+
+  /** Depth-first lookup by id over the current (possibly lazily-extended) tree. */
+  findNode(id: string): TreeNode | null {
+    const walk = (list: TreeNode[]): TreeNode | null => {
+      for (const n of list) {
+        if (n.id === id) return n;
+        const found = n.children?.length ? walk(n.children) : null;
+        if (found) return found;
+      }
+      return null;
+    };
+    return walk(this.#nodes());
   }
 
   isExpanded(id: string): boolean {
@@ -100,26 +147,29 @@ export class TreeService {
   }
 
   toggle(id: string): void {
-    this.#expandedIds.update((set) => {
-      const next = new Set(set);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    if (this.isExpanded(id)) this.collapse(id);
+    else this.expand(id);
   }
 
   expand(id: string): void {
-    this.#expandedIds.update((set) => new Set(set).add(id));
+    this.#expandedIds.update((set) => (set.has(id) ? set : new Set(set).add(id)));
+    const node = untracked(() => this.findNode(id));
+    if (node) this.#ensureChildrenLoaded(node);
   }
 
   collapse(id: string): void {
     this.#expandedIds.update((set) => {
+      if (!set.has(id)) return set;
       const next = new Set(set);
       next.delete(id);
       return next;
     });
   }
 
+  /**
+   * Expand every node whose children are already loaded. Deliberately does **not**
+   * trigger `loadChildren` — "expand all" must not mean "download the whole tree".
+   */
   expandAll(): void {
     const all = new Set<string>();
     const collect = (list: TreeNode[]) => {
@@ -137,6 +187,144 @@ export class TreeService {
   collapseAll(): void {
     this.#expandedIds.set(new Set());
   }
+
+  // ── Lazy loading ──────────────────────────────────────────────────────────
+
+  /**
+   * Install (or remove) the children loader. Safe to call repeatedly with a new function
+   * identity — it does not reset expansion or selection. Setting a loader while nodes are
+   * already expanded starts the loads those nodes are waiting for.
+   */
+  setLoadChildren(fn: TreeLoadChildrenFn | null): void {
+    if (this.#loadChildren === fn) return;
+    this.#loadChildren = fn;
+    if (fn) this.#loadExpandedNodes();
+  }
+
+  /**
+   * Load state of a node. Nodes that already carry a `children` array report `loaded`,
+   * so templates can treat static and lazily-loaded nodes the same way.
+   */
+  loadState(nodeOrId: TreeNode | string): TreeNodeLoadState {
+    const node = this.#resolve(nodeOrId);
+    if (!node) return 'idle';
+    return this.#loadStates().get(node.id) ?? (node.children ? 'loaded' : 'idle');
+  }
+
+  isLoading(nodeOrId: TreeNode | string): boolean {
+    return this.loadState(nodeOrId) === 'loading';
+  }
+
+  /** The rejection value of the last failed load, or `undefined`. */
+  loadError(nodeOrId: TreeNode | string): unknown {
+    const node = this.#resolve(nodeOrId);
+    return node ? this.#loadErrors().get(node.id) : undefined;
+  }
+
+  /** Clear the error state and re-issue the request, expanding the node again. */
+  retry(nodeOrId: TreeNode | string): void {
+    const node = this.#resolve(nodeOrId);
+    if (!node || node.children) return;
+    if (this.#loadStates().get(node.id) === 'loading') return;
+    this.#setLoadState(node.id, 'idle');
+    this.expand(node.id);
+  }
+
+  #resolve(nodeOrId: TreeNode | string): TreeNode | null {
+    return typeof nodeOrId === 'string' ? this.findNode(nodeOrId) : nodeOrId;
+  }
+
+  /** Kick off loads for nodes that are expanded but whose children are not there yet. */
+  #loadExpandedNodes(): void {
+    if (!this.#loadChildren) return;
+    // Untracked: this is imperative kick-off, often reached from a consumer `effect()`
+    // (see TreeComponent) which must not subscribe to the tree's internal signals.
+    untracked(() => {
+      for (const id of this.#expandedIds()) {
+        const node = this.findNode(id);
+        if (node) this.#ensureChildrenLoaded(node);
+      }
+    });
+  }
+
+  /**
+   * Request a node's children once. No-ops when there is no loader, when the children are
+   * already present, when the node is a declared leaf, or when a load is in flight or
+   * already succeeded — so expand/collapse/expand never repeats the request.
+   */
+  #ensureChildrenLoaded(node: TreeNode): void {
+    const load = this.#loadChildren;
+    if (!load || node.children || !this.hasChildren(node)) return;
+
+    const state = untracked(this.#loadStates).get(node.id);
+    if (state === 'loading' || state === 'loaded') return;
+
+    const id = node.id;
+    const generation = this.#generation;
+    this.#setLoadState(id, 'loading');
+
+    let pending: Promise<TreeNode[]>;
+    try {
+      pending = load(node);
+    } catch (error) {
+      this.#failLoad(id, generation, error);
+      return;
+    }
+
+    Promise.resolve(pending).then(
+      (children) => {
+        if (generation !== this.#generation) return; // superseded by a re-init
+        this.#setChildren(id, children ?? []);
+        this.#setLoadState(id, 'loaded');
+      },
+      (error) => this.#failLoad(id, generation, error),
+    );
+  }
+
+  /** A failed load leaves the node in `error` and collapsed — never spinning forever. */
+  #failLoad(id: string, generation: number, error: unknown): void {
+    if (generation !== this.#generation) return;
+    this.#setLoadState(id, 'error');
+    this.#loadErrors.update((map) => new Map(map).set(id, error));
+    this.collapse(id);
+  }
+
+  #setLoadState(id: string, state: TreeNodeLoadState): void {
+    this.#loadStates.update((map) => new Map(map).set(id, state));
+    if (state === 'error') return;
+    this.#loadErrors.update((map) => {
+      if (!map.has(id)) return map;
+      const next = new Map(map);
+      next.delete(id);
+      return next;
+    });
+  }
+
+  /** Immutably graft loaded children onto a node — the consumer's array is never mutated. */
+  #setChildren(id: string, children: TreeNode[]): void {
+    const replace = (list: TreeNode[]): TreeNode[] | null => {
+      for (let i = 0; i < list.length; i++) {
+        const n = list[i];
+        if (n.id === id) {
+          const next = list.slice();
+          next[i] = { ...n, children };
+          return next;
+        }
+        if (n.children?.length) {
+          const nested = replace(n.children);
+          if (nested) {
+            const next = list.slice();
+            next[i] = { ...n, children: nested };
+            return next;
+          }
+        }
+      }
+      return null;
+    };
+    this.#nodes.update((list) => replace(list) ?? list);
+  }
+
+  // ── Selection ─────────────────────────────────────────────────────────────
 
   select(id: string): void {
     if (!this.#config().multiSelect) {
