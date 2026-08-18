@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-08-18
+
+### Added
+
+- **Listbox.** New directive-based, unstyled WAI-ARIA listbox with single/multiple selection,
+  active-descendant focus, disabled options, vertical/horizontal keyboard navigation,
+  Home/End, Enter/Space and type-ahead. It exposes a two-way `value` model and `compareWith`
+  for object values, and is registered in the source-copy CLI and docs site.
+
+### Fixed
+
+- Drag-drop object configuration now consistently honors `disabled` for draggables/drop zones
+  and `sortable` for drop zones, matching the public `DragDropConfig` / `DropZoneConfig` API.
+- The package smoke test now correctly rejects missing `sideEffects: false` metadata.
+
+### Changed
+
+- npm publication is now an explicit `workflow_dispatch` action with `publish: true`; ordinary
+  pushes to `main` still deploy docs but cannot fail by publishing an already-published version.
+- Documentation now accurately describes Quartz as having no visual theme rather than no CSS at
+  all: portal and layout primitives retain only the structural styles their behaviour requires.
+- Drag & drop is described accurately as native pointer-based HTML DnD; keyboard DnD remains a
+  separately scoped future primitive.
+
 ## [0.0.6] — 2026-08-18
 
 ### Added

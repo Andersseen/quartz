@@ -1,0 +1,85 @@
+<app-demo-page
+  badge="Selection"
+  title="Listbox"
+  description="A headless WAI-ARIA listbox for single and multiple selection. Quartz owns keyboard behaviour; your design system owns every visual detail."
+  [features]="[
+    { title: 'Keyboard', description: 'Arrows, Home/End, Enter/Space and type-ahead' },
+    { title: 'Signals', description: 'Reactive value model with two-way binding' },
+    { title: 'Accessible', description: 'Active-descendant and option semantics included' },
+    { title: 'Composable', description: 'Foundation for select, combobox and command palettes' },
+  ]"
+>
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Single selection</h2>
+      <p class="text-sm text-gray-500 mb-6">
+        Use arrows to change the active option, then Enter or Space to select.
+      </p>
+      <app-code-block [code]="basicCode">
+        <div preview class="flex flex-col gap-3 max-w-sm mx-auto">
+          <div
+            qzListbox
+            [value]="selectedPlan()"
+            (valueChange)="selectedPlan.set($event)"
+            class="rounded-lg border border-white/10 overflow-hidden outline-none focus:ring-2 focus:ring-violet-500"
+          >
+            @for (plan of ['starter', 'pro', 'enterprise']; track plan) {
+              <button
+                qzListboxOption
+                [qzListboxOption]="plan"
+                class="w-full text-left px-4 py-3 border-b border-white/10 last:border-0 text-gray-300 hover:bg-white/5 data-[qz-selected]:bg-violet-500/20 data-[qz-selected]:text-violet-200 data-[qz-active]:ring-1 data-[qz-active]:ring-inset data-[qz-active]:ring-violet-400"
+              >
+                {{ plan }}
+              </button>
+            }
+          </div>
+          <p class="text-sm text-gray-500">
+            Selected: <span class="text-gray-200">{{ selectedPlan() }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Multiple selection</h2>
+      <p class="text-sm text-gray-500 mb-6">
+        Disabled options are skipped by keyboard navigation and remain inert on click.
+      </p>
+      <app-code-block [code]="multiCode">
+        <div preview class="flex flex-col gap-3 max-w-sm mx-auto">
+          <div
+            qzListbox
+            [multiple]="true"
+            [value]="selectedTags()"
+            (valueChange)="selectedTags.set($event)"
+            class="rounded-lg border border-white/10 overflow-hidden outline-none focus:ring-2 focus:ring-violet-500"
+          >
+            <button
+              qzListboxOption="angular"
+              class="w-full text-left px-4 py-3 border-b border-white/10 text-gray-300 data-[qz-selected]:bg-violet-500/20"
+            >
+              Angular
+            </button>
+            <button
+              qzListboxOption="signals"
+              class="w-full text-left px-4 py-3 border-b border-white/10 text-gray-300 data-[qz-selected]:bg-violet-500/20"
+            >
+              Signals
+            </button>
+            <button
+              qzListboxOption="ssr"
+              [qzListboxOptionDisabled]="true"
+              class="w-full text-left px-4 py-3 text-gray-600"
+              disabled
+            >
+              SSR (unavailable)
+            </button>
+          </div>
+          <p class="text-sm text-gray-500">
+            Selected: <span class="text-gray-200">{{ selectedTags().join(', ') || 'none' }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

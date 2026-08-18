@@ -36,6 +36,16 @@ test.describe('Navigation', () => {
     await expect(page.getByRole('heading', { name: 'Drag & Drop', level: 1 })).toBeVisible();
   });
 
+  test('should navigate to listbox page and select with the keyboard', async ({ page }) => {
+    await page.goto('/listbox');
+    await expect(page.getByRole('heading', { name: 'Listbox', level: 1 })).toBeVisible();
+    const listbox = page.getByRole('listbox').first();
+    await listbox.press('ArrowDown');
+    await listbox.press('ArrowDown');
+    await listbox.press('Enter');
+    await expect(page.locator('text=Selected:').first()).toContainText('enterprise');
+  });
+
   test('should redirect /components to /overlay', async ({ page }) => {
     await page.goto('/components');
     await expect(page).toHaveURL(/\/overlay/);

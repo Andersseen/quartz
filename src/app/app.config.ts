@@ -53,6 +53,16 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'listbox',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/listbox.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

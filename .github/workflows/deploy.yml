@@ -7,6 +7,13 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish the version in packages/quartz/package.json to npm'
+        required: true
+        default: false
+        type: boolean
 
 jobs:
   quality:
@@ -158,7 +165,9 @@ jobs:
     name: Publish to npm
     runs-on: ubuntu-latest
     needs: [unit-tests, e2e-tests]
-    if: github.ref == 'refs/heads/main'
+    # Publishing is deliberately explicit: a normal main deployment must never attempt to
+    # publish a version that already exists on npm.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -188,7 +197,7 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [publish]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish
     permissions:
       contents: write
     steps:

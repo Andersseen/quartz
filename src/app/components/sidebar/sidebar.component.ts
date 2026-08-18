@@ -94,6 +94,7 @@ export class SidebarComponent {
       soon: false,
     },
     { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
+    { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
     {
       path: '/virtual-scroll',
       label: 'Virtual Scroll',

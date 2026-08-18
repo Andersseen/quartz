@@ -40,14 +40,14 @@ export class Demo {}
 
 ## ✨ Why Quartz
 
-|                         |                                                                                   |
-| ----------------------- | --------------------------------------------------------------------------------- |
-| 🎨 **Zero styles**      | No CSS, no themes, no class names to fight. Only `data-qz-*` hooks and behaviour. |
-| ⚡ **Zoneless**         | Built for `provideZonelessChangeDetection()` — signals all the way down.          |
-| ♿ **Accessible**       | WAI-ARIA roles, focus management and full keyboard support baked in.              |
-| 🌳 **Tree-shakeable**   | Standalone directives &amp; services with no import-time side effects.            |
-| 🖥️ **SSR-safe**         | Guards DOM access so it runs cleanly under Angular server rendering.              |
-| 📦 **Two ways to ship** | Install the npm package _or_ copy the raw source with the CLI — your call.        |
+|                         |                                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🎨 **No visual theme**  | No theme or visual design opinions. Structural portal/layout styles only where behaviour requires them; use `data-qz-*` hooks for your UI. |
+| ⚡ **Zoneless**         | Built for `provideZonelessChangeDetection()` — signals all the way down.                                                                   |
+| ♿ **Accessible**       | WAI-ARIA roles, focus management and full keyboard support baked in.                                                                       |
+| 🌳 **Tree-shakeable**   | Standalone directives &amp; services with no import-time side effects.                                                                     |
+| 🖥️ **SSR-safe**         | Guards DOM access so it runs cleanly under Angular server rendering.                                                                       |
+| 📦 **Two ways to ship** | Install the npm package _or_ copy the raw source with the CLI — your call.                                                                 |
 
 ## 🚀 Install
 
@@ -91,13 +91,14 @@ Files land in your project's `src/lib/components/<name>/` (auto-detected) or the
 | [`dialog`](https://quartz-headless.pages.dev/dialog)                 | Service-driven dialog &amp; drawer with backdrop and focus trap                    |
 | [`splitter`](https://quartz-headless.pages.dev/splitter)             | Resizable panels with keyboard, touch and ARIA slider semantics                    |
 | [`toast`](https://quartz-headless.pages.dev/toast)                   | Notification system with position groups and auto-dismiss                          |
-| [`drag-drop`](https://quartz-headless.pages.dev/drag-drop)           | Accessible drag &amp; drop with sortable drop zones                                |
+| [`drag-drop`](https://quartz-headless.pages.dev/drag-drop)           | Native HTML drag &amp; drop with sortable drop zones                               |
 | [`tooltip`](https://quartz-headless.pages.dev/tooltip)               | Hover/focus tooltip with configurable placement                                    |
 | [`tree`](https://quartz-headless.pages.dev/tree)                     | Tree view with roving tabindex, WAI-ARIA keyboard nav &amp; lazy per-level loading |
+| [`listbox`](https://quartz-headless.pages.dev/listbox)               | Single/multi selection with WAI-ARIA keyboard navigation and type-ahead            |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | Reactive breakpoint service + `ViewportMatchDirective`                             |
 
-Every primitive is **zoneless**, **standalone** and **tree-shakeable**.
+Every primitive is **zoneless**, **standalone** and **tree-shakeable**. Drag &amp; drop follows the browser's native pointer-based HTML DnD model; keyboard drag-and-drop is intentionally deferred to a dedicated future primitive.
 
 ## 🛠 Example
 

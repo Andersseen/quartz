@@ -57,7 +57,10 @@ export class DraggableDirective {
   readonly isDragging = signal(false);
   private dragImage: HTMLElement | null = null;
 
-  readonly isDisabled = computed(() => this.qzDraggableDisabled());
+  /** An explicit input wins; the object config remains a convenient shorthand. */
+  readonly isDisabled = computed(
+    () => this.qzDraggableDisabled() || this.getConfig().disabled === true,
+  );
 
   private getConfig(): DragDropConfig {
     const cfg = this.qzDraggable();

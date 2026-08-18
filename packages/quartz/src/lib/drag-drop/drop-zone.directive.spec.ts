@@ -24,6 +24,19 @@ class Host {
   dir!: DropZoneDirective;
 }
 
+@Component({
+  standalone: true,
+  imports: [DropZoneDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<div qzDropZone [qzDropZone]="{ disabled: true, sortable: true }">
+    configured zone
+  </div>`,
+})
+class ConfigHost {
+  @ViewChild(DropZoneDirective, { static: true })
+  dir!: DropZoneDirective;
+}
+
 describe('DropZoneDirective', () => {
   it('is not droppable while nothing is being dragged', async () => {
     const { fixture } = await render(Host);
@@ -85,5 +98,15 @@ describe('DropZoneDirective', () => {
     expect(dropped!.data).toBe('payload');
     expect(dropped!.source).toBe(source);
     expect(dropped!.target).toBe(zone);
+  });
+
+  it('honours disabled and sortable values from the configuration object', async () => {
+    const { fixture } = await render(ConfigHost);
+    const service = TestBed.inject(DragDropService);
+    service.startDrag('payload', document.createElement('div'), 'file');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.dir.canDrop()).toBe(false);
+    expect(fixture.componentInstance.dir.isSortable()).toBe(true);
+    expect(screen.getByText('configured zone')).toHaveClass('qz-drop-disabled');
   });
 });
