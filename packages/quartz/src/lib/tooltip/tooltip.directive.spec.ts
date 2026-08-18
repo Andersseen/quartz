@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
@@ -10,6 +10,16 @@ import { TooltipDirective } from './tooltip.directive';
   template: `<button qzTooltip="Hello tooltip">Hover me</button>`,
 })
 class TestHost {}
+
+@Component({
+  standalone: true,
+  imports: [TooltipDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<button qzTooltip="Hello tooltip" [tooltipDisabled]="disabled()">Hover me</button>`,
+})
+class DisableableHost {
+  readonly disabled = signal(false);
+}
 
 describe('TooltipDirective', () => {
   beforeEach(() => {
@@ -102,5 +112,73 @@ describe('TooltipDirective', () => {
     expect(tooltip).not.toBeNull();
     expect(tooltip?.getAttribute('role')).toBe('tooltip');
     expect(button.getAttribute('aria-describedby')).toBe(tooltip?.id);
+  });
+
+  it('should dismiss with Escape while visible', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    // Dismissal is immediate — no hide delay to wait out.
+    expect(document.querySelector('.qz-tooltip')).toBeNull();
+  });
+
+  it('should ignore Escape once the tooltip is gone', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    expect(document.querySelector('.qz-tooltip')).toBeNull();
+  });
+
+  it('should not stack show timers across repeated hovers', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(100);
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(100);
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+
+    expect(document.querySelectorAll('.qz-tooltip')).toHaveLength(1);
+  });
+
+  it('should hide immediately when disabled while visible', async () => {
+    const { fixture } = await render(DisableableHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+
+    fixture.componentInstance.disabled.set(true);
+    fixture.detectChanges();
+
+    expect(document.querySelector('.qz-tooltip')).toBeNull();
+  });
+
+  it('should reveal the tooltip only once it has been positioned', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+
+    // It starts hidden to avoid a flash at the viewport origin; by the time the
+    // positioning frame has run it must be both placed and visible again.
+    const tooltip = document.querySelector<HTMLElement>('.qz-tooltip');
+    expect(tooltip?.style.transform).toMatch(/^translate\(/);
+    expect(tooltip?.style.visibility).toBe('visible');
   });
 });

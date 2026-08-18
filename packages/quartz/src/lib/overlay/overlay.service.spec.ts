@@ -107,6 +107,34 @@ describe('OverlayService', () => {
 
     expect(ref.isOpen).toBe(false);
   });
+
+  it('should not replay closed$ to subscribers that arrive after a close', () => {
+    // An overlay is reusable, so a fresh subscription must not be told about a close
+    // that already happened — see the comment on OverlayRef#closed$ (DialogRef, being
+    // one-shot, deliberately replays instead).
+    const mockTemplateRef = {} as TemplateRef<unknown>;
+    const mockViewContainerRef = {
+      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {}, destroy: () => {} }),
+    } as unknown as ViewContainerRef;
+
+    const anchor = document.createElement('div');
+    document.body.appendChild(anchor);
+
+    const ref = service.create(mockTemplateRef, mockViewContainerRef, anchor);
+    ref.open();
+    ref.close();
+
+    let late = 0;
+    const sub = ref.closed$.subscribe(() => late++);
+    expect(late).toBe(0);
+
+    ref.open();
+    ref.close();
+    expect(late).toBe(1);
+
+    sub.unsubscribe();
+    anchor.remove();
+  });
 });
 
 function createTemplateMocks(content: HTMLElement): {

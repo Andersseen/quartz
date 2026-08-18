@@ -65,6 +65,9 @@
                 let-level="level"
                 let-expanded="expanded"
                 let-selected="selected"
+                let-hasChildren="hasChildren"
+                let-toggle="toggle"
+                let-select="select"
               >
                 <div
                   [class]="
@@ -74,19 +77,22 @@
                       : 'text-gray-200 hover:bg-white/5')
                   "
                   [style.padding-left.px]="level * 24"
-                  (click)="node.select()"
-                  (keydown.enter)="node.select()"
+                  (click)="select()"
+                  (keydown.enter)="select()"
                   tabindex="0"
                   role="treeitem"
+                  [attr.aria-level]="level + 1"
+                  [attr.aria-expanded]="hasChildren ? expanded : null"
                   [attr.aria-selected]="selected"
                 >
-                  @if (node.hasChildren) {
+                  @if (hasChildren) {
                     <span
                       class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] text-gray-500 cursor-pointer flex-shrink-0"
                       tabindex="0"
                       role="button"
-                      (click)="node.toggle(); $event.stopPropagation()"
-                      (keydown.enter)="node.toggle(); $event.stopPropagation()"
+                      [attr.aria-label]="'Toggle ' + node.label"
+                      (click)="toggle(); $event.stopPropagation()"
+                      (keydown.enter)="toggle(); $event.stopPropagation()"
                     >
                       {{ expanded ? '▼' : '▶' }}
                     </span>
@@ -94,7 +100,7 @@
                     <span class="w-4 flex-shrink-0"></span>
                   }
                   <span class="text-base flex-shrink-0">
-                    {{ node.hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
+                    {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
                   </span>
                   <span class="flex-1 min-w-0">{{ node.label }}</span>
                 </div>

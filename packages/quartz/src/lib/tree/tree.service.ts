@@ -39,6 +39,8 @@ export class TreeService {
   readonly expandedIds = computed(() => this.#expandedIds());
   readonly selectedIds = computed(() => this.#selectedIds());
   readonly activeId = computed(() => this.#activeId());
+  /** Resolved configuration (defaults merged with the `config` input). */
+  readonly config = computed(() => this.#config());
   /** Per-node lazy-load state. Nodes never lazily loaded are absent from the map. */
   readonly loadStates = computed(() => this.#loadStates());
 

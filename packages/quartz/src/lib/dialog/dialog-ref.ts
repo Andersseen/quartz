@@ -1,6 +1,12 @@
 import { ReplaySubject } from 'rxjs';
 
 export class DialogRef {
+  /**
+   * `ReplaySubject(1)` on purpose: a dialog is one-shot, so code that subscribes after
+   * the dialog already closed (a late `await firstValueFrom(closed$)`, an async guard)
+   * must still learn about it instead of hanging forever.
+   * `OverlayRef` is reusable and deliberately uses a plain `Subject` — see its comment.
+   */
   #closed$ = new ReplaySubject<void>(1);
   readonly closed$ = this.#closed$.asObservable();
 

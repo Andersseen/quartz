@@ -15,6 +15,11 @@ export class OverlayRef {
   private anchor: OverlayAnchor;
   private clickOutsideTimer: ReturnType<typeof setTimeout> | null = null;
 
+  /**
+   * Plain `Subject` on purpose: an overlay is reusable (open/close/open), so replaying
+   * the last close would fire immediately on every new subscription and read as a close
+   * that never happened. `DialogRef` is one-shot and uses `ReplaySubject(1)` instead.
+   */
   #closed$ = new Subject<void>();
   readonly closed$ = this.#closed$.asObservable();
 

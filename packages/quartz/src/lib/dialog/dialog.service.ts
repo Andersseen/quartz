@@ -85,10 +85,9 @@ export class DialogService {
     const panelEl = this.document.createElement('div');
     panelEl.setAttribute('role', 'dialog');
     panelEl.setAttribute('aria-modal', 'true');
-    panelEl.setAttribute('aria-labelledby', ariaLabelledBy);
-    if (ariaDescribedBy) {
-      panelEl.setAttribute('aria-describedby', ariaDescribedBy);
-    }
+    // Focus target of last resort: a dialog with no focusable content must still take
+    // focus, or the user keeps tabbing through the page behind the modal.
+    panelEl.setAttribute('tabindex', '-1');
     panelEl.style.cssText = [
       'pointer-events:auto',
       'max-width:100%',
@@ -123,6 +122,23 @@ export class DialogService {
       if (node instanceof HTMLElement) panelEl.appendChild(node);
     }
     wrapperEl.appendChild(panelEl);
+
+    // A configured id is applied as-is (it may point anywhere in the document). A
+    // *generated* fallback id is only useful once the consumer has bound it to a title /
+    // description element in the template, so it is applied only when that element exists
+    // — a dangling reference gives the dialog no accessible name at all.
+    this.#applyAriaReference(
+      panelEl,
+      'aria-labelledby',
+      ariaLabelledBy,
+      !!resolvedConfig.ariaLabelledBy,
+    );
+    this.#applyAriaReference(
+      panelEl,
+      'aria-describedby',
+      ariaDescribedBy,
+      !!resolvedConfig.ariaDescribedBy,
+    );
 
     // -- Focus management -------------------------------------------------------
     const previousActiveElement = this.document.activeElement as HTMLElement | null;
@@ -210,9 +226,19 @@ export class DialogService {
     previousActiveElement?.focus();
   }
 
+  #applyAriaReference(
+    panel: HTMLElement,
+    attribute: string,
+    id: string,
+    isExplicit: boolean,
+  ): void {
+    if (!isExplicit && !panel.querySelector(`[id="${id}"]`)) return;
+    panel.setAttribute(attribute, id);
+  }
+
   #focusFirstFocusable(panel: HTMLElement): void {
     const first = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-    first?.focus();
+    (first ?? panel).focus();
   }
 
   #trapFocus(panel: HTMLElement, event: KeyboardEvent): void {

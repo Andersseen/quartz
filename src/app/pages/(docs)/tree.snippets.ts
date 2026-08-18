@@ -26,10 +26,21 @@ export const EXPANDED_SNIPPET = `const nodes: TreeNode[] = [
 
 <qz-tree [nodes]="nodes" />`;
 
-export const CUSTOM_SNIPPET = `<qz-tree [nodes]="nodes">
-  <ng-template let-node let-level="level" let-expanded="expanded">
-    <div [style.padding-left.px]="level * 20">
-      {{ expanded ? '📂' : '📁' }} {{ node.label }}
+export const CUSTOM_SNIPPET = `// Project an <ng-template> into <qz-tree>, or pass one via [nodeTemplate].
+<qz-tree [nodes]="nodes">
+  <ng-template
+    let-node
+    let-level="level"
+    let-expanded="expanded"
+    let-hasChildren="hasChildren"
+    let-toggle="toggle"
+    let-select="select"
+  >
+    <div [style.padding-left.px]="level * 20" (click)="select()">
+      @if (hasChildren) {
+        <span (click)="toggle(); $event.stopPropagation()">{{ expanded ? '▼' : '▶' }}</span>
+      }
+      {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }} {{ node.label }}
     </div>
   </ng-template>
 </qz-tree>`;

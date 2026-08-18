@@ -2,6 +2,8 @@ import {
   Component,
   ChangeDetectionStrategy,
   input,
+  contentChild,
+  computed,
   TemplateRef,
   effect,
   inject,
@@ -49,7 +51,7 @@ export interface TreeNodeContext {
           [setsize]="count"
           [posinset]="i + 1"
           [isFirst]="i === 0"
-          [template]="nodeTemplate()"
+          [template]="resolvedTemplate()"
         />
       }
     </div>
@@ -73,6 +75,15 @@ export class TreeComponent {
   readonly nodes = input.required<TreeNode[]>();
   readonly config = input<Partial<TreeConfig>>({});
   readonly nodeTemplate = input<TemplateRef<TreeNodeContext> | null>(null);
+  /**
+   * `<ng-template>` projected into `<qz-tree>` — an alternative to the `nodeTemplate`
+   * input, which still wins when both are present.
+   */
+  private readonly projectedTemplate = contentChild<TemplateRef<TreeNodeContext>>(TemplateRef);
+  /** The template actually rendered for each node, if any. */
+  protected readonly resolvedTemplate = computed(
+    () => this.nodeTemplate() ?? this.projectedTemplate() ?? null,
+  );
   /**
    * Optional per-level loader. When set, a node with `hasChildren: true` and no `children`
    * fetches them the first time it is expanded — once; collapsing and re-expanding does not

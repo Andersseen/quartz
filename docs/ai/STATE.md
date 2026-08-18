@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-18** (tree lazy loading — per-level `loadChildren`)
+> **Last updated: 2026-08-18** (tree lazy loading + library-wide review fixes, v0.0.6)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -25,11 +25,14 @@ and **P3.1–P3.2**. This hardening round additionally completed:
 - Library version bumped to **v0.0.5** (v0.0.4 was already published to npm) and CI now
   includes an npm publish job after `unit-tests` + `e2e-tests` pass on `main`.
 
-Remaining plan items not yet done: **P3.4** (ReplaySubject vs Subject consistency).
+**P3.4 is now done**: the `ReplaySubject` (DialogRef, one-shot) vs `Subject` (OverlayRef,
+reusable) split is deliberate, documented in both files and covered by tests. No review-plan
+items remain open.
 
 ## Version & publish status
 
-- Library `quartz-headless` **v0.0.5** on npm. Root monorepo package stays private.
+- Library `quartz-headless` **v0.0.6** (v0.0.5 is the last version published to npm; CI
+  publishes on merge to `main`). Root monorepo package stays private.
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.
@@ -68,6 +71,28 @@ what it was. Worth knowing:
   `TreeComponent` effects wrap their service calls in `untracked()`. Without it the init
   effect subscribes to `expandedIds` and re-initializes (wiping expansion + loaded
   children) on every expand. Keep imperative service calls out of effect tracking.
+
+## Library review fixes (2026-08-18, v0.0.6)
+
+A review pass over every primitive; details in `CHANGELOG.md` under 0.0.6. The ones that
+change behaviour or that are easy to regress:
+
+- **`TreeConfig.toggleOnClick` was dead config** — declared, defaulted to `true`, read
+  nowhere. Now implemented: clicking a parent row expands/collapses it _and_ selects it.
+  This changed one E2E test that had (accidentally) relied on click-not-expanding.
+- **Toast containers swallowed clicks.** The six aria-live regions are always rendered so
+  announcements work; they are now `pointer-events: none` with the toasts themselves
+  `auto`. jsdom does not apply `pointer-events` from a component stylesheet, so this is
+  guarded by an E2E test (`elementFromPoint` at each page corner) — verified to fail
+  against the old CSS.
+- **Tooltip had no Escape dismissal** (WAI-ARIA APG requires it). Added for both the text
+  and template paths, wired to the same document listener lifecycle as the scroll close.
+- **Dialog focus/ARIA**: the panel is `tabindex="-1"` and takes focus when it holds nothing
+  focusable; generated `aria-labelledby`/`aria-describedby` ids are only applied when an
+  element actually uses them (explicitly configured ids are always applied).
+- `<qz-tree>` now also accepts a **content-projected `<ng-template>`**. Note this activated
+  the docs page's custom-template example, which had been silently dead and read
+  `toggle`/`select` off the node instead of the context — fixed in the same pass.
 
 ## In progress / next up
 

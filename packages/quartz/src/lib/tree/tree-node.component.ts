@@ -174,8 +174,14 @@ export class TreeNodeComponent {
 
   onClick(_event: MouseEvent): void {
     if (this.node().disabled) return;
-    this.treeService.setActive(this.node().id);
-    this.treeService.toggleSelection(this.node().id);
+    const id = this.node().id;
+    this.treeService.setActive(id);
+    // `toggleOnClick` (default true): clicking a parent row expands/collapses it, which
+    // for a lazy node also triggers its first load.
+    if (this.treeService.config().toggleOnClick && this.hasChildren()) {
+      this.treeService.toggle(id);
+    }
+    this.treeService.toggleSelection(id);
   }
 
   onToggleClick(event: MouseEvent): void {
