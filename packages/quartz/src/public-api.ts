@@ -81,3 +81,12 @@ export type { VirtualScrollConfig, VirtualScrollRow } from './lib/virtual-scroll
 // Viewport
 export { ViewportService, ViewportMatchDirective, DEFAULT_BREAKPOINTS } from './lib/viewport';
 export type { ViewportBreakpoint, ViewportBreakpoints, ViewportMatchResult } from './lib/viewport';
+
+// Listbox
+export {
+  ListboxDirective,
+  ListboxOptionDirective,
+  ListboxService,
+  DEFAULT_LISTBOX_CONFIG,
+} from './lib/listbox';
+export type { ListboxConfig, ListboxOrientation } from './lib/listbox';

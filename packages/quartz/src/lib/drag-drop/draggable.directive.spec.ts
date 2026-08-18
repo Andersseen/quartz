@@ -20,6 +20,14 @@ class HandleHost {
   data = { id: 'item-1' };
 }
 
+@Component({
+  standalone: true,
+  imports: [DraggableDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<div [qzDraggable]="{ disabled: true }">Disabled</div>`,
+})
+class ConfigHost {}
+
 describe('DraggableDirective', () => {
   afterEach(() => {
     TestBed.inject(DragDropService).endDrag(false);
@@ -49,5 +57,14 @@ describe('DraggableDirective', () => {
     expect(allowedEvent.defaultPrevented).toBe(false);
     expect(service.isDragging()).toBe(true);
     expect(service.dragData()).toEqual({ id: 'item-1' });
+  });
+
+  it('honours disabled from the configuration object', async () => {
+    await render(ConfigHost);
+    const element = screen.getByText('Disabled');
+    const event = new Event('dragstart', { bubbles: true, cancelable: true }) as DragEvent;
+    element.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(element).toHaveAttribute('draggable', 'false');
   });
 });

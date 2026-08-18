@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-18
+
+### Added
+
+- Documentation code samples now use the bundled Vertex Lite editor: syntax-highlighted,
+  copyable and explicitly read-only.
+- A sticky desktop sidebar regression test covers component documentation routes while the page
+  scrolls.
+
+### Changed
+
+- Refreshed the docs installation experience with working pnpm/npm/yarn commands and the
+  published `quartz-headless` package name.
+- Updated the demo design system to Volt UI 1.0 and uses Angular Movement for page animation.
+- Merging a version bump into `main` now publishes npm and creates the GitHub Release
+  automatically; existing npm versions are safely skipped.
+
+### Fixed
+
+- The component navigation sidebar remains sticky on desktop instead of scrolling away with the
+  documentation content.
+
+## [0.1.0] — 2026-08-18
+
+### Added
+
+- **Listbox.** New directive-based, unstyled WAI-ARIA listbox with single/multiple selection,
+  active-descendant focus, disabled options, vertical/horizontal keyboard navigation,
+  Home/End, Enter/Space and type-ahead. It exposes a two-way `value` model and `compareWith`
+  for object values, and is registered in the source-copy CLI and docs site.
+
+### Fixed
+
+- Drag-drop object configuration now consistently honors `disabled` for draggables/drop zones
+  and `sortable` for drop zones, matching the public `DragDropConfig` / `DropZoneConfig` API.
+- The package smoke test now correctly rejects missing `sideEffects: false` metadata.
+
+### Changed
+
+- npm publication is now an explicit `workflow_dispatch` action with `publish: true`; ordinary
+  pushes to `main` still deploy docs but cannot fail by publishing an already-published version.
+- Documentation now accurately describes Quartz as having no visual theme rather than no CSS at
+  all: portal and layout primitives retain only the structural styles their behaviour requires.
+- Drag & drop is described accurately as native pointer-based HTML DnD; keyboard DnD remains a
+  separately scoped future primitive.
+
 ## [0.0.6] — 2026-08-18
 
 ### Added

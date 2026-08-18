@@ -18,7 +18,7 @@ import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.typ
   host: {
     '[class.qz-drop-zone]': 'true',
     '[class.qz-drag-over]': 'isDragOver()',
-    '[class.qz-drop-disabled]': 'disabled()',
+    '[class.qz-drop-disabled]': 'isDisabled()',
     '[class.qz-can-drop]': 'canDrop()',
     '(dragenter)': 'onDragEnter($event)',
     '(dragleave)': 'onDragLeave($event)',
@@ -69,7 +69,7 @@ export class DropZoneDirective {
   }
 
   readonly canDrop = computed(() => {
-    if (this.disabled()) return false;
+    if (this.isDisabled()) return false;
     if (!this.dragDropService.isDragging()) return false;
 
     const dragType = this.dragDropService.dragType();
@@ -86,8 +86,13 @@ export class DropZoneDirective {
     return typeof cfg === 'object' && cfg !== null ? cfg : {};
   }
 
+  /** An explicit input wins; config supports the same shorthand fields. */
+  readonly isDisabled = computed(() => this.disabled() || this.getConfig().disabled === true);
+
+  readonly isSortable = computed(() => this.sortable() || this.getConfig().sortable === true);
+
   onDragEnter(event: DragEvent): void {
-    if (this.disabled() || !this.canDrop()) return;
+    if (this.isDisabled() || !this.canDrop()) return;
 
     event.preventDefault();
     this.dragCounter++;
@@ -104,7 +109,7 @@ export class DropZoneDirective {
   }
 
   onDragLeave(_event: DragEvent): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
 
     this.dragCounter--;
 
@@ -115,7 +120,7 @@ export class DropZoneDirective {
   }
 
   onDragOver(event: DragEvent): void {
-    if (this.disabled() || !this.canDrop()) return;
+    if (this.isDisabled() || !this.canDrop()) return;
 
     event.preventDefault();
     event.dataTransfer!.dropEffect = 'move';
@@ -130,7 +135,7 @@ export class DropZoneDirective {
 
   onDrop(event: unknown): void {
     const dragEvent = event as DragEvent;
-    if (this.disabled() || !this.canDrop()) {
+    if (this.isDisabled() || !this.canDrop()) {
       dragEvent.preventDefault();
       return;
     }
@@ -164,7 +169,7 @@ export class DropZoneDirective {
   }
 
   private calculateDropIndex(event: DragEvent): number | undefined {
-    if (!this.sortable()) return undefined;
+    if (!this.isSortable()) return undefined;
 
     const element = this.elementRef.nativeElement;
     const children = Array.from(element.children);

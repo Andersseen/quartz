@@ -1,13 +1,12 @@
 # Spec: Listbox primitive
 
-- **Status:** Draft — needs user approval before implementation
-- **Branch:** feature/listbox
+- **Status:** Implemented in v0.1.0
+- **Branch:** main
 - **Date:** 2026-07-06
-- **Related:** README table (marked "coming soon"), `cli/registry.js` (`soon: true`),
-  empty folder `packages/quartz/src/lib/listbox/`, placeholder page `(docs)/listbox.page.ts`
+- **Related:** public API, `cli/registry.js`, `packages/quartz/src/lib/listbox/`, docs route `/listbox`
 
-> This spec is pre-written as a starting point because listbox is the declared next
-> primitive. An agent picking this up must review §3/§8 with the user before coding.
+> Implementation follows the directive-based API below and includes `compareWith`; horizontal
+> orientation is supported. Menu and Combobox remain future composition primitives.
 
 ## 1. Problem
 

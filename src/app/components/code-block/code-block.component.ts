@@ -41,12 +41,14 @@ import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-ic
       <volt-tabs [value]="activeTab()" (valueChange)="selectTab($event)" class="block">
         <div class="flex items-center justify-between p-2 bg-[#1e1e2a] border-b border-[#2a2a3a]">
           <volt-tabs-list>
-            <volt-tabs-trigger value="preview">
-              <span class="inline-flex items-center gap-2">
-                <lmn-eye [size]="16" />
-                Preview
-              </span>
-            </volt-tabs-trigger>
+            @if (preview()) {
+              <volt-tabs-trigger value="preview">
+                <span class="inline-flex items-center gap-2">
+                  <lmn-eye [size]="16" />
+                  Preview
+                </span>
+              </volt-tabs-trigger>
+            }
             <volt-tabs-trigger value="code">
               <span class="inline-flex items-center gap-2">
                 <lmn-terminal [size]="16" />
@@ -55,7 +57,12 @@ import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-ic
             </volt-tabs-trigger>
           </volt-tabs-list>
 
-          <volt-badge variant="outline">{{ language() }}</volt-badge>
+          <div class="flex items-center gap-2">
+            @if (filename()) {
+              <span class="hidden text-xs font-mono text-gray-500 sm:inline">{{ filename() }}</span>
+            }
+            <volt-badge variant="outline">{{ language() }}</volt-badge>
+          </div>
         </div>
 
         @if (activeTab() === 'code') {
@@ -81,27 +88,39 @@ import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-ic
           </div>
         }
 
-        <volt-tabs-content value="preview">
-          <div class="p-8 flex items-center justify-center min-h-[200px]">
-            <ng-content select="[preview]" />
-          </div>
-        </volt-tabs-content>
+        @if (preview()) {
+          <volt-tabs-content value="preview">
+            <div class="p-8 flex items-center justify-center min-h-[200px]">
+              <ng-content select="[preview]" />
+            </div>
+          </volt-tabs-content>
+        }
 
         <volt-tabs-content value="code">
-          <div class="h-[380px] overflow-hidden">
+          <div class="overflow-hidden" [style.height.px]="height()">
             @if (editorLoaded()) {
               <vertex-editor
                 [attr.value]="code()"
                 [attr.language]="language()"
                 theme="dark"
                 lineNumbers="true"
-                style="display: block; height: 380px; overflow: auto;"
+                aria-readonly="true"
+                style="display: block; height: 100%; overflow: auto;"
               ></vertex-editor>
+            } @else if (editorError()) {
+              <div
+                class="h-full flex flex-col items-center justify-center gap-3 px-6 text-center text-sm text-gray-500"
+              >
+                <span>Could not load the read-only code viewer.</span>
+                <volt-button variant="outline" size="sm" (click)="loadEditor()"
+                  >Try again</volt-button
+                >
+              </div>
             } @else {
               <div
-                class="h-[380px] flex items-center justify-center text-gray-500 text-sm animate-pulse"
+                class="h-full flex items-center justify-center text-gray-500 text-sm animate-pulse"
               >
-                <span>Loading editor…</span>
+                <span>Loading read-only editor…</span>
               </div>
             }
           </div>
@@ -112,28 +131,49 @@ import { LmnCheckIcon, LmnCopyIcon, LmnEyeIcon, LmnTerminalIcon } from 'lumen-ic
 })
 export class CodeBlockComponent implements OnInit {
   code = input.required<string>();
-  language = input<'html' | 'typescript'>('html');
+  language = input<'html' | 'typescript' | 'scss' | 'css' | 'javascript'>('html');
+  filename = input<string>();
+  height = input(380);
+  preview = input(true);
   activeTab = signal<'preview' | 'code'>('preview');
   copied = signal(false);
   editorLoaded = signal(false);
+  editorError = signal(false);
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly editorLoader = inject(EditorLoaderService);
 
-  async ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    await this.editorLoader.loadEditor();
-    this.editorLoaded.set(true);
+  ngOnInit(): void {
+    if (!this.preview()) {
+      this.activeTab.set('code');
+      void this.loadEditor();
+    }
   }
 
   selectTab(value: string | undefined): void {
     if (value === 'preview' || value === 'code') {
       this.activeTab.set(value);
+      if (value === 'code') {
+        void this.loadEditor();
+      }
     }
   }
 
-  copyCode(): void {
-    navigator.clipboard.writeText(this.code());
+  async loadEditor(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId) || this.editorLoaded()) return;
+
+    this.editorError.set(false);
+    try {
+      await this.editorLoader.loadEditor();
+      this.editorLoaded.set(true);
+    } catch {
+      this.editorError.set(true);
+    }
+  }
+
+  async copyCode(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    await navigator.clipboard.writeText(this.code());
     this.copied.set(true);
     setTimeout(() => this.copied.set(false), 2000);
   }

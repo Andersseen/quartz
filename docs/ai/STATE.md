@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-18** (tree lazy loading + library-wide review fixes, v0.0.6)
+> **Last updated: 2026-08-18** (Listbox minor release preparation, v0.1.0)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -31,8 +31,8 @@ items remain open.
 
 ## Version & publish status
 
-- Library `quartz-headless` **v0.0.6** (v0.0.5 is the last version published to npm; CI
-  publishes on merge to `main`). Root monorepo package stays private.
+- Library `quartz-headless` **v0.1.0** is prepared for publish. Root monorepo package stays
+  private; npm publication is an explicit GitHub Actions dispatch with `publish: true`.
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.
@@ -48,6 +48,7 @@ items remain open.
 | drag-drop      | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
 | tooltip        | ✅       | ✅         | ✅        | ✅ deps:[overlay] | Docs page now live at `/tooltip`                                                                             |
 | tree           | ✅       | ✅         | ✅        | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
+| listbox        | ✅       | ✅         | ✅        | ✅                | Single/multi selection, active-descendant, typeahead and disabled options                                    |
 | virtual-scroll | ✅       | ✅         | ✅        | ✅                | Has ResizeObserver support                                                                                   |
 | viewport       | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
 
@@ -96,10 +97,7 @@ change behaviour or that are easy to regress:
 
 ## In progress / next up
 
-- **P3.4** Decide on `ReplaySubject` vs `Subject` for `DialogRef`/`OverlayRef` and document
-  the choice with tests.
-- **Next major primitive**: `listbox` is still the planned next primitive, but intentionally
-  out of scope for this hardening round.
+- **Next composition primitives**: Menu (Overlay) and Combobox (Overlay + Listbox).
 
 ## Known issues / gotchas (live)
 

@@ -13,6 +13,7 @@ const COMPONENT_ROUTES = [
   '/tooltip',
   '/drag-drop',
   '/tree',
+  '/listbox',
   '/virtual-scroll',
   '/viewport',
 ];

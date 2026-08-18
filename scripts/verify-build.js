@@ -48,6 +48,9 @@ const EXPECTED_EXPORTS = [
   'VirtualScrollDirective',
   'ViewportService',
   'ViewportMatchDirective',
+  'ListboxDirective',
+  'ListboxOptionDirective',
+  'ListboxService',
 ];
 
 function checkFile(relPath) {
@@ -73,7 +76,7 @@ function checkPackageMetadata() {
     throw new Error(`Unexpected package name: ${pkg.name}`);
   }
 
-  if (!pkg.sideEffects === false) {
+  if (pkg.sideEffects !== false) {
     throw new Error('Package should have sideEffects: false');
   }
 
@@ -84,7 +87,9 @@ function checkPackageMetadata() {
 
 function main() {
   if (!fs.existsSync(DIST_DIR)) {
-    throw new Error(`Build output directory does not exist: ${DIST_DIR}\nRun pnpm build:lib first.`);
+    throw new Error(
+      `Build output directory does not exist: ${DIST_DIR}\nRun pnpm build:lib first.`,
+    );
   }
 
   for (const file of REQUIRED_FILES) {

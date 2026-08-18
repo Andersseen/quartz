@@ -49,7 +49,7 @@ const REGISTRY = {
     docs: 'https://quartz-headless.pages.dev/toast',
   },
   'drag-drop': {
-    description: 'Accessible drag and drop with keyboard support',
+    description: 'Native HTML drag and drop with sortable drop zones',
     files: [
       'drag-drop/draggable.directive.ts',
       'drag-drop/drop-zone.directive.ts',
@@ -99,6 +99,17 @@ const REGISTRY = {
       'viewport/index.ts',
     ],
     docs: 'https://quartz-headless.pages.dev/viewport',
+  },
+  listbox: {
+    description: 'Accessible single and multi-select listbox with keyboard navigation',
+    files: [
+      'listbox/listbox.directive.ts',
+      'listbox/listbox-option.directive.ts',
+      'listbox/listbox.service.ts',
+      'listbox/listbox.types.ts',
+      'listbox/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/listbox',
   },
 };
 

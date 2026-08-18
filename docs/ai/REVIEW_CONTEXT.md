@@ -79,7 +79,7 @@ Quartz is a modern Angular 21 headless UI primitives monorepo. Tests, lint, type
 - **Issue**: `this.overlayRef.closed$.subscribe(...)` is called on every `open()` without unsubscribing previous subscriptions.
 - **Impact**: Memory leak + duplicate `closed` emissions.
 
-### 2. `listbox` is a ghost primitive
+### 2. `listbox` was a ghost primitive — resolved in v0.1.0
 
 - **Files**:
   - `packages/quartz/src/lib/listbox/` — empty folder

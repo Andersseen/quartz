@@ -6,6 +6,7 @@ import {
 import { provideFileRouter, withExtraRoutes } from '@analogjs/router';
 import type { Routes } from '@angular/router';
 import { provideVoltTheme } from '@voltui/components';
+import { provideMovement } from 'angular-movement';
 
 /**
  * Fallback route for /tree when AnalogJS file-based routing doesn't detect
@@ -53,6 +54,16 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'listbox',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/listbox.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {
@@ -61,5 +72,9 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideFileRouter(withExtraRoutes(extraRoutes)),
     provideVoltTheme({ color: 'dusk', style: 'sharp', dark: true }),
+    provideMovement({
+      duration: 580,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    }),
   ],
 };

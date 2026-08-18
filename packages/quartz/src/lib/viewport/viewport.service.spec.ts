@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { ViewportService } from './viewport.service';
 
 describe('ViewportService', () => {
@@ -58,5 +59,28 @@ describe('ViewportService', () => {
     expect(match.md).toBe(true);
     expect(match.lg).toBe(false);
     expect(match.xl).toBe(false);
+  });
+
+  it('caches custom media-query signals and removes their listeners on destroy', () => {
+    const listener = vi.fn();
+    const removeListener = vi.fn();
+    const matchMedia = vi.fn(() => ({
+      matches: false,
+      addEventListener: listener,
+      removeEventListener: removeListener,
+    }));
+    vi.stubGlobal('matchMedia', matchMedia);
+    service.destroy();
+    service = TestBed.inject(ViewportService);
+
+    const first = service.minWidth(900);
+    const second = service.minWidth(900);
+    expect(first).toBe(second);
+    expect(matchMedia).toHaveBeenCalledTimes(1);
+    expect(listener).toHaveBeenCalledWith('change', expect.any(Function));
+
+    service.destroy();
+    expect(removeListener).toHaveBeenCalledWith('change', expect.any(Function));
+    vi.unstubAllGlobals();
   });
 });
