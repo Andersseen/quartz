@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-18
+
+### Added
+
+- Documentation code samples now use the bundled Vertex Lite editor: syntax-highlighted,
+  copyable and explicitly read-only.
+- A sticky desktop sidebar regression test covers component documentation routes while the page
+  scrolls.
+
+### Changed
+
+- Refreshed the docs installation experience with working pnpm/npm/yarn commands and the
+  published `quartz-headless` package name.
+- Updated the demo design system to Volt UI 1.0 and uses Angular Movement for page animation.
+- Merging a version bump into `main` now publishes npm and creates the GitHub Release
+  automatically; existing npm versions are safely skipped.
+
+### Fixed
+
+- The component navigation sidebar remains sticky on desktop instead of scrolling away with the
+  documentation content.
+
 ## [0.1.0] — 2026-08-18
 
 ### Added

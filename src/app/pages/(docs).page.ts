@@ -9,7 +9,7 @@ import { LayoutService } from '../services/layout.service';
   imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex min-h-screen bg-[#0a0a0c] overflow-x-hidden">
+    <div class="flex min-h-screen bg-[#0a0a0c]">
       <app-header />
 
       <div
@@ -21,9 +21,7 @@ import { LayoutService } from '../services/layout.service';
 
       <app-sidebar [open]="layout.sidebarOpen()" />
 
-      <main
-        class="flex-1 ml-[260px] pt-28 min-h-screen min-w-0 px-8 pb-12 max-md:ml-0 max-md:pt-24 max-md:px-4"
-      >
+      <main class="flex-1 pt-28 min-h-screen min-w-0 px-8 pb-12 max-md:pt-24 max-md:px-4">
         <router-outlet />
       </main>
     </div>

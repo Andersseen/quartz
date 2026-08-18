@@ -40,7 +40,9 @@ export class EditorLoaderService {
       }
 
       const script = document.createElement('script');
-      script.src = 'web-editor.min.js';
+      // This is deliberately absolute: documentation routes are nested, while the
+      // vendored Lite bundle is served from the app's public root.
+      script.src = '/web-editor.min.js';
       script.async = true;
       script.defer = true;
 

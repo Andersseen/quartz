@@ -1,132 +1,148 @@
 <app-header />
 
 <div class="py-32 px-8 max-w-4xl mx-auto max-md:py-16 max-md:px-4">
-  <header class="mb-20 text-center">
+  <header class="mb-16 text-center">
+    <div class="mb-5 flex justify-center">
+      <volt-badge variant="outline">Documentation</volt-badge>
+    </div>
     <h1
       class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent"
     >
       Getting Started
     </h1>
     <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-      Quartz Headless is a collection of unstyled, accessible, and high-performance Angular
-      primitives. Follow these steps to integrate them into your project.
+      Quartz Headless is a collection of unstyled, accessible Angular primitives. Set up the
+      package, then make the design entirely your own.
     </p>
   </header>
 
-  <div class="flex flex-col gap-24">
-    <volt-card>
-      <volt-card-header>
-        <volt-card-title>1. Installation</volt-card-title>
+  <div class="flex flex-col gap-10">
+    <volt-card class="overflow-hidden border border-violet-400/15 bg-[#0d0d12]">
+      <volt-card-header class="pb-4">
+        <div class="flex items-center gap-3">
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/15 text-sm font-bold text-violet-300"
+            >1</span
+          >
+          <volt-card-title>Installation</volt-card-title>
+        </div>
         <volt-card-description>
-          Add the core package to your project using your preferred package manager.
+          Choose the package manager your project already uses.
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
-        <div class="bg-[#0f0f13] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-          <div class="flex bg-white/[0.02] border-b border-white/10">
-            <volt-button
-              variant="ghost"
-              size="sm"
-              class="flex-1 rounded-none border-r border-white/10"
-              >pnpm</volt-button
-            >
-            <volt-button
-              variant="ghost"
-              size="sm"
-              class="flex-1 rounded-none border-r border-white/10"
-              >npm</volt-button
-            >
-            <volt-button variant="ghost" size="sm" class="flex-1 rounded-none">yarn</volt-button>
-          </div>
-          <div class="p-6 flex items-center justify-between gap-4">
-            <code class="font-mono text-lg text-white">pnpm add @quartz/ui</code>
-            <volt-button variant="outline" size="sm" title="Copy to clipboard">
-              <lmn-copy [size]="20" />
-            </volt-button>
-          </div>
+        <div class="overflow-hidden rounded-xl border border-white/10 bg-[#101015]">
+          <volt-tabs
+            [value]="packageManager()"
+            (valueChange)="selectPackageManager($event)"
+            class="block"
+          >
+            <div class="border-b border-white/10 bg-white/[0.025] px-2 pt-2">
+              <volt-tabs-list class="w-full">
+                <volt-tabs-trigger value="pnpm" class="flex-1">pnpm</volt-tabs-trigger>
+                <volt-tabs-trigger value="npm" class="flex-1">npm</volt-tabs-trigger>
+                <volt-tabs-trigger value="yarn" class="flex-1">yarn</volt-tabs-trigger>
+              </volt-tabs-list>
+            </div>
+
+            <div class="flex min-h-24 items-center justify-between gap-4 px-5 py-4 sm:px-6">
+              <div
+                class="flex min-w-0 items-center gap-3 overflow-x-auto font-mono text-sm sm:text-base"
+              >
+                <lmn-terminal class="shrink-0 text-violet-400" [size]="18" />
+                <code class="whitespace-nowrap text-slate-100">{{ installCommand() }}</code>
+              </div>
+              <volt-button
+                variant="outline"
+                size="sm"
+                class="shrink-0"
+                (click)="copyInstallCommand()"
+                [attr.aria-label]="installCopied() ? 'Command copied' : 'Copy install command'"
+              >
+                @if (installCopied()) {
+                  <lmn-check [size]="16" />
+                  <span class="hidden sm:inline">Copied</span>
+                } @else {
+                  <lmn-copy [size]="16" />
+                  <span class="hidden sm:inline">Copy</span>
+                }
+              </volt-button>
+            </div>
+          </volt-tabs>
         </div>
+        <p class="mt-3 text-xs text-gray-500">
+          Package name: <code class="text-gray-400">quartz-headless</code>
+        </p>
       </volt-card-content>
     </volt-card>
 
-    <volt-card>
-      <volt-card-header>
-        <volt-card-title>2. Styles Configuration</volt-card-title>
+    <volt-card class="border border-white/10 bg-[#0d0d12]">
+      <volt-card-header class="pb-4">
+        <div class="flex items-center gap-3">
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/15 text-sm font-bold text-violet-300"
+            >2</span
+          >
+          <volt-card-title>Style configuration</volt-card-title>
+        </div>
         <volt-card-description>
-          Quartz Headless is CSS-agnostic. However, we recommend setting up a basic CSS reset and a
-          color palette in your
-          <code class="bg-violet-500/10 text-violet-400 px-1.5 py-0.5 rounded text-sm"
-            >styles.scss</code
-          >.
+          No CSS import is required. Start with your own tokens in <code>styles.scss</code>.
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
-        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 pl-2">
-          styles.scss
-        </div>
-        <div
-          class="bg-[#0f0f13] border border-white/10 rounded-xl p-6 overflow-x-auto font-mono text-sm text-gray-400"
-        >
-          <pre><code>// Quartz Headless doesn't require any specific CSS imports.
-// You are free to use Tailwind, CSS Modules, or Vanilla CSS.
-
-:root {{ '{' }}
-  --qz-primary: #8b5cf6;
-  --qz-primary-glow: rgba(139, 92, 246, 0.4);
-{{ '}' }}</code></pre>
-        </div>
+        <app-code-block
+          [code]="stylesCode"
+          language="scss"
+          filename="styles.scss"
+          [preview]="false"
+          [height]="230"
+        />
       </volt-card-content>
     </volt-card>
 
-    <volt-card>
-      <volt-card-header>
-        <volt-card-title>3. Basic Usage</volt-card-title>
+    <volt-card class="border border-white/10 bg-[#0d0d12]">
+      <volt-card-header class="pb-4">
+        <div class="flex items-center gap-3">
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/15 text-sm font-bold text-violet-300"
+            >3</span
+          >
+          <volt-card-title>Basic usage</volt-card-title>
+        </div>
         <volt-card-description>
-          Import the standalone primitive you need and start building.
+          Import only the standalone primitive you need.
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
-        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 pl-2">
-          app.component.ts
-        </div>
-        <div
-          class="bg-[#0f0f13] border border-white/10 rounded-xl p-6 overflow-x-auto font-mono text-sm text-gray-400"
-        >
-          <pre><code>import {{ '{' }} QzOverlay {{ '}' }} from '@quartz/ui/overlay';
-
-@Component({{ '{' }}
-  selector: 'app-root',
-  standalone: true,
-  imports: [QzOverlay],
-  template: \`
-    &lt;button qzOverlayTrigger&gt;Open Menu&lt;/button&gt;
-    &lt;qz-overlay&gt;
-      &lt;div class="menu-content"&gt;...&lt;/div&gt;
-    &lt;/qz-overlay&gt;
-  \`
-{{ '}' }})
-export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
-        </div>
+        <app-code-block
+          [code]="basicUsageCode"
+          language="typescript"
+          filename="menu.component.ts"
+          [preview]="false"
+          [height]="310"
+        />
       </volt-card-content>
     </volt-card>
   </div>
 
-  <footer class="mt-32">
+  <footer class="mt-20">
     <volt-card
-      class="p-16 text-center flex flex-col items-center gap-6 bg-gradient-to-br from-violet-500/10 to-transparent max-md:p-8"
+      class="p-12 text-center flex flex-col items-center gap-5 bg-gradient-to-br from-violet-500/10 to-transparent max-md:p-8"
     >
       <volt-card-header>
-        <volt-card-title class="text-3xl font-extrabold tracking-tight">Next Steps</volt-card-title>
+        <volt-card-title class="text-3xl font-extrabold tracking-tight"
+          >Ready to build?</volt-card-title
+        >
       </volt-card-header>
       <volt-card-content>
         <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
-          Now that you've installed the core, check out the component showcase to see what you can
-          build.
+          Explore the primitives and copy the examples straight into your Angular project.
         </p>
       </volt-card-content>
       <volt-card-footer>
         <a
           routerLink="/components"
-          class="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-all duration-300"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 transition-colors"
         >
           Explore Components
           <lmn-arrow-right [size]="20" />
