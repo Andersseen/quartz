@@ -1,9 +1,33 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-18** (Listbox minor release preparation, v0.1.0)
+> **Last updated: 2026-08-26** (Core / Headless Primitives architectural split)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
+
+## Core / Headless Primitives split (2026-08-26)
+
+Purely architectural refactor, no behavior or public API change. `packages/quartz/src/lib/`
+was split into `src/core/` (collection, focus, dismiss, overlay, viewport, drag-drop,
+virtual-scroll, splitter) and `src/primitives/` (dialog, tooltip, toast, tree, listbox),
+matching Angular CDK vs. a Radix/Headless-UI-style primitives layer. Full details, the
+one-way dependency rule, and how it's enforced live in `ARCHITECTURE.md`.
+
+- `quartz-headless` still ships as a **single flat npm entry point** — ng-packagr
+  secondary entry points (`quartz-headless/core`, `quartz-headless/primitives`) were
+  attempted and reverted after hitting a reproducible, open upstream Angular CLI/TS bug
+  (see `ARCHITECTURE.md` → "Why there's no `quartz-headless/core` npm subpath (yet)").
+  Don't re-attempt this without first checking whether that upstream issue has shipped a
+  fix.
+- `cli/registry.js` entries now carry a `layer: 'core' | 'primitive'` field; `quartz add`
+  copies components into `<output>/<layer>/<name>/` instead of a flat `<output>/<name>/`.
+  This is a CLI **output shape change** — existing consumers who already ran `quartz add`
+  are unaffected (nothing re-copies automatically), but a fresh `quartz add` today nests
+  one level deeper than before.
+- Root `src/public-api.ts` is now two lines (`export * from './core/public-api'; export *
+from './primitives/public-api';`) — every previously-published named export is still
+  re-exported, verified by `scripts/verify-build.js` checking the **built** `.d.ts`
+  instead of grepping source (source no longer contains the literal export names).
 
 ## Review-plan remediation status (see `REVIEW_PLAN.md`)
 

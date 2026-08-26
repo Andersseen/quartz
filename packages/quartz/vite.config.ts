@@ -15,8 +15,8 @@ export default defineConfig(() => ({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: '../../coverage/quartz',
       all: true,
-      include: ['src/lib/**/*.ts'],
-      exclude: ['**/*.spec.ts', '**/index.ts', '**/test-setup.ts'],
+      include: ['src/core/**/*.ts', 'src/primitives/**/*.ts'],
+      exclude: ['**/*.spec.ts', '**/index.ts', '**/public-api.ts', '**/test-setup.ts'],
     },
   },
 }));

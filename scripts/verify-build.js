@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DIST_DIR = path.resolve(__dirname, '../dist/quartz');
-const PUBLIC_API = path.resolve(__dirname, '../packages/quartz/src/public-api.ts');
+const BUILT_TYPES = path.join(DIST_DIR, 'types/quartz-headless.d.ts');
 
 const REQUIRED_FILES = [
   'package.json',
@@ -61,10 +61,14 @@ function checkFile(relPath) {
 }
 
 function checkPublicApiExports() {
-  const api = fs.readFileSync(PUBLIC_API, 'utf8');
-  const missing = EXPECTED_EXPORTS.filter((name) => !api.includes(name));
+  // Checks the BUILT declaration output, not the source — this also verifies that the
+  // Core / Headless Primitives barrel split (src/core/public-api.ts +
+  // src/primitives/public-api.ts, re-exported from src/public-api.ts) actually surfaces
+  // every symbol through to the published package.
+  const dts = fs.readFileSync(BUILT_TYPES, 'utf8');
+  const missing = EXPECTED_EXPORTS.filter((name) => !dts.includes(name));
   if (missing.length) {
-    throw new Error(`public-api.ts missing expected exports: ${missing.join(', ')}`);
+    throw new Error(`Built types missing expected exports: ${missing.join(', ')}`);
   }
 }
 

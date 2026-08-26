@@ -50,6 +50,23 @@ module.exports = [
     }
   },
   {
+    files: ["packages/quartz/src/core/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/primitives", "**/primitives/**"],
+              message:
+                "Quartz Core must not depend on Headless Primitives — dependencies flow Core -> Primitives only.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["**/*.html"],
     languageOptions: {
       parser: angularEslintTemplateParser,

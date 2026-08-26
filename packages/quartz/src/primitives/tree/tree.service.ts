@@ -6,7 +6,7 @@ import {
   TreeLoadChildrenFn,
   DEFAULT_TREE_CONFIG,
 } from './tree.types';
-import { findByTypeahead, findRelativeItem, firstItem, lastItem } from '../collection';
+import { findByTypeahead, findRelativeItem, firstItem, lastItem } from '../../core/collection';
 
 /** A node flattened into the currently-visible traversal order. */
 export interface FlatTreeNode {

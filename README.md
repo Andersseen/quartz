@@ -81,7 +81,12 @@ pnpm quartz add dialog splitter     # add several at once
 pnpm quartz add toast --output src/app/ui
 ```
 
-Files land in your project's `src/lib/components/<name>/` (auto-detected) or the `--output` path.
+Files land in your project's `src/lib/components/<layer>/<name>/` (auto-detected) or the
+`--output` path — `<layer>` is `core` for low-level infrastructure (overlay, dismiss, focus,
+collection, viewport, drag-drop, virtual-scroll, splitter) or `primitives` for accessible UI
+patterns built on it (dialog, tooltip, toast, tree, listbox). `pnpm quartz add dialog` copies
+`primitives/dialog/` plus the `core/focus/` and `core/dismiss/` it depends on — never another
+primitive.
 
 ## 🧩 Primitives
 

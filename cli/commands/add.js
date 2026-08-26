@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { REGISTRY } = require('../registry');
 
-const QUARTZ_LIB_ROOT = path.resolve(__dirname, '../../packages/quartz/src/lib');
+const QUARTZ_LIB_ROOT = path.resolve(__dirname, '../../packages/quartz/src');
 
 function resolveOutputDir(cwd, outFlag) {
   if (outFlag) return path.resolve(cwd, outFlag);
@@ -18,10 +18,11 @@ function resolveOutputDir(cwd, outFlag) {
   return path.join(cwd, 'src/lib/components');
 }
 
-// Matches cross-component relative imports like `from '../overlay'` or
-// `from '../overlay/overlay-position'` — the leading `../` means a sibling
-// component folder in the copied output.
-const CROSS_IMPORT_RE = /from\s+['"]\.\.\/([^'"/]+)/g;
+// Matches cross-component relative imports like `from '../overlay'` (same-layer sibling)
+// or `from '../../core/dismiss'` (cross-layer, primitive importing a Core dep) — the
+// optional `../(core|primitives)/` segment is consumed so group 1 is always just the
+// component name, regardless of which layer it lives in.
+const CROSS_IMPORT_RE = /from\s+['"]\.\.\/(?:\.\.\/(?:core|primitives)\/)?([^'"/]+)/g;
 
 function siblingComponentsReferenced(fileContent) {
   const names = new Set();
@@ -44,7 +45,9 @@ function ensureCrossImportsResolved(outputDir, done, verbose) {
   while (changed) {
     changed = false;
     for (const name of [...done]) {
-      const dir = path.join(outputDir, name);
+      const layer = REGISTRY[name]?.layer;
+      if (!layer) continue;
+      const dir = path.join(outputDir, layer, name);
       if (!fs.existsSync(dir)) continue;
       for (const file of fs.readdirSync(dir)) {
         if (!file.endsWith('.ts')) continue;
@@ -70,7 +73,7 @@ function ensureCrossImportsResolved(outputDir, done, verbose) {
 }
 
 function copyFiles(component, entry, outputDir, verbose) {
-  const destDir = path.join(outputDir, component);
+  const destDir = path.join(outputDir, entry.layer, component);
   fs.mkdirSync(destDir, { recursive: true });
 
   const copied = [];

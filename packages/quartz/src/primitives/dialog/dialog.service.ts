@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
-import { createDismissController, type DismissController } from '../dismiss';
+import { createDismissController, type DismissController } from '../../core/dismiss';
 import {
   createFocusRestorer,
   createFocusTrap,
   focusInitialElement,
   type FocusTrap,
-} from '../focus';
+} from '../../core/focus';
 
 let dialogId = 0;
 

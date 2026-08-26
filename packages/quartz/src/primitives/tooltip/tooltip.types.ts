@@ -1,4 +1,4 @@
-import type { OverlayPlacement } from '../overlay';
+import type { OverlayPlacement } from '../../core/overlay';
 
 export type TooltipPlacement = OverlayPlacement;
 
