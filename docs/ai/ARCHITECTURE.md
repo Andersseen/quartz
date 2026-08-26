@@ -131,10 +131,10 @@ core/splitter, primitives/toast, core/drag-drop, core/virtual-scroll, core/viewp
 ```
 
 `cli/registry.js` encodes this graph as `deps: ['overlay']` plus a `layer: 'core' |
-'primitive'` field per entry. If you make a component import from another folder, you
+'primitives'` field per entry. If you make a component import from another folder, you
 MUST add `deps: [...]` to its registry entry, or CLI users will get broken copies. New
-Core pieces get `layer: 'core'`; new Primitives get `layer: 'primitive'`. Core entries
-must never import from a `primitive`-layer entry (see boundary rule above).
+Core pieces get `layer: 'core'`; new Primitives get `layer: 'primitives'`. Core entries
+must never import from a `primitives`-layer entry (see boundary rule above).
 
 ## How the key primitives work
 

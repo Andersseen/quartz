@@ -19,7 +19,7 @@ one-way dependency rule, and how it's enforced live in `ARCHITECTURE.md`.
   (see `ARCHITECTURE.md` → "Why there's no `quartz-headless/core` npm subpath (yet)").
   Don't re-attempt this without first checking whether that upstream issue has shipped a
   fix.
-- `cli/registry.js` entries now carry a `layer: 'core' | 'primitive'` field; `quartz add`
+- `cli/registry.js` entries now carry a `layer: 'core' | 'primitives'` field; `quartz add`
   copies components into `<output>/<layer>/<name>/` instead of a flat `<output>/<name>/`.
   This is a CLI **output shape change** — existing consumers who already ran `quartz add`
   are unaffected (nothing re-copies automatically), but a fresh `quartz add` today nests
