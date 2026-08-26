@@ -8,22 +8,15 @@ import {
 } from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
+import { createDismissController, type DismissController } from '../dismiss';
+import {
+  createFocusRestorer,
+  createFocusTrap,
+  focusInitialElement,
+  type FocusTrap,
+} from '../focus';
 
 let dialogId = 0;
-
-const FOCUSABLE_SELECTOR = [
-  'button:not([disabled])',
-  '[href]',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"]):not([disabled])',
-  '[contenteditable]:not([contenteditable="false"])',
-  'audio[controls]',
-  'video[controls]',
-  'summary:not([tabindex="-1"])',
-  'details[tabindex]:not([tabindex="-1"]) summary',
-].join(', ');
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -101,14 +94,25 @@ export class DialogService {
     }
 
     // -- Build DialogRef (cleanup uses closures captured above) -----------------
-    let onKeyDown!: (e: KeyboardEvent) => void;
+    let focusTrap: FocusTrap | null = null;
+    let dismissController: DismissController | null = null;
+    const focusRestorer = createFocusRestorer(this.document);
+    let viewRef!: EmbeddedViewRef<unknown>;
 
     const ref = new DialogRef(() => {
-      this.#performClose(ref, backdropEl, wrapperEl, viewRef, onKeyDown, previousActiveElement);
+      this.#performClose(
+        ref,
+        backdropEl,
+        wrapperEl,
+        viewRef,
+        focusTrap,
+        dismissController,
+        focusRestorer,
+      );
     });
 
     // -- Render template with DialogRef as $implicit context --------------------
-    const viewRef = viewContainerRef.createEmbeddedView(
+    viewRef = viewContainerRef.createEmbeddedView(
       templateRef as TemplateRef<{
         $implicit: DialogRef;
         ariaLabelledBy: string;
@@ -141,8 +145,8 @@ export class DialogService {
     );
 
     // -- Focus management -------------------------------------------------------
-    const previousActiveElement = this.document.activeElement as HTMLElement | null;
-    this.#focusFirstFocusable(panelEl);
+    focusInitialElement(panelEl);
+    focusTrap = createFocusTrap(panelEl, this.document);
 
     // -- Scroll lock -------------------------------------------------------------
     if (this.#openDialogs.size === 0) {
@@ -152,22 +156,17 @@ export class DialogService {
     this.#openDialogs.add(ref);
 
     // -- Event listeners --------------------------------------------------------
-    if (resolvedConfig.closeOnBackdropClick && backdropEl) {
-      backdropEl.addEventListener('click', () => ref.close(), { once: true });
-    }
-
-    onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        if (!resolvedConfig.closeOnEscape) return;
-        const dialogs = [...this.#openDialogs];
-        if (dialogs[dialogs.length - 1] === ref) ref.close();
-        return;
-      }
-      if (event.key === 'Tab') {
-        this.#trapFocus(panelEl, event);
-      }
-    };
-    this.document.addEventListener('keydown', onKeyDown);
+    dismissController = createDismissController({
+      document: this.document,
+      escape: resolvedConfig.closeOnEscape,
+      outsidePointer: resolvedConfig.closeOnBackdropClick,
+      rootElements: () => [panelEl],
+      onDismiss: (reason, event) => {
+        if (reason === 'outside-pointer' && backdropEl && event.target !== backdropEl) return;
+        ref.close();
+      },
+    });
+    this.document.addEventListener('keydown', focusTrap.handleKeydown, true);
 
     return ref;
   }
@@ -210,12 +209,17 @@ export class DialogService {
     backdrop: HTMLElement | null,
     wrapper: HTMLElement,
     view: EmbeddedViewRef<unknown>,
-    onKeyDown: (e: KeyboardEvent) => void,
-    previousActiveElement: HTMLElement | null,
+    focusTrap: FocusTrap | null,
+    dismissController: DismissController | null,
+    focusRestorer: { restore(): void },
   ): void {
     if (!this.#openDialogs.has(ref)) return;
     this.#openDialogs.delete(ref);
-    this.document.removeEventListener('keydown', onKeyDown);
+    dismissController?.destroy();
+    if (focusTrap) {
+      this.document.removeEventListener('keydown', focusTrap.handleKeydown, true);
+      focusTrap.destroy();
+    }
     backdrop?.remove();
     wrapper.remove();
     view.destroy();
@@ -223,7 +227,7 @@ export class DialogService {
       this.document.body.style.overflow = this.#originalBodyOverflow;
       this.#originalBodyOverflow = '';
     }
-    previousActiveElement?.focus();
+    focusRestorer.restore();
   }
 
   #applyAriaReference(
@@ -234,30 +238,5 @@ export class DialogService {
   ): void {
     if (!isExplicit && !panel.querySelector(`[id="${id}"]`)) return;
     panel.setAttribute(attribute, id);
-  }
-
-  #focusFirstFocusable(panel: HTMLElement): void {
-    const first = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-    (first ?? panel).focus();
-  }
-
-  #trapFocus(panel: HTMLElement, event: KeyboardEvent): void {
-    const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
-    if (focusable.length === 0) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (event.shiftKey) {
-      if (this.document.activeElement === first) {
-        last.focus();
-        event.preventDefault();
-      }
-    } else {
-      if (this.document.activeElement === last) {
-        first.focus();
-        event.preventDefault();
-      }
-    }
   }
 }

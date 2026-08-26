@@ -50,6 +50,7 @@ if (!command || command === '--help' || command === '-h') {
 if (command === 'list') {
   console.log('\nAvailable Quartz UI components:\n');
   for (const [name, entry] of Object.entries(REGISTRY)) {
+    if (entry.internal) continue;
     console.log(`  ${name.padEnd(14)} ${entry.description}`);
   }
   console.log('');

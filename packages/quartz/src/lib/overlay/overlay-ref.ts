@@ -7,13 +7,14 @@ import {
   OverlayVirtualAnchor,
 } from './overlay.types';
 import { calculatePosition } from './overlay-position';
+import { createDismissController, type DismissController } from '../dismiss';
 
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
   private wrapperEl: HTMLElement | null = null;
-  private scrollParents: { target: Element | Document; options: AddEventListenerOptions }[] = [];
   private anchor: OverlayAnchor;
   private clickOutsideTimer: ReturnType<typeof setTimeout> | null = null;
+  private dismissController: DismissController | null = null;
 
   /**
    * Plain `Subject` on purpose: an overlay is reusable (open/close/open), so replaying
@@ -147,52 +148,34 @@ export class OverlayRef {
 
   // ── Listeners ──────────────────────────────────────────────────────────────
 
-  private onClickOutside = (event: MouseEvent): void => {
-    if (!this.config.closeOnClickOutside) return;
-    const target = event.target as Node;
-    const overlayEl = this.wrapperEl;
-    const anchorEl = this.getAnchorElement();
-    const isInsideAnchor = anchorEl?.contains(target) ?? false;
-    if (overlayEl && !overlayEl.contains(target) && !isInsideAnchor) {
-      this.close();
-    }
-  };
-
-  private onEscape = (event: KeyboardEvent): void => {
-    if (!this.config.closeOnEscape) return;
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      this.close();
-    }
-  };
-
-  private onScroll = (): void => {
-    if (!this.config.closeOnScroll) return;
-    this.close();
-  };
-
   private attachListeners(): void {
+    const attachDismiss = (outsidePointer: boolean) => {
+      if (!this.isOpen) return;
+      this.dismissController?.destroy();
+      this.dismissController = createDismissController({
+        document: this.document,
+        escape: this.config.closeOnEscape,
+        outsidePointer,
+        scroll: this.config.closeOnScroll,
+        rootElements: () => [this.wrapperEl],
+        excludeElements: () => [this.getAnchorElement()],
+        scrollTargets: () => getScrollParents(this.anchor, this.document),
+        onDismiss: (reason, event) => {
+          if (reason === 'escape') event.stopPropagation();
+          this.close();
+        },
+      });
+    };
+
     if (this.config.closeOnClickOutside) {
       // Use setTimeout to avoid catching the same click that opened the overlay
       this.clickOutsideTimer = setTimeout(() => {
         this.clickOutsideTimer = null;
-        if (!this.isOpen) return;
-        this.document.addEventListener('mousedown', this.onClickOutside, true);
+        attachDismiss(true);
       });
     }
 
-    if (this.config.closeOnEscape) {
-      this.document.addEventListener('keydown', this.onEscape, true);
-    }
-
-    if (this.config.closeOnScroll) {
-      const parents = getScrollParents(this.anchor, this.document);
-      const options: AddEventListenerOptions = { passive: true };
-      for (const parent of parents) {
-        parent.addEventListener('scroll', this.onScroll, options);
-        this.scrollParents.push({ target: parent, options });
-      }
-    }
+    attachDismiss(false);
   }
 
   private detachListeners(): void {
@@ -201,12 +184,8 @@ export class OverlayRef {
       this.clickOutsideTimer = null;
     }
 
-    this.document.removeEventListener('mousedown', this.onClickOutside, true);
-    this.document.removeEventListener('keydown', this.onEscape, true);
-    for (const { target, options } of this.scrollParents) {
-      target.removeEventListener('scroll', this.onScroll, options);
-    }
-    this.scrollParents = [];
+    this.dismissController?.destroy();
+    this.dismissController = null;
   }
 
   private getAnchorElement(): HTMLElement | null {

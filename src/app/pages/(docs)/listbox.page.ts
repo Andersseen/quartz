@@ -15,4 +15,12 @@ export default class ListboxPage {
   readonly selectedTags = signal<string[]>(['angular']);
   readonly basicCode = BASIC_SNIPPET;
   readonly multiCode = MULTI_SNIPPET;
+
+  setSelectedPlan(value: string | string[] | null): void {
+    this.selectedPlan.set(typeof value === 'string' ? value : null);
+  }
+
+  setSelectedTags(value: string | string[] | null): void {
+    this.selectedTags.set(Array.isArray(value) ? value : []);
+  }
 }

@@ -2,6 +2,28 @@
 // Each entry lists only the files a consumer needs; test specs are excluded.
 
 const REGISTRY = {
+  collection: {
+    description: 'Interactive collection foundation',
+    internal: true,
+    files: [
+      'collection/collection.ts',
+      'collection/collection.types.ts',
+      'collection/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/docs',
+  },
+  focus: {
+    description: 'Focus management foundation',
+    internal: true,
+    files: ['focus/focus.ts', 'focus/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs',
+  },
+  dismiss: {
+    description: 'Dismissal foundation',
+    internal: true,
+    files: ['dismiss/dismiss.ts', 'dismiss/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs',
+  },
   overlay: {
     description: 'Portal-based positioning system for dropdowns, menus, and popovers',
     files: [
@@ -22,7 +44,7 @@ const REGISTRY = {
       'dialog/dialog.types.ts',
       'dialog/index.ts',
     ],
-    deps: ['overlay'],
+    deps: ['focus', 'dismiss'],
     docs: 'https://quartz-headless.pages.dev/dialog',
   },
   splitter: {
@@ -67,7 +89,7 @@ const REGISTRY = {
       'tooltip/tooltip.types.ts',
       'tooltip/index.ts',
     ],
-    deps: ['overlay'],
+    deps: ['overlay', 'dismiss'],
     docs: 'https://quartz-headless.pages.dev/tooltip',
   },
   tree: {
@@ -79,6 +101,7 @@ const REGISTRY = {
       'tree/tree.types.ts',
       'tree/index.ts',
     ],
+    deps: ['collection'],
     docs: 'https://quartz-headless.pages.dev/tree',
   },
   'virtual-scroll': {
@@ -109,6 +132,7 @@ const REGISTRY = {
       'listbox/listbox.types.ts',
       'listbox/index.ts',
     ],
+    deps: ['collection'],
     docs: 'https://quartz-headless.pages.dev/listbox',
   },
 };
