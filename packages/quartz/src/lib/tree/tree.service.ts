@@ -6,6 +6,7 @@ import {
   TreeLoadChildrenFn,
   DEFAULT_TREE_CONFIG,
 } from './tree.types';
+import { findByTypeahead, findRelativeItem, firstItem, lastItem } from '../collection';
 
 /** A node flattened into the currently-visible traversal order. */
 export interface FlatTreeNode {
@@ -368,28 +369,28 @@ export class TreeService {
 
   /** Move focus to the next visible node (ArrowDown). */
   focusNext(id: string): void {
-    const list = this.#focusable();
-    const i = list.findIndex((f) => f.node.id === id);
-    if (i >= 0 && i < list.length - 1) this.setActive(list[i + 1].node.id);
+    if (!this.#focusable().some((item) => item.node.id === id)) return;
+    const next = findRelativeItem(this.#focusableItems(), id, 1, { wrap: false }).item;
+    if (next && next.id !== id) this.setActive(next.id);
   }
 
   /** Move focus to the previous visible node (ArrowUp). */
   focusPrevious(id: string): void {
-    const list = this.#focusable();
-    const i = list.findIndex((f) => f.node.id === id);
-    if (i > 0) this.setActive(list[i - 1].node.id);
+    if (!this.#focusable().some((item) => item.node.id === id)) return;
+    const previous = findRelativeItem(this.#focusableItems(), id, -1, { wrap: false }).item;
+    if (previous && previous.id !== id) this.setActive(previous.id);
   }
 
   /** Move focus to the first visible node (Home). */
   focusFirst(): void {
-    const list = this.#focusable();
-    if (list.length) this.setActive(list[0].node.id);
+    const first = firstItem(this.#focusableItems()).item;
+    if (first) this.setActive(first.id);
   }
 
   /** Move focus to the last visible node (End). */
   focusLast(): void {
-    const list = this.#focusable();
-    if (list.length) this.setActive(list[list.length - 1].node.id);
+    const last = lastItem(this.#focusableItems()).item;
+    if (last) this.setActive(last.id);
   }
 
   /** Move focus to the parent node (ArrowLeft on a collapsed/leaf node). */
@@ -418,21 +419,15 @@ export class TreeService {
     this.#lastTypeAt = now;
     this.#typeBuffer += char.toLowerCase();
 
-    const list = this.#focusable();
-    if (!list.length) return;
-    const start = Math.max(
-      0,
-      list.findIndex((f) => f.node.id === currentId),
-    );
-    // On a single char, begin the search after the current node so repeats
-    // cycle; while building a longer prefix, include the current node.
-    const offset = this.#typeBuffer.length === 1 ? 1 : 0;
-    for (let k = 0; k < list.length; k++) {
-      const cand = list[(start + offset + k) % list.length];
-      if (cand.node.label.toLowerCase().startsWith(this.#typeBuffer)) {
-        this.setActive(cand.node.id);
-        return;
-      }
-    }
+    const match = findByTypeahead(this.#focusableItems(), currentId, this.#typeBuffer).item;
+    if (match) this.setActive(match.id);
+  }
+
+  #focusableItems(): Array<{ id: string; label: string; disabled: boolean }> {
+    return this.#focusable().map((item) => ({
+      id: item.node.id,
+      label: item.node.label,
+      disabled: !!item.node.disabled,
+    }));
   }
 }

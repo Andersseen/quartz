@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TooltipDirective } from 'quartz';
+import { TooltipDirective, type TooltipPlacement } from 'quartz';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {
@@ -24,7 +24,7 @@ export default class TooltipPage {
   readonly interactiveCode = INTERACTIVE_SNIPPET;
   readonly delayCode = DELAY_SNIPPET;
 
-  readonly placements: { label: string; value: string }[] = [
+  readonly placements: { label: string; value: TooltipPlacement }[] = [
     { label: 'Top', value: 'top' },
     { label: 'Bottom', value: 'bottom' },
     { label: 'Left', value: 'left' },

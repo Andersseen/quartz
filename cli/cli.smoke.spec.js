@@ -7,8 +7,8 @@ import os from 'os';
 /**
  * Smoke test for the `quartz add` CLI.
  *
- * Verifies that copying a primitive (dialog) also copies transitive dependencies
- * (overlay) and that every referenced cross-component import resolves to a copied
+ * Verifies that copying a primitive also copies transitive dependencies
+ * (foundations and overlay) and that every referenced cross-component import resolves to a copied
  * sibling folder. Does not build a full Angular app — just checks file existence and
  * import paths.
  */
@@ -52,7 +52,7 @@ describe('CLI smoke — quartz add', () => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('should copy dialog and its overlay dependency', () => {
+  it('should copy dialog and its focus/dismiss dependencies', () => {
     const outDir = runAdd(tmpDir, ['dialog']);
     const copied = readFiles(outDir);
 
@@ -60,10 +60,10 @@ describe('CLI smoke — quartz add', () => {
     expect(copied.dialog).toContain('dialog.types.ts');
     expect(copied.dialog).toContain('dialog-ref.ts');
     expect(copied.dialog).toContain('index.ts');
-    expect(copied.overlay).toContain('overlay.service.ts');
-    expect(copied.overlay).toContain('overlay-ref.ts');
-    expect(copied.overlay).toContain('overlay.types.ts');
-    expect(copied.overlay).toContain('index.ts');
+    expect(copied.focus).toContain('focus.ts');
+    expect(copied.focus).toContain('index.ts');
+    expect(copied.dismiss).toContain('dismiss.ts');
+    expect(copied.dismiss).toContain('index.ts');
   });
 
   it('should copy tooltip and pull overlay transitively', () => {
@@ -82,7 +82,13 @@ describe('CLI smoke — quartz add', () => {
     const outDir = runAdd(tmpDir, ['dialog', 'tooltip']);
     const copied = readFiles(outDir);
 
-    expect(Object.keys(copied).sort()).toEqual(['dialog', 'overlay', 'tooltip']);
+    expect(Object.keys(copied).sort()).toEqual([
+      'dialog',
+      'dismiss',
+      'focus',
+      'overlay',
+      'tooltip',
+    ]);
   });
 
   it('should resolve every cross-component import inside copied files', () => {

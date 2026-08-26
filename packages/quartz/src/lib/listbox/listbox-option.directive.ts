@@ -37,6 +37,8 @@ export class ListboxOptionDirective<T> implements OnInit, OnDestroy {
   readonly selected = computed(() => this.listbox.isSelected(this));
   readonly active = computed(() => this.listbox.activeId() === this.id);
   readonly label = computed(() => this.elementRef.nativeElement.textContent?.trim() ?? '');
+  readonly element = () => this.elementRef.nativeElement;
+  readonly disabled = () => this.optionDisabled();
 
   readonly optionDisabled = this.qzListboxOptionDisabled;
   readonly value = this.qzListboxOption;

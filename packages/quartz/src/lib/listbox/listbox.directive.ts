@@ -7,7 +7,6 @@ import {
   inject,
   OnDestroy,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { ListboxService } from './listbox.service';
 import {
   DEFAULT_LISTBOX_CONFIG,
@@ -33,7 +32,6 @@ import type { ListboxOptionDirective } from './listbox-option.directive';
 })
 export class ListboxDirective<T> implements OnDestroy {
   private readonly service = inject(ListboxService);
-  private readonly document = inject(DOCUMENT);
 
   /** Selected value. Supports Angular two-way binding: [(value)]="selection". */
   readonly value = model<T | T[] | null>(null);
@@ -46,13 +44,11 @@ export class ListboxDirective<T> implements OnDestroy {
 
   readonly activeId = this.service.activeId;
   readonly activeOption = computed(
-    () => this.enabledOptions().find((option) => option.id === this.activeId()) ?? null,
+    () => (this.service.activeOption() as ListboxOptionDirective<T> | null) ?? null,
   );
 
-  private typeahead = '';
-  private typeaheadTimer: number | null = null;
-
   register(option: ListboxOptionDirective<T>): void {
+    this.configureCollection();
     this.service.register(option as ListboxOptionDirective<unknown>);
   }
 
@@ -90,23 +86,24 @@ export class ListboxDirective<T> implements OnDestroy {
 
   onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
+    this.configureCollection();
     const horizontal = this.orientation() === 'horizontal';
     switch (event.key) {
       case horizontal ? 'ArrowRight' : 'ArrowDown':
         event.preventDefault();
-        this.moveActive(1);
+        this.service.next();
         return;
       case horizontal ? 'ArrowLeft' : 'ArrowUp':
         event.preventDefault();
-        this.moveActive(-1);
+        this.service.previous();
         return;
       case 'Home':
         event.preventDefault();
-        this.service.setActive(this.enabledOptions()[0]?.id ?? null);
+        this.service.first();
         return;
       case 'End':
         event.preventDefault();
-        this.service.setActive(this.enabledOptions().at(-1)?.id ?? null);
+        this.service.last();
         return;
       case 'Enter':
       case ' ':
@@ -115,56 +112,24 @@ export class ListboxDirective<T> implements OnDestroy {
         return;
       default:
         if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-          this.search(event.key);
+          this.service.typeahead(event.key);
         }
     }
   }
 
   ngOnDestroy(): void {
-    this.clearTypeahead();
+    this.service.destroy();
   }
 
   private enabledOptions(): ListboxOptionDirective<unknown>[] {
-    return this.service.options().filter((option) => !option.optionDisabled());
+    return this.service.enabledOptions();
   }
 
-  private moveActive(direction: 1 | -1): void {
-    const options = this.enabledOptions();
-    if (!options.length) return;
-    const current = options.findIndex((option) => option.id === this.activeId());
-    const next =
-      current === -1
-        ? direction === 1
-          ? 0
-          : options.length - 1
-        : (current + direction + options.length) % options.length;
-    this.service.setActive(options[next].id);
-  }
-
-  private search(character: string): void {
-    const options = this.enabledOptions();
-    if (!options.length) return;
-    this.typeahead += character.toLocaleLowerCase();
-    this.clearTypeahead(false);
-    const timeout = this.config().typeaheadTimeoutMs ?? DEFAULT_LISTBOX_CONFIG.typeaheadTimeoutMs;
-    const view = this.document.defaultView;
-    if (view) this.typeaheadTimer = view.setTimeout(() => this.clearTypeahead(), timeout);
-
-    const start = options.findIndex((option) => option.id === this.activeId());
-    for (let offset = 1; offset <= options.length; offset++) {
-      const option = options[(start + offset + options.length) % options.length];
-      if (option.label().toLocaleLowerCase().startsWith(this.typeahead)) {
-        this.service.setActive(option.id);
-        return;
-      }
-    }
-  }
-
-  private clearTypeahead(reset = true): void {
-    if (this.typeaheadTimer !== null) {
-      this.document.defaultView?.clearTimeout(this.typeaheadTimer);
-      this.typeaheadTimer = null;
-    }
-    if (reset) this.typeahead = '';
+  private configureCollection(): void {
+    this.service.configure({
+      orientation: this.orientation(),
+      typeaheadTimeoutMs:
+        this.config().typeaheadTimeoutMs ?? DEFAULT_LISTBOX_CONFIG.typeaheadTimeoutMs,
+    });
   }
 }

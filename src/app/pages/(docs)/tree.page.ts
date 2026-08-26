@@ -93,7 +93,7 @@ export default class TreePage {
             },
           ],
         },
-        { id: 'package', label: 'package.json' },
+        { id: 'package', label: 'package.json', disabled: true },
         { id: 'readme', label: 'README.md' },
       ],
     },

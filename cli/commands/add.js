@@ -94,6 +94,7 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
     console.error('Usage: quartz add <component> [component2 ...]');
     console.error('\nAvailable components:');
     for (const [name, entry] of Object.entries(REGISTRY)) {
+      if (entry.internal) continue;
       console.error(`  ${name.padEnd(14)} ${entry.description}`);
     }
     process.exit(1);

@@ -55,6 +55,19 @@ test.describe('Dialog behavior', () => {
     );
     expect(stillInside).toBe(true);
   });
+
+  test('should restore focus to the opener after Escape', async ({ page }) => {
+    await page.goto('/dialog');
+
+    const openButton = page.getByRole('button', { name: 'Open Modal' });
+    await openButton.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[role="dialog"]')).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+    await expect(openButton).toBeFocused();
+  });
 });
 
 test.describe('Tooltip behavior', () => {
@@ -95,6 +108,59 @@ test.describe('Tooltip behavior', () => {
       await page.mouse.move(0, 0);
       await expect(tooltip).not.toBeVisible({ timeout: 1000 });
     }
+  });
+
+  test('should dismiss tooltip with Escape', async ({ page }) => {
+    await page.goto('/tooltip');
+
+    const trigger = page.getByTestId('tooltip-basic-trigger');
+    await trigger.focus();
+    const tooltip = page.locator('[role="tooltip"]');
+    await expect(tooltip).toBeVisible({ timeout: 2000 });
+
+    await page.keyboard.press('Escape');
+    await expect(tooltip).not.toBeVisible({ timeout: 1000 });
+    await expect(trigger).toBeFocused();
+  });
+});
+
+test.describe('Listbox behavior', () => {
+  test('should navigate, typeahead, select and skip disabled options', async ({ page }) => {
+    await page.goto('/listbox');
+
+    const single = page.getByRole('listbox').first();
+    const singleOptions = single.getByRole('option');
+
+    await single.focus();
+    await single.press('End');
+    await expect(single).toHaveAttribute(
+      'aria-activedescendant',
+      await singleOptions.nth(2).getAttribute('id'),
+    );
+    await single.press('Home');
+    await expect(single).toHaveAttribute(
+      'aria-activedescendant',
+      await singleOptions.nth(0).getAttribute('id'),
+    );
+    await single.press('e');
+    await single.press('Enter');
+    await expect(page.locator('text=Selected:').first()).toContainText('enterprise');
+
+    const multi = page.getByRole('listbox').nth(1);
+    const multiOptions = multi.getByRole('option');
+    await multi.focus();
+    await multi.press('ArrowDown');
+    await expect(multi).toHaveAttribute(
+      'aria-activedescendant',
+      await multiOptions.nth(1).getAttribute('id'),
+    );
+    await multi.press('ArrowDown');
+    await expect(multi).toHaveAttribute(
+      'aria-activedescendant',
+      await multiOptions.nth(0).getAttribute('id'),
+    );
+    await multiOptions.nth(2).click({ force: true });
+    await expect(multiOptions.nth(2)).toHaveAttribute('aria-selected', 'false');
   });
 });
 
@@ -149,6 +215,28 @@ test.describe('Tree behavior', () => {
     await root.evaluate((el: HTMLElement) => el.focus());
     await page.keyboard.press('Enter');
     await expect(root).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('should use Home/End and skip disabled nodes during focus navigation', async ({ page }) => {
+    await page.goto('/tree');
+
+    const tree = basicTree(page);
+    const root = tree.getByRole('treeitem').filter({ hasText: 'quartz' });
+    await root.focus();
+    await page.keyboard.press('ArrowRight');
+
+    await page.keyboard.press('End');
+    const readme = tree.getByRole('treeitem').filter({ hasText: 'README.md' });
+    await expect(readme).toHaveAttribute('tabindex', '0');
+
+    await page.keyboard.press('ArrowUp');
+    const disabledPackage = tree.getByRole('treeitem').filter({ hasText: 'package.json' });
+    const packages = tree.getByRole('treeitem').filter({ hasText: 'packages' });
+    await expect(disabledPackage).toHaveAttribute('aria-disabled', 'true');
+    await expect(packages).toHaveAttribute('tabindex', '0');
+
+    await page.keyboard.press('Home');
+    await expect(root).toHaveAttribute('tabindex', '0');
   });
 });
 

@@ -1,5 +1,42 @@
 // Quartz Headless - primitives for Angular
 
+// Foundations
+export {
+  CollectionStore,
+  DEFAULT_COLLECTION_CONFIG,
+  compareDomOrder,
+  findByTypeahead,
+  findRelativeItem,
+  firstItem,
+  getElement,
+  getLabel,
+  isDisabled,
+  lastItem,
+  sortByDomOrder,
+  type CollectionConfig,
+  type CollectionFocusStrategy,
+  type CollectionItem,
+  type CollectionNavigationResult,
+  type CollectionOrientation,
+} from './lib/collection';
+export {
+  FOCUSABLE_SELECTOR,
+  createFocusRestorer,
+  createFocusTrap,
+  focusInitialElement,
+  focusSafely,
+  getFocusableElements,
+  isFocusable,
+  type FocusRestorer,
+  type FocusTrap,
+} from './lib/focus';
+export {
+  createDismissController,
+  type DismissConfig,
+  type DismissController,
+  type DismissReason,
+} from './lib/dismiss';
+
 // Overlay
 export {
   OverlayTriggerDirective,

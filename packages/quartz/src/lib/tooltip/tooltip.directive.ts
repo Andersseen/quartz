@@ -15,6 +15,7 @@ import { OverlayRef } from '../overlay';
 import { TooltipService } from './tooltip.service';
 import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
 import { calculatePosition } from '../overlay';
+import { createDismissController, type DismissController } from '../dismiss';
 
 let tooltipIdCounter = 0;
 
@@ -78,6 +79,7 @@ export class TooltipDirective implements OnDestroy {
     options: AddEventListenerOptions;
   }> = [];
   private overlayMountedSubscription: Subscription | null = null;
+  private dismissController: DismissController | null = null;
 
   readonly tooltipId = signal<string | null>(null);
 
@@ -141,16 +143,6 @@ export class TooltipDirective implements OnDestroy {
     this.clearHideTimer();
     this.destroyTooltip();
   }
-
-  /**
-   * WAI-ARIA APG: Escape dismisses a tooltip without moving focus, so a tooltip can
-   * never cover the content a keyboard user is trying to read.
-   */
-  private onEscape = (event: KeyboardEvent): void => {
-    if (event.key !== 'Escape') return;
-    if (!this.isVisible()) return;
-    this.hideImmediately();
-  };
 
   // ── Private ──────────────────────────────────────────────────────────────
 
@@ -262,11 +254,19 @@ export class TooltipDirective implements OnDestroy {
   }
 
   private attachDismissListeners(): void {
-    this.document.addEventListener('keydown', this.onEscape, true);
+    this.dismissController?.destroy();
+    this.dismissController = createDismissController({
+      document: this.document,
+      escape: true,
+      rootElements: () => [this.textTooltipEl, this.templateTooltipChild],
+      excludeElements: () => [this.elementRef.nativeElement],
+      onDismiss: () => this.hideImmediately(),
+    });
   }
 
   private detachDismissListeners(): void {
-    this.document.removeEventListener('keydown', this.onEscape, true);
+    this.dismissController?.destroy();
+    this.dismissController = null;
   }
 
   private attachScrollListeners(): void {
