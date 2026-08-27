@@ -17,9 +17,22 @@
           <lmn-menu [size]="16" />
         }
       </button>
+    } @else {
+      <button
+        class="hidden max-md:flex items-center justify-center w-8 h-8 border-none bg-transparent text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+        (click)="mobileNavOpen.set(!mobileNavOpen())"
+        [attr.aria-expanded]="mobileNavOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        @if (mobileNavOpen()) {
+          <lmn-x [size]="16" />
+        } @else {
+          <lmn-menu [size]="16" />
+        }
+      </button>
     }
 
-    <a routerLink="/" class="flex items-center gap-2.5 no-underline">
+    <a routerLink="/" class="flex shrink-0 items-center gap-2.5 no-underline">
       <svg width="24" height="24" viewBox="0 0 32 32">
         <defs>
           <linearGradient id="qz-gradient-header" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -42,15 +55,17 @@
           stroke-dasharray="1 3"
         />
       </svg>
-      <span class="font-bold text-[0.9375rem] tracking-tight text-white">Quartz Headless</span>
+      <span class="whitespace-nowrap font-bold text-[0.9375rem] tracking-tight text-white"
+        >Quartz Headless</span
+      >
     </a>
 
-    <nav class="flex items-center gap-2 max-md:hidden">
+    <nav class="flex shrink items-center gap-2 max-md:hidden">
       <a
         routerLink="/"
         routerLinkActive="bg-violet-500/15 text-white shadow-[inset_0_0_0_1px_rgba(139,92,246,0.3)]"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="px-4 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        class="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
         >Home</a
       >
       <a
@@ -58,18 +73,18 @@
         [class.bg-violet-500/15]="isComponentRoute()"
         [class.text-white]="isComponentRoute()"
         [class.shadow-\[inset_0_0_0_1px_rgba(139,92,246,0.3)\]]="isComponentRoute()"
-        class="px-4 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        class="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
         >Components</a
       >
       <a
         routerLink="/docs"
         routerLinkActive="bg-violet-500/15 text-white shadow-[inset_0_0_0_1px_rgba(139,92,246,0.3)]"
-        class="px-4 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        class="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
         >Docs</a
       >
     </nav>
 
-    <div class="flex items-center pl-2 border-l border-white/10">
+    <div class="flex shrink-0 items-center pl-2 border-l border-white/10">
       <a
         href="https://github.com/andersseen/quartz"
         target="_blank"
@@ -80,4 +95,51 @@
       </a>
     </div>
   </div>
+
+  @if (!isComponentRoute()) {
+    <!-- Purely a dismiss layer for mouse/touch; Escape (bound on the component host) and
+    every link in the panel already close it via the keyboard, so this stays out of the
+    tab order rather than adding a meaningless focus stop. -->
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+    <div
+      class="hidden max-md:block fixed inset-0 z-40 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"
+      [class.opacity-100]="mobileNavOpen()"
+      [class.pointer-events-auto]="mobileNavOpen()"
+      aria-hidden="true"
+      (click)="mobileNavOpen.set(false)"
+    ></div>
+
+    <nav
+      class="hidden max-md:block pointer-events-auto absolute left-0 right-0 top-[calc(100%+0.5rem)] origin-top rounded-2xl border border-white/10 bg-[#0f0f13]/95 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-2 transition-all duration-200 z-50"
+      [class.opacity-100]="mobileNavOpen()"
+      [class.opacity-0]="!mobileNavOpen()"
+      [class.scale-100]="mobileNavOpen()"
+      [class.scale-95]="!mobileNavOpen()"
+      [class.pointer-events-none]="!mobileNavOpen()"
+      [class.invisible]="!mobileNavOpen()"
+      aria-label="Mobile navigation"
+    >
+      <a
+        routerLink="/"
+        routerLinkActive="bg-violet-500/15 text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="mobileNavOpen.set(false)"
+        class="block px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        >Home</a
+      >
+      <a
+        routerLink="/overlay"
+        (click)="mobileNavOpen.set(false)"
+        class="block px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        >Components</a
+      >
+      <a
+        routerLink="/docs"
+        routerLinkActive="bg-violet-500/15 text-white"
+        (click)="mobileNavOpen.set(false)"
+        class="block px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+        >Docs</a
+      >
+    </nav>
+  }
 </header>
