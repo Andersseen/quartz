@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { REGISTRY } = require('../registry');
 
-const QUARTZ_LIB_ROOT = path.resolve(__dirname, '../../packages/quartz/src/lib');
+// Core and Primitives are now two separate real packages (@quartz-headless/core,
+// @quartz-headless/primitives) — each registry entry's `files` are relative to its own
+// package's src/, chosen here by `entry.layer`.
+const LAYER_ROOTS = {
+  core: path.resolve(__dirname, '../../packages/core/src'),
+  primitives: path.resolve(__dirname, '../../packages/primitives/src'),
+};
 
 function resolveOutputDir(cwd, outFlag) {
   if (outFlag) return path.resolve(cwd, outFlag);
@@ -18,9 +24,11 @@ function resolveOutputDir(cwd, outFlag) {
   return path.join(cwd, 'src/lib/components');
 }
 
-// Matches cross-component relative imports like `from '../overlay'` or
-// `from '../overlay/overlay-position'` — the leading `../` means a sibling
-// component folder in the copied output.
+// Matches cross-component relative imports like `from '../overlay'` — the leading `../`
+// means a sibling component folder in the copied output. Only Core components still have
+// these (internal cross-imports within Core, e.g. overlay -> dismiss); Primitives now
+// depend on Core via the real `@quartz-headless/core` package import (a bare specifier,
+// which this regex does not match), declared as `peerDeps` instead of copied.
 const CROSS_IMPORT_RE = /from\s+['"]\.\.\/([^'"/]+)/g;
 
 function siblingComponentsReferenced(fileContent) {
@@ -73,9 +81,10 @@ function copyFiles(component, entry, outputDir, verbose) {
   const destDir = path.join(outputDir, component);
   fs.mkdirSync(destDir, { recursive: true });
 
+  const root = LAYER_ROOTS[entry.layer];
   const copied = [];
   for (const relFile of entry.files) {
-    const src = path.join(QUARTZ_LIB_ROOT, relFile);
+    const src = path.join(root, relFile);
     if (!fs.existsSync(src)) {
       console.warn(`  ⚠  Source not found: ${src}`);
       continue;
@@ -104,7 +113,8 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
   const queue = [...new Set(components)];
   const done = new Set();
 
-  // Resolve transitive deps
+  // Resolve transitive Core deps (a Primitive never appears here — it depends on Core via
+  // an npm peer dependency instead, reported below).
   function enqueue(name) {
     if (done.has(name)) return;
     const entry = REGISTRY[name];
@@ -137,7 +147,7 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
     if (entry.docs) console.log(`   Docs: ${entry.docs}`);
 
     if (entry.peerDeps?.length) {
-      console.log(`   Peer deps needed: ${entry.peerDeps.join(', ')}`);
+      console.log(`   Requires: npm install ${entry.peerDeps.join(' ')}`);
     }
     console.log('');
   }

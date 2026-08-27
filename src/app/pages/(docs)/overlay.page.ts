@@ -12,9 +12,9 @@ import {
   OverlayTriggerDirective,
   OverlayService,
   OverlayRef,
-  TooltipDirective,
   type OverlayPlacement,
-} from 'quartz';
+} from '@quartz-headless/core';
+import { TooltipDirective } from '@quartz-headless/primitives';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {

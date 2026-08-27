@@ -7,13 +7,12 @@ import os from 'os';
 /**
  * Smoke test for the `quartz add` CLI.
  *
- * Verifies that copying a primitive also copies transitive dependencies
- * (foundations and overlay) and that every referenced cross-component import resolves to a copied
- * sibling folder. Does not build a full Angular app — just checks file existence and
- * import paths.
+ * Core components are still copy-source with zero npm dependencies: copying one pulls in
+ * its Core sibling deps (e.g. overlay -> dismiss) as sibling folders. Primitives now depend
+ * on @quartz-headless/core as a real npm package instead — copying a primitive must NOT
+ * copy any Core folder, and must report the peer dependency instead.
  */
 function runAdd(cwd, components, output = 'src/lib/components') {
-  // Capture the CLI output without polluting test logs.
   const outDir = path.join(cwd, output);
   add(components, { output: outDir, verbose: false, cwd });
   return outDir;
@@ -52,47 +51,51 @@ describe('CLI smoke — quartz add', () => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('should copy dialog and its focus/dismiss dependencies', () => {
-    const outDir = runAdd(tmpDir, ['dialog']);
+  it('should copy a Core component and its Core sibling deps', () => {
+    const outDir = runAdd(tmpDir, ['overlay']);
     const copied = readFiles(outDir);
 
-    expect(copied.dialog).toContain('dialog.service.ts');
-    expect(copied.dialog).toContain('dialog.types.ts');
-    expect(copied.dialog).toContain('dialog-ref.ts');
-    expect(copied.dialog).toContain('index.ts');
-    expect(copied.focus).toContain('focus.ts');
-    expect(copied.focus).toContain('index.ts');
+    expect(copied.overlay).toContain('overlay.service.ts');
+    expect(copied.overlay).toContain('overlay-trigger.directive.ts');
+    expect(copied.overlay).toContain('overlay-ref.ts');
+    expect(copied.overlay).toContain('index.ts');
     expect(copied.dismiss).toContain('dismiss.ts');
     expect(copied.dismiss).toContain('index.ts');
   });
 
-  it('should copy tooltip and pull overlay transitively', () => {
+  it('should copy a Primitive without copying any Core folder', () => {
+    const outDir = runAdd(tmpDir, ['dialog']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied)).toEqual(['dialog']);
+    expect(copied.dialog).toContain('dialog.service.ts');
+    expect(copied.dialog).toContain('dialog.types.ts');
+    expect(copied.dialog).toContain('dialog-ref.ts');
+    expect(copied.dialog).toContain('index.ts');
+    expect(fs.existsSync(path.join(outDir, 'focus'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, 'dismiss'))).toBe(false);
+  });
+
+  it('should copy tooltip without copying overlay, since overlay is now an npm peer dep', () => {
     const outDir = runAdd(tmpDir, ['tooltip']);
     const copied = readFiles(outDir);
 
+    expect(Object.keys(copied)).toEqual(['tooltip']);
     expect(copied.tooltip).toContain('tooltip.directive.ts');
     expect(copied.tooltip).toContain('tooltip.service.ts');
     expect(copied.tooltip).toContain('tooltip.types.ts');
     expect(copied.tooltip).toContain('index.ts');
-    expect(copied.overlay).toBeDefined();
-    expect(copied.overlay.length).toBeGreaterThan(0);
   });
 
-  it('should copy dialog + tooltip together without duplicates', () => {
-    const outDir = runAdd(tmpDir, ['dialog', 'tooltip']);
+  it('should copy a Core component and a Primitive together without duplicates', () => {
+    const outDir = runAdd(tmpDir, ['overlay', 'tooltip']);
     const copied = readFiles(outDir);
 
-    expect(Object.keys(copied).sort()).toEqual([
-      'dialog',
-      'dismiss',
-      'focus',
-      'overlay',
-      'tooltip',
-    ]);
+    expect(Object.keys(copied).sort()).toEqual(['dismiss', 'overlay', 'tooltip']);
   });
 
-  it('should resolve every cross-component import inside copied files', () => {
-    const outDir = runAdd(tmpDir, ['dialog', 'tooltip']);
+  it('should resolve every cross-component import inside copied Core files', () => {
+    const outDir = runAdd(tmpDir, ['overlay']);
     const files = readAll(outDir);
 
     const importRe = /from\s+['"](\.\.\/[^'"]+)['"]/g;
@@ -105,6 +108,13 @@ describe('CLI smoke — quartz add', () => {
         expect(fs.existsSync(siblingDir), `${relPath} imports missing ${sibling}`).toBe(true);
       }
     }
+  });
+
+  it('copied Primitive source imports @quartz-headless/core as a bare package specifier', () => {
+    const outDir = runAdd(tmpDir, ['dialog']);
+    const service = fs.readFileSync(path.join(outDir, 'dialog', 'dialog.service.ts'), 'utf8');
+    expect(service).toContain("from '@quartz-headless/core'");
+    expect(service).not.toMatch(/from ['"]\.\.\//);
   });
 
   it('should preserve the original index.ts re-exports', () => {

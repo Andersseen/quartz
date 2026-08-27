@@ -9,16 +9,16 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 pnpm start
 
 # Build
-pnpm build:lib        # ng-packagr → dist/quartz (Angular library only)
+pnpm build:lib        # ng-packagr → packages/core/dist/ + packages/primitives/dist/ (core builds first)
 pnpm build:demo       # Vite build (demo app)
 
 # Tests
-pnpm test             # Run all Vitest tests (lib + app) once
+pnpm test             # Run all Vitest tests (both libs + app) once
 pnpm test:watch       # Vitest in watch mode
 pnpm test:coverage    # Coverage report → coverage/
 
 # Run a single test file
-pnpm exec vitest run packages/quartz/src/lib/overlay/overlay.service.spec.ts
+pnpm exec vitest run packages/core/src/overlay/overlay.service.spec.ts
 
 # E2E (requires dev server running or uses webServer config)
 pnpm e2e              # Playwright headless
@@ -31,7 +31,7 @@ pnpm exec playwright test e2e/components.spec.ts
 pnpm lint
 pnpm format
 
-# Type check (lib + app)
+# Type check (both libs + app; builds @quartz-headless/core first — required, see Architecture)
 pnpm typecheck
 
 # Deploy
@@ -47,21 +47,24 @@ Pre-commit hook runs `lint-staged` (ESLint + Prettier on staged files), `typeche
 # Publish to npm
 
 ```bash
-# One-shot: build lib then publish dist/quartz to npm as quartz-headless
+# One-shot: build both libs then publish each to npm
 pnpm publish:lib
 
-# Or manually:
+# Or manually (core first — primitives declares it as a peer dependency):
 pnpm build:lib
-npm publish ./dist/quartz --access public
+npm publish ./packages/core/dist --access public
+npm publish ./packages/primitives/dist --access public
 ```
 
-Requires being logged in to npm (`npm login`) with access to the `@andersseen` scope. The published package is `dist/quartz/` — the monorepo root is never published (`"private": true`).
+Requires being logged in to npm (`npm login`) with access to the `@quartz-headless` org. The published packages are `packages/core/dist/` (`@quartz-headless/core`) and `packages/primitives/dist/` (`@quartz-headless/primitives`) — the monorepo root is never published (`"private": true`). The old unscoped `quartz-headless` package is **frozen** at its last published version; don't resurrect a publish path for it.
 
 ## Architecture
 
-### Two-part monorepo
+### Two npm packages + a demo app (pnpm workspace)
 
-**Angular library** (`packages/quartz/`): unstyled, headless Angular primitives built with `ng-packagr`. Output: `dist/quartz/`. Each primitive lives in its own folder under `src/lib/` with an `index.ts` barrel. Public surface is `src/public-api.ts`.
+**`@quartz-headless/core`** (`packages/core/`): low-level interaction infrastructure — overlay, dismiss, focus, collection, viewport, drag-drop, virtual-scroll, splitter. Built with `ng-packagr`. Output: `packages/core/dist/`. Each piece lives in its own folder under `src/` with an `index.ts` barrel. Public surface is `src/public-api.ts`.
+
+**`@quartz-headless/primitives`** (`packages/primitives/`): accessible UI patterns built on Core — dialog, tooltip, toast, tree, listbox. Depends on `@quartz-headless/core` as a real npm `peerDependency` (resolved locally via the pnpm workspace symlink to Core's **built** output — see "Path aliases" and `docs/ai/ARCHITECTURE.md` for why this must go through `node_modules` and never a tsconfig path to Core's source). Output: `packages/primitives/dist/`.
 
 **Demo/docs app** (`src/`): AnalogJS (Vite + Angular) app on Cloudflare Pages. File-based routing under `src/app/pages/`. The `(docs)` route group wraps all component pages in a shared layout. New pages added to `(docs)/` sometimes need a manual extra-route entry in `src/app/app.config.ts` due to a Vite cache issue — see the comment in that file.
 
@@ -75,10 +78,10 @@ Requires being logged in to npm (`npm login`) with access to the `@andersseen` s
 
 ### How primitives are structured
 
-Each primitive follows this pattern:
+Each piece, under `packages/core/src/<name>/` or `packages/primitives/src/<name>/`, follows this pattern:
 
 ```
-lib/<name>/
+<name>/
   <name>.service.ts        # Core logic, @Injectable({ providedIn: 'root' })
   <name>.types.ts          # Interfaces, types, default config constants
   <name>-ref.ts            # Ref object returned to consumers (dialog, overlay)
@@ -100,14 +103,14 @@ lib/<name>/
 
 ### CLI (`cli/`)
 
-The `quartz add` CLI copies raw TypeScript source files from `packages/quartz/src/lib/` into consumer projects. `registry.js` is the single source of truth for which files belong to each component and their transitive `deps`. When adding a new primitive, register it there.
+The `quartz add` CLI copies raw TypeScript source files from `packages/core/src/` or `packages/primitives/src/` into consumer projects, flat (`<output>/<name>/`). `registry.js` is the single source of truth: each entry has a `layer` ('core' | 'primitives'), and either `deps` (Core-internal sibling folders also copied) or `peerDeps` (Primitives — tells the consumer to `npm install @quartz-headless/core` instead of copying it). When adding a new piece, register it there.
 
 ### Path aliases
 
-`quartz` resolves to `packages/quartz/src/public-api.ts` in both the app's `tsconfig.json` paths and Vite `resolve.alias`. The library build ignores this alias (ng-packagr uses its own tsconfig).
+`@quartz-headless/core` and `@quartz-headless/primitives` resolve to each package's `src/public-api.ts` in the app's `tsconfig.app.json` paths and the demo's Vite `resolve.alias` — **demo-app-only**, never add these to the shared root `tsconfig.json` (it would leak into the library tsconfigs and break the library build — see `docs/ai/ARCHITECTURE.md`). The library builds ignore these aliases and resolve `@quartz-headless/core` via real `node_modules` (the pnpm workspace symlink to Core's built output), which is why `packages/core` must be built before `packages/primitives`.
 
 ### Testing
 
-Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. The library's vitest config (`packages/quartz/vite.config.ts`) and the app's config (`vitest.app.config.ts`) are registered as Vitest workspaces in the root `vitest.config.ts`.
+Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. Each library's vitest config (`packages/core/vite.config.ts`, `packages/primitives/vite.config.ts`) and the app's config (`vitest.app.config.ts`) are registered as Vitest workspaces in the root `vitest.config.ts`. Primitives' vitest project resolves `@quartz-headless/core` via `node_modules` too, so `packages/core` must be built before running primitives' unit tests in isolation.
 
 E2E tests in `e2e/` use Playwright against a running dev server (auto-started by `webServer` config). Tests target `localhost:5173`.

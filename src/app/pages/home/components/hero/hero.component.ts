@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { VoltBadge, VoltButton, VoltCard, VoltCardContent } from '@voltui/components';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
-import { version } from '../../../../../../packages/quartz/package.json';
+import { version } from '../../../../../../packages/core/package.json';
 
 @Component({
   selector: 'app-home-hero',

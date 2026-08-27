@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DialogService, DialogRef, type DialogPosition } from 'quartz';
+import { DialogService, DialogRef, type DialogPosition } from '@quartz-headless/primitives';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {

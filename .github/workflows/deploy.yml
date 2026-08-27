@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -52,7 +52,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -88,7 +88,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -125,7 +125,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -155,13 +155,20 @@ jobs:
           command: pages deploy dist/client --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
+  # Publishes @quartz-headless/core and @quartz-headless/primitives (two independent
+  # Angular library projects — see docs/ai/ARCHITECTURE.md). Core must publish first since
+  # primitives declares it as a peer dependency. The old unscoped `quartz-headless` package
+  # is frozen at its last published version and is no longer published from CI.
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
     needs: [unit-tests, e2e-tests]
     if: github.ref == 'refs/heads/main'
     outputs:
-      published: ${{ steps.version.outputs.published }}
+      core-published: ${{ steps.version-core.outputs.published }}
+      core-version: ${{ steps.version-core.outputs.version }}
+      primitives-published: ${{ steps.version-primitives.outputs.published }}
+      primitives-version: ${{ steps.version-primitives.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -172,18 +179,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check npm version availability
-        id: version
+      - name: Check @quartz-headless/core version availability
+        id: version-core
         run: |
-          version=$(node -p "require('./packages/quartz/package.json').version")
-          if npm view "quartz-headless@$version" version >/dev/null 2>&1; then
+          version=$(node -p "require('./packages/core/package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if npm view "@quartz-headless/core@$version" version >/dev/null 2>&1; then
             echo "Version $version already exists on npm; skipping publication."
             echo "published=false" >> "$GITHUB_OUTPUT"
           else
@@ -191,37 +199,80 @@ jobs:
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build Library
-        if: steps.version.outputs.published == 'true'
-        run: pnpm build:lib
+      - name: Build @quartz-headless/core
+        if: steps.version-core.outputs.published == 'true'
+        run: pnpm exec ng build quartz-core
 
-      - name: Publish package
-        if: steps.version.outputs.published == 'true'
-        run: npm publish ./dist/quartz --access public
+      - name: Publish @quartz-headless/core
+        if: steps.version-core.outputs.published == 'true'
+        run: npm publish ./packages/core/dist --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Check @quartz-headless/primitives version availability
+        id: version-primitives
+        run: |
+          version=$(node -p "require('./packages/primitives/package.json').version")
+          if npm view "@quartz-headless/primitives@$version" version >/dev/null 2>&1; then
+            echo "Version $version already exists on npm; skipping publication."
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version $version is new; publication will proceed."
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Build @quartz-headless/primitives
+        if: steps.version-primitives.outputs.published == 'true'
+        run: pnpm exec ng build quartz-core && pnpm exec ng build quartz-primitives
+
+      - name: Publish @quartz-headless/primitives
+        if: steps.version-primitives.outputs.published == 'true'
+        run: npm publish ./packages/primitives/dist --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # Fires if EITHER package actually published (core and primitives are meant to stay
+  # version-locked, but this doesn't assume that holds — a core-only or primitives-only
+  # bump still gets a release instead of publishing silently).
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [publish]
-    if: github.ref == 'refs/heads/main' && needs.publish.outputs.published == 'true'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      (needs.publish.outputs.core-published == 'true' || needs.publish.outputs.primitives-published == 'true')
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Read library version
-        id: version
-        run: |
-          version=$(node -p "require('./packages/quartz/package.json').version")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CORE_PUBLISHED: ${{ needs.publish.outputs.core-published }}
+          CORE_VERSION: ${{ needs.publish.outputs.core-version }}
+          PRIMITIVES_PUBLISHED: ${{ needs.publish.outputs.primitives-published }}
+          PRIMITIVES_VERSION: ${{ needs.publish.outputs.primitives-version }}
         run: |
-          gh release create "v${{ steps.version.outputs.version }}" \
-            --title "v${{ steps.version.outputs.version }}" \
+          # Prefer the primitives version for the tag/title (versions are meant to stay in
+          # lockstep); fall back to core's if only core published this run.
+          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+            version="$PRIMITIVES_VERSION"
+          else
+            version="$CORE_VERSION"
+          fi
+
+          notes="Published this release:"
+          if [ "$CORE_PUBLISHED" = "true" ]; then
+            notes="$notes\n- @quartz-headless/core@$CORE_VERSION"
+          fi
+          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+            notes="$notes\n- @quartz-headless/primitives@$PRIMITIVES_VERSION"
+          fi
+
+          gh release create "v$version" \
+            --title "v$version" \
+            --notes "$(printf '%b' "$notes")" \
             --generate-notes

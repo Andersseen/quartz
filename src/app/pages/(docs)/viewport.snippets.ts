@@ -1,5 +1,5 @@
 export const BASIC_SNIPPET = `import { Component, inject } from '@angular/core';
-import { ViewportService } from 'quartz';
+import { ViewportService } from '@quartz-headless/core';
 
 @Component({
   selector: 'app-responsive',

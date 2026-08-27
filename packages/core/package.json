@@ -1,0 +1,61 @@
+{
+  "name": "@quartz-headless/core",
+  "version": "0.0.3",
+  "description": "Low-level interaction infrastructure for Quartz Headless — overlay, focus, dismiss, collection, viewport, drag & drop, virtual scroll, splitter.",
+  "keywords": [
+    "angular",
+    "headless",
+    "overlay",
+    "focus-trap",
+    "dismiss",
+    "collection",
+    "drag-drop",
+    "virtual-scroll",
+    "viewport",
+    "splitter",
+    "a11y",
+    "zoneless",
+    "signals"
+  ],
+  "author": {
+    "name": "Andersseen",
+    "url": "https://github.com/Andersseen"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Andersseen/quartz.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://quartz-headless.pages.dev",
+  "bugs": {
+    "url": "https://github.com/Andersseen/quartz/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "module": "./dist/fesm2022/quartz-headless-core.mjs",
+  "typings": "./dist/types/quartz-headless-core.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./dist/types/quartz-headless-core.d.ts",
+      "default": "./dist/fesm2022/quartz-headless-core.mjs"
+    }
+  }
+}

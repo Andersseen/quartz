@@ -1,9 +1,45 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-18** (Listbox minor release preparation, v0.1.0)
+> **Last updated: 2026-08-27** (split into two real npm packages)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
+
+## Split into @quartz-headless/core + @quartz-headless/primitives (2026-08-27)
+
+The single-package Core/Primitives split from 2026-08-26 (see git history) has been
+superseded: Quartz now ships as **two separate, independently-versioned npm packages**
+under the `@quartz-headless` npm org — `@quartz-headless/core`
+(`packages/core/`) and `@quartz-headless/primitives` (`packages/primitives/`, depends on
+core via a real `peerDependency`). `packages/quartz/` no longer exists. Full details —
+dependency graph, why cross-package resolution must go through `node_modules` and not a
+source-pointing tsconfig path, why the Vitest source-alias shortcut doesn't work — live in
+`ARCHITECTURE.md`. Read that before touching either package's build/test config; the
+constraints there aren't obvious and are easy to accidentally undo.
+
+- **The old unscoped `quartz-headless` package is frozen** at its last published version
+  (v0.2.1) per an explicit decision — CI no longer builds or publishes it. Don't resurrect
+  `packages/quartz/` or its publish job.
+- This repo is now a **real pnpm workspace** (`pnpm-workspace.yaml: packages/*`) for the
+  first time — it wasn't one before, despite the `packages/` folder naming.
+- Root `package.json`: added `"private": true` (wasn't actually set before, despite
+  CLAUDE.md claiming it was — the code/config always wins over stale docs).
+- `pnpm typecheck` and `pnpm build:lib` both build `@quartz-headless/core` first, then
+  build/typecheck primitives against it — this ordering is required, not incidental.
+  Running `ng build quartz-primitives` (or its Vitest project) standalone without core
+  built first will fail to resolve `@quartz-headless/core` — that's expected.
+- CLI (`cli/registry.js`, `cli/commands/add.js`) redesigned again: Core stays flat
+  copy-source with zero deps; Primitives entries switched from `deps` (copied Core
+  siblings) to `peerDeps: ['@quartz-headless/core']` — `quartz add dialog` now tells the
+  consumer to `npm install @quartz-headless/core` instead of copying `focus`/`dismiss`
+  source. Output is flat again (`<output>/<name>/`), no more layer-nested folders.
+- Demo app (`src/`) now imports from `@quartz-headless/core` /
+  `@quartz-headless/primitives` (aliased to each package's source for fast local dev — see
+  `ARCHITECTURE.md` "Path aliases"). Sidebar shows two groups ("Core"/"Primitives");
+  per-page badges say "Core" or "Primitive" matching the real classification (previously
+  ad-hoc category words like "Layout"/"Interaction"/"Selection").
+- CI (`.github/workflows/deploy.yml`) publish job now publishes core then primitives
+  independently, each with its own "already published?" version check.
 
 ## Review-plan remediation status (see `REVIEW_PLAN.md`)
 
@@ -31,26 +67,32 @@ items remain open.
 
 ## Version & publish status
 
-- Library `quartz-headless` **v0.1.0** is prepared for publish. Root monorepo package stays
-  private; npm publication is an explicit GitHub Actions dispatch with `publish: true`.
+- `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
+  (v0.2.1) — no longer built or published from CI.
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.0.3** in their
+  `package.json`, not yet published to npm (verified via `npm view` — both 404 as of
+  2026-08-27). CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
+  `main` whenever a package's `package.json` version isn't already live on npm.
+- Root monorepo package stays `"private": true`; npm publication happens per-package from
+  CI on push to `main` (see "Publish" row in ARCHITECTURE.md's build/test topology table).
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.
 
 ## Primitive status matrix
 
-| Primitive      | Lib code | Unit tests | Demo page | CLI registry      | Notes                                                                                                        |
-| -------------- | -------- | ---------- | --------- | ----------------- | ------------------------------------------------------------------------------------------------------------ |
-| overlay        | ✅       | ✅         | ✅        | ✅                | Foundation for dialog + tooltip                                                                              |
-| dialog         | ✅       | ✅ (+SSR)  | ✅        | ✅ deps:[overlay] | Includes drawer positioning                                                                                  |
-| splitter       | ✅       | ✅         | ✅        | ✅                | Container-scoped service pattern                                                                             |
-| toast          | ✅       | ✅         | ✅        | ✅                | Types now in `toast.types.ts` (naming deviation resolved)                                                    |
-| drag-drop      | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
-| tooltip        | ✅       | ✅         | ✅        | ✅ deps:[overlay] | Docs page now live at `/tooltip`                                                                             |
-| tree           | ✅       | ✅         | ✅        | ✅                | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
-| listbox        | ✅       | ✅         | ✅        | ✅                | Single/multi selection, active-descendant, typeahead and disabled options                                    |
-| virtual-scroll | ✅       | ✅         | ✅        | ✅                | Has ResizeObserver support                                                                                   |
-| viewport       | ✅       | ✅         | ✅        | ✅                |                                                                                                              |
+| Primitive        | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
+| ---------------- | -------- | ---------- | --------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| overlay (Core)   | ✅       | ✅         | ✅        | ✅ deps:[dismiss]                   | Foundation for dialog + tooltip                                                                              |
+| dialog           | ✅       | ✅ (+SSR)  | ✅        | ✅ peerDeps:[@quartz-headless/core] | Includes drawer positioning                                                                                  |
+| splitter (Core)  | ✅       | ✅         | ✅        | ✅                                  | Container-scoped service pattern                                                                             |
+| toast            | ✅       | ✅         | ✅        | ✅                                  | Types now in `toast.types.ts` (naming deviation resolved)                                                    |
+| drag-drop (Core) | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
+| tooltip          | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Docs page now live at `/tooltip`                                                                             |
+| tree             | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
+| listbox          | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multi selection, active-descendant, typeahead and disabled options                                    |
+| virtual-scroll   | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
+| viewport         | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
 
 ## Tree lazy loading (2026-08-18)
 

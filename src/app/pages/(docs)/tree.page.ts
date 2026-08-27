@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { TreeComponent, TreeNode, TreeLoadChildrenFn } from 'quartz';
+import { TreeComponent, TreeNode, TreeLoadChildrenFn } from '@quartz-headless/primitives';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {

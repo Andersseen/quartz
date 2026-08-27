@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { ListboxDirective, ListboxOptionDirective } from 'quartz';
+import { ListboxDirective, ListboxOptionDirective } from '@quartz-headless/primitives';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { BASIC_SNIPPET, MULTI_SNIPPET } from './listbox.snippets';

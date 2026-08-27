@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TooltipDirective, type TooltipPlacement } from 'quartz';
+import { TooltipDirective, type TooltipPlacement } from '@quartz-headless/primitives';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {

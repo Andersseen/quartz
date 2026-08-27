@@ -13,10 +13,10 @@ export default defineConfig(() => ({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: '../../coverage/quartz',
+      reportsDirectory: '../../coverage/core',
       all: true,
-      include: ['src/lib/**/*.ts'],
-      exclude: ['**/*.spec.ts', '**/index.ts', '**/test-setup.ts'],
+      include: ['src/**/*.ts'],
+      exclude: ['**/*.spec.ts', '**/index.ts', '**/public-api.ts', '**/test-setup.ts'],
     },
   },
 }));

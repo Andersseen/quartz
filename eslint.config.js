@@ -7,9 +7,10 @@ const angularEslintTemplateParser = require('@angular-eslint/template-parser');
 module.exports = [
   {
     ignores: [
-      "dist/**/*", 
-      "coverage/**/*", 
-      ".angular/**/*", 
+      "dist/**/*",
+      "**/dist/**/*",
+      "coverage/**/*",
+      ".angular/**/*",
       "node_modules/**/*",
       "**/*.config.ts"
     ],
@@ -19,7 +20,7 @@ module.exports = [
     languageOptions: {
       parser: typescriptEslintParser,
       parserOptions: {
-        project: ["./tsconfig.json", "./packages/quartz/tsconfig.lib.json", "./packages/quartz/tsconfig.spec.json", "./tsconfig.app.json", "./tsconfig.spec.json"],
+        project: ["./tsconfig.json", "./packages/core/tsconfig.lib.json", "./packages/core/tsconfig.spec.json", "./packages/primitives/tsconfig.lib.json", "./packages/primitives/tsconfig.spec.json", "./tsconfig.app.json", "./tsconfig.spec.json"],
       },
     },
     plugins: {
@@ -48,6 +49,23 @@ module.exports = [
         }
       ]
     }
+  },
+  {
+    files: ["packages/core/src/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@quartz-headless/primitives", "@quartz-headless/primitives/**"],
+              message:
+                "Quartz Core must not depend on Headless Primitives — dependencies flow Core -> Primitives only.",
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     files: ["**/*.html"],
