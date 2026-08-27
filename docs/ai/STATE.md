@@ -67,8 +67,14 @@ items remain open.
 
 ## Version & publish status
 
-- Library `quartz-headless` **v0.1.0** is prepared for publish. Root monorepo package stays
-  private; npm publication is an explicit GitHub Actions dispatch with `publish: true`.
+- `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
+  (v0.2.1) — no longer built or published from CI.
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.0.3** in their
+  `package.json`, not yet published to npm (verified via `npm view` — both 404 as of
+  2026-08-27). CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
+  `main` whenever a package's `package.json` version isn't already live on npm.
+- Root monorepo package stays `"private": true`; npm publication happens per-package from
+  CI on push to `main` (see "Publish" row in ARCHITECTURE.md's build/test topology table).
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.

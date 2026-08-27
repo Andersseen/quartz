@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Breaking (packaging):** Quartz now ships as two separate npm packages instead of one —
-  `@quartz-headless/core` (v0.1.0, low-level infrastructure: overlay, dismiss, focus,
+  `@quartz-headless/core` (v0.0.3, low-level infrastructure: overlay, dismiss, focus,
   collection, viewport, drag-drop, virtual-scroll, splitter) and
-  `@quartz-headless/primitives` (v0.1.0, accessible UI patterns: dialog, tooltip, toast,
+  `@quartz-headless/primitives` (v0.0.3, accessible UI patterns: dialog, tooltip, toast,
   tree, listbox; depends on `@quartz-headless/core` as a peer dependency). The previous
   unscoped `quartz-headless` package is **frozen** at v0.2.1 — no further releases. See
   `docs/ai/ARCHITECTURE.md` for the full rationale and dependency rules.

@@ -1,6 +1,6 @@
 {
   "name": "@quartz-headless/primitives",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "description": "Headless, accessible Angular 21 UI primitives built on Quartz Core — dialog, tooltip, toast, tree, listbox.",
   "keywords": [
     "angular",
@@ -37,7 +37,7 @@
     "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0",
     "rxjs": "^7.8.0",
-    "@quartz-headless/core": "^0.1.0"
+    "@quartz-headless/core": "^0.0.3"
   },
   "devDependencies": {
     "@quartz-headless/core": "workspace:*"
