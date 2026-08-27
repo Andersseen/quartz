@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [angular()],
   resolve: {
     alias: {
-      quartz: resolve(__dirname, 'packages/quartz/src/public-api.ts'),
+      '@quartz-headless/core': resolve(__dirname, 'packages/core/src/public-api.ts'),
+      '@quartz-headless/primitives': resolve(__dirname, 'packages/primitives/src/public-api.ts'),
     },
   },
   test: {

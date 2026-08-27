@@ -6,8 +6,10 @@ import path from 'path';
  * Architecture rule: Quartz Core must never import from Quartz Headless Primitives.
  * Dependencies flow Core -> Primitives only (see docs/ai/ARCHITECTURE.md). This is also
  * enforced by the `no-restricted-imports` override in eslint.config.js scoped to
- * `packages/quartz/src/core/**`; this spec is a second, independent check that runs
- * under `pnpm test` even if lint is skipped.
+ * `packages/core/src/**`; this spec is a second, independent check that runs under
+ * `pnpm test` even if lint is skipped. Core and Primitives are separate npm packages now,
+ * so a violation would show up as an import of the bare specifier
+ * `@quartz-headless/primitives` — this still matches the substring check below.
  */
 
 const CORE_DIR = path.resolve(__dirname, '.');

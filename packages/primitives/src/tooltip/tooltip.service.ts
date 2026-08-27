@@ -1,5 +1,5 @@
 import { Injectable, TemplateRef, ViewContainerRef, inject, DOCUMENT } from '@angular/core';
-import { OverlayService, OverlayRef } from '../../core/overlay';
+import { OverlayService, OverlayRef } from '@quartz-headless/core';
 import { TooltipConfig, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
 
 @Injectable({ providedIn: 'root' })

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import { version } from '../../../../packages/quartz/package.json';
+import { version } from '../../../../packages/core/package.json';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import {
@@ -24,6 +24,13 @@ import {
   LmnRefreshCwIcon,
   LmnZapIcon,
 } from 'lumen-icons';
+
+interface SidebarItem {
+  path: string;
+  label: string;
+  icon: 'bell' | 'database' | 'grid' | 'info' | 'list' | 'file' | 'refresh' | 'zap' | 'package';
+  soon: boolean;
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -71,32 +78,28 @@ export class SidebarComponent {
 
   readonly version = version;
 
-  readonly groupLabel = 'Angular Components';
+  readonly coreGroupLabel = 'Core';
+  readonly primitivesGroupLabel = 'Primitives';
 
-  readonly angularItems = [
+  readonly coreItems: SidebarItem[] = [
     {
       path: '/overlay',
       label: 'Overlay',
       icon: 'package' as const,
       soon: false,
     },
-    { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false },
-    { path: '/tooltip', label: 'Tooltip', icon: 'info' as const, soon: false },
     {
       path: '/splitter',
       label: 'Splitter',
       icon: 'grid' as const,
       soon: false,
     },
-    { path: '/toast', label: 'Toast', icon: 'bell' as const, soon: false },
     {
       path: '/drag-drop',
       label: 'Drag & Drop',
       icon: 'zap' as const,
       soon: false,
     },
-    { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
-    { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
     {
       path: '/virtual-scroll',
       label: 'Virtual Scroll',
@@ -111,5 +114,11 @@ export class SidebarComponent {
     },
   ];
 
-  readonly menuItems = this.angularItems;
+  readonly primitiveItems: SidebarItem[] = [
+    { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false },
+    { path: '/tooltip', label: 'Tooltip', icon: 'info' as const, soon: false },
+    { path: '/toast', label: 'Toast', icon: 'bell' as const, soon: false },
+    { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
+    { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
+  ];
 }

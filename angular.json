@@ -6,28 +6,42 @@
   },
   "newProjectRoot": "packages",
   "projects": {
-    "quartz": {
-      "root": "packages/quartz",
-      "sourceRoot": "packages/quartz/src",
+    "quartz-core": {
+      "root": "packages/core",
+      "sourceRoot": "packages/core/src",
       "projectType": "library",
       "prefix": "qz",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "packages/quartz/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:vitest",
-          "options": {
-            "configFile": "packages/quartz/vitest.config.ts"
+            "project": "packages/core/ng-package.json"
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["packages/quartz/**/*.ts", "packages/quartz/**/*.html"]
+            "lintFilePatterns": ["packages/core/**/*.ts", "packages/core/**/*.html"]
+          }
+        }
+      }
+    },
+    "quartz-primitives": {
+      "root": "packages/primitives",
+      "sourceRoot": "packages/primitives/src",
+      "projectType": "library",
+      "prefix": "qz",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "packages/primitives/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["packages/primitives/**/*.ts", "packages/primitives/**/*.html"]
           }
         }
       }

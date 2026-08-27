@@ -11,11 +11,14 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { OverlayRef } from '../../core/overlay';
 import { TooltipService } from './tooltip.service';
 import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
-import { calculatePosition } from '../../core/overlay';
-import { createDismissController, type DismissController } from '../../core/dismiss';
+import {
+  OverlayRef,
+  calculatePosition,
+  createDismissController,
+  type DismissController,
+} from '@quartz-headless/core';
 
 let tooltipIdCounter = 0;
 

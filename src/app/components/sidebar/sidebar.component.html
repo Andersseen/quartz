@@ -43,8 +43,52 @@
       </volt-sidebar-item>
     </volt-sidebar-group>
 
-    <volt-sidebar-group [label]="groupLabel">
-      @for (item of menuItems; track item.path) {
+    <volt-sidebar-group [label]="coreGroupLabel">
+      @for (item of coreItems; track item.path) {
+        <volt-sidebar-item
+          [routerLink]="item.path"
+          [label]="item.label"
+          [class.opacity-50]="item.soon"
+          [class.pointer-events-none]="item.soon"
+        >
+          @switch (item.icon) {
+            @case ('bell') {
+              <lmn-bell slot="icon" [size]="16" />
+            }
+            @case ('database') {
+              <lmn-database slot="icon" [size]="16" />
+            }
+            @case ('grid') {
+              <lmn-grid slot="icon" [size]="16" />
+            }
+            @case ('info') {
+              <lmn-info slot="icon" [size]="16" />
+            }
+            @case ('list') {
+              <lmn-list slot="icon" [size]="16" />
+            }
+            @case ('file') {
+              <lmn-file slot="icon" [size]="16" />
+            }
+            @case ('refresh') {
+              <lmn-refresh-cw slot="icon" [size]="16" />
+            }
+            @case ('zap') {
+              <lmn-zap slot="icon" [size]="16" />
+            }
+            @default {
+              <lmn-package slot="icon" [size]="16" />
+            }
+          }
+          @if (item.soon) {
+            <volt-badge slot="trailing" variant="secondary">Soon</volt-badge>
+          }
+        </volt-sidebar-item>
+      }
+    </volt-sidebar-group>
+
+    <volt-sidebar-group [label]="primitivesGroupLabel">
+      @for (item of primitiveItems; track item.path) {
         <volt-sidebar-item
           [routerLink]="item.path"
           [label]="item.label"

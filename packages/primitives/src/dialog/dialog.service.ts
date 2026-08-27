@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
-import { createDismissController, type DismissController } from '../../core/dismiss';
 import {
+  createDismissController,
+  type DismissController,
   createFocusRestorer,
   createFocusTrap,
   focusInitialElement,
   type FocusTrap,
-} from '../../core/focus';
+} from '@quartz-headless/core';
 
 let dialogId = 0;
 

@@ -1,10 +1,11 @@
 {
   "name": "quartz",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build:lib": "ng build quartz && cp README.md dist/quartz/ && cp LICENSE dist/quartz/",
+    "build:lib": "ng build quartz-core && cp README.md packages/core/dist/ && cp LICENSE packages/core/dist/ && ng build quartz-primitives && cp README.md packages/primitives/dist/ && cp LICENSE packages/primitives/dist/",
     "build:demo": "vite build",
     "verify:build": "node scripts/verify-build.js",
     "pages:build": "vite build",
@@ -13,16 +14,16 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit -p packages/quartz/tsconfig.lib.json && tsc --noEmit -p tsconfig.app.json",
+    "typecheck": "ng build quartz-core && tsc --noEmit -p packages/core/tsconfig.lib.json && tsc --noEmit -p packages/primitives/tsconfig.lib.json && tsc --noEmit -p tsconfig.app.json",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "lint": "eslint \"{packages/quartz,src}/**/*.{ts,html}\"",
+    "lint": "eslint \"{packages/core,packages/primitives,src}/**/*.{ts,html}\"",
     "format": "prettier --write \"**/*.{ts,html,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\"",
     "quartz": "node cli/bin/quartz.js",
     "update-editor": "node /Users/andriipap/Andersseen/Web/Projects/vertex/packages/frontend/web-editor/bin/install.mjs public --local",
     "prepare": "husky",
-    "publish:lib": "pnpm build:lib && npm publish ./dist/quartz --access public"
+    "publish:lib": "pnpm build:lib && npm publish ./packages/core/dist --access public && npm publish ./packages/primitives/dist --access public"
   },
   "lint-staged": {
     "*.{ts,html}": [

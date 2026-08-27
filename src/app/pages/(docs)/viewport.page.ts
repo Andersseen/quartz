@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { ViewportService, ViewportMatchDirective } from 'quartz';
+import { ViewportService, ViewportMatchDirective } from '@quartz-headless/core';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { BASIC_SNIPPET, MATCH_SNIPPET, API_SNIPPET } from './viewport.snippets';

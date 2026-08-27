@@ -1,6 +1,6 @@
 // Quartz Core — low-level interaction infrastructure (Angular CDK equivalent).
-// No entry in this file may import from '../primitives' — enforced by eslint.config.js
-// and packages/quartz/src/core/core-boundary.spec.ts.
+// No entry in this file (or anywhere under this package) may import from
+// @quartz-headless/primitives — enforced by eslint.config.js and core-boundary.spec.ts.
 
 // Foundations
 export {
@@ -44,6 +44,7 @@ export {
   OverlayTriggerDirective,
   OverlayService,
   OverlayRef,
+  calculatePosition,
   DEFAULT_OVERLAY_CONFIG,
 } from './overlay';
 export type {

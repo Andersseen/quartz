@@ -2,13 +2,16 @@
 
 # Compiled output
 /dist
+/packages/core/dist
+/packages/primitives/dist
 /tmp
 /out-tsc
 /bazel-out
 
 # Node
 /node_modules
-/packages/quartz/node_modules
+/packages/core/node_modules
+/packages/primitives/node_modules
 npm-debug.log
 yarn-error.log
 

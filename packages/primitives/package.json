@@ -1,0 +1,64 @@
+{
+  "name": "@quartz-headless/primitives",
+  "version": "0.1.0",
+  "description": "Headless, accessible Angular 21 UI primitives built on Quartz Core — dialog, tooltip, toast, tree, listbox.",
+  "keywords": [
+    "angular",
+    "headless",
+    "ui",
+    "components",
+    "dialog",
+    "tooltip",
+    "toast",
+    "tree",
+    "listbox",
+    "a11y",
+    "zoneless",
+    "signals"
+  ],
+  "author": {
+    "name": "Andersseen",
+    "url": "https://github.com/Andersseen"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Andersseen/quartz.git",
+    "directory": "packages/primitives"
+  },
+  "homepage": "https://quartz-headless.pages.dev",
+  "bugs": {
+    "url": "https://github.com/Andersseen/quartz/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "rxjs": "^7.8.0",
+    "@quartz-headless/core": "^0.1.0"
+  },
+  "devDependencies": {
+    "@quartz-headless/core": "workspace:*"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "module": "./dist/fesm2022/quartz-headless-primitives.mjs",
+  "typings": "./dist/types/quartz-headless-primitives.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./dist/types/quartz-headless-primitives.d.ts",
+      "default": "./dist/fesm2022/quartz-headless-primitives.mjs"
+    }
+  }
+}

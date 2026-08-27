@@ -20,11 +20,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": ["ES2022", "dom"],
-    "paths": {
-      "@quartz/*": ["./packages/quartz/src/*"],
-      "quartz": ["./packages/quartz/src/public-api.ts"]
-    }
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -38,7 +34,10 @@
       "path": "./tsconfig.app.json"
     },
     {
-      "path": "./packages/quartz/tsconfig.lib.json"
+      "path": "./packages/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./packages/primitives/tsconfig.lib.json"
     }
   ]
 }

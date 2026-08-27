@@ -2,7 +2,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@quartz-headless/core": ["./packages/core/src/public-api.ts"],
+      "@quartz-headless/primitives": ["./packages/primitives/src/public-api.ts"]
+    }
   },
   "files": ["src/main.ts"],
   "include": ["src/**/*.ts", "src/**/*.d.ts"],

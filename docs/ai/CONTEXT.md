@@ -22,7 +22,11 @@ the shadcn/ui distribution model (copy the source into your project).
 - A small, tree-shakeable set of primitives that work in **zoneless, signals-first
   Angular 21+** apps, including SSR.
 - Two consumption paths that both stay first-class:
-  1. **npm package** `quartz-headless` (built from `packages/quartz/` → `dist/quartz/`).
+  1. **Two npm packages** — `@quartz-headless/core` (built from `packages/core/` →
+     `packages/core/dist/`) and `@quartz-headless/primitives` (built from
+     `packages/primitives/` → `packages/primitives/dist/`, depends on core as a peer
+     dependency). The old unscoped `quartz-headless` package is frozen at its last
+     published version.
   2. **Copy-source CLI** — `pnpm quartz add <component>` copies raw `.ts` files into a
      consumer project (registry: `cli/registry.js`).
 - A live docs/demo site — <https://quartz-headless.pages.dev> — built with AnalogJS and
@@ -31,9 +35,10 @@ the shadcn/ui distribution model (copy the source into your project).
 
 ## Non-goals (do NOT drift here)
 
-- **No visual styling** in the library. No themes, no CSS files, no Tailwind classes in
-  `packages/quartz/`. Data attributes (`data-qz-*`) and minimal structural inline styles
-  (e.g. `position: fixed` for overlays) are the only allowed DOM styling.
+- **No visual styling** in either library. No themes, no CSS files, no Tailwind classes in
+  `packages/core/` or `packages/primitives/`. Data attributes (`data-qz-*`) and minimal
+  structural inline styles (e.g. `position: fixed` for overlays) are the only allowed DOM
+  styling.
 - **No dependencies** beyond `@angular/*` peer deps, `rxjs`, `tslib`.
 - **Not a component kit.** No buttons, inputs, cards. Only behavioural primitives.
 - **No Zone.js support paths.** The library assumes `provideZonelessChangeDetection()`.
@@ -53,11 +58,11 @@ the shadcn/ui distribution model (copy the source into your project).
 
 ## Key identifiers
 
-| Thing           | Value                                          |
-| --------------- | ---------------------------------------------- |
-| npm package     | `quartz-headless`                              |
-| GitHub          | `Andersseen/quartz`                            |
-| Docs site       | https://quartz-headless.pages.dev              |
-| License         | MIT                                            |
-| Angular target  | ^21.0.0 (peer), zoneless, standalone           |
-| Selector prefix | `qz-` / `qzCamelCase` (lib), `app-` (demo app) |
+| Thing           | Value                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| npm packages    | `@quartz-headless/core`, `@quartz-headless/primitives` (legacy: `quartz-headless`, frozen) |
+| GitHub          | `Andersseen/quartz`                                                                        |
+| Docs site       | https://quartz-headless.pages.dev                                                          |
+| License         | MIT                                                                                        |
+| Angular target  | ^21.0.0 (peer), zoneless, standalone                                                       |
+| Selector prefix | `qz-` / `qzCamelCase` (lib), `app-` (demo app)                                             |

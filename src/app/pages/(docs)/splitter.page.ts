@@ -3,7 +3,7 @@ import {
   SplitterContainerDirective,
   SplitterHandleDirective,
   SplitterPanelDirective,
-} from 'quartz';
+} from '@quartz-headless/core';
 import { DecimalPipe } from '@angular/common';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';

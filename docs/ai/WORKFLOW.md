@@ -26,17 +26,22 @@ Rules for weaker models, be strict with yourself:
 Copy this into your working notes and tick every box:
 
 - [ ] Spec written in `docs/ai/specs/<name>.md` and approved
-- [ ] Folder `packages/quartz/src/lib/<name>/` following the anatomy in ARCHITECTURE.md:
-      `<name>.types.ts` (+ `DEFAULT_<NAME>_CONFIG`), service/directives/components,
-      `index.ts` barrel
+- [ ] Decide the layer first: low-level infrastructure → `packages/core/src/<name>/`;
+      accessible UI pattern built on Core → `packages/primitives/src/<name>/`. Follow the
+      anatomy in ARCHITECTURE.md: `<name>.types.ts` (+ `DEFAULT_<NAME>_CONFIG`),
+      service/directives/components, `index.ts` barrel
 - [ ] SSR-safe: no `document`/`window` at import time; `inject(DOCUMENT)` +
       `defaultView` guard (copy the overlay pattern)
 - [ ] Keyboard support + ARIA roles/attributes implemented (this is the product, not a nice-to-have)
-- [ ] Exports added to `packages/quartz/src/public-api.ts`
+- [ ] Exports added to that package's `src/public-api.ts`
+- [ ] If it's a Primitive that needs something from Core, import it as
+      `from '@quartz-headless/core'` (a real package import) — never a relative path into
+      `packages/core/`
 - [ ] Unit tests `*.spec.ts` next to source (host-component pattern, fake timers if needed,
       DOM cleanup in `afterEach`)
-- [ ] `cli/registry.js`: entry with `files` list (no specs), `deps` if it imports another
-      primitive, `docs` URL; remove `soon: true` if present
+- [ ] `cli/registry.js`: entry with `layer`, `files` list (no specs), `deps` if it imports
+      another Core sibling (Core only) or `peerDeps: ['@quartz-headless/core']` (Primitives
+      only), `docs` URL; remove `soon: true` if present
 - [ ] Demo page: `src/app/pages/(docs)/<name>.page.ts` + `.page.html` + `<name>.snippets.ts`
 - [ ] Route works on `localhost:5173` — if 404, add to `extraRoutes` in
       `src/app/app.config.ts` (known Vite cache issue)
@@ -53,20 +58,25 @@ Copy this into your working notes and tick every box:
 - [ ] Files added/renamed/deleted? → update `cli/registry.js`
 - [ ] Tests updated/added for the changed behaviour
 - [ ] `pnpm typecheck && pnpm test` green; run the affected spec file directly first:
-      `pnpm exec vitest run packages/quartz/src/lib/<x>/<x>.spec.ts`
+      `pnpm exec vitest run packages/core/src/<x>/<x>.spec.ts` or
+      `packages/primitives/src/<x>/<x>.spec.ts` (if it's a Primitives file and you're
+      running its vitest project in isolation, `packages/core` must already be built —
+      see ARCHITECTURE.md)
 
 ## Checklist: demo/docs app change only
 
-- [ ] No imports from demo app into `packages/quartz/` (one-way street)
+- [ ] No imports from demo app into `packages/core/` or `packages/primitives/` (one-way street)
 - [ ] New `(docs)/` page → check the Vite-cache/extraRoutes gotcha
 - [ ] `pnpm typecheck` (app tsconfig) + visual check on `localhost:5173` (`pnpm start`)
 
 ## Checklist: release / publish
 
 - [ ] All tests green on `main`
-- [ ] Bump `version` in `packages/quartz/package.json` (NOT the root package.json)
-- [ ] `pnpm publish:lib` (runs `build:lib`, copies README/LICENSE, publishes `dist/quartz/`)
-      — requires `npm login`
+- [ ] Bump `version` in `packages/core/package.json` AND `packages/primitives/package.json`
+      (kept in lockstep — NOT the root package.json)
+- [ ] `pnpm publish:lib` (builds both, copies README/LICENSE into each dist, publishes
+      `packages/core/dist` then `packages/primitives/dist`) — requires `npm login` with
+      access to the `@quartz-headless` org
 - [ ] Deploy docs if demo changed: `pnpm pages:deploy`
 - [ ] Update version in `docs/ai/STATE.md`
 

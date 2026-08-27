@@ -1,5 +1,9 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { ToastService, ToastContainerComponent, type ToastPosition } from 'quartz';
+import {
+  ToastService,
+  ToastContainerComponent,
+  type ToastPosition,
+} from '@quartz-headless/primitives';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { TYPES_SNIPPET, POSITIONS_SNIPPET, DURATION_SNIPPET, API_SNIPPET } from './toast.snippets';

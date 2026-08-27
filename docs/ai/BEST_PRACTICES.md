@@ -16,13 +16,17 @@ These are not suggestions. Lint, the pre-commit hook, or review will reject viol
 | Native control flow `@if` / `@for` (with `track`)                                         | `*ngIf` / `*ngFor`                                                                      |
 | ES `#private` fields for internal state (`#toasts = signal(...)`)                         | `private _foo` naming for true internals                                                |
 
-## Library-only rules (`packages/quartz/`)
+## Library-only rules (`packages/core/`, `packages/primitives/`)
 
 1. **Zero styling.** No CSS classes with visual meaning, no style opinions. Allowed:
    `data-qz-*` attributes for consumers to target, and structural inline styles that are
    required for behaviour (`position: fixed`, `pointer-events`, transform for positioning).
-2. **Zero dependencies** beyond `@angular/*` (peer), `rxjs`, `tslib`. Never import from
-   `src/` (demo app), `@voltui/*`, `lumen-icons`, or Tailwind.
+2. **Zero dependencies** beyond `@angular/*` (peer), `rxjs`, `tslib` — Primitives'
+   _one_ exception is `@quartz-headless/core` as a real peer dependency, resolved via
+   `node_modules`, never a relative or tsconfig-path import into Core's source (see
+   `docs/ai/ARCHITECTURE.md` for why). Never import from `src/` (demo app), `@voltui/*`,
+   `lumen-icons`, or Tailwind. Core must never import from Primitives (enforced by lint +
+   `core-boundary.spec.ts`).
 3. **SSR-safe always.** Never touch `document`/`window` at import time or in field
    initializers. Get the document via `inject(DOCUMENT)` and guard browser-only code with
    `if (!this.document.defaultView) return ...;` (see `overlay.service.ts` for the
@@ -53,7 +57,8 @@ These are not suggestions. Lint, the pre-commit hook, or review will reject viol
   `afterEach`, advance with `vi.advanceTimersByTime(ms)`.
 - **Clean the DOM in `afterEach`** — portals attach to `document.body` and survive between
   tests otherwise.
-- Run a single file: `pnpm exec vitest run packages/quartz/src/lib/<x>/<x>.spec.ts`.
+- Run a single file: `pnpm exec vitest run packages/core/src/<x>/<x>.spec.ts` or
+  `packages/primitives/src/<x>/<x>.spec.ts`.
 - E2E only for user-visible flows on the demo site (`e2e/*.spec.ts`, Playwright, targets
   `localhost:5173`). Don't write E2E for logic a unit test can cover.
 

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
-import { CollectionStore } from '../../core/collection';
+import { CollectionStore } from '@quartz-headless/core';
 import type { ListboxOptionDirective } from './listbox-option.directive';
 
 /** Container-scoped registry and active-descendant state for qzListbox. */

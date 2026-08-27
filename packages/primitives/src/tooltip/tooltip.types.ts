@@ -1,4 +1,4 @@
-import type { OverlayPlacement } from '../../core/overlay';
+import type { OverlayPlacement } from '@quartz-headless/core';
 
 export type TooltipPlacement = OverlayPlacement;
 

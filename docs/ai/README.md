@@ -33,8 +33,10 @@ Load files in this order, depending on the task:
 ## Golden rules (if you read nothing else)
 
 1. **Zoneless + signals.** No `NgZone`, no `markForCheck()`. Use `signal()` / `computed()`.
-2. **The library (`packages/quartz/`) must stay unstyled and dependency-free** (only
-   `@angular/*`, `rxjs`, `tslib`). Never import demo-app code or CSS frameworks into it.
+2. **The libraries (`packages/core/`, `packages/primitives/`) must stay unstyled and
+   dependency-free** (only `@angular/*`, `rxjs`, `tslib`, plus Primitives' one real
+   dependency on `@quartz-headless/core`). Never import demo-app code or CSS frameworks
+   into either. Core must never depend on Primitives.
 3. **Every lib change needs three things**: the code, a `*.spec.ts` test, and a CLI
    `cli/registry.js` update if files were added/removed/renamed.
 4. **Run `pnpm typecheck && pnpm test` before claiming done.** The pre-commit hook runs

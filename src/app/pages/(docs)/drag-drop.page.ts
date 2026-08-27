@@ -13,7 +13,7 @@ import {
   DragDropService,
   type QzDropInfo,
   type QzDragInfo,
-} from 'quartz';
+} from '@quartz-headless/core';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import {
