@@ -165,8 +165,10 @@ jobs:
     needs: [unit-tests, e2e-tests]
     if: github.ref == 'refs/heads/main'
     outputs:
-      published: ${{ steps.version-primitives.outputs.published }}
-      version: ${{ steps.version-primitives.outputs.version }}
+      core-published: ${{ steps.version-core.outputs.published }}
+      core-version: ${{ steps.version-core.outputs.version }}
+      primitives-published: ${{ steps.version-primitives.outputs.published }}
+      primitives-version: ${{ steps.version-primitives.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -188,6 +190,7 @@ jobs:
         id: version-core
         run: |
           version=$(node -p "require('./packages/core/package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           if npm view "@quartz-headless/core@$version" version >/dev/null 2>&1; then
             echo "Version $version already exists on npm; skipping publication."
             echo "published=false" >> "$GITHUB_OUTPUT"
@@ -229,11 +232,16 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+  # Fires if EITHER package actually published (core and primitives are meant to stay
+  # version-locked, but this doesn't assume that holds — a core-only or primitives-only
+  # bump still gets a release instead of publishing silently).
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs: [publish]
-    if: github.ref == 'refs/heads/main' && needs.publish.outputs.published == 'true'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      (needs.publish.outputs.core-published == 'true' || needs.publish.outputs.primitives-published == 'true')
     permissions:
       contents: write
     steps:
@@ -243,7 +251,28 @@ jobs:
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CORE_PUBLISHED: ${{ needs.publish.outputs.core-published }}
+          CORE_VERSION: ${{ needs.publish.outputs.core-version }}
+          PRIMITIVES_PUBLISHED: ${{ needs.publish.outputs.primitives-published }}
+          PRIMITIVES_VERSION: ${{ needs.publish.outputs.primitives-version }}
         run: |
-          gh release create "v${{ needs.publish.outputs.version }}" \
-            --title "v${{ needs.publish.outputs.version }}" \
+          # Prefer the primitives version for the tag/title (versions are meant to stay in
+          # lockstep); fall back to core's if only core published this run.
+          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+            version="$PRIMITIVES_VERSION"
+          else
+            version="$CORE_VERSION"
+          fi
+
+          notes="Published this release:"
+          if [ "$CORE_PUBLISHED" = "true" ]; then
+            notes="$notes\n- @quartz-headless/core@$CORE_VERSION"
+          fi
+          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+            notes="$notes\n- @quartz-headless/primitives@$PRIMITIVES_VERSION"
+          fi
+
+          gh release create "v$version" \
+            --title "v$version" \
+            --notes "$(printf '%b' "$notes")" \
             --generate-notes
