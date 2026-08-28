@@ -15,6 +15,16 @@ import { provideMovement } from 'angular-movement';
  */
 const extraRoutes: Routes = [
   {
+    path: 'directionality',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/directionality.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
     path: 'tree',
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [

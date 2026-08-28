@@ -89,9 +89,10 @@ pnpm quartz add toast --output src/app/ui
 ```
 
 Files land flat in your project's `src/lib/components/<name>/` (auto-detected) or the
-`--output` path. **Core** pieces (overlay, dismiss, focus, collection, viewport, drag-drop,
-virtual-scroll, splitter) stay pure copy-source with zero npm dependencies — copying one
-pulls in its Core siblings too (e.g. `overlay` also copies `dismiss`). **Primitives**
+`--output` path. **Core** pieces (overlay, dismiss, focus, collection, directionality,
+viewport, drag-drop, virtual-scroll, splitter) stay pure copy-source with zero npm
+dependencies — copying one pulls in its Core siblings too (e.g. `overlay` also copies
+`dismiss` and `directionality`). **Primitives**
 (dialog, tooltip, toast, tree, listbox) depend on `@quartz-headless/core` as a real npm
 package instead of copied source — `pnpm quartz add dialog` copies only `dialog/` and tells
 you to `npm install @quartz-headless/core`.
@@ -110,6 +111,7 @@ you to `npm install @quartz-headless/core`.
 | [`listbox`](https://quartz-headless.pages.dev/listbox)               | `@quartz-headless/primitives` | Single/multi selection with WAI-ARIA keyboard navigation and type-ahead            |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | `@quartz-headless/core`       | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | `@quartz-headless/core`       | Reactive breakpoint service + `ViewportMatchDirective`                             |
+| [`directionality`](https://quartz-headless.pages.dev/directionality) | `@quartz-headless/core`       | LTR/RTL resolution + logical inline-start/end and keyboard helpers                 |
 
 Every primitive is **zoneless**, **standalone** and **tree-shakeable**. Drag &amp; drop follows the browser's native pointer-based HTML DnD model; keyboard drag-and-drop is intentionally deferred to a dedicated future primitive.
 

@@ -38,6 +38,20 @@ export {
   type DismissController,
   type DismissReason,
 } from './dismiss';
+export {
+  DirectionalityService,
+  resolveDirection,
+  oppositeDirection,
+  inlineToPhysical,
+  physicalToInline,
+  inlineStartKey,
+  inlineEndKey,
+  resolveInlineArrowKey,
+  type Direction,
+  type LogicalInlineDirection,
+  type PhysicalHorizontal,
+  type InlineArrowKey,
+} from './directionality';
 
 // Overlay
 export {

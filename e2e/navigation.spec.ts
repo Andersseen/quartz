@@ -7,6 +7,12 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Portal-based positioning system')).toBeVisible();
   });
 
+  test('should navigate to directionality page', async ({ page }) => {
+    await page.goto('/directionality');
+    await expect(page.getByRole('heading', { name: 'Directionality', level: 1 })).toBeVisible();
+    await expect(page.locator('text=Resolves LTR/RTL once')).toBeVisible();
+  });
+
   test('should navigate to dialog page', async ({ page }) => {
     await page.goto('/dialog');
     await expect(page.getByRole('heading', { name: 'Dialog & Drawer', level: 1 })).toBeVisible();

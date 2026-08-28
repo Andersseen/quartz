@@ -59,6 +59,48 @@ describe('CollectionStore', () => {
     expect(store.activeId()).toBe('one');
   });
 
+  it('defaults horizontal navigation to ltr (ArrowRight = next, ArrowLeft = previous)', () => {
+    const store = new CollectionStore<CollectionItem>({ orientation: 'horizontal' }, document);
+    store.register({ id: 'one' });
+    store.register({ id: 'two' });
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    expect(store.activeId()).toBe('two');
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    expect(store.activeId()).toBe('one');
+  });
+
+  it('mirrors horizontal arrow keys in rtl (ArrowLeft = next, ArrowRight = previous)', () => {
+    const store = new CollectionStore<CollectionItem>(
+      { orientation: 'horizontal', direction: 'rtl' },
+      document,
+    );
+    store.register({ id: 'one' });
+    store.register({ id: 'two' });
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    expect(store.activeId()).toBe('two');
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    expect(store.activeId()).toBe('one');
+  });
+
+  it('never mirrors vertical Up/Down, regardless of direction', () => {
+    const store = new CollectionStore<CollectionItem>(
+      { orientation: 'vertical', direction: 'rtl' },
+      document,
+    );
+    store.register({ id: 'one' });
+    store.register({ id: 'two' });
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(store.activeId()).toBe('two');
+
+    store.handleKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(store.activeId()).toBe('one');
+  });
+
   it('supports typeahead and clears its buffer', () => {
     vi.useFakeTimers();
     const store = new CollectionStore<CollectionItem>({ typeaheadTimeoutMs: 50 }, document);

@@ -61,6 +61,8 @@ describe('CLI smoke — quartz add', () => {
     expect(copied.overlay).toContain('index.ts');
     expect(copied.dismiss).toContain('dismiss.ts');
     expect(copied.dismiss).toContain('index.ts');
+    expect(copied.directionality).toContain('directionality.service.ts');
+    expect(copied.directionality).toContain('index.ts');
   });
 
   it('should copy a Primitive without copying any Core folder', () => {
@@ -91,7 +93,7 @@ describe('CLI smoke — quartz add', () => {
     const outDir = runAdd(tmpDir, ['overlay', 'tooltip']);
     const copied = readFiles(outDir);
 
-    expect(Object.keys(copied).sort()).toEqual(['dismiss', 'overlay', 'tooltip']);
+    expect(Object.keys(copied).sort()).toEqual(['directionality', 'dismiss', 'overlay', 'tooltip']);
   });
 
   it('should resolve every cross-component import inside copied Core files', () => {

@@ -1,4 +1,5 @@
 import { computed, signal } from '@angular/core';
+import { inlineEndKey, inlineStartKey } from '../directionality';
 import {
   DEFAULT_COLLECTION_CONFIG,
   type CollectionConfig,
@@ -79,14 +80,19 @@ export class CollectionStore<T extends CollectionItem> {
     const horizontal = this.#config.orientation === 'horizontal';
     const vertical = this.#config.orientation === 'vertical';
     const key = event.key;
+    // Which physical arrow key means "next"/"previous" on the horizontal axis
+    // depends on direction; vertical Up/Down never do. Defaults to ArrowRight/
+    // ArrowLeft (ltr), matching this method's behavior before Directionality existed.
+    const nextKey = inlineEndKey(this.#config.direction);
+    const previousKey = inlineStartKey(this.#config.direction);
 
-    if ((!horizontal && key === 'ArrowDown') || (!vertical && key === 'ArrowRight')) {
+    if ((!horizontal && key === 'ArrowDown') || (!vertical && key === nextKey)) {
       event.preventDefault();
       this.next(options);
       return true;
     }
 
-    if ((!horizontal && key === 'ArrowUp') || (!vertical && key === 'ArrowLeft')) {
+    if ((!horizontal && key === 'ArrowUp') || (!vertical && key === previousKey)) {
       event.preventDefault();
       this.previous(options);
       return true;

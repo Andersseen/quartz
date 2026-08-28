@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Components Pages', () => {
   const components = [
     { path: '/overlay', title: 'Overlay' },
+    { path: '/directionality', title: 'Directionality' },
     { path: '/dialog', title: 'Dialog & Drawer' },
     { path: '/tooltip', title: 'Tooltip' },
     { path: '/splitter', title: 'Splitter' },
