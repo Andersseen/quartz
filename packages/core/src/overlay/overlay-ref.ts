@@ -8,6 +8,7 @@ import {
 } from './overlay.types';
 import { calculatePosition } from './overlay-position';
 import { createDismissController, type DismissController } from '../dismiss';
+import { resolveDirection } from '../directionality';
 
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
@@ -140,6 +141,7 @@ export class OverlayRef {
       this.config.flip,
       this.config.flipAxis,
       this.getViewport(),
+      resolveDirection(this.getAnchorElement() ?? this.document.documentElement),
     );
 
     this.wrapperEl.style.transform = `translate(${pos.left}px, ${pos.top}px)`;

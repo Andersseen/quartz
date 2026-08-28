@@ -17,6 +17,7 @@ const REGISTRY = {
     layer: 'core',
     internal: true,
     files: ['collection/collection.ts', 'collection/collection.types.ts', 'collection/index.ts'],
+    deps: ['directionality'],
     docs: 'https://quartz-headless.pages.dev/docs',
   },
   focus: {
@@ -33,6 +34,18 @@ const REGISTRY = {
     files: ['dismiss/dismiss.ts', 'dismiss/index.ts'],
     docs: 'https://quartz-headless.pages.dev/docs',
   },
+  directionality: {
+    description: 'LTR/RTL direction resolution and logical (inline-start/end) helpers',
+    layer: 'core',
+    internal: true,
+    files: [
+      'directionality/directionality.ts',
+      'directionality/directionality.service.ts',
+      'directionality/directionality.types.ts',
+      'directionality/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/directionality',
+  },
   overlay: {
     description: 'Portal-based positioning system for dropdowns, menus, and popovers',
     layer: 'core',
@@ -44,7 +57,7 @@ const REGISTRY = {
       'overlay/overlay.types.ts',
       'overlay/index.ts',
     ],
-    deps: ['dismiss'],
+    deps: ['dismiss', 'directionality'],
     docs: 'https://quartz-headless.pages.dev/overlay',
   },
   splitter: {

@@ -83,6 +83,12 @@ export class SidebarComponent {
 
   readonly coreItems: SidebarItem[] = [
     {
+      path: '/directionality',
+      label: 'Directionality',
+      icon: 'info' as const,
+      soon: false,
+    },
+    {
       path: '/overlay',
       label: 'Overlay',
       icon: 'package' as const,

@@ -1,3 +1,5 @@
+import type { Direction } from '../directionality';
+
 export type CollectionOrientation = 'vertical' | 'horizontal' | 'both';
 export type CollectionFocusStrategy = 'roving-tabindex' | 'aria-activedescendant';
 
@@ -13,6 +15,13 @@ export interface CollectionConfig {
   wrap: boolean;
   focusStrategy: CollectionFocusStrategy;
   typeaheadTimeoutMs: number;
+  /**
+   * Direction used to resolve which arrow key moves "next"/"previous" on the
+   * horizontal axis (see `handleKeydown`). Vertical Up/Down are never affected.
+   * Defaults to `'ltr'`, which reproduces the historical (pre-Directionality)
+   * behaviour byte-for-byte: ArrowRight → next, ArrowLeft → previous.
+   */
+  direction: Direction;
 }
 
 export const DEFAULT_COLLECTION_CONFIG: CollectionConfig = {
@@ -20,6 +29,7 @@ export const DEFAULT_COLLECTION_CONFIG: CollectionConfig = {
   wrap: true,
   focusStrategy: 'aria-activedescendant',
   typeaheadTimeoutMs: 500,
+  direction: 'ltr',
 };
 
 export interface CollectionNavigationResult<T extends CollectionItem> {

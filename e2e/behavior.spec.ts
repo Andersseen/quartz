@@ -240,6 +240,31 @@ test.describe('Tree behavior', () => {
   });
 });
 
+test.describe('Directionality behavior', () => {
+  test('mirrors horizontal arrow keys after toggling to rtl', async ({ page }) => {
+    await page.goto('/directionality');
+
+    const collection = page.getByTestId('directionality-collection');
+    await collection.focus();
+    await expect(collection.locator('[data-active]')).toHaveText('Alpha');
+
+    // ltr (default): ArrowRight moves next.
+    await page.keyboard.press('ArrowRight');
+    await expect(collection.locator('[data-active]')).toHaveText('Bravo');
+    await expect(collection).toHaveAttribute('dir', 'ltr');
+
+    await page.getByTestId('directionality-toggle').click();
+    await expect(collection).toHaveAttribute('dir', 'rtl');
+    await collection.focus();
+
+    // rtl: ArrowRight now moves previous, ArrowLeft moves next.
+    await page.keyboard.press('ArrowRight');
+    await expect(collection.locator('[data-active]')).toHaveText('Alpha');
+    await page.keyboard.press('ArrowLeft');
+    await expect(collection.locator('[data-active]')).toHaveText('Bravo');
+  });
+});
+
 test.describe('Splitter behavior', () => {
   test('should resize horizontal panel with arrow keys', async ({ page }) => {
     await page.goto('/splitter');

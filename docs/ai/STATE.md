@@ -1,9 +1,33 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-27** (split into two real npm packages)
+> **Last updated: 2026-08-28** (added Directionality Core foundation)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
+
+## Directionality Core foundation (2026-08-28)
+
+Added `packages/core/src/directionality/` — `DirectionalityService` (signal-based, resolves
+`document.documentElement`'s effective `dir` once at construction) plus pure helpers
+(`resolveDirection`, `inlineToPhysical`/`physicalToInline`, `inlineStartKey`/`inlineEndKey`/
+`resolveInlineArrowKey`). Full audit, API, and decisions are in
+`docs/ai/specs/directionality.md`. Key points for future sessions:
+
+- `CollectionConfig` gained `direction: Direction` (default `'ltr'`) — `handleKeydown`'s
+  horizontal-axis Arrow mapping is now direction-aware; default behavior is byte-for-byte
+  unchanged. Vertical Up/Down are never affected.
+- `OverlayPlacement`'s `top-start`/`top-end`/`bottom-start`/`bottom-end` now resolve against
+  the anchor's own `dir` (via `resolveDirection` in `OverlayRef`); `left`/`right` placements
+  stay purely physical. `calculatePosition()` gained a trailing optional `direction` param.
+- **Deliberately unchanged**: Splitter's ArrowLeft/Right stay physical (position is measured
+  from the container's physical left edge; mirroring only the keyboard would desync it from
+  pointer dragging). Listbox and Tree keep their own physical key handling — neither calls
+  `CollectionStore.handleKeydown` today, so fixing Collection didn't reach them; revisit when
+  a Menu/Tabs primitive needs the same mirroring.
+- No `MutationObserver`: direction is resolved once, with `refresh()`/`set()` as explicit,
+  cheap escape hatches for apps that toggle direction dynamically.
+- New demo page at `/directionality` (Core, sidebar + `extraRoutes` entry like tree/viewport/
+  tooltip/listbox).
 
 ## Split into @quartz-headless/core + @quartz-headless/primitives (2026-08-27)
 
@@ -81,18 +105,19 @@ items remain open.
 
 ## Primitive status matrix
 
-| Primitive        | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
-| ---------------- | -------- | ---------- | --------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| overlay (Core)   | ✅       | ✅         | ✅        | ✅ deps:[dismiss]                   | Foundation for dialog + tooltip                                                                              |
-| dialog           | ✅       | ✅ (+SSR)  | ✅        | ✅ peerDeps:[@quartz-headless/core] | Includes drawer positioning                                                                                  |
-| splitter (Core)  | ✅       | ✅         | ✅        | ✅                                  | Container-scoped service pattern                                                                             |
-| toast            | ✅       | ✅         | ✅        | ✅                                  | Types now in `toast.types.ts` (naming deviation resolved)                                                    |
-| drag-drop (Core) | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
-| tooltip          | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Docs page now live at `/tooltip`                                                                             |
-| tree             | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
-| listbox          | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multi selection, active-descendant, typeahead and disabled options                                    |
-| virtual-scroll   | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
-| viewport         | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
+| Primitive             | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
+| --------------------- | -------- | ---------- | --------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| overlay (Core)        | ✅       | ✅         | ✅        | ✅ deps:[dismiss]                   | Foundation for dialog + tooltip                                                                              |
+| dialog                | ✅       | ✅ (+SSR)  | ✅        | ✅ peerDeps:[@quartz-headless/core] | Includes drawer positioning                                                                                  |
+| splitter (Core)       | ✅       | ✅         | ✅        | ✅                                  | Container-scoped service pattern                                                                             |
+| toast                 | ✅       | ✅         | ✅        | ✅                                  | Types now in `toast.types.ts` (naming deviation resolved)                                                    |
+| drag-drop (Core)      | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
+| tooltip               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Docs page now live at `/tooltip`                                                                             |
+| tree                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
+| listbox               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multi selection, active-descendant, typeahead and disabled options                                    |
+| virtual-scroll        | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
+| viewport              | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
+| directionality (Core) | ✅       | ✅ (+SSR)  | ✅        | ✅                                  | No `MutationObserver`; `refresh()`/`set()` for dynamic dir. See `docs/ai/specs/directionality.md`            |
 
 ## Tree lazy loading (2026-08-18)
 
@@ -145,8 +170,8 @@ change behaviour or that are easy to regress:
 
 - **AnalogJS route cache**: new `(docs)/*.page.ts` files still need a manual entry in
   `extraRoutes` (`src/app/app.config.ts`). Currently listed there: tree, virtual-scroll,
-  viewport, **tooltip**. Do not remove entries without re-verifying the route in a fresh
-  `.angular`/Vite cache.
+  viewport, tooltip, listbox, **directionality**. Do not remove entries without
+  re-verifying the route in a fresh `.angular`/Vite cache.
 - CLAUDE.md may lag reality on small details. When CLAUDE.md and the code disagree,
   **the code wins**; then fix CLAUDE.md.
 - `package.json` has a machine-specific script `update-editor` pointing at a local Vertex
