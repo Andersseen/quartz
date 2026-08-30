@@ -1,0 +1,93 @@
+<app-demo-page
+  badge="Primitive"
+  title="Popover"
+  description="A non-modal floating surface for interactive content. It composes Overlay dismissal and positioning without trapping focus or forcing dialog semantics."
+  [features]="[
+    { title: 'Interactive', description: 'Buttons, links and form controls can live inside' },
+    { title: 'Non Modal', description: 'No focus trap by default' },
+    { title: 'Dismissable', description: 'Escape, outside pointer and scroll close it' },
+    { title: 'Positioned', description: 'Placement, offset, flip and width matching' },
+  ]"
+>
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Basic Popover</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Popover is for interactive floating content. The trigger receives
+        <code>aria-expanded</code> and <code>aria-controls</code> while open.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <button
+            qzPopoverTrigger
+            [popover]="details"
+            [placement]="placement"
+            class="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+            type="button"
+          >
+            Details
+          </button>
+
+          <ng-template #details>
+            <div
+              qzPopover
+              class="w-72 rounded-lg border border-white/10 bg-[#181820] p-4 text-sm text-gray-200 shadow-2xl"
+            >
+              <h3 class="mb-2 font-semibold text-white">Workspace usage</h3>
+              <p class="mb-4 text-gray-400">You are using 42% of the included storage.</p>
+              <button
+                class="rounded-md border border-white/10 px-3 py-1.5 text-sm text-gray-100 hover:bg-white/5"
+                type="button"
+              >
+                Manage
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Controlled State</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Bind <code>[(open)]</code> when application state should own visibility. Use
+        <code>autoFocus</code> when the first focusable control should receive focus on open.
+      </p>
+
+      <app-code-block [code]="controlledCode">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <button
+            qzPopoverTrigger
+            [popover]="settings"
+            [(open)]="open"
+            [autoFocus]="true"
+            class="inline-flex items-center justify-center rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-gray-100 hover:bg-white/5"
+            type="button"
+          >
+            Settings
+          </button>
+          <span class="text-sm text-gray-400">Open: {{ open() }}</span>
+
+          <ng-template #settings>
+            <div
+              qzPopover
+              class="w-72 rounded-lg border border-white/10 bg-[#181820] p-4 text-sm text-gray-200 shadow-2xl"
+            >
+              <label class="mb-3 flex items-center justify-between gap-4">
+                <span>Email updates</span>
+                <input class="accent-emerald-500" type="checkbox" />
+              </label>
+              <button
+                class="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-500"
+                type="button"
+              >
+                Save
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

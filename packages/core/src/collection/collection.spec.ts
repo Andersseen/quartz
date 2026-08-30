@@ -117,6 +117,30 @@ describe('CollectionStore', () => {
     vi.useRealTimers();
   });
 
+  it('cycles repeated typeahead characters instead of searching the repeated string', () => {
+    const store = new CollectionStore<CollectionItem>({ typeaheadTimeoutMs: 50 }, document);
+    store.register({ id: 'alpha', label: 'Alpha' });
+    store.register({ id: 'alpine', label: 'Alpine' });
+    store.register({ id: 'bravo', label: 'Bravo' });
+
+    store.typeahead('a');
+    expect(store.activeId()).toBe('alpine');
+    store.typeahead('a');
+    expect(store.activeId()).toBe('alpha');
+  });
+
+  it('keeps active id usable when every item becomes disabled', () => {
+    let disabled = false;
+    const store = new CollectionStore<CollectionItem>({}, document);
+    store.register({ id: 'one', disabled: () => disabled });
+
+    disabled = true;
+    store.next();
+
+    expect(store.activeItem()).toBeNull();
+    expect(store.activeTabIndex('one')).toBe(-1);
+  });
+
   it('handles dynamic add/remove and active item removal', () => {
     const store = new CollectionStore<CollectionItem>({}, document);
     const one = { id: 'one' };

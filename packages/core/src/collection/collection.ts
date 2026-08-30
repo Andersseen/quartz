@@ -123,6 +123,8 @@ export class CollectionStore<T extends CollectionItem> {
     if (!items.length) return null;
 
     this.#typeahead += character.toLocaleLowerCase();
+    const repeated = this.#typeahead.split('').every((char) => char === this.#typeahead[0]);
+    const query = repeated ? this.#typeahead[0] : this.#typeahead;
     this.#clearTypeahead(false);
 
     const view = this.#document?.defaultView;
@@ -133,7 +135,7 @@ export class CollectionStore<T extends CollectionItem> {
       );
     }
 
-    const result = findByTypeahead(items, this.#activeId(), this.#typeahead);
+    const result = findByTypeahead(items, this.#activeId(), query);
     return this.#activate(result.item, options);
   }
 

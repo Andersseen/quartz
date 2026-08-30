@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-28** (added Directionality Core foundation)
+> **Last updated: 2026-08-30** (prepared Quartz 0.1.0 with Menu + Popover)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -28,6 +28,30 @@ Added `packages/core/src/directionality/` — `DirectionalityService` (signal-ba
   cheap escape hatches for apps that toggle direction dynamically.
 - New demo page at `/directionality` (Core, sidebar + `extraRoutes` entry like tree/viewport/
   tooltip/listbox).
+
+## Quartz 0.1.0 foundation release prep (2026-08-30)
+
+Quartz is now prepared for the first real minor release:
+`@quartz-headless/core@0.1.0` and `@quartz-headless/primitives@0.1.0`.
+
+- Core hardening: `CollectionStore` repeated-character typeahead now cycles matching items
+  instead of searching the repeated string literally; focus helpers avoid restoring focus
+  to removed, disabled, hidden or otherwise unfocusable targets.
+- New Primitive: `Menu` (`qzMenuTrigger`, `qzMenu`, `qzMenuItem`, `qzMenuSeparator`,
+  `qzMenuCheckboxItem`, `qzMenuRadioGroup`, `qzMenuRadioItem`) built from Collection,
+  Overlay, Dismiss, Focus and Directionality. Supports roving tabindex, typeahead, disabled
+  items, nested submenus, RTL inline-start/end keyboard behavior, outside/tree dismissal,
+  checkbox items and radio groups.
+- New Primitive: `Popover` (`qzPopoverTrigger`, `qzPopover`) built on Overlay. It is
+  non-modal by default, supports controlled/uncontrolled `open`, placement/offset/flip,
+  outside/Escape dismissal, ARIA trigger relationships, and optional initial focus for
+  interactive content.
+- CLI registry now includes `menu` and `popover` as Primitives with
+  `peerDeps: ['@quartz-headless/core']`; `verify-build` now checks their built public API
+  exports.
+- Demo/docs now include `/menu` and `/popover`, sidebar entries, route-cache `extraRoutes`,
+  updated README install/package language, and removal of stale unscoped package examples
+  from user-facing docs.
 
 ## Split into @quartz-headless/core + @quartz-headless/primitives (2026-08-27)
 
@@ -93,9 +117,8 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.0.3** in their
-  `package.json`, not yet published to npm (verified via `npm view` — both 404 as of
-  2026-08-27). CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.1.0** in their
+  `package.json`. CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
   `main` whenever a package's `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
   CI on push to `main` (see "Publish" row in ARCHITECTURE.md's build/test topology table).
@@ -115,6 +138,8 @@ items remain open.
 | tooltip               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Docs page now live at `/tooltip`                                                                             |
 | tree                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | WAI-ARIA keyboard nav + roving tabindex (default template). Lazy per-level `loadChildren`. Manual extraRoute |
 | listbox               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multi selection, active-descendant, typeahead and disabled options                                    |
+| menu                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Dropdown menu with submenus, checkboxes, radio groups, typeahead and RTL inline keys                         |
+| popover               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Non-modal interactive floating surface with controlled state and optional autofocus                          |
 | virtual-scroll        | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
 | viewport              | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
 | directionality (Core) | ✅       | ✅ (+SSR)  | ✅        | ✅                                  | No `MutationObserver`; `refresh()`/`set()` for dynamic dir. See `docs/ai/specs/directionality.md`            |

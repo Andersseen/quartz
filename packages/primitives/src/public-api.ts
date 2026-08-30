@@ -43,3 +43,21 @@ export {
   DEFAULT_LISTBOX_CONFIG,
 } from './listbox';
 export type { ListboxConfig, ListboxOrientation } from './listbox';
+
+// Menu
+export {
+  MenuDirective,
+  MenuTriggerDirective,
+  MenuItemDirective,
+  MenuSeparatorDirective,
+  MenuCheckboxItemDirective,
+  MenuRadioGroupDirective,
+  MenuRadioItemDirective,
+  MenuService,
+  DEFAULT_MENU_CONFIG,
+} from './menu';
+export type { MenuConfig, MenuCollectionEntry } from './menu';
+
+// Popover
+export { PopoverDirective, PopoverTriggerDirective, DEFAULT_POPOVER_CONFIG } from './popover';
+export type { PopoverConfig } from './popover';
