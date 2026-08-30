@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import { MenuCheckboxItemDirective } from './menu-checkbox-item.directive';
@@ -72,6 +73,7 @@ class SubmenuHost {
 
 describe('Menu', () => {
   afterEach(() => {
+    TestBed.resetTestingModule();
     document.querySelectorAll('[data-qz-overlay-container]').forEach((el) => el.remove());
   });
 
@@ -165,10 +167,18 @@ describe('Menu', () => {
     fireEvent.keyDown(rootMenu, { key: 'ArrowDown' });
     fireEvent.keyDown(rootMenu, { key: 'ArrowRight' });
     await waitFor(() => expect(screen.getAllByRole('menu')).toHaveLength(2));
-    await new Promise((resolve) => document.defaultView?.setTimeout(resolve));
+    await new Promise((resolve) => document.defaultView?.setTimeout(resolve, 10));
 
-    fireEvent.pointerDown(document.body);
+    const outside = document.createElement('button');
+    outside.textContent = 'Outside';
+    document.body.appendChild(outside);
+
+    fireEvent.pointerDown(outside);
+    fireEvent.mouseDown(outside);
+    fireEvent.click(outside);
     await waitFor(() => expect(screen.queryAllByRole('menu')).toHaveLength(0));
+
+    outside.remove();
 
     fireEvent.click(trigger);
     await screen.findByRole('menu');

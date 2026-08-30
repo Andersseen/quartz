@@ -94,6 +94,8 @@ export class MenuTriggerDirective implements OnDestroy {
       this.menuService = getMenuService(panel);
       this.menuService?.registerPanel(panel);
       this.menuService?.registerRootClose(this.closeFromService);
+      if (options.focus === 'last') this.menuService?.focusLast();
+      else this.menuService?.focusFirst();
       queueFrame(this.document, () => {
         if (!this.isOpen()) return;
         if (options.focus === 'last') this.menuService?.focusLast();

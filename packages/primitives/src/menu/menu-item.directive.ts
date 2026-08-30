@@ -197,7 +197,10 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
       this.childMenuService = getMenuService(panel);
       this.childMenuService?.registerLevelClose(this.closeFromChild);
       this.menuService.registerPanel(panel);
-      if (options.focusFirst) queueFrame(this.document, () => this.childMenuService?.focusFirst());
+      if (options.focusFirst) {
+        this.childMenuService?.focusFirst();
+        queueFrame(this.document, () => this.childMenuService?.focusFirst());
+      }
     });
     this.closedSubscription = this.overlayRef.closed$.subscribe(() => this.closeSubmenu(false));
     this.overlayRef.open();

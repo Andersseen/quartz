@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal, type OnDestroy } from '@angular/core';
 import {
   CollectionStore,
   createDismissController,
@@ -11,7 +11,7 @@ import {
 import { DEFAULT_MENU_CONFIG, type MenuCollectionEntry, type MenuConfig } from './menu.types';
 
 @Injectable()
-export class MenuService {
+export class MenuService implements OnDestroy {
   readonly #document = inject(DOCUMENT);
   readonly #parent = inject(MenuService, { optional: true, skipSelf: true });
   readonly #collection = new CollectionStore<MenuCollectionEntry>(
@@ -31,6 +31,7 @@ export class MenuService {
   #openSubmenuClose: (() => void) | null = null;
   #dismissController: DismissController | null = null;
   #dismissTimer: number | null = null;
+  #dismissTracksScroll = false;
 
   readonly items = this.#collection.items;
   readonly activeId = this.#collection.activeId;
@@ -175,28 +176,36 @@ export class MenuService {
     this.#clearDismissTimer();
     this.#dismissController?.destroy();
     this.#dismissController = null;
+    this.#dismissTracksScroll = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy();
   }
 
   #ensureDismissController(): void {
-    if (!this.isRoot || this.#dismissController || !this.#rootClose) return;
-    if (this.#dismissTimer !== null) return;
+    if (!this.isRoot || !this.#rootClose) return;
+    if (!this.#dismissController) this.#attachDismissController(false);
+    if (this.#dismissTracksScroll || this.#dismissTimer !== null) return;
     const view = this.#document.defaultView;
     if (!view) return;
     this.#dismissTimer = view.setTimeout(() => {
       this.#dismissTimer = null;
-      if (!this.isRoot || this.#dismissController || !this.#rootClose) return;
-      this.#attachDismissController();
+      if (!this.isRoot || this.#dismissTracksScroll || !this.#rootClose) return;
+      this.#attachDismissController(true);
     });
   }
 
-  #attachDismissController(): void {
+  #attachDismissController(scroll: boolean): void {
+    this.#dismissController?.destroy();
     this.#dismissController = createDismissController({
       document: this.#document,
       outsidePointer: true,
-      scroll: true,
+      scroll,
       rootElements: () => this.#panels(),
       onDismiss: () => this.closeAll(true),
     });
+    this.#dismissTracksScroll = scroll;
   }
 
   #teardownDismissIfIdle(): void {
@@ -204,6 +213,7 @@ export class MenuService {
     this.#clearDismissTimer();
     this.#dismissController?.destroy();
     this.#dismissController = null;
+    this.#dismissTracksScroll = false;
   }
 
   #clearDismissTimer(): void {

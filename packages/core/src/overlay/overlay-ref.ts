@@ -153,6 +153,7 @@ export class OverlayRef {
   private attachListeners(): void {
     const attachDismiss = (outsidePointer: boolean) => {
       if (!this.isOpen) return;
+      if (!this.config.closeOnEscape && !outsidePointer && !this.config.closeOnScroll) return;
       this.dismissController?.destroy();
       this.dismissController = createDismissController({
         document: this.document,
