@@ -6,14 +6,14 @@
 
 **You own the styles — Quartz owns the behaviour.**
 
-[![npm version](https://img.shields.io/npm/v/quartz-headless?style=flat-square&color=7c3aed&label=npm)](https://www.npmjs.com/package/quartz-headless)
-[![npm downloads](https://img.shields.io/npm/dm/quartz-headless?style=flat-square&color=7c3aed)](https://www.npmjs.com/package/quartz-headless)
+[![core npm version](https://img.shields.io/npm/v/@quartz-headless/core?style=flat-square&color=7c3aed&label=core)](https://www.npmjs.com/package/@quartz-headless/core)
+[![primitives npm version](https://img.shields.io/npm/v/@quartz-headless/primitives?style=flat-square&color=7c3aed&label=primitives)](https://www.npmjs.com/package/@quartz-headless/primitives)
 [![CI/CD](https://img.shields.io/github/actions/workflow/status/Andersseen/quartz/deploy.yml?branch=main&style=flat-square&color=7c3aed&label=ci%2Fcd)](https://github.com/Andersseen/quartz/actions/workflows/deploy.yml)
-[![minzipped size](https://img.shields.io/bundlephobia/minzip/quartz-headless?style=flat-square&color=7c3aed&label=min%2Bgzip)](https://bundlephobia.com/package/quartz-headless)
+[![core size](https://img.shields.io/bundlephobia/minzip/@quartz-headless/core?style=flat-square&color=7c3aed&label=core%20min%2Bgzip)](https://bundlephobia.com/package/@quartz-headless/core)
 [![Angular](https://img.shields.io/badge/angular-21-dd0031?style=flat-square)](https://angular.dev)
 [![license](https://img.shields.io/github/license/Andersseen/quartz?style=flat-square&color=7c3aed)](LICENSE)
 
-**[🌐 Live docs & demos](https://quartz-headless.pages.dev)** · [📦 npm](https://www.npmjs.com/package/quartz-headless) · [🐛 Report a bug](https://github.com/Andersseen/quartz/issues)
+**[🌐 Live docs & demos](https://quartz-headless.pages.dev)** · [📦 Core](https://www.npmjs.com/package/@quartz-headless/core) · [📦 Primitives](https://www.npmjs.com/package/@quartz-headless/primitives) · [🐛 Report a bug](https://github.com/Andersseen/quartz/issues)
 
 </div>
 
@@ -93,7 +93,7 @@ Files land flat in your project's `src/lib/components/<name>/` (auto-detected) o
 viewport, drag-drop, virtual-scroll, splitter) stay pure copy-source with zero npm
 dependencies — copying one pulls in its Core siblings too (e.g. `overlay` also copies
 `dismiss` and `directionality`). **Primitives**
-(dialog, tooltip, toast, tree, listbox) depend on `@quartz-headless/core` as a real npm
+(dialog, tooltip, toast, tree, listbox, menu, popover) depend on `@quartz-headless/core` as a real npm
 package instead of copied source — `pnpm quartz add dialog` copies only `dialog/` and tells
 you to `npm install @quartz-headless/core`.
 
@@ -109,6 +109,8 @@ you to `npm install @quartz-headless/core`.
 | [`tooltip`](https://quartz-headless.pages.dev/tooltip)               | `@quartz-headless/primitives` | Hover/focus tooltip with configurable placement                                    |
 | [`tree`](https://quartz-headless.pages.dev/tree)                     | `@quartz-headless/primitives` | Tree view with roving tabindex, WAI-ARIA keyboard nav &amp; lazy per-level loading |
 | [`listbox`](https://quartz-headless.pages.dev/listbox)               | `@quartz-headless/primitives` | Single/multi selection with WAI-ARIA keyboard navigation and type-ahead            |
+| [`menu`](https://quartz-headless.pages.dev/menu)                     | `@quartz-headless/primitives` | Dropdown menu with submenus, checkbox/radio items, RTL and type-ahead              |
+| [`popover`](https://quartz-headless.pages.dev/popover)               | `@quartz-headless/primitives` | Non-modal interactive floating content with dismiss and optional initial focus     |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | `@quartz-headless/core`       | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | `@quartz-headless/core`       | Reactive breakpoint service + `ViewportMatchDirective`                             |
 | [`directionality`](https://quartz-headless.pages.dev/directionality) | `@quartz-headless/core`       | LTR/RTL resolution + logical inline-start/end and keyboard helpers                 |

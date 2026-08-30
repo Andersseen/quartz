@@ -29,7 +29,7 @@ import { MOVEMENT_DIRECTIVES } from 'angular-movement';
               class="flex min-w-0 flex-wrap items-center justify-center gap-3 rounded-lg bg-black/30 px-3 py-3 font-mono text-xs text-gray-200 sm:flex-nowrap sm:justify-start sm:gap-4 sm:px-4 sm:text-sm"
             >
               <span class="text-violet-500 select-none">$</span>
-              npm install quartz-headless
+              npm install @quartz-headless/core @quartz-headless/primitives
               <volt-button
                 variant="outline"
                 size="sm"
@@ -50,7 +50,7 @@ export class HomeCtaComponent {
   copied = signal<boolean>(false);
 
   copyInstallCommand() {
-    navigator.clipboard.writeText('npm install quartz-headless');
+    navigator.clipboard.writeText('npm install @quartz-headless/core @quartz-headless/primitives');
     this.copied.set(true);
     setTimeout(() => {
       this.copied.set(false);

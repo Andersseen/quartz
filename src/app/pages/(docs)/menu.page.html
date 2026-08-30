@@ -1,0 +1,138 @@
+<app-demo-page
+  badge="Primitive"
+  title="Menu"
+  description="Accessible dropdown menus with roving tabindex, type-ahead, nested submenus, checkable items, radio groups, RTL-aware submenu keys and outside dismissal."
+  [features]="[
+    { title: 'Keyboard Complete', description: 'Arrows, Home, End, type-ahead, Escape and Tab' },
+    { title: 'Nested', description: 'Submenus compose through Overlay and Dismiss' },
+    { title: 'Checkable', description: 'Checkbox and radio menu item semantics' },
+    { title: 'RTL', description: 'Logical inline keys and placement' },
+  ]"
+>
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Dropdown Menu</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Use <code>qzMenuTrigger</code> with a menu template. Items emit <code>selected</code> and
+        close the menu by default.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <button
+            qzMenuTrigger
+            [menu]="fileMenu"
+            class="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+            type="button"
+          >
+            File
+          </button>
+          <span class="text-sm text-gray-400">Selected: {{ selected() }}</span>
+
+          <ng-template #fileMenu>
+            <div
+              qzMenu
+              class="min-w-48 rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+            >
+              <button qzMenuItem class="menu-item" (selected)="selected.set('New file')">
+                New file
+              </button>
+              <button qzMenuItem class="menu-item" (selected)="selected.set('Rename')">
+                Rename
+              </button>
+              <button qzMenuItem class="menu-item" [disabled]="true">Archive</button>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Submenus</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        A menu item can own a nested menu with <code>[submenu]</code>. Inline-end opens it;
+        inline-start closes it and returns focus to the owner.
+      </p>
+
+      <app-code-block [code]="submenuCode">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <button
+            qzMenuTrigger
+            [menu]="actionsMenu"
+            data-testid="submenu-menu-trigger"
+            class="inline-flex items-center justify-center rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-gray-100 hover:bg-white/5"
+            type="button"
+          >
+            Actions
+          </button>
+
+          <ng-template #actionsMenu>
+            <div
+              qzMenu
+              class="min-w-52 rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+            >
+              <button qzMenuItem class="menu-item">Duplicate</button>
+              <button
+                qzMenuItem
+                class="menu-item"
+                [submenu]="shareMenu"
+                data-testid="share-submenu-item"
+              >
+                Share with
+              </button>
+              <ng-template #shareMenu>
+                <div
+                  qzMenu
+                  class="min-w-44 rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+                >
+                  <button qzMenuItem class="menu-item">Email</button>
+                  <button qzMenuItem class="menu-item">Copy link</button>
+                </div>
+              </ng-template>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Checkbox And Radio Items</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Checkable items stay open by default and expose <code>aria-checked</code> for assistive
+        technology.
+      </p>
+
+      <app-code-block [code]="checkableCode">
+        <div preview class="flex items-center gap-4 flex-wrap">
+          <button
+            qzMenuTrigger
+            [menu]="viewMenu"
+            class="inline-flex items-center justify-center rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-gray-100 hover:bg-white/5"
+            type="button"
+          >
+            View
+          </button>
+          <span class="text-sm text-gray-400">
+            Toolbar: {{ showToolbar() ? 'shown' : 'hidden' }} · {{ density() }}
+          </span>
+
+          <ng-template #viewMenu>
+            <div
+              qzMenu
+              class="min-w-56 rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+            >
+              <button qzMenuCheckboxItem class="menu-item" [(checked)]="showToolbar">
+                Show toolbar
+              </button>
+              <div qzMenuSeparator class="my-1 h-px bg-white/10"></div>
+              <div qzMenuRadioGroup [(value)]="density">
+                <button qzMenuRadioItem value="compact" class="menu-item">Compact</button>
+                <button qzMenuRadioItem value="comfortable" class="menu-item">Comfortable</button>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

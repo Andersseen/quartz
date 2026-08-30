@@ -43,9 +43,10 @@ export function focusInitialElement(container: HTMLElement): HTMLElement | null 
 
 export function focusSafely(element: HTMLElement | null | undefined): HTMLElement | null {
   if (!element?.ownerDocument.defaultView) return null;
+  if (!isFocusable(element)) return null;
   try {
     element.focus();
-    return element;
+    return element.ownerDocument.activeElement === element ? element : null;
   } catch {
     return null;
   }

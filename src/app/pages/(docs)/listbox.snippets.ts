@@ -1,5 +1,5 @@
 export const BASIC_SNIPPET = `import { signal } from '@angular/core';
-import { ListboxDirective, ListboxOptionDirective } from 'quartz-headless';
+import { ListboxDirective, ListboxOptionDirective } from '@quartz-headless/primitives';
 
 selected = signal<string | null>('starter');
 

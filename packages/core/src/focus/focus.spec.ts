@@ -3,6 +3,7 @@ import {
   createFocusRestorer,
   createFocusTrap,
   focusInitialElement,
+  focusSafely,
   getFocusableElements,
 } from './focus';
 
@@ -53,6 +54,31 @@ describe('focus foundation', () => {
 
     restorer.restore();
     expect(document.activeElement).toBe(before);
+
+    before.remove();
+    after.remove();
+  });
+
+  it('does not restore focus to removed, disabled, or hidden targets', () => {
+    const before = document.createElement('button');
+    const after = document.createElement('button');
+    document.body.append(before, after);
+    before.focus();
+
+    const restorer = createFocusRestorer(document);
+    before.remove();
+    after.focus();
+
+    restorer.restore();
+    expect(document.activeElement).toBe(after);
+
+    expect(focusSafely(before)).toBeNull();
+    before.disabled = true;
+    document.body.appendChild(before);
+    expect(focusSafely(before)).toBeNull();
+    before.disabled = false;
+    before.hidden = true;
+    expect(focusSafely(before)).toBeNull();
 
     before.remove();
     after.remove();

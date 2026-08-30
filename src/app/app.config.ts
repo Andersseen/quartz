@@ -74,6 +74,26 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'menu',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/menu.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'popover',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/popover.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

@@ -164,6 +164,74 @@ test.describe('Listbox behavior', () => {
   });
 });
 
+test.describe('Menu behavior', () => {
+  test('should open, navigate, typeahead and restore focus on Escape', async ({ page }) => {
+    await page.goto('/menu');
+
+    const trigger = page.getByRole('button', { name: 'File' });
+    await trigger.focus();
+    await page.keyboard.press('ArrowDown');
+
+    const menu = page.getByRole('menu').first();
+    await expect(menu).toBeVisible();
+    await expect(menu.getByRole('menuitem', { name: 'New file' })).toBeFocused();
+
+    await page.keyboard.press('ArrowDown');
+    await expect(menu.getByRole('menuitem', { name: 'Rename' })).toBeFocused();
+
+    await page.keyboard.press('a');
+    await expect(menu.getByRole('menuitem', { name: 'Archive' })).not.toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(menu).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  });
+
+  test('should open a submenu with the inline-end key and close it with inline-start', async ({
+    page,
+  }) => {
+    await page.goto('/menu');
+
+    await page.getByTestId('submenu-menu-trigger').click();
+    const rootMenu = page.getByRole('menu').first();
+    await expect(rootMenu.getByRole('menuitem', { name: 'Duplicate' })).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByTestId('share-submenu-item')).toBeFocused();
+
+    await page.keyboard.press('ArrowRight');
+    await expect(page.getByRole('menu')).toHaveCount(2);
+    await expect(page.getByRole('menuitem', { name: 'Email' })).toBeFocused();
+
+    await page.keyboard.press('ArrowLeft');
+    await expect(page.getByRole('menu')).toHaveCount(1);
+    await expect(page.getByTestId('share-submenu-item')).toBeFocused();
+  });
+});
+
+test.describe('Popover behavior', () => {
+  test('should open interactive content and close with Escape', async ({ page }) => {
+    await page.goto('/popover');
+
+    const trigger = page.getByRole('button', { name: 'Details' });
+    await trigger.click();
+    const popover = page.locator('[data-qz-popover]').first();
+    await expect(popover).toBeVisible();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    await page.keyboard.press('Escape');
+    await expect(popover).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  });
+
+  test('should support controlled state and autofocus', async ({ page }) => {
+    await page.goto('/popover');
+
+    await page.getByRole('button', { name: 'Settings' }).click();
+    await expect(page.getByRole('checkbox', { name: 'Email updates' })).toBeFocused();
+    await expect(page.locator('text=Open: true')).toBeVisible();
+  });
+});
+
 test.describe('Tree behavior', () => {
   function basicTree(page) {
     return page.getByTestId('basic-tree');

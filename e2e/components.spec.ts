@@ -10,6 +10,8 @@ test.describe('Components Pages', () => {
     { path: '/toast', title: 'Toast' },
     { path: '/drag-drop', title: 'Drag & Drop' },
     { path: '/listbox', title: 'Listbox' },
+    { path: '/menu', title: 'Menu' },
+    { path: '/popover', title: 'Popover' },
   ];
 
   for (const component of components) {

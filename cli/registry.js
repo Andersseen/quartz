@@ -168,6 +168,36 @@ const REGISTRY = {
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/listbox',
   },
+  menu: {
+    description: 'Dropdown menu with keyboard navigation, submenus, checkbox and radio items',
+    layer: 'primitives',
+    files: [
+      'menu/menu.directive.ts',
+      'menu/menu-trigger.directive.ts',
+      'menu/menu-item.directive.ts',
+      'menu/menu-separator.directive.ts',
+      'menu/menu-checkbox-item.directive.ts',
+      'menu/menu-radio-group.directive.ts',
+      'menu/menu-radio-item.directive.ts',
+      'menu/menu.service.ts',
+      'menu/menu.types.ts',
+      'menu/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/menu',
+  },
+  popover: {
+    description: 'Non-modal interactive floating surface built on Overlay',
+    layer: 'primitives',
+    files: [
+      'popover/popover.directive.ts',
+      'popover/popover-trigger.directive.ts',
+      'popover/popover.types.ts',
+      'popover/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/popover',
+  },
 };
 
 module.exports = { REGISTRY };

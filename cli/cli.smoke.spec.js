@@ -89,6 +89,19 @@ describe('CLI smoke — quartz add', () => {
     expect(copied.tooltip).toContain('index.ts');
   });
 
+  it('should copy menu and popover as Primitives without copying Core folders', () => {
+    const outDir = runAdd(tmpDir, ['menu', 'popover']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['menu', 'popover']);
+    expect(copied.menu).toContain('menu-trigger.directive.ts');
+    expect(copied.menu).toContain('menu-checkbox-item.directive.ts');
+    expect(copied.menu).toContain('menu-radio-item.directive.ts');
+    expect(copied.popover).toContain('popover-trigger.directive.ts');
+    expect(fs.existsSync(path.join(outDir, 'overlay'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, 'dismiss'))).toBe(false);
+  });
+
   it('should copy a Core component and a Primitive together without duplicates', () => {
     const outDir = runAdd(tmpDir, ['overlay', 'tooltip']);
     const copied = readFiles(outDir);

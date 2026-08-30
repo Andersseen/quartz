@@ -52,6 +52,18 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Selected:').first()).toContainText('enterprise');
   });
 
+  test('should navigate to menu page', async ({ page }) => {
+    await page.goto('/menu');
+    await expect(page.getByRole('heading', { name: 'Menu', level: 1 })).toBeVisible();
+    await expect(page.getByText('Nested', { exact: true })).toBeVisible();
+  });
+
+  test('should navigate to popover page', async ({ page }) => {
+    await page.goto('/popover');
+    await expect(page.getByRole('heading', { name: 'Popover', level: 1 })).toBeVisible();
+    await expect(page.getByText('Non Modal', { exact: true })).toBeVisible();
+  });
+
   test('should redirect /components to /overlay', async ({ page }) => {
     await page.goto('/components');
     await expect(page).toHaveURL(/\/overlay/);
@@ -63,5 +75,7 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Dialog').first()).toBeVisible();
     await expect(page.locator('text=Tooltip').first()).toBeVisible();
     await expect(page.locator('text=Splitter').first()).toBeVisible();
+    await expect(page.locator('text=Menu').first()).toBeVisible();
+    await expect(page.locator('text=Popover').first()).toBeVisible();
   });
 });

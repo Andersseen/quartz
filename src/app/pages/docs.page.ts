@@ -47,9 +47,9 @@ export default class DocsPage {
   readonly installCopied = signal(false);
 
   readonly installCommands = {
-    pnpm: 'pnpm add quartz-headless',
-    npm: 'npm install quartz-headless',
-    yarn: 'yarn add quartz-headless',
+    pnpm: 'pnpm add @quartz-headless/core @quartz-headless/primitives',
+    npm: 'npm install @quartz-headless/core @quartz-headless/primitives',
+    yarn: 'yarn add @quartz-headless/core @quartz-headless/primitives',
   } as const;
 
   readonly stylesCode = `// Quartz Headless ships without CSS. Use your own design tokens.
@@ -60,12 +60,12 @@ export default class DocsPage {
 }`;
 
   readonly basicUsageCode = `import { Component } from '@angular/core';
-import { OverlayTriggerDirective } from 'quartz-headless';
+import { OverlayTriggerDirective } from '@quartz-headless/core';
 
 @Component({
   selector: 'app-menu',
   imports: [OverlayTriggerDirective],
-  template: \`<button qzOverlayTrigger=\"menu\">Open menu</button>\`,
+    template: \`<button qzOverlayTrigger [overlayTemplate]="menu">Open menu</button>\`,
 })
 export class MenuComponent {}`;
 
