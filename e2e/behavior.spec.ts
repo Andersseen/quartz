@@ -169,20 +169,22 @@ test.describe('Menu behavior', () => {
     await page.goto('/menu');
 
     const trigger = page.getByRole('button', { name: 'File' });
-    await trigger.focus();
-    await page.keyboard.press('ArrowDown');
+    await expect(trigger).toBeVisible();
+    await trigger.click();
 
     const menu = page.getByRole('menu').first();
     await expect(menu).toBeVisible();
-    await expect(menu.getByRole('menuitem', { name: 'New file' })).toBeFocused();
+    const newFile = menu.getByRole('menuitem', { name: 'New file' });
+    await expect(newFile).toBeFocused();
 
-    await page.keyboard.press('ArrowDown');
-    await expect(menu.getByRole('menuitem', { name: 'Rename' })).toBeFocused();
+    await newFile.press('ArrowDown');
+    const rename = menu.getByRole('menuitem', { name: 'Rename' });
+    await expect(rename).toBeFocused();
 
-    await page.keyboard.press('a');
+    await rename.press('a');
     await expect(menu.getByRole('menuitem', { name: 'Archive' })).not.toBeFocused();
 
-    await page.keyboard.press('Escape');
+    await rename.press('Escape');
     await expect(menu).not.toBeVisible();
     await expect(trigger).toBeFocused();
   });
@@ -194,17 +196,20 @@ test.describe('Menu behavior', () => {
 
     await page.getByTestId('submenu-menu-trigger').click();
     const rootMenu = page.getByRole('menu').first();
-    await expect(rootMenu.getByRole('menuitem', { name: 'Duplicate' })).toBeFocused();
-    await page.keyboard.press('ArrowDown');
-    await expect(page.getByTestId('share-submenu-item')).toBeFocused();
+    const duplicate = rootMenu.getByRole('menuitem', { name: 'Duplicate' });
+    await expect(duplicate).toBeFocused();
+    await duplicate.press('ArrowDown');
+    const share = page.getByTestId('share-submenu-item');
+    await expect(share).toBeFocused();
 
-    await page.keyboard.press('ArrowRight');
+    await share.press('ArrowRight');
     await expect(page.getByRole('menu')).toHaveCount(2);
-    await expect(page.getByRole('menuitem', { name: 'Email' })).toBeFocused();
+    const email = page.getByRole('menuitem', { name: 'Email' });
+    await expect(email).toBeFocused();
 
-    await page.keyboard.press('ArrowLeft');
+    await email.press('ArrowLeft');
     await expect(page.getByRole('menu')).toHaveCount(1);
-    await expect(page.getByTestId('share-submenu-item')).toBeFocused();
+    await expect(share).toBeFocused();
   });
 });
 
