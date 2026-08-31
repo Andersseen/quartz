@@ -61,3 +61,23 @@ export type { MenuConfig, MenuCollectionEntry } from './menu';
 // Popover
 export { PopoverDirective, PopoverTriggerDirective, DEFAULT_POPOVER_CONFIG } from './popover';
 export type { PopoverConfig } from './popover';
+
+// Combobox
+export {
+  ComboboxDirective,
+  ComboboxInputDirective,
+  ComboboxContentDirective,
+  ComboboxListboxDirective,
+  ComboboxOptionDirective,
+  ComboboxTriggerDirective,
+  DEFAULT_COMBOBOX_CONFIG,
+} from './combobox';
+export type {
+  ComboboxAutocomplete,
+  ComboboxOpenReason,
+  ComboboxCloseReason,
+  ComboboxFilter,
+  ComboboxDisplayWith,
+  ComboboxCompareWith,
+  ComboboxConfig,
+} from './combobox';

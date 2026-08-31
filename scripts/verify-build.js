@@ -68,6 +68,12 @@ const PACKAGES = {
       'MenuRadioItemDirective',
       'PopoverDirective',
       'PopoverTriggerDirective',
+      'ComboboxDirective',
+      'ComboboxInputDirective',
+      'ComboboxContentDirective',
+      'ComboboxListboxDirective',
+      'ComboboxOptionDirective',
+      'ComboboxTriggerDirective',
     ],
   },
 };
@@ -83,7 +89,9 @@ function checkExports(distDir, flatModuleName, expectedExports) {
   const dts = fs.readFileSync(path.join(distDir, `types/${flatModuleName}.d.ts`), 'utf8');
   const missing = expectedExports.filter((name) => !dts.includes(name));
   if (missing.length) {
-    throw new Error(`${flatModuleName}: built types missing expected exports: ${missing.join(', ')}`);
+    throw new Error(
+      `${flatModuleName}: built types missing expected exports: ${missing.join(', ')}`,
+    );
   }
 }
 
@@ -105,7 +113,9 @@ function checkPackageMetadata(distDir, npmName) {
 function checkPrimitivesDependsOnCoreAsPackage(distDir, flatModuleName) {
   const pkg = JSON.parse(fs.readFileSync(path.join(distDir, 'package.json'), 'utf8'));
   if (!pkg.peerDependencies || !pkg.peerDependencies['@quartz-headless/core']) {
-    throw new Error('@quartz-headless/primitives must declare @quartz-headless/core as a peer dependency');
+    throw new Error(
+      '@quartz-headless/primitives must declare @quartz-headless/core as a peer dependency',
+    );
   }
 
   const bundle = fs.readFileSync(path.join(distDir, `fesm2022/${flatModuleName}.mjs`), 'utf8');
@@ -144,7 +154,9 @@ function main() {
   for (const [name, config] of Object.entries(PACKAGES)) {
     verifyPackage(name, config);
   }
-  console.log('✓ Build verification passed for @quartz-headless/core and @quartz-headless/primitives');
+  console.log(
+    '✓ Build verification passed for @quartz-headless/core and @quartz-headless/primitives',
+  );
 }
 
 main();

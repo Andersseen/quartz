@@ -111,6 +111,7 @@ you to `npm install @quartz-headless/core`.
 | [`listbox`](https://quartz-headless.pages.dev/listbox)               | `@quartz-headless/primitives` | Single/multi selection with WAI-ARIA keyboard navigation and type-ahead            |
 | [`menu`](https://quartz-headless.pages.dev/menu)                     | `@quartz-headless/primitives` | Dropdown menu with submenus, checkbox/radio items, RTL and type-ahead              |
 | [`popover`](https://quartz-headless.pages.dev/popover)               | `@quartz-headless/primitives` | Non-modal interactive floating content with dismiss and optional initial focus     |
+| [`combobox`](https://quartz-headless.pages.dev/combobox)             | `@quartz-headless/primitives` | Editable suggestions with input focus, active-descendant navigation and filtering  |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | `@quartz-headless/core`       | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | `@quartz-headless/core`       | Reactive breakpoint service + `ViewportMatchDirective`                             |
 | [`directionality`](https://quartz-headless.pages.dev/directionality) | `@quartz-headless/core`       | LTR/RTL resolution + logical inline-start/end and keyboard helpers                 |
