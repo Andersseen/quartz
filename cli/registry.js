@@ -34,6 +34,12 @@ const REGISTRY = {
     files: ['dismiss/dismiss.ts', 'dismiss/index.ts'],
     docs: 'https://quartz-headless.pages.dev/docs',
   },
+  'scroll-lock': {
+    description: 'Document-scoped body scroll locking for overlays and modal surfaces',
+    layer: 'core',
+    files: ['scroll-lock/scroll-lock.ts', 'scroll-lock/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/scroll-lock',
+  },
   directionality: {
     description: 'LTR/RTL direction resolution and logical (inline-start/end) helpers',
     layer: 'core',
@@ -213,6 +219,55 @@ const REGISTRY = {
     ],
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/combobox',
+  },
+  select: {
+    description: 'Button-triggered single select with listbox popup and keyboard navigation',
+    layer: 'primitives',
+    files: [
+      'select/select.directive.ts',
+      'select/select-trigger.directive.ts',
+      'select/select-content.directive.ts',
+      'select/select-listbox.directive.ts',
+      'select/select-option.directive.ts',
+      'select/select.types.ts',
+      'select/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/select',
+  },
+  tabs: {
+    description: 'Accessible tablist, tabs, and tab panels with roving focus',
+    layer: 'primitives',
+    files: [
+      'tabs/tabs.directive.ts',
+      'tabs/tab-list.directive.ts',
+      'tabs/tab.directive.ts',
+      'tabs/tab-panel.directive.ts',
+      'tabs/tabs.types.ts',
+      'tabs/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/tabs',
+  },
+  accordion: {
+    description: 'Single or multiple disclosure sections with accessible triggers and panels',
+    layer: 'primitives',
+    files: [
+      'accordion/accordion.directive.ts',
+      'accordion/accordion-item.directive.ts',
+      'accordion/accordion-trigger.directive.ts',
+      'accordion/accordion-panel.directive.ts',
+      'accordion/accordion.types.ts',
+      'accordion/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/accordion',
+  },
+  switch: {
+    description: 'Button-based ARIA switch with controlled checked state',
+    layer: 'primitives',
+    files: ['switch/switch.directive.ts', 'switch/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/switch',
   },
 };
 

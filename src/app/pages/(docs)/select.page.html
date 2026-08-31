@@ -1,0 +1,125 @@
+<app-demo-page
+  badge="Primitive"
+  title="Select"
+  description="A button-triggered single select that renders a WAI-ARIA listbox popup with Quartz-owned keyboard, dismissal and positioning."
+  [features]="[
+    {
+      title: 'Keyboard',
+      description: 'Enter, Space, arrows, Home/End, Escape, Tab and type-ahead',
+    },
+    { title: 'Values', description: 'Strings or objects with compareWith and displayWith' },
+    { title: 'Popup', description: 'Overlay placement, flip and trigger-width matching' },
+    { title: 'CLI', description: 'pnpm quartz add select' },
+  ]"
+>
+  <div class="flex flex-col gap-10">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Basic and disabled option</h2>
+      <app-code-block [code]="basicCode">
+        <div preview class="flex flex-col gap-4 max-w-sm mx-auto">
+          <div qzSelect #select="qzSelect" [(value)]="country">
+            <button
+              qzSelectTrigger
+              data-testid="select-basic-trigger"
+              class="w-full rounded-md border border-white/15 px-4 py-2 text-left text-gray-100 data-[qz-open]:border-emerald-400"
+            >
+              {{ select.selectedLabel() || 'Choose country' }}
+            </button>
+            <ng-template qzSelectContent>
+              <div
+                qzSelectListbox
+                class="rounded-md border border-white/15 bg-[#111318] p-1 shadow-xl"
+              >
+                <button
+                  qzSelectOption="es"
+                  data-testid="select-basic-option"
+                  class="w-full rounded px-3 py-2 text-left text-gray-200 data-[qz-highlighted]:bg-emerald-500/20 data-[qz-selected]:text-emerald-200"
+                >
+                  Spain
+                </button>
+                <button
+                  qzSelectOption="fr"
+                  data-testid="select-basic-option"
+                  [qzSelectOptionDisabled]="true"
+                  class="w-full rounded px-3 py-2 text-left text-gray-500"
+                >
+                  France unavailable
+                </button>
+                <button
+                  qzSelectOption="de"
+                  data-testid="select-basic-option"
+                  class="w-full rounded px-3 py-2 text-left text-gray-200 data-[qz-highlighted]:bg-emerald-500/20 data-[qz-selected]:text-emerald-200"
+                >
+                  Germany
+                </button>
+              </div>
+            </ng-template>
+          </div>
+          <p class="text-sm text-gray-500">
+            Value: <span class="text-gray-200">{{ country() }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Object values and RTL</h2>
+      <app-code-block [code]="objectCode">
+        <div preview class="grid gap-4 md:grid-cols-2">
+          <div
+            qzSelect
+            #objectSelect="qzSelect"
+            [(value)]="objectCountry"
+            [displayWith]="displayCountry"
+            [compareWith]="compareCountry"
+          >
+            <button
+              qzSelectTrigger
+              class="w-full rounded-md border border-white/15 px-4 py-2 text-left text-gray-100"
+            >
+              {{ objectSelect.selectedLabel() }}
+            </button>
+            <ng-template qzSelectContent>
+              <div qzSelectListbox class="rounded-md border border-white/15 bg-[#111318] p-1">
+                @for (item of countries(); track item.code) {
+                  <button
+                    [qzSelectOption]="item"
+                    [qzSelectOptionLabel]="item.name"
+                    class="w-full rounded px-3 py-2 text-left text-gray-200 data-[qz-highlighted]:bg-cyan-500/20 data-[qz-selected]:text-cyan-200"
+                  >
+                    {{ item.name }}
+                  </button>
+                }
+              </div>
+            </ng-template>
+          </div>
+
+          <div dir="rtl" qzSelect #rtlSelect="qzSelect" [(value)]="rtlCountry">
+            <button
+              qzSelectTrigger
+              class="w-full rounded-md border border-white/15 px-4 py-2 text-right text-gray-100"
+            >
+              {{ rtlSelect.selectedLabel() || 'اختر' }}
+            </button>
+            <ng-template qzSelectContent>
+              <div qzSelectListbox class="rounded-md border border-white/15 bg-[#111318] p-1">
+                <button
+                  qzSelectOption="es"
+                  class="w-full rounded px-3 py-2 text-right text-gray-200 data-[qz-highlighted]:bg-cyan-500/20"
+                >
+                  Spain
+                </button>
+                <button
+                  qzSelectOption="de"
+                  class="w-full rounded px-3 py-2 text-right text-gray-200 data-[qz-highlighted]:bg-cyan-500/20"
+                >
+                  Germany
+                </button>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

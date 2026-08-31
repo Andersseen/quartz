@@ -104,6 +104,56 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'scroll-lock',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/scroll-lock.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'select',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/select.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'tabs',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/tabs.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'accordion',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/accordion.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'switch',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/switch.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

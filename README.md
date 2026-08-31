@@ -90,10 +90,11 @@ pnpm quartz add toast --output src/app/ui
 
 Files land flat in your project's `src/lib/components/<name>/` (auto-detected) or the
 `--output` path. **Core** pieces (overlay, dismiss, focus, collection, directionality,
-viewport, drag-drop, virtual-scroll, splitter) stay pure copy-source with zero npm
+viewport, drag-drop, virtual-scroll, splitter, scroll-lock) stay pure copy-source with zero npm
 dependencies — copying one pulls in its Core siblings too (e.g. `overlay` also copies
 `dismiss` and `directionality`). **Primitives**
-(dialog, tooltip, toast, tree, listbox, menu, popover) depend on `@quartz-headless/core` as a real npm
+(dialog, tooltip, toast, tree, listbox, menu, popover, combobox, select, tabs, accordion,
+switch) depend on `@quartz-headless/core` as a real npm
 package instead of copied source — `pnpm quartz add dialog` copies only `dialog/` and tells
 you to `npm install @quartz-headless/core`.
 
@@ -112,9 +113,14 @@ you to `npm install @quartz-headless/core`.
 | [`menu`](https://quartz-headless.pages.dev/menu)                     | `@quartz-headless/primitives` | Dropdown menu with submenus, checkbox/radio items, RTL and type-ahead              |
 | [`popover`](https://quartz-headless.pages.dev/popover)               | `@quartz-headless/primitives` | Non-modal interactive floating content with dismiss and optional initial focus     |
 | [`combobox`](https://quartz-headless.pages.dev/combobox)             | `@quartz-headless/primitives` | Editable suggestions with input focus, active-descendant navigation and filtering  |
+| [`select`](https://quartz-headless.pages.dev/select)                 | `@quartz-headless/primitives` | Button-triggered single select with listbox popup and type-ahead                   |
+| [`tabs`](https://quartz-headless.pages.dev/tabs)                     | `@quartz-headless/primitives` | Tablist, tabs and panels with roving focus, orientation and RTL support            |
+| [`accordion`](https://quartz-headless.pages.dev/accordion)           | `@quartz-headless/primitives` | Single, collapsible or multiple disclosure sections                                |
+| [`switch`](https://quartz-headless.pages.dev/switch)                 | `@quartz-headless/primitives` | Button-based ARIA switch with controlled checked state                             |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | `@quartz-headless/core`       | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | `@quartz-headless/core`       | Reactive breakpoint service + `ViewportMatchDirective`                             |
 | [`directionality`](https://quartz-headless.pages.dev/directionality) | `@quartz-headless/core`       | LTR/RTL resolution + logical inline-start/end and keyboard helpers                 |
+| [`scroll-lock`](https://quartz-headless.pages.dev/scroll-lock)       | `@quartz-headless/core`       | Per-Document body scroll locking for modal and floating workflows                  |
 
 Every primitive is **zoneless**, **standalone** and **tree-shakeable**. Drag &amp; drop follows the browser's native pointer-based HTML DnD model; keyboard drag-and-drop is intentionally deferred to a dedicated future primitive.
 

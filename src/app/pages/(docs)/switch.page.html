@@ -1,0 +1,41 @@
+<app-demo-page
+  badge="Primitive"
+  title="Switch"
+  description="A compact button-based ARIA switch for boolean state. Use it where the change takes effect immediately."
+  [features]="[
+    { title: 'Button first', description: 'Native click, Enter and Space behavior' },
+    { title: 'Signals', description: 'Two-way checked model' },
+    { title: 'ARIA', description: 'role switch and aria-checked included' },
+    { title: 'CLI', description: 'pnpm quartz add switch' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Basic, controlled and disabled</h2>
+    <app-code-block [code]="code">
+      <div preview class="flex flex-wrap items-center justify-center gap-4">
+        <button
+          qzSwitch
+          [(checked)]="enabled"
+          class="rounded-full border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=checked]:bg-emerald-500/20 data-[qz-state=checked]:text-emerald-100"
+        >
+          Notifications {{ enabled() ? 'on' : 'off' }}
+        </button>
+        <button
+          qzSwitch
+          [(checked)]="controlled"
+          class="rounded-full border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=checked]:bg-cyan-500/20"
+        >
+          Sync {{ controlled() ? 'on' : 'off' }}
+        </button>
+        <button
+          qzSwitch
+          [checked]="true"
+          [disabled]="true"
+          class="rounded-full border border-white/15 px-4 py-2 text-gray-600"
+        >
+          Disabled
+        </button>
+      </div>
+    </app-code-block>
+  </section>
+</app-demo-page>

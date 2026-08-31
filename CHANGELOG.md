@@ -7,15 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-31
+
+Release target: `@quartz-headless/core@0.2.0` and
+`@quartz-headless/primitives@0.2.0`.
+
 ### Added
 
+- **Core Scroll Lock.** New `createScrollLock(document)` foundation coordinates body scroll
+  locking per `Document`, supports nested and independent consumers, restores the original
+  `body.style.overflow`, exposes `lock()`, `unlock()` and `destroy()`, and is SSR-safe.
 - **Combobox.** New editable, unstyled WAI-ARIA combobox primitive with input-owned focus,
   active-descendant suggestion navigation, Overlay positioning, filtering, disabled options,
   object values with `displayWith`/`compareWith`, controlled `value`/`inputValue`/`open`
   models and IME-safe input handling.
+- **Select.** New button-triggered single Select primitive with Overlay-backed listbox popup,
+  roving focus, type-ahead, disabled options, controlled `value`/`open`, object values,
+  `displayWith`/`compareWith`, dismissal and RTL-aware logical placement.
+- **Tabs.** New `qzTabs`, `qzTabList`, `qzTab` and `qzTabPanel` primitives with roving
+  tabindex, automatic/manual activation, disabled tabs, horizontal/vertical orientation,
+  stable ARIA relationships and RTL horizontal keyboard navigation.
+- **Accordion.** New `qzAccordion`, `qzAccordionItem`, `qzAccordionTrigger` and
+  `qzAccordionPanel` primitives with single, single-collapsible and multiple state, disabled
+  items, optional `region` panels and header arrow navigation.
+- **Switch.** New button-first `qzSwitch` primitive with a controlled `checked` model,
+  disabled state, `role="switch"` and `aria-checked`.
+- Docs/demo pages and CLI registry entries for `/scroll-lock`, `/select`, `/tabs`,
+  `/accordion` and `/switch`.
 
 ### Changed
 
+- `DialogService` now consumes Core `createScrollLock()` instead of maintaining a private
+  body-overflow counter. Public dialog behavior is unchanged.
+- `@quartz-headless/primitives` now declares `@quartz-headless/core@^0.2.0` as its peer
+  dependency for the 0.2.0 minor line.
+- Package verification now checks public exports for Scroll Lock, Combobox, Select, Tabs,
+  Accordion and Switch.
 - **Breaking (packaging):** Quartz now ships as two separate npm packages instead of one —
   `@quartz-headless/core` (v0.0.3, low-level infrastructure: overlay, dismiss, focus,
   collection, viewport, drag-drop, virtual-scroll, splitter) and
@@ -32,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cloudflare Pages now deploys the static `dist/client` site rather than the failing SSR worker.
   Client-side routes use a Pages SPA fallback.
 
-## [0.2.0] — 2026-08-18
+## [legacy quartz-headless@0.2.0] — 2026-08-18
 
 ### Added
 

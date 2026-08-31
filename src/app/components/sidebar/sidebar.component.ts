@@ -118,6 +118,12 @@ export class SidebarComponent {
       icon: 'database' as const,
       soon: false,
     },
+    {
+      path: '/scroll-lock',
+      label: 'Scroll Lock',
+      icon: 'refresh' as const,
+      soon: false,
+    },
   ];
 
   readonly primitiveItems: SidebarItem[] = [
@@ -129,5 +135,9 @@ export class SidebarComponent {
     { path: '/menu', label: 'Menu', icon: 'list' as const, soon: false },
     { path: '/popover', label: 'Popover', icon: 'package' as const, soon: false },
     { path: '/combobox', label: 'Combobox', icon: 'list' as const, soon: false },
+    { path: '/select', label: 'Select', icon: 'list' as const, soon: false },
+    { path: '/tabs', label: 'Tabs', icon: 'grid' as const, soon: false },
+    { path: '/accordion', label: 'Accordion', icon: 'file' as const, soon: false },
+    { path: '/switch', label: 'Switch', icon: 'zap' as const, soon: false },
   ];
 }

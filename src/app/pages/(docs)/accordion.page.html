@@ -1,0 +1,108 @@
+<app-demo-page
+  badge="Primitive"
+  title="Accordion"
+  description="Disclosure sections with single, collapsible or multiple open state, accessible trigger/panel relationships and optional header arrow navigation."
+  [features]="[
+    { title: 'State', description: 'Single, single collapsible and multiple modes' },
+    {
+      title: 'Keyboard',
+      description: 'Native button activation plus Arrow/Home/End between headers',
+    },
+    { title: 'ARIA', description: 'expanded, controls, labelledby and optional region panels' },
+    { title: 'CLI', description: 'pnpm quartz add accordion' },
+  ]"
+>
+  <div class="flex flex-col gap-10">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Single mode</h2>
+      <app-code-block [code]="basicCode">
+        <div
+          preview
+          qzAccordion
+          [(value)]="section"
+          class="max-w-xl mx-auto divide-y divide-white/10 rounded-lg border border-white/10"
+        >
+          <div qzAccordionItem="shipping">
+            <button
+              qzAccordionTrigger
+              class="w-full px-4 py-3 text-left text-gray-200 data-[qz-state=open]:text-emerald-200"
+            >
+              Shipping
+            </button>
+            <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">
+              Ships in two business days.
+            </div>
+          </div>
+          <div qzAccordionItem="returns">
+            <button
+              qzAccordionTrigger
+              class="w-full px-4 py-3 text-left text-gray-200 data-[qz-state=open]:text-emerald-200"
+            >
+              Returns
+            </button>
+            <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">
+              Returns stay open until another item is chosen.
+            </div>
+          </div>
+          <div qzAccordionItem="billing" [qzAccordionItemDisabled]="true">
+            <button qzAccordionTrigger class="w-full px-4 py-3 text-left text-gray-600">
+              Billing disabled
+            </button>
+            <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">Disabled panel</div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Collapsible and multiple</h2>
+      <app-code-block [code]="multipleCode">
+        <div preview class="grid gap-6 md:grid-cols-2">
+          <div
+            qzAccordion
+            [(value)]="collapsibleSection"
+            [collapsible]="true"
+            class="divide-y divide-white/10 rounded-lg border border-white/10"
+          >
+            <div qzAccordionItem="faq">
+              <button
+                qzAccordionTrigger
+                class="w-full px-4 py-3 text-left text-gray-200 data-[qz-state=open]:text-cyan-200"
+              >
+                FAQ
+              </button>
+              <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">
+                Click again to close.
+              </div>
+            </div>
+          </div>
+          <div
+            qzAccordion
+            type="multiple"
+            [(value)]="sections"
+            class="divide-y divide-white/10 rounded-lg border border-white/10"
+          >
+            <div qzAccordionItem="one">
+              <button
+                qzAccordionTrigger
+                class="w-full px-4 py-3 text-left text-gray-200 data-[qz-state=open]:text-cyan-200"
+              >
+                One
+              </button>
+              <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">First panel</div>
+            </div>
+            <div qzAccordionItem="two">
+              <button
+                qzAccordionTrigger
+                class="w-full px-4 py-3 text-left text-gray-200 data-[qz-state=open]:text-cyan-200"
+              >
+                Two
+              </button>
+              <div qzAccordionPanel class="px-4 pb-4 text-sm text-gray-400">Second panel</div>
+            </div>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

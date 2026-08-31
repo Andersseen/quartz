@@ -10,6 +10,7 @@ import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.ty
 import { DialogRef } from './dialog-ref';
 import {
   createDismissController,
+  createScrollLock,
   type DismissController,
   createFocusRestorer,
   createFocusTrap,
@@ -23,7 +24,7 @@ let dialogId = 0;
 export class DialogService {
   private document = inject(DOCUMENT);
   #openDialogs = new Set<DialogRef>();
-  #originalBodyOverflow = '';
+  #scrollLock = createScrollLock(this.document);
 
   open(
     templateRef: TemplateRef<unknown>,
@@ -150,10 +151,7 @@ export class DialogService {
     focusTrap = createFocusTrap(panelEl, this.document);
 
     // -- Scroll lock -------------------------------------------------------------
-    if (this.#openDialogs.size === 0) {
-      this.#originalBodyOverflow = this.document.body.style.overflow;
-      this.document.body.style.overflow = 'hidden';
-    }
+    this.#scrollLock.lock();
     this.#openDialogs.add(ref);
 
     // -- Event listeners --------------------------------------------------------
@@ -224,10 +222,7 @@ export class DialogService {
     backdrop?.remove();
     wrapper.remove();
     view.destroy();
-    if (this.#openDialogs.size === 0) {
-      this.document.body.style.overflow = this.#originalBodyOverflow;
-      this.#originalBodyOverflow = '';
-    }
+    this.#scrollLock.unlock();
     focusRestorer.restore();
   }
 

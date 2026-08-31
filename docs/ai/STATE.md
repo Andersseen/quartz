@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-31** (Combobox primitive implemented on feature/combobox)
+> **Last updated: 2026-08-31** (0.2.0 navigation, selection and controls on feature/0.2.0-navigation-selection-controls)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -117,7 +117,7 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.1.0** in their
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.2.0** in their
   `package.json`. CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
   `main` whenever a package's `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
@@ -145,6 +145,29 @@ controlled `value`, `inputValue` and `open` models, input-owned ARIA, Overlay-ba
 rendering, default/custom/no filtering, disabled options, object values with `displayWith`
 and `compareWith`, outside/focus/scroll dismissal and IME-safe keyboard handling.
 
+## Quartz 0.2.0 navigation, selection and controls (2026-08-31)
+
+`docs/ai/specs/0.2.0-navigation-selection-controls.md` captures the release audit and
+implementation decisions. The scoped packages are prepared as
+`@quartz-headless/core@0.2.0` and `@quartz-headless/primitives@0.2.0`.
+
+- Core added `scroll-lock` with `createScrollLock(document)`. It coordinates nested and
+  independent consumers per `Document`, preserves the original body overflow style, exposes
+  `lock()`, `unlock()`, `destroy()` and is a no-op under SSR. Dialog now uses this Core
+  utility instead of keeping a private body overflow counter.
+- Primitives added Select, Tabs, Accordion and Switch. Select composes Overlay, Dismiss,
+  Focus, Collection and Directionality; Tabs uses Collection + Directionality for roving
+  focus and RTL horizontal keys; Accordion uses Collection for header navigation only;
+  Switch stays intentionally standalone.
+- Listbox, Combobox and Select were reviewed together. No shared public selection
+  abstraction was added because the three widgets have different focus ownership models.
+  Keep using Core `CollectionStore` directly unless a fourth primitive proves a smaller
+  primitives-private extraction is worth it.
+- Docs, sidebar, route-cache `extraRoutes`, CLI registry, CLI smoke coverage and package
+  build verification now include `scroll-lock`, `select`, `tabs`, `accordion` and `switch`.
+  `@quartz-headless/primitives` peers on `@quartz-headless/core@^0.2.0`.
+  Presence/exit animations remain explicitly out of scope for this minor.
+
 ## Primitive status matrix
 
 | Primitive             | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
@@ -160,9 +183,14 @@ and `compareWith`, outside/focus/scroll dismissal and IME-safe keyboard handling
 | menu                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Dropdown menu with submenus, checkboxes, radio groups, typeahead and RTL inline keys                         |
 | popover               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Non-modal interactive floating surface with controlled state and optional autofocus                          |
 | combobox              | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Editable input + listbox suggestions with active-descendant focus, filtering and Overlay positioning         |
+| select                | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single selection popup listbox with roving focus, object values, typeahead, dismissal and Overlay placement  |
+| tabs                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Roving-focus tabs with automatic/manual activation, orientation and RTL horizontal navigation                |
+| accordion             | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single, collapsible and multiple disclosure sections with trigger/panel ARIA                                 |
+| switch                | ✅       | ✅         | ✅        | ✅                                  | Button-first ARIA switch with controlled checked state                                                       |
 | virtual-scroll        | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
 | viewport              | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
 | directionality (Core) | ✅       | ✅ (+SSR)  | ✅        | ✅                                  | No `MutationObserver`; `refresh()`/`set()` for dynamic dir. See `docs/ai/specs/directionality.md`            |
+| scroll-lock (Core)    | ✅       | ✅         | ✅        | ✅                                  | Per-Document scroll coordination; Dialog consumes it                                                         |
 
 ## Tree lazy loading (2026-08-18)
 
@@ -209,13 +237,14 @@ change behaviour or that are easy to regress:
 
 ## In progress / next up
 
-- **Next composition primitive**: TBD after Combobox review.
+- **Next composition primitive**: TBD after the 0.2.0 release lands and npm publishes.
 
 ## Known issues / gotchas (live)
 
 - **AnalogJS route cache**: new `(docs)/*.page.ts` files still need a manual entry in
   `extraRoutes` (`src/app/app.config.ts`). Currently listed there: tree, virtual-scroll,
-  viewport, tooltip, listbox, **directionality**. Do not remove entries without
+  viewport, tooltip, listbox, directionality, combobox, scroll-lock, select, tabs,
+  accordion and switch. Do not remove entries without
   re-verifying the route in a fresh `.angular`/Vite cache.
 - CLAUDE.md may lag reality on small details. When CLAUDE.md and the code disagree,
   **the code wins**; then fix CLAUDE.md.
