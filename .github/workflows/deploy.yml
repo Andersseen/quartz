@@ -169,6 +169,10 @@ jobs:
       core-version: ${{ steps.version-core.outputs.version }}
       primitives-published: ${{ steps.version-primitives.outputs.published }}
       primitives-version: ${{ steps.version-primitives.outputs.version }}
+      release-needed: ${{ steps.release-metadata.outputs.needed }}
+      release-version: ${{ steps.release-metadata.outputs.version }}
+      release-tag: ${{ steps.release-metadata.outputs.tag }}
+      release-primary-tag: ${{ steps.release-metadata.outputs.primary-tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -232,6 +236,42 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Resolve GitHub Release metadata
+        id: release-metadata
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CORE_PUBLISHED: ${{ steps.version-core.outputs.published }}
+          CORE_VERSION: ${{ steps.version-core.outputs.version }}
+          PRIMITIVES_PUBLISHED: ${{ steps.version-primitives.outputs.published }}
+          PRIMITIVES_VERSION: ${{ steps.version-primitives.outputs.version }}
+        run: |
+          if [ -n "$PRIMITIVES_VERSION" ]; then
+            version="$PRIMITIVES_VERSION"
+          else
+            version="$CORE_VERSION"
+          fi
+          primary_tag="v$version"
+          tag="$primary_tag"
+
+          primary_body="$(gh release view "$primary_tag" --json body --jq .body 2>/dev/null || true)"
+          if [ -n "$primary_body" ] && ! printf '%s' "$primary_body" | grep -q "@quartz-headless/.*@$version"; then
+            tag="quartz-headless-v$version"
+          fi
+
+          needed=false
+          if [ "$CORE_PUBLISHED" = "true" ] || [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+            needed=true
+          elif ! gh release view "$tag" >/dev/null 2>&1; then
+            needed=true
+          fi
+
+          {
+            echo "needed=$needed"
+            echo "version=$version"
+            echo "tag=$tag"
+            echo "primary-tag=$primary_tag"
+          } >> "$GITHUB_OUTPUT"
+
   # Fires if EITHER package actually published (core and primitives are meant to stay
   # version-locked, but this doesn't assume that holds — a core-only or primitives-only
   # bump still gets a release instead of publishing silently).
@@ -241,7 +281,7 @@ jobs:
     needs: [publish]
     if: |
       github.ref == 'refs/heads/main' &&
-      (needs.publish.outputs.core-published == 'true' || needs.publish.outputs.primitives-published == 'true')
+      needs.publish.outputs.release-needed == 'true'
     permissions:
       contents: write
     steps:
@@ -255,24 +295,37 @@ jobs:
           CORE_VERSION: ${{ needs.publish.outputs.core-version }}
           PRIMITIVES_PUBLISHED: ${{ needs.publish.outputs.primitives-published }}
           PRIMITIVES_VERSION: ${{ needs.publish.outputs.primitives-version }}
+          RELEASE_VERSION: ${{ needs.publish.outputs.release-version }}
+          RELEASE_TAG: ${{ needs.publish.outputs.release-tag }}
+          RELEASE_PRIMARY_TAG: ${{ needs.publish.outputs.release-primary-tag }}
         run: |
-          # Prefer the primitives version for the tag/title (versions are meant to stay in
-          # lockstep); fall back to core's if only core published this run.
-          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
-            version="$PRIMITIVES_VERSION"
-          else
-            version="$CORE_VERSION"
-          fi
+          version="$RELEASE_VERSION"
+          tag="$RELEASE_TAG"
+          primary_tag="$RELEASE_PRIMARY_TAG"
 
-          notes="Published this release:"
-          if [ "$CORE_PUBLISHED" = "true" ]; then
+          notes="Packages in this release:"
+          if [ -n "$CORE_VERSION" ]; then
             notes="$notes\n- @quartz-headless/core@$CORE_VERSION"
           fi
-          if [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
+          if [ -n "$PRIMITIVES_VERSION" ]; then
             notes="$notes\n- @quartz-headless/primitives@$PRIMITIVES_VERSION"
           fi
+          if [ "$tag" != "$primary_tag" ]; then
+            notes="$notes\n\nNote: $primary_tag already exists from the legacy package release history, so this scoped release uses tag $tag."
+          fi
 
-          gh release create "v$version" \
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release edit "$tag" \
+              --target "$GITHUB_SHA" \
+              --title "v$version" \
+              --notes "$(printf '%b' "$notes")" \
+              --latest
+            exit 0
+          fi
+
+          gh release create "$tag" \
+            --target "$GITHUB_SHA" \
             --title "v$version" \
             --notes "$(printf '%b' "$notes")" \
-            --generate-notes
+            --generate-notes \
+            --latest
