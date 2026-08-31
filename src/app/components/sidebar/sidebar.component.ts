@@ -128,5 +128,6 @@ export class SidebarComponent {
     { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
     { path: '/menu', label: 'Menu', icon: 'list' as const, soon: false },
     { path: '/popover', label: 'Popover', icon: 'package' as const, soon: false },
+    { path: '/combobox', label: 'Combobox', icon: 'list' as const, soon: false },
   ];
 }

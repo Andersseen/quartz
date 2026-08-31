@@ -12,6 +12,7 @@ test.describe('Components Pages', () => {
     { path: '/listbox', title: 'Listbox' },
     { path: '/menu', title: 'Menu' },
     { path: '/popover', title: 'Popover' },
+    { path: '/combobox', title: 'Combobox' },
   ];
 
   for (const component of components) {

@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-30** (prepared Quartz 0.1.0 with Menu + Popover)
+> **Last updated: 2026-08-31** (Combobox primitive implemented on feature/combobox)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -126,6 +126,25 @@ items remain open.
 - Pre-1.0: breaking API changes are acceptable but should be deliberate and documented in
   the README/demo pages.
 
+## Combobox primitive implemented (2026-08-31)
+
+`docs/ai/specs/combobox.md` captures the post-0.1.0 Combobox architecture decision, and
+`packages/primitives/src/combobox/` now implements the first editable Combobox primitive.
+
+Key decision: Combobox should reuse Core `CollectionStore`, `Overlay`, `Dismiss`, `Focus`
+and `Directionality`, and it should reuse Listbox behaviour conceptually, but it should not
+directly compose the current `ListboxDirective`/`ListboxOptionDirective` as-is. The current
+Listbox container owns focus/key handling and `aria-activedescendant`; editable Combobox
+must keep DOM focus on the input and put the active descendant relationship there. If build
+work reveals real duplication, prefer a small primitives-private shared option controller
+over a new Core abstraction.
+
+Implemented API: `qzCombobox`, `qzComboboxInput`, `qzComboboxContent`,
+`qzComboboxListbox`, `qzComboboxOption` and optional `qzComboboxTrigger`. The primitive has
+controlled `value`, `inputValue` and `open` models, input-owned ARIA, Overlay-backed popup
+rendering, default/custom/no filtering, disabled options, object values with `displayWith`
+and `compareWith`, outside/focus/scroll dismissal and IME-safe keyboard handling.
+
 ## Primitive status matrix
 
 | Primitive             | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
@@ -140,6 +159,7 @@ items remain open.
 | listbox               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multi selection, active-descendant, typeahead and disabled options                                    |
 | menu                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Dropdown menu with submenus, checkboxes, radio groups, typeahead and RTL inline keys                         |
 | popover               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Non-modal interactive floating surface with controlled state and optional autofocus                          |
+| combobox              | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Editable input + listbox suggestions with active-descendant focus, filtering and Overlay positioning         |
 | virtual-scroll        | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
 | viewport              | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
 | directionality (Core) | ✅       | ✅ (+SSR)  | ✅        | ✅                                  | No `MutationObserver`; `refresh()`/`set()` for dynamic dir. See `docs/ai/specs/directionality.md`            |
@@ -189,7 +209,7 @@ change behaviour or that are easy to regress:
 
 ## In progress / next up
 
-- **Next composition primitives**: Menu (Overlay) and Combobox (Overlay + Listbox).
+- **Next composition primitive**: TBD after Combobox review.
 
 ## Known issues / gotchas (live)
 

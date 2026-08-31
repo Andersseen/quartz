@@ -1,0 +1,183 @@
+<app-demo-page
+  badge="Primitive"
+  title="Combobox"
+  description="An editable WAI-ARIA combobox with input-owned focus, active-descendant suggestions, filtering and Overlay positioning."
+  [features]="[
+    { title: 'Editable', description: 'Input text stays separate from committed value' },
+    { title: 'Focused', description: 'DOM focus remains on the input while options activate' },
+    { title: 'Async Safe', description: 'Options can be replaced while the popup is open' },
+    { title: 'Headless', description: 'Projection keeps suggestion markup fully owned by you' },
+  ]"
+>
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Static options</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Type to filter, use ArrowDown or ArrowUp to move the active suggestion, then Enter to commit
+        it.
+      </p>
+
+      <app-code-block [code]="basicCode">
+        <div preview class="mx-auto flex max-w-sm flex-col gap-3">
+          <div
+            qzCombobox
+            #fruitCombo="qzCombobox"
+            [content]="fruitContent"
+            [options]="fruits"
+            [(value)]="selectedFruit"
+          >
+            <label class="mb-2 block text-sm font-medium text-gray-300" for="fruit-combobox">
+              Fruit
+            </label>
+            <div class="flex">
+              <input
+                id="fruit-combobox"
+                qzComboboxInput
+                class="min-w-0 flex-1 rounded-l-lg border border-white/10 bg-[#181820] px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Search fruit"
+              />
+              <button
+                qzComboboxTrigger
+                class="rounded-r-lg border border-l-0 border-white/10 bg-[#181820] px-3 text-sm text-gray-300 hover:bg-white/5"
+                type="button"
+              >
+                Open
+              </button>
+            </div>
+
+            <ng-template #fruitContent qzComboboxContent>
+              <ul
+                qzComboboxListbox
+                class="max-h-64 overflow-auto rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+              >
+                @for (fruit of fruitCombo.filteredOptions(); track fruit) {
+                  <li
+                    [qzComboboxOption]="fruit"
+                    class="cursor-default rounded-md px-3 py-2 data-[qz-active]:bg-emerald-500/20 data-[qz-active]:text-emerald-100 data-[qz-selected]:font-semibold"
+                  >
+                    {{ fruit }}
+                  </li>
+                }
+                @if (fruitCombo.empty()) {
+                  <li class="px-3 py-2 text-gray-500">No results</li>
+                }
+              </ul>
+            </ng-template>
+          </div>
+          <p class="text-sm text-gray-500">
+            Selected: <span class="text-gray-200">{{ selectedFruit() || 'none' }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Object values</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Use <code>displayWith</code>, <code>compareWith</code> and explicit option labels when the
+        value is not a string.
+      </p>
+
+      <app-code-block [code]="objectCode">
+        <div preview class="mx-auto flex max-w-md flex-col gap-3">
+          <div
+            qzCombobox
+            #userCombo="qzCombobox"
+            [content]="userContent"
+            [options]="users()"
+            [displayWith]="displayUser"
+            [compareWith]="compareUsers"
+            [(value)]="selectedUser"
+          >
+            <input
+              qzComboboxInput
+              aria-label="User"
+              class="w-full rounded-lg border border-white/10 bg-[#181820] px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Search users"
+            />
+
+            <ng-template #userContent qzComboboxContent>
+              <div
+                qzComboboxListbox
+                class="max-h-72 overflow-auto rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+              >
+                @for (user of userCombo.filteredOptions(); track user.id) {
+                  <div
+                    [qzComboboxOption]="user"
+                    [qzComboboxOptionLabel]="user.name"
+                    [qzComboboxOptionDisabled]="!!user.disabled"
+                    class="cursor-default rounded-md px-3 py-2 data-[qz-active]:bg-sky-500/20 data-[qz-active]:text-sky-100 data-[qz-disabled]:text-gray-600 data-[qz-selected]:font-semibold"
+                  >
+                    <div class="font-medium">{{ user.name }}</div>
+                    <div class="text-xs text-gray-500">{{ user.role }}</div>
+                  </div>
+                }
+              </div>
+            </ng-template>
+          </div>
+          <p class="text-sm text-gray-500">
+            Selected: <span class="text-gray-200">{{ selectedUser()?.name || 'none' }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Async replacement</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+        Quartz does not fetch data, but it keeps focus and active state stable while consumers
+        replace option arrays.
+      </p>
+
+      <app-code-block [code]="asyncCode">
+        <div preview class="mx-auto flex max-w-md flex-col gap-3">
+          <div
+            qzCombobox
+            #repoCombo="qzCombobox"
+            [content]="repoContent"
+            [options]="results()"
+            [filter]="null"
+            [loading]="loading()"
+            [displayWith]="displayRepository"
+            [(value)]="selectedRepo"
+            [(inputValue)]="query"
+          >
+            <input
+              qzComboboxInput
+              aria-label="Repository"
+              class="w-full rounded-lg border border-white/10 bg-[#181820] px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="Search repositories"
+            />
+
+            <ng-template #repoContent qzComboboxContent>
+              <div
+                qzComboboxListbox
+                class="max-h-72 overflow-auto rounded-lg border border-white/10 bg-[#181820] p-1 text-sm text-gray-200 shadow-2xl"
+              >
+                @if (repoCombo.loading()) {
+                  <div class="px-3 py-2 text-gray-500">Loading...</div>
+                }
+                @for (repo of repoCombo.filteredOptions(); track repo.id) {
+                  <div
+                    [qzComboboxOption]="repo"
+                    [qzComboboxOptionLabel]="repo.name"
+                    class="cursor-default rounded-md px-3 py-2 data-[qz-active]:bg-amber-500/20 data-[qz-active]:text-amber-100 data-[qz-selected]:font-semibold"
+                  >
+                    <div class="font-medium">{{ repo.name }}</div>
+                    <div class="text-xs text-gray-500">{{ repo.language }}</div>
+                  </div>
+                }
+                @if (repoCombo.empty() && !repoCombo.loading()) {
+                  <div class="px-3 py-2 text-gray-500">No results</div>
+                }
+              </div>
+            </ng-template>
+          </div>
+          <p class="text-sm text-gray-500">
+            Selected: <span class="text-gray-200">{{ repoLabel() }}</span>
+          </p>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

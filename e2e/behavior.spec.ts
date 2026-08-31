@@ -177,14 +177,14 @@ test.describe('Menu behavior', () => {
     const newFile = menu.getByRole('menuitem', { name: 'New file' });
     await expect(newFile).toBeFocused();
 
-    await newFile.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
     const rename = menu.getByRole('menuitem', { name: 'Rename' });
     await expect(rename).toBeFocused();
 
-    await rename.press('a');
+    await page.keyboard.press('a');
     await expect(menu.getByRole('menuitem', { name: 'Archive' })).not.toBeFocused();
 
-    await rename.press('Escape');
+    await page.keyboard.press('Escape');
     await expect(menu).not.toBeVisible();
     await expect(trigger).toBeFocused();
   });
@@ -198,11 +198,11 @@ test.describe('Menu behavior', () => {
     const rootMenu = page.getByRole('menu').first();
     const duplicate = rootMenu.getByRole('menuitem', { name: 'Duplicate' });
     await expect(duplicate).toBeFocused();
-    await duplicate.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
     const share = page.getByTestId('share-submenu-item');
     await expect(share).toBeFocused();
 
-    await share.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
     await expect(page.getByRole('menu')).toHaveCount(2);
     const email = page.getByRole('menuitem', { name: 'Email' });
     await expect(email).toBeFocused();
@@ -234,6 +234,54 @@ test.describe('Popover behavior', () => {
     await page.getByRole('button', { name: 'Settings' }).click();
     await expect(page.getByRole('checkbox', { name: 'Email updates' })).toBeFocused();
     await expect(page.locator('text=Open: true')).toBeVisible();
+  });
+});
+
+test.describe('Combobox behavior', () => {
+  test('should filter, keep focus on input, and select with keyboard', async ({ page }) => {
+    await page.goto('/combobox');
+
+    const input = page.getByRole('combobox', { name: 'Fruit' });
+    await input.fill('ap');
+    const listbox = page.getByRole('listbox').first();
+    await expect(listbox).toBeVisible();
+
+    const options = listbox.getByRole('option');
+    await expect(options).toHaveCount(3);
+    const firstId = await options.nth(0).getAttribute('id');
+    await expect(input).toHaveAttribute('aria-activedescendant', firstId ?? '');
+    await expect(input).toBeFocused();
+
+    await input.press('ArrowDown');
+    const secondId = await options.nth(1).getAttribute('id');
+    await expect(input).toHaveAttribute('aria-activedescendant', secondId ?? '');
+    await expect(input).toBeFocused();
+
+    await input.press('Enter');
+    await expect(listbox).not.toBeVisible();
+    await expect(input).toHaveValue('Apricot');
+    await expect(page.locator('text=Selected:').first()).toContainText('Apricot');
+    await expect(input).toBeFocused();
+  });
+
+  test('should close on Escape and Tab without committing the active option', async ({ page }) => {
+    await page.goto('/combobox');
+
+    const input = page.getByRole('combobox', { name: 'Fruit' });
+    await input.fill('ora');
+    const listbox = page.getByRole('listbox').first();
+    await expect(listbox).toBeVisible();
+
+    await input.press('Escape');
+    await expect(listbox).not.toBeVisible();
+    await expect(input).toHaveValue('');
+    await expect(page.locator('text=Selected:').first()).toContainText('none');
+
+    await input.fill('ban');
+    await expect(listbox).toBeVisible();
+    await input.press('Tab');
+    await expect(listbox).not.toBeVisible();
+    await expect(input).not.toBeFocused();
   });
 });
 

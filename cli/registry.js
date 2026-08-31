@@ -198,6 +198,22 @@ const REGISTRY = {
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/popover',
   },
+  combobox: {
+    description: 'Editable suggestions combobox with active-descendant navigation',
+    layer: 'primitives',
+    files: [
+      'combobox/combobox.directive.ts',
+      'combobox/combobox-input.directive.ts',
+      'combobox/combobox-content.directive.ts',
+      'combobox/combobox-listbox.directive.ts',
+      'combobox/combobox-option.directive.ts',
+      'combobox/combobox-trigger.directive.ts',
+      'combobox/combobox.types.ts',
+      'combobox/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/combobox',
+  },
 };
 
 module.exports = { REGISTRY };

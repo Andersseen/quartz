@@ -94,6 +94,16 @@ const extraRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'combobox',
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/combobox.page').then((m) => m.default),
+      },
+    ],
+  },
 ];
 
 export const appConfig: ApplicationConfig = {

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Combobox.** New editable, unstyled WAI-ARIA combobox primitive with input-owned focus,
+  active-descendant suggestion navigation, Overlay positioning, filtering, disabled options,
+  object values with `displayWith`/`compareWith`, controlled `value`/`inputValue`/`open`
+  models and IME-safe input handling.
+
 ### Changed
 
 - **Breaking (packaging):** Quartz now ships as two separate npm packages instead of one —
