@@ -64,6 +64,19 @@ test.describe('Navigation', () => {
     await expect(page.getByText('Non Modal', { exact: true })).toBeVisible();
   });
 
+  test('should navigate to 0.2.0 pages', async ({ page }) => {
+    for (const [path, title] of [
+      ['/scroll-lock', 'Scroll Lock'],
+      ['/select', 'Select'],
+      ['/tabs', 'Tabs'],
+      ['/accordion', 'Accordion'],
+      ['/switch', 'Switch'],
+    ] as const) {
+      await page.goto(path);
+      await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
+    }
+  });
+
   test('should redirect /components to /overlay', async ({ page }) => {
     await page.goto('/components');
     await expect(page).toHaveURL(/\/overlay/);
@@ -77,5 +90,9 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Splitter').first()).toBeVisible();
     await expect(page.locator('text=Menu').first()).toBeVisible();
     await expect(page.locator('text=Popover').first()).toBeVisible();
+    await expect(page.locator('text=Select').first()).toBeVisible();
+    await expect(page.locator('text=Tabs').first()).toBeVisible();
+    await expect(page.locator('text=Accordion').first()).toBeVisible();
+    await expect(page.locator('text=Switch').first()).toBeVisible();
   });
 });

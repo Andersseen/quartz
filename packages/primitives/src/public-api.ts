@@ -81,3 +81,37 @@ export type {
   ComboboxCompareWith,
   ComboboxConfig,
 } from './combobox';
+
+// Select
+export {
+  SelectDirective,
+  SelectTriggerDirective,
+  SelectContentDirective,
+  SelectListboxDirective,
+  SelectOptionDirective,
+  DEFAULT_SELECT_CONFIG,
+} from './select';
+export type { SelectCloseReason, SelectConfig, SelectOpenReason } from './select';
+
+// Tabs
+export {
+  TabsDirective,
+  TabListDirective,
+  TabDirective,
+  TabPanelDirective,
+  DEFAULT_TABS_CONFIG,
+} from './tabs';
+export type { TabsActivationMode, TabsConfig, TabsOrientation } from './tabs';
+
+// Accordion
+export {
+  AccordionDirective,
+  AccordionItemDirective,
+  AccordionTriggerDirective,
+  AccordionPanelDirective,
+  DEFAULT_ACCORDION_CONFIG,
+} from './accordion';
+export type { AccordionConfig, AccordionType } from './accordion';
+
+// Switch
+export { SwitchDirective } from './switch';

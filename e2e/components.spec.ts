@@ -13,6 +13,11 @@ test.describe('Components Pages', () => {
     { path: '/menu', title: 'Menu' },
     { path: '/popover', title: 'Popover' },
     { path: '/combobox', title: 'Combobox' },
+    { path: '/scroll-lock', title: 'Scroll Lock' },
+    { path: '/select', title: 'Select' },
+    { path: '/tabs', title: 'Tabs' },
+    { path: '/accordion', title: 'Accordion' },
+    { path: '/switch', title: 'Switch' },
   ];
 
   for (const component of components) {

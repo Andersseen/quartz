@@ -1,13 +1,14 @@
 {
   "name": "@quartz-headless/core",
-  "version": "0.1.0",
-  "description": "Low-level interaction infrastructure for Quartz Headless — overlay, focus, dismiss, collection, viewport, drag & drop, virtual scroll, splitter.",
+  "version": "0.2.0",
+  "description": "Low-level interaction infrastructure for Quartz Headless — overlay, focus, dismiss, scroll lock, collection, viewport, drag & drop, virtual scroll, splitter.",
   "keywords": [
     "angular",
     "headless",
     "overlay",
     "focus-trap",
     "dismiss",
+    "scroll-lock",
     "collection",
     "drag-drop",
     "virtual-scroll",

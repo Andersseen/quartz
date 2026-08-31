@@ -146,4 +146,24 @@ describe('CLI smoke — quartz add', () => {
     const names = Object.keys(files);
     expect(names.every((n) => !n.endsWith('.spec.ts'))).toBe(true);
   });
+
+  it('should copy 0.2.0 Core and Primitive additions with correct peer boundaries', () => {
+    const outDir = runAdd(tmpDir, ['scroll-lock', 'select', 'tabs', 'accordion', 'switch']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual([
+      'accordion',
+      'scroll-lock',
+      'select',
+      'switch',
+      'tabs',
+    ]);
+    expect(copied['scroll-lock']).toContain('scroll-lock.ts');
+    expect(copied.select).toContain('select.directive.ts');
+    expect(copied.tabs).toContain('tab-list.directive.ts');
+    expect(copied.accordion).toContain('accordion-trigger.directive.ts');
+    expect(copied.switch).toContain('switch.directive.ts');
+    expect(fs.existsSync(path.join(outDir, 'overlay'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, 'collection'))).toBe(false);
+  });
 });

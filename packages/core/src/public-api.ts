@@ -38,6 +38,7 @@ export {
   type DismissController,
   type DismissReason,
 } from './dismiss';
+export { createScrollLock, type ScrollLock } from './scroll-lock';
 export {
   DirectionalityService,
   resolveDirection,

@@ -1,0 +1,95 @@
+<app-demo-page
+  badge="Primitive"
+  title="Tabs"
+  description="A WAI-ARIA tabs primitive with roving focus, automatic or manual activation, orientation support and RTL-aware horizontal navigation."
+  [features]="[
+    { title: 'Collection', description: 'DOM order, disabled tabs and roving tabindex' },
+    { title: 'Activation', description: 'Automatic by default, manual when panels are expensive' },
+    { title: 'ARIA', description: 'tablist, tab, tabpanel, controls and labelledby' },
+    { title: 'CLI', description: 'pnpm quartz add tabs' },
+  ]"
+>
+  <div class="flex flex-col gap-10">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Horizontal tabs</h2>
+      <app-code-block [code]="basicCode">
+        <div preview qzTabs [(value)]="tab" class="max-w-xl mx-auto">
+          <div qzTabList class="flex gap-2 border-b border-white/10">
+            <button
+              qzTab="account"
+              class="px-4 py-2 text-gray-300 data-[qz-selected]:text-emerald-200 data-[qz-selected]:border-b data-[qz-selected]:border-emerald-300"
+            >
+              Account
+            </button>
+            <button qzTab="security" [qzTabDisabled]="true" class="px-4 py-2 text-gray-600">
+              Security
+            </button>
+            <button
+              qzTab="billing"
+              class="px-4 py-2 text-gray-300 data-[qz-selected]:text-emerald-200 data-[qz-selected]:border-b data-[qz-selected]:border-emerald-300"
+            >
+              Billing
+            </button>
+          </div>
+          <section qzTabPanel="account" class="pt-4 text-gray-300">Account panel</section>
+          <section qzTabPanel="security" class="pt-4 text-gray-300">Security panel</section>
+          <section qzTabPanel="billing" class="pt-4 text-gray-300">Billing panel</section>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Vertical, manual and RTL</h2>
+      <app-code-block [code]="manualCode">
+        <div preview class="grid gap-6 md:grid-cols-2">
+          <div
+            qzTabs
+            [(value)]="verticalTab"
+            orientation="vertical"
+            activationMode="manual"
+            class="grid grid-cols-[130px_1fr] gap-4"
+          >
+            <div qzTabList class="flex flex-col gap-2">
+              <button
+                qzTab="preview"
+                class="rounded px-3 py-2 text-left text-gray-300 data-[qz-selected]:bg-cyan-500/20"
+              >
+                Preview
+              </button>
+              <button
+                qzTab="settings"
+                class="rounded px-3 py-2 text-left text-gray-300 data-[qz-selected]:bg-cyan-500/20"
+              >
+                Settings
+              </button>
+            </div>
+            <section qzTabPanel="preview" class="text-gray-300">
+              Focus moves first; click activates in manual mode.
+            </section>
+            <section qzTabPanel="settings" class="text-gray-300">Settings panel</section>
+          </div>
+          <div dir="rtl" qzTabs [(value)]="rtlTab">
+            <div qzTabList class="flex gap-2">
+              <button
+                qzTab="one"
+                class="rounded px-3 py-2 text-gray-300 data-[qz-selected]:bg-cyan-500/20"
+              >
+                One
+              </button>
+              <button
+                qzTab="two"
+                class="rounded px-3 py-2 text-gray-300 data-[qz-selected]:bg-cyan-500/20"
+              >
+                Two
+              </button>
+            </div>
+            <section qzTabPanel="one" class="pt-4 text-gray-300">
+              RTL ArrowLeft advances to the next tab.
+            </section>
+            <section qzTabPanel="two" class="pt-4 text-gray-300">Second RTL panel</section>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>
