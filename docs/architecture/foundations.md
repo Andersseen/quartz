@@ -16,18 +16,28 @@ accessibility and lifecycle logic that can sit under any visual system.
 collection
 focus
 dismiss
+directionality
 overlay
 positioning
 viewport
+scroll-lock
         ↓
 listbox
 tree
 dialog
 tooltip
-future menu
-future popover
-future select
-future combobox
+menu
+popover
+select
+combobox
+tabs
+accordion
+switch
+checkbox
+radio-group
+toggle
+toggle-group
+slider
 ```
 
 ## Foundations
@@ -52,28 +62,27 @@ only dismisses the topmost interactive layer.
 positioning, anchors, virtual anchors and optional dismissal. It should not grow
 Popover-specific state.
 
+## Structural CSS
+
+Quartz may write structural styles when they are required for behavior:
+`position`, `inset`, `pointer-events`, `overflow`, z-index layering and layout
+needed for portal positioning or modal interaction. Quartz should not impose
+visual defaults such as `background`, `color`, `box-shadow`, `border`,
+`border-radius`, typography, decorative opacity or animation.
+
+CSS custom properties follow the same rule. Geometry/state values such as
+`--qz-slider-percent` are acceptable because consumers need them to position
+their own range and thumb. Visual tokens such as colors, radii or shadows belong
+to the consuming design system.
+
 ## Roadmap
 
 ```text
-0.3 - Interaction Foundations
-      Collection
-      Focus
-      Dismiss
-      existing primitive refactors
-
-0.4 - Menu
-      Menu
-      MenuItem
-      Submenu
-      CheckboxItem
-      RadioItem
-
-0.5 - Floating interactions
-      Popover
-      positioning improvements
-
-0.6 - Selection
-      Select
-      Combobox
-      Autocomplete
+0.3 - Controls & Interaction
+      Checkbox
+      RadioGroup
+      Toggle
+      ToggleGroup
+      Slider
+      Dialog headless cleanup
 ```

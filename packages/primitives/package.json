@@ -1,7 +1,7 @@
 {
   "name": "@quartz-headless/primitives",
-  "version": "0.2.0",
-  "description": "Headless, accessible Angular 21 UI primitives built on Quartz Core — dialog, tooltip, toast, tree, listbox, combobox, select, tabs, accordion, switch.",
+  "version": "0.3.0",
+  "description": "Headless, accessible Angular 21 UI primitives built on Quartz Core — dialog, tooltip, toast, tree, listbox, combobox, select, tabs, accordion and controls.",
   "keywords": [
     "angular",
     "headless",
@@ -17,6 +17,10 @@
     "tabs",
     "accordion",
     "switch",
+    "checkbox",
+    "radio",
+    "toggle",
+    "slider",
     "a11y",
     "zoneless",
     "signals"
@@ -42,7 +46,7 @@
     "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0",
     "rxjs": "^7.8.0",
-    "@quartz-headless/core": "^0.2.0"
+    "@quartz-headless/core": "^0.3.0"
   },
   "devDependencies": {
     "@quartz-headless/core": "workspace:*"

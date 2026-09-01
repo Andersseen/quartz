@@ -269,6 +269,57 @@ const REGISTRY = {
     files: ['switch/switch.directive.ts', 'switch/index.ts'],
     docs: 'https://quartz-headless.pages.dev/switch',
   },
+  checkbox: {
+    description: 'Button-based ARIA checkbox with checked, unchecked and indeterminate state',
+    layer: 'primitives',
+    files: ['checkbox/checkbox.directive.ts', 'checkbox/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/checkbox',
+  },
+  'radio-group': {
+    description: 'Standalone radio group with roving focus and RTL-aware keyboard navigation',
+    layer: 'primitives',
+    files: [
+      'radio-group/radio-group.directive.ts',
+      'radio-group/radio.directive.ts',
+      'radio-group/radio-group.types.ts',
+      'radio-group/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/radio-group',
+  },
+  toggle: {
+    description: 'Button-based ARIA toggle with controlled pressed state',
+    layer: 'primitives',
+    files: ['toggle/toggle.directive.ts', 'toggle/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/toggle',
+  },
+  'toggle-group': {
+    description: 'Single or multiple toggle button group with roving focus',
+    layer: 'primitives',
+    files: [
+      'toggle-group/toggle-group.directive.ts',
+      'toggle-group/toggle-item.directive.ts',
+      'toggle-group/toggle-group.types.ts',
+      'toggle-group/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/toggle-group',
+  },
+  slider: {
+    description: 'Single-thumb ARIA slider with keyboard, pointer and RTL support',
+    layer: 'primitives',
+    files: [
+      'slider/slider.directive.ts',
+      'slider/slider-thumb.directive.ts',
+      'slider/slider-track.directive.ts',
+      'slider/slider-range.directive.ts',
+      'slider/slider.types.ts',
+      'slider/slider-value.ts',
+      'slider/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/slider',
+  },
 };
 
 module.exports = { REGISTRY };

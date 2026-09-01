@@ -38,15 +38,22 @@ import { MOVEMENT_DIRECTIVES } from 'angular-movement';
             <pre
               class="overflow-x-auto p-6"
             ><code class="font-mono text-sm leading-7 text-gray-200">
-<span class="text-purple-400">import</span> &#123; ToastService &#125; <span class="text-purple-400">from</span> <span class="text-green-400">'quartz/toast'</span>;
+<span class="text-purple-400">import</span> &#123; signal &#125; <span class="text-purple-400">from</span> <span class="text-green-400">'&#64;angular/core'</span>;
+<span class="text-purple-400">import</span> &#123; CheckboxDirective, SliderDirective, SliderThumbDirective &#125; <span class="text-purple-400">from</span> <span class="text-green-400">'&#64;quartz-headless/primitives'</span>;
 
-<span class="text-purple-400">export class</span> ProfileComponent &#123;
-  <span class="text-purple-400">constructor</span>(private toast: ToastService) &#123;&#125;
+<span class="text-purple-400">&#64;Component</span>(&#123;
+  imports: [CheckboxDirective, SliderDirective, SliderThumbDirective],
+  template: <span class="text-green-400">&#96;
+    &lt;button qzCheckbox [(checked)]="accepted"&gt;Accept&lt;/button&gt;
 
-  save() &#123;
-    <span class="text-gray-500 italic">// 🚀 Trigger a beautiful toast instantly</span>
-    <span class="text-purple-400">this</span>.toast.success(<span class="text-green-400">'Profile updated exactly as intended.'</span>);
-  &#125;
+    &lt;div qzSlider [(value)]="volume"&gt;
+      &lt;button qzSliderThumb aria-label="Volume"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &#96;</span>,
+&#125;)
+<span class="text-purple-400">export class</span> PreferencesComponent &#123;
+  accepted = signal(false);
+  volume = signal(50);
 &#125;</code></pre>
           </volt-card-content>
         </volt-card>

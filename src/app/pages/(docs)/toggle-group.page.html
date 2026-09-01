@@ -1,0 +1,84 @@
+<app-demo-page
+  badge="Primitive"
+  title="ToggleGroup"
+  description="A group of toggle buttons with single or multiple selection, Collection-powered roving focus and RTL-aware horizontal keys."
+  [features]="[
+    { title: 'API', description: 'qzToggleGroup type single|multiple with qzToggleItem' },
+    { title: 'Focus', description: 'One tab stop; disabled items are skipped' },
+    { title: 'ARIA', description: 'role group with item aria-pressed' },
+    { title: 'CLI', description: 'pnpm quartz add toggle-group' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Single, multiple and RTL</h2>
+    <app-code-block [code]="code">
+      <div preview class="grid gap-5">
+        <div qzToggleGroup type="single" [(value)]="alignment" class="flex gap-2">
+          <button
+            qzToggleItem="left"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-cyan-500/20"
+          >
+            Left
+          </button>
+          <button
+            qzToggleItem="center"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-cyan-500/20"
+          >
+            Center
+          </button>
+          <button
+            qzToggleItem="right"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-cyan-500/20"
+          >
+            Right
+          </button>
+        </div>
+        <div qzToggleGroup type="multiple" [(value)]="formats" class="flex gap-2">
+          <button
+            qzToggleItem="bold"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-emerald-500/20"
+          >
+            Bold
+          </button>
+          <button
+            qzToggleItem="italic"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-emerald-500/20"
+          >
+            Italic
+          </button>
+          <button
+            qzToggleItem="strike"
+            [qzToggleItemDisabled]="true"
+            class="border border-white/15 px-3 py-2 text-gray-600"
+          >
+            Strike
+          </button>
+        </div>
+        <div qzToggleGroup type="single" [(value)]="rtl" dir="rtl" class="flex gap-2">
+          <button
+            qzToggleItem="left"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-amber-400/20"
+          >
+            Left
+          </button>
+          <button
+            qzToggleItem="center"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-amber-400/20"
+          >
+            Center
+          </button>
+          <button
+            qzToggleItem="right"
+            class="border border-white/15 px-3 py-2 data-[qz-state=on]:bg-amber-400/20"
+          >
+            Right
+          </button>
+        </div>
+      </div>
+    </app-code-block>
+    <p class="mt-4 text-sm text-gray-500">
+      ToggleGroup single is intentionally not radio semantics; each item remains a toggle button
+      with <code>aria-pressed</code>.
+    </p>
+  </section>
+</app-demo-page>

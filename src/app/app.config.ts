@@ -4,9 +4,10 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideFileRouter, withExtraRoutes } from '@analogjs/router';
-import type { Routes } from '@angular/router';
+import { RouteReuseStrategy, type Routes } from '@angular/router';
 import { provideVoltTheme } from '@voltui/components';
 import { provideMovement } from 'angular-movement';
+import { DocsShellReuseStrategy } from './routing/docs-shell-reuse.strategy';
 
 /**
  * Fallback route for /tree when AnalogJS file-based routing doesn't detect
@@ -15,7 +16,41 @@ import { provideMovement } from 'angular-movement';
  */
 const extraRoutes: Routes = [
   {
+    path: 'overlay',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/overlay.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'splitter',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/splitter.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'drag-drop',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/drag-drop.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
     path: 'directionality',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -26,6 +61,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'tree',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -36,6 +72,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'virtual-scroll',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -46,6 +83,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'viewport',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -56,6 +94,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'tooltip',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -65,7 +104,30 @@ const extraRoutes: Routes = [
     ],
   },
   {
+    path: 'dialog',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/dialog.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'toast',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/toast.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
     path: 'listbox',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -76,6 +138,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'menu',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -86,6 +149,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'popover',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -96,6 +160,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'combobox',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -106,6 +171,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'scroll-lock',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -116,6 +182,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'select',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -126,6 +193,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'tabs',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -136,6 +204,7 @@ const extraRoutes: Routes = [
   },
   {
     path: 'accordion',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
@@ -146,11 +215,67 @@ const extraRoutes: Routes = [
   },
   {
     path: 'switch',
+    data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
     children: [
       {
         path: '',
         loadComponent: () => import('./pages/(docs)/switch.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'checkbox',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/checkbox.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'radio-group',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/radio-group.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'toggle',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/toggle.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'toggle-group',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/toggle-group.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'slider',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/slider.page').then((m) => m.default),
       },
     ],
   },
@@ -161,6 +286,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideFileRouter(withExtraRoutes(extraRoutes)),
+    { provide: RouteReuseStrategy, useClass: DocsShellReuseStrategy },
     provideVoltTheme({ color: 'dusk', style: 'sharp', dark: true }),
     provideMovement({
       duration: 580,

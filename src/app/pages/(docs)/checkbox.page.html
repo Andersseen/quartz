@@ -1,0 +1,55 @@
+<app-demo-page
+  badge="Primitive"
+  title="Checkbox"
+  description="A headless ARIA checkbox for button-based boolean or mixed state. It owns semantics and state hooks, never checkmarks or visuals."
+  [features]="[
+    { title: 'API', description: 'qzCheckbox with [(checked)] boolean | indeterminate' },
+    { title: 'Keyboard', description: 'Space via native button activation' },
+    { title: 'ARIA', description: 'role checkbox and aria-checked false/true/mixed' },
+    { title: 'CLI', description: 'pnpm quartz add checkbox' },
+  ]"
+>
+  <div class="grid gap-6">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Basic and disabled</h2>
+      <app-code-block [code]="basicCode">
+        <div preview class="flex flex-wrap items-center justify-center gap-4">
+          <button
+            qzCheckbox
+            [(checked)]="accepted"
+            class="border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=checked]:bg-emerald-500/20"
+          >
+            Accept terms
+          </button>
+          <button
+            qzCheckbox
+            [checked]="true"
+            [disabled]="true"
+            class="border border-white/15 px-4 py-2 text-gray-600"
+          >
+            Disabled
+          </button>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Indeterminate</h2>
+      <app-code-block [code]="indeterminateCode">
+        <div preview class="flex items-center justify-center">
+          <button
+            qzCheckbox
+            [(checked)]="selectAll"
+            class="border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=indeterminate]:bg-amber-400/20 data-[qz-state=checked]:bg-emerald-500/20"
+          >
+            Select all: {{ selectAll() }}
+          </button>
+        </div>
+      </app-code-block>
+      <p class="mt-4 text-sm text-gray-500">
+        Styling hooks: <code>data-qz-state</code> and <code>data-qz-disabled</code>. SSR is safe
+        because the directive has no DOM work at import time.
+      </p>
+    </section>
+  </div>
+</app-demo-page>

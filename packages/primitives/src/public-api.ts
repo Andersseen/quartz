@@ -115,3 +115,23 @@ export type { AccordionConfig, AccordionType } from './accordion';
 
 // Switch
 export { SwitchDirective } from './switch';
+
+// Controls
+export { CheckboxDirective, type CheckboxState } from './checkbox';
+export { RadioGroupDirective, RadioDirective, DEFAULT_RADIO_GROUP_CONFIG } from './radio-group';
+export type { RadioGroupConfig, RadioGroupOrientation } from './radio-group';
+export { ToggleDirective } from './toggle';
+export {
+  ToggleGroupDirective,
+  ToggleItemDirective,
+  DEFAULT_TOGGLE_GROUP_CONFIG,
+} from './toggle-group';
+export type { ToggleGroupConfig, ToggleGroupOrientation, ToggleGroupType } from './toggle-group';
+export {
+  SliderDirective,
+  SliderThumbDirective,
+  SliderTrackDirective,
+  SliderRangeDirective,
+  DEFAULT_SLIDER_CONFIG,
+} from './slider';
+export type { SliderConfig, SliderOrientation } from './slider';

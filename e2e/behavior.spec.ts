@@ -546,3 +546,111 @@ test.describe('Toast behavior', () => {
     await expect(page.locator('qz-toast')).toHaveCount(0);
   });
 });
+
+test.describe('Controls behavior', () => {
+  test('checkbox toggles with pointer and Space, including indeterminate state', async ({
+    page,
+  }) => {
+    await page.goto('/checkbox');
+
+    const accept = page.getByRole('checkbox', { name: 'Accept terms' });
+    await accept.click();
+    await expect(accept).toHaveAttribute('aria-checked', 'true');
+
+    await accept.focus();
+    await page.keyboard.press('Space');
+    await expect(accept).toHaveAttribute('aria-checked', 'false');
+
+    const mixed = page.getByRole('checkbox', { name: /Select all:/ });
+    await expect(mixed).toHaveAttribute('aria-checked', 'mixed');
+    await mixed.click();
+    await expect(mixed).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('radio group tabs into one stop, arrows select, RTL mirrors and disabled items are skipped', async ({
+    page,
+  }) => {
+    await page.goto('/radio-group');
+
+    const vertical = page.getByRole('radiogroup').first();
+    await vertical.getByRole('radio', { name: 'Free' }).focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(vertical.getByRole('radio', { name: 'Pro' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await page.keyboard.press('ArrowDown');
+    await expect(vertical.getByRole('radio', { name: 'Free' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+
+    const rtl = page.getByRole('radiogroup').nth(2);
+    await rtl.getByRole('radio', { name: 'Left' }).focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(rtl.getByRole('radio', { name: 'Center' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+  });
+
+  test('toggle group roves focus, supports single and multiple selection, and mirrors RTL', async ({
+    page,
+  }) => {
+    await page.goto('/toggle-group');
+
+    const single = page.getByRole('group').first();
+    await single.getByRole('button', { name: 'Left' }).focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(single.getByRole('button', { name: 'Center' })).toBeFocused();
+    await single.getByRole('button', { name: 'Center' }).click();
+    await expect(single.getByRole('button', { name: 'Center' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+
+    const multiple = page.getByRole('group').nth(1);
+    await multiple.getByRole('button', { name: 'Italic' }).click();
+    await expect(multiple.getByRole('button', { name: 'Bold' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(multiple.getByRole('button', { name: 'Italic' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+
+    const rtl = page.getByRole('group').nth(2);
+    await rtl.getByRole('button', { name: 'Left' }).focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(rtl.getByRole('button', { name: 'Center' })).toBeFocused();
+  });
+
+  test('slider supports keyboard, pointer track/drag, RTL and disabled state', async ({ page }) => {
+    await page.goto('/slider');
+
+    const volume = page.getByRole('slider', { name: 'Volume' });
+    await volume.focus();
+    await page.keyboard.press('End');
+    await expect(volume).toHaveAttribute('aria-valuenow', '100');
+    await page.keyboard.press('Home');
+    await expect(volume).toHaveAttribute('aria-valuenow', '0');
+
+    const root = page.locator('[qzslider]').first();
+    const box = await root.boundingBox();
+    expect(box).not.toBeNull();
+    await page.mouse.move(box!.x + box!.width * 0.25, box!.y + box!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width * 0.75, box!.y + box!.height / 2);
+    await page.mouse.up();
+    await expect(volume).toHaveAttribute('aria-valuenow', '75');
+
+    const rtl = page.getByRole('slider', { name: 'RTL amount' });
+    await rtl.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(rtl).toHaveAttribute('aria-valuenow', '26');
+
+    const disabled = page.getByRole('slider', { name: 'Disabled amount' });
+    await expect(disabled).toHaveAttribute('aria-disabled', 'true');
+  });
+});

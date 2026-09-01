@@ -33,7 +33,11 @@
     </div>
   </volt-sidebar-header>
 
-  <volt-sidebar-content>
+  <volt-sidebar-content
+    #sidebarContent
+    class="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4"
+    (scroll)="rememberSidebarScroll($event)"
+  >
     <volt-sidebar-group>
       <volt-sidebar-item routerLink="/" label="Home" [exact]="true">
         <lmn-home slot="icon" [size]="16" />
@@ -88,46 +92,53 @@
     </volt-sidebar-group>
 
     <volt-sidebar-group [label]="primitivesGroupLabel">
-      @for (item of primitiveItems; track item.path) {
-        <volt-sidebar-item
-          [routerLink]="item.path"
-          [label]="item.label"
-          [class.opacity-50]="item.soon"
-          [class.pointer-events-none]="item.soon"
+      @for (group of primitiveGroups; track group.label) {
+        <div
+          class="px-4 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-600"
         >
-          @switch (item.icon) {
-            @case ('bell') {
-              <lmn-bell slot="icon" [size]="16" />
+          {{ group.label }}
+        </div>
+        @for (item of group.items; track item.path) {
+          <volt-sidebar-item
+            [routerLink]="item.path"
+            [label]="item.label"
+            [class.opacity-50]="item.soon"
+            [class.pointer-events-none]="item.soon"
+          >
+            @switch (item.icon) {
+              @case ('bell') {
+                <lmn-bell slot="icon" [size]="16" />
+              }
+              @case ('database') {
+                <lmn-database slot="icon" [size]="16" />
+              }
+              @case ('grid') {
+                <lmn-grid slot="icon" [size]="16" />
+              }
+              @case ('info') {
+                <lmn-info slot="icon" [size]="16" />
+              }
+              @case ('list') {
+                <lmn-list slot="icon" [size]="16" />
+              }
+              @case ('file') {
+                <lmn-file slot="icon" [size]="16" />
+              }
+              @case ('refresh') {
+                <lmn-refresh-cw slot="icon" [size]="16" />
+              }
+              @case ('zap') {
+                <lmn-zap slot="icon" [size]="16" />
+              }
+              @default {
+                <lmn-package slot="icon" [size]="16" />
+              }
             }
-            @case ('database') {
-              <lmn-database slot="icon" [size]="16" />
+            @if (item.soon) {
+              <volt-badge slot="trailing" variant="secondary">Soon</volt-badge>
             }
-            @case ('grid') {
-              <lmn-grid slot="icon" [size]="16" />
-            }
-            @case ('info') {
-              <lmn-info slot="icon" [size]="16" />
-            }
-            @case ('list') {
-              <lmn-list slot="icon" [size]="16" />
-            }
-            @case ('file') {
-              <lmn-file slot="icon" [size]="16" />
-            }
-            @case ('refresh') {
-              <lmn-refresh-cw slot="icon" [size]="16" />
-            }
-            @case ('zap') {
-              <lmn-zap slot="icon" [size]="16" />
-            }
-            @default {
-              <lmn-package slot="icon" [size]="16" />
-            }
-          }
-          @if (item.soon) {
-            <volt-badge slot="trailing" variant="secondary">Soon</volt-badge>
-          }
-        </volt-sidebar-item>
+          </volt-sidebar-item>
+        }
       }
     </volt-sidebar-group>
   </volt-sidebar-content>

@@ -94,9 +94,9 @@ viewport, drag-drop, virtual-scroll, splitter, scroll-lock) stay pure copy-sourc
 dependencies — copying one pulls in its Core siblings too (e.g. `overlay` also copies
 `dismiss` and `directionality`). **Primitives**
 (dialog, tooltip, toast, tree, listbox, menu, popover, combobox, select, tabs, accordion,
-switch) depend on `@quartz-headless/core` as a real npm
-package instead of copied source — `pnpm quartz add dialog` copies only `dialog/` and tells
-you to `npm install @quartz-headless/core`.
+switch, checkbox, radio-group, toggle, toggle-group, slider) depend on
+`@quartz-headless/core` as a real npm package when they compose Core utilities. `pnpm quartz
+add dialog` copies only `dialog/` and tells you to `npm install @quartz-headless/core`.
 
 ## 🧩 Primitives
 
@@ -117,6 +117,11 @@ you to `npm install @quartz-headless/core`.
 | [`tabs`](https://quartz-headless.pages.dev/tabs)                     | `@quartz-headless/primitives` | Tablist, tabs and panels with roving focus, orientation and RTL support            |
 | [`accordion`](https://quartz-headless.pages.dev/accordion)           | `@quartz-headless/primitives` | Single, collapsible or multiple disclosure sections                                |
 | [`switch`](https://quartz-headless.pages.dev/switch)                 | `@quartz-headless/primitives` | Button-based ARIA switch with controlled checked state                             |
+| [`checkbox`](https://quartz-headless.pages.dev/checkbox)             | `@quartz-headless/primitives` | Button-based ARIA checkbox with checked, unchecked and mixed state                 |
+| [`radio-group`](https://quartz-headless.pages.dev/radio-group)       | `@quartz-headless/primitives` | Standalone radio selection with roving focus, orientation and RTL support          |
+| [`toggle`](https://quartz-headless.pages.dev/toggle)                 | `@quartz-headless/primitives` | Pressed/unpressed button semantics with `aria-pressed`                             |
+| [`toggle-group`](https://quartz-headless.pages.dev/toggle-group)     | `@quartz-headless/primitives` | Single or multiple toggle-button selection with roving focus                       |
+| [`slider`](https://quartz-headless.pages.dev/slider)                 | `@quartz-headless/primitives` | Single-thumb ARIA slider with keyboard, pointer, decimal step and RTL support      |
 | [`virtual-scroll`](https://quartz-headless.pages.dev/virtual-scroll) | `@quartz-headless/core`       | Windowed rendering for long lists                                                  |
 | [`viewport`](https://quartz-headless.pages.dev/viewport)             | `@quartz-headless/core`       | Reactive breakpoint service + `ViewportMatchDirective`                             |
 | [`directionality`](https://quartz-headless.pages.dev/directionality) | `@quartz-headless/core`       | LTR/RTL resolution + logical inline-start/end and keyboard helpers                 |
