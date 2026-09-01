@@ -58,7 +58,7 @@ import { VoltBadge } from '@voltui/components';
                 <h2 class="mt-1 text-2xl font-bold text-white">@quartz-headless/primitives</h2>
               </div>
               <span class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500"
-                >17 primitives</span
+                >20 primitives</span
               >
             </div>
             <div class="space-y-6">
@@ -123,8 +123,11 @@ export default class ComponentsCatalogPage {
       ],
     },
     {
-      label: 'Navigation / Disclosure',
+      label: 'Navigation / Layout',
       items: [
+        { name: 'Sidebar', path: '/sidebar', detail: 'Application navigation layout' },
+        { name: 'Navbar', path: '/navbar', detail: 'Sticky and responsive menu state' },
+        { name: 'Stepper', path: '/stepper', detail: 'Sequential flow navigation' },
         { name: 'Tree', path: '/tree', detail: 'Hierarchical keyboard navigation' },
         { name: 'Tabs', path: '/tabs', detail: 'Tablist and panels' },
         { name: 'Accordion', path: '/accordion', detail: 'Single or multiple disclosure sections' },

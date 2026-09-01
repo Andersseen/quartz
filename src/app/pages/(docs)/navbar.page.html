@@ -1,0 +1,94 @@
+<app-demo-page
+  badge="Primitive"
+  title="Navbar"
+  description="Headless navbar behaviour for sticky state, scrolled/stuck hooks, scroll direction, reveal state and responsive mobile menu control."
+  [features]="[
+    { title: 'Scroll state', description: 'Thresholded scrolled, stuck and direction signals' },
+    { title: 'Reveal', description: 'State-only reveal on scroll-up' },
+    { title: 'Menu', description: 'Trigger, ARIA, Escape and outside dismissal' },
+    { title: 'CLI', description: 'pnpm quartz add navbar' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Sticky app bar</h2>
+    <app-code-block [code]="code">
+      <div preview class="h-[460px] w-full overflow-y-auto border border-white/10 bg-[#080a0f]">
+        <nav
+          #navbar="qzNavbar"
+          qzNavbar
+          sticky
+          reveal="scroll-up"
+          [scrollThreshold]="8"
+          [closeMenuOnDesktop]="false"
+          class="z-10 border-b border-transparent bg-[#0d1117]/95 text-gray-200 backdrop-blur data-[qz-scrolled]:border-emerald-300/20 data-[qz-scrolled]:shadow-2xl data-[qz-scrolled]:shadow-black/30"
+        >
+          <div class="flex min-h-16 items-center gap-4 px-5">
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="grid size-9 shrink-0 place-items-center bg-cyan-400/15 text-cyan-200"
+                >Q</span
+              >
+              <div class="min-w-0">
+                <p class="truncate font-semibold text-white">Quartz Console</p>
+                <p class="text-xs text-gray-500">
+                  {{ navbar.scrolled() ? 'scrolled' : 'top' }} · {{ navbar.scrollDirection() }}
+                </p>
+              </div>
+            </div>
+
+            <div class="ml-auto hidden items-center gap-1 sm:flex">
+              @for (item of ['Overview', 'Deployments', 'Usage']; track item) {
+                <a
+                  href="/navbar"
+                  class="px-3 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                  >{{ item }}</a
+                >
+              }
+            </div>
+
+            <button qzNavbarTrigger class="bg-emerald-500 px-3 py-2 text-sm text-black">
+              Menu
+            </button>
+          </div>
+
+          <div
+            qzNavbarMenu
+            class="grid gap-3 border-t border-white/10 bg-[#10131a] p-4 text-sm text-gray-300 sm:grid-cols-3"
+          >
+            @for (item of ['Sidebar', 'Navbar', 'Stepper']; track item) {
+              <a
+                href="/{{ item.toLowerCase() }}"
+                class="border border-white/10 bg-white/[0.03] p-3"
+              >
+                <span class="font-medium text-white">{{ item }}</span>
+                <span class="mt-1 block text-xs text-gray-500">Navigation primitive</span>
+              </a>
+            }
+          </div>
+        </nav>
+
+        <div class="grid gap-4 p-5 text-gray-300">
+          <section class="border border-white/10 bg-white/[0.03] p-5">
+            <p class="text-xs uppercase tracking-[0.14em] text-gray-500">Workspace</p>
+            <h3 class="mt-3 text-2xl font-semibold text-white">Platform overview</h3>
+            <p class="mt-2 max-w-2xl text-sm text-gray-400">
+              Active release status, usage movement and review queues sit underneath a persistent
+              navigation surface.
+            </p>
+          </section>
+
+          @for (item of navbarRows; track item.title) {
+            <article class="grid gap-3 border border-white/10 bg-white/[0.025] p-4 sm:grid-cols-4">
+              <div>
+                <h3 class="font-medium text-white">{{ item.title }}</h3>
+                <p class="mt-1 text-xs uppercase tracking-[0.12em] text-emerald-300">
+                  {{ item.status }}
+                </p>
+              </div>
+              <p class="text-sm text-gray-400 sm:col-span-3">{{ item.body }}</p>
+            </article>
+          }
+        </div>
+      </div>
+    </app-code-block>
+  </section>
+</app-demo-page>

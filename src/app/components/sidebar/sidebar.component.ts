@@ -174,8 +174,11 @@ export class SidebarComponent {
       ],
     },
     {
-      label: 'Navigation / Disclosure',
+      label: 'Navigation / Layout',
       items: [
+        { path: '/sidebar', label: 'Sidebar', icon: 'grid' as const, soon: false },
+        { path: '/navbar', label: 'Navbar', icon: 'list' as const, soon: false },
+        { path: '/stepper', label: 'Stepper', icon: 'grid' as const, soon: false },
         { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
         { path: '/tabs', label: 'Tabs', icon: 'grid' as const, soon: false },
         { path: '/accordion', label: 'Accordion', icon: 'file' as const, soon: false },

@@ -1,0 +1,169 @@
+<app-demo-page
+  badge="Primitive"
+  title="Stepper"
+  description="Sequential flow primitive with controlled value, linear navigation, completed/disabled state, orientation and RTL-aware keyboard focus."
+  [features]="[
+    { title: 'Controlled', description: 'Active step is a value model, not an index' },
+    {
+      title: 'Linear',
+      description: 'Consumers supply completed state; Quartz enforces navigation',
+    },
+    { title: 'ARIA', description: 'Buttons, aria-current=step and panel relationships' },
+    { title: 'CLI', description: 'pnpm quartz add stepper' },
+  ]"
+>
+  <div class="flex flex-col gap-10">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Linear setup flow</h2>
+      <app-code-block [code]="code">
+        <div
+          preview
+          qzStepper
+          [(value)]="step"
+          linear
+          class="w-full space-y-6 border border-white/10 bg-[#090b10] p-5 text-gray-300"
+        >
+          <div class="grid gap-3 sm:grid-cols-3">
+            <button
+              qzStep="account"
+              [qzStepCompleted]="accountDone()"
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] p-4 text-left data-[qz-active]:border-emerald-300/60 data-[qz-active]:bg-emerald-400/15"
+            >
+              <span class="block text-sm font-semibold text-white">Account</span>
+              <span class="mt-1 block text-xs text-gray-500">Workspace identity</span>
+            </button>
+            <button
+              qzStep="profile"
+              [qzStepCompleted]="profileDone()"
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] p-4 text-left data-[qz-active]:border-emerald-300/60 data-[qz-active]:bg-emerald-400/15"
+            >
+              <span class="block text-sm font-semibold text-white">Profile</span>
+              <span class="mt-1 block text-xs text-gray-500">Team preferences</span>
+            </button>
+            <button
+              qzStep="billing"
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] p-4 text-left data-[qz-active]:border-emerald-300/60 data-[qz-active]:bg-emerald-400/15"
+            >
+              <span class="block text-sm font-semibold text-white">Billing</span>
+              <span class="mt-1 block text-xs text-gray-500">Plan and invoice</span>
+            </button>
+          </div>
+
+          <section
+            qzStepPanel="account"
+            class="min-h-40 border border-white/10 bg-white/[0.025] p-5"
+          >
+            <h3 class="font-semibold text-white">Account details</h3>
+            <p class="mt-2 text-sm text-gray-400">
+              The workspace slug, owner and default region are ready to confirm.
+            </p>
+            <button
+              class="mt-4 bg-white/10 px-3 py-2 text-sm text-gray-100"
+              type="button"
+              (click)="accountDone.set(true)"
+            >
+              Mark complete
+            </button>
+          </section>
+
+          <section
+            qzStepPanel="profile"
+            class="min-h-40 border border-white/10 bg-white/[0.025] p-5"
+          >
+            <h3 class="font-semibold text-white">Profile settings</h3>
+            <p class="mt-2 text-sm text-gray-400">
+              Notification channels and review defaults can be changed before billing.
+            </p>
+            <button
+              class="mt-4 bg-white/10 px-3 py-2 text-sm text-gray-100"
+              type="button"
+              (click)="profileDone.set(true)"
+            >
+              Mark complete
+            </button>
+          </section>
+
+          <section
+            qzStepPanel="billing"
+            class="min-h-40 border border-white/10 bg-white/[0.025] p-5"
+          >
+            <h3 class="font-semibold text-white">Billing plan</h3>
+            <p class="mt-2 text-sm text-gray-400">
+              Seats, plan limits and invoice email are grouped in the final step.
+            </p>
+          </section>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button qzStepperPrevious class="bg-white/10 px-3 py-2 text-sm text-gray-100">
+              Previous
+            </button>
+            <button qzStepperNext class="bg-emerald-500 px-3 py-2 text-sm text-black">Next</button>
+            <span class="ml-auto text-xs uppercase tracking-[0.14em] text-gray-500">
+              {{ step() }}
+            </span>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Vertical review flow</h2>
+      <app-code-block [code]="code">
+        <div
+          preview
+          qzStepper
+          [(value)]="verticalStep"
+          orientation="vertical"
+          class="grid min-h-[340px] gap-5 border border-white/10 bg-[#090b10] p-5 text-gray-300 md:grid-cols-[15rem_1fr]"
+        >
+          <div class="flex flex-col gap-2">
+            <button
+              qzStep="plan"
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] px-4 py-3 text-left data-[qz-active]:border-cyan-300/60 data-[qz-active]:bg-cyan-400/15"
+            >
+              Plan
+            </button>
+            <button
+              qzStep="security"
+              qzStepDisabled
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] px-4 py-3 text-left text-gray-500 data-[qz-active]:border-cyan-300/60 data-[qz-active]:bg-cyan-400/15"
+            >
+              Security
+            </button>
+            <button
+              qzStep="launch"
+              qzStepTrigger
+              class="border border-white/10 bg-white/[0.03] px-4 py-3 text-left data-[qz-active]:border-cyan-300/60 data-[qz-active]:bg-cyan-400/15"
+            >
+              Launch
+            </button>
+          </div>
+
+          <div class="border border-white/10 bg-white/[0.025] p-5">
+            <section qzStepPanel="plan">
+              <h3 class="font-semibold text-white">Plan review</h3>
+              <p class="mt-2 text-sm text-gray-400">
+                Implementation notes, owners and rollout calendar are grouped here.
+              </p>
+            </section>
+            <section qzStepPanel="security">
+              <h3 class="font-semibold text-white">Security review</h3>
+              <p class="mt-2 text-sm text-gray-400">This step is disabled in the current flow.</p>
+            </section>
+            <section qzStepPanel="launch">
+              <h3 class="font-semibold text-white">Launch checklist</h3>
+              <p class="mt-2 text-sm text-gray-400">
+                Final publication tasks sit at the end of the sequence.
+              </p>
+            </section>
+          </div>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

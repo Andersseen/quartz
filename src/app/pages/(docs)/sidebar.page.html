@@ -1,0 +1,137 @@
+<app-demo-page
+  badge="Primitive"
+  title="Sidebar"
+  description="Application navigation sidebar behaviour for push and overlay layouts, collapsed state, responsive mode switching and logical inline sides."
+  [features]="[
+    { title: 'Layout', description: 'Push mode owns structural grid geometry' },
+    { title: 'Overlay', description: 'Escape, outside pointer, optional focus and scroll lock' },
+    { title: 'Responsive', description: 'Viewport breakpoint chooses desktop/mobile mode' },
+    { title: 'CLI', description: 'pnpm quartz add sidebar' },
+  ]"
+>
+  <div class="flex flex-col gap-10">
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Push and collapsed</h2>
+      <app-code-block [code]="basicCode">
+        <div
+          preview
+          qzSidebar
+          [(open)]="open"
+          [(collapsed)]="collapsed"
+          class="w-full min-h-[360px] overflow-hidden border border-white/10 bg-[#090b10]"
+          style="--qz-sidebar-size: 15rem; --qz-sidebar-collapsed-size: 5rem"
+        >
+          <aside
+            qzSidebarPanel
+            class="border-r border-white/10 bg-[#0d1117] p-3 text-sm text-gray-300"
+          >
+            <div class="mb-5 flex h-10 items-center gap-3 overflow-hidden px-2">
+              <span
+                class="grid size-8 shrink-0 place-items-center bg-emerald-400/15 text-emerald-200"
+                >Q</span
+              >
+              <span class="whitespace-nowrap font-semibold text-white">Quartz Admin</span>
+            </div>
+
+            <nav class="space-y-1">
+              @for (item of sidebarItems; track item) {
+                <a
+                  href="/sidebar"
+                  class="flex h-10 items-center gap-3 overflow-hidden px-2 text-gray-300 data-[active=true]:bg-emerald-400/15 data-[active=true]:text-emerald-100"
+                  [attr.data-active]="item === 'Overview'"
+                >
+                  <span class="grid size-7 shrink-0 place-items-center bg-white/5 text-xs">{{
+                    item[0]
+                  }}</span>
+                  <span class="whitespace-nowrap">{{ item }}</span>
+                </a>
+              }
+            </nav>
+          </aside>
+
+          <main qzSidebarContent class="min-h-[360px] p-5 text-gray-300">
+            <div class="mb-5 flex flex-wrap items-center gap-2">
+              <button qzSidebarTrigger class="bg-emerald-500 px-3 py-2 text-sm text-black">
+                Toggle
+              </button>
+              <button
+                class="bg-white/10 px-3 py-2 text-sm text-gray-100"
+                type="button"
+                (click)="collapsed.set(!collapsed()); open.set(true)"
+              >
+                {{ collapsed() ? 'Expand' : 'Collapse' }}
+              </button>
+              <span class="ml-auto text-xs uppercase tracking-[0.14em] text-gray-500">
+                {{ open() ? (collapsed() ? 'collapsed' : 'expanded') : 'closed' }}
+              </span>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-3">
+              @for (metric of ['Revenue', 'Latency', 'Jobs']; track metric) {
+                <div class="border border-white/10 bg-white/[0.03] p-4">
+                  <p class="text-xs uppercase tracking-[0.14em] text-gray-500">{{ metric }}</p>
+                  <p class="mt-3 text-2xl font-semibold text-white">98%</p>
+                </div>
+              }
+            </div>
+
+            <div class="mt-4 min-h-32 border border-white/10 bg-white/[0.02] p-4">
+              <p class="text-sm text-gray-400">
+                Content keeps its place while the sidebar changes structural geometry.
+              </p>
+            </div>
+          </main>
+        </div>
+      </app-code-block>
+    </section>
+
+    <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Overlay and RTL</h2>
+      <app-code-block [code]="responsiveCode">
+        <div
+          preview
+          dir="rtl"
+          qzSidebar
+          [(open)]="overlayOpen"
+          mode="overlay"
+          side="inline-end"
+          [scrollLock]="false"
+          class="relative w-full min-h-[320px] overflow-hidden border border-white/10 bg-[#090b10]"
+        >
+          <aside
+            qzSidebarPanel
+            class="border-l border-cyan-300/20 bg-[#0d1117] p-4 text-sm text-gray-300"
+          >
+            <div class="mb-4 flex items-center justify-between gap-3">
+              <span class="font-semibold text-white">Inspector</span>
+              <button qzSidebarTrigger class="bg-cyan-400 px-3 py-2 text-black">
+                Close overlay
+              </button>
+            </div>
+            <div class="space-y-3">
+              @for (item of ['Direction', 'Mode', 'Focus']; track item) {
+                <div class="border border-white/10 bg-white/[0.03] p-3">
+                  <p class="text-xs text-gray-500">{{ item }}</p>
+                  <p class="mt-1 text-gray-200">inline-end</p>
+                </div>
+              }
+            </div>
+          </aside>
+
+          <main qzSidebarContent class="p-5 text-gray-300">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <span class="font-semibold text-white">RTL workspace</span>
+              <button qzSidebarTrigger class="bg-cyan-400 px-3 py-2 text-black">
+                Open overlay
+              </button>
+            </div>
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+              <div class="min-h-36 border border-white/10 bg-white/[0.03] p-4">Canvas</div>
+              <div class="min-h-36 border border-white/10 bg-white/[0.03] p-4">Preview</div>
+            </div>
+          </main>
+        </div>
+      </app-code-block>
+    </section>
+  </div>
+</app-demo-page>

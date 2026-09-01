@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-09-01** (0.3.0 Controls & Interaction)
+> **Last updated: 2026-09-01** (0.4.0 Navigation & Layout)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -117,7 +117,7 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.3.0** in their
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.4.0** in their
   `package.json`. CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
   `main` whenever a package's `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
@@ -192,6 +192,29 @@ Checkbox decision for 0.3.0: `qzCheckbox` is button-first only. Native
 DOM properties and the button ARIA pattern would create two subtly different surfaces. Revisit
 only if real consumers need native form submission semantics.
 
+## Quartz 0.4.0 Navigation & Layout (2026-09-01)
+
+This release adds Sidebar, Navbar and Stepper as primitives and leaves Core without a new
+navigation/layout foundation. The audit found the existing foundations sufficient:
+Viewport covers breakpoint state, Dismiss covers layered Escape/outside pointer dismissal,
+ScrollLock covers document body locking, Focus covers optional initial focus/trapping, Directionality
+covers logical inline sides/RTL and Collection covers Stepper roving focus.
+
+- **Sidebar** (`qzSidebar`, `qzSidebarPanel`, `qzSidebarContent`, `qzSidebarTrigger`) models app
+  navigation sidebar behavior: `open` vs `collapsed`, `push` vs `overlay`, desktop/mobile mode
+  selection via Viewport breakpoints, logical `inline-start`/`inline-end` sides, structural size
+  hooks (`--qz-sidebar-size`, `--qz-sidebar-collapsed-size`) and overlay dismissal.
+- **Navbar** (`qzNavbar`, `qzNavbarTrigger`, `qzNavbarMenu`) owns sticky/static behavior,
+  thresholded `scrolled`/`stuck`, scroll direction, reveal state and a dismissible responsive menu.
+  It intentionally exposes state only; blur, background, borders and animation stay in the consumer.
+- **Stepper** (`qzStepper`, `qzStep`, `qzStepTrigger`, `qzStepPanel`, `qzStepperNext`,
+  `qzStepperPrevious`) uses value-based controlled state, supports linear/non-linear navigation,
+  consumer-supplied completion, disabled steps, horizontal/vertical orientation, RTL-aware keyboard
+  navigation and active-step recovery when dynamic steps are removed.
+- No shared public `NavItem` was extracted. Sidebar/Navbar docs need links, but the reusable
+  behavior is currently only active/ARIA reflection and would be premature as a public primitive.
+  Quartz remains router-agnostic and imports no Angular Router from the package implementation.
+
 ## Primitive status matrix
 
 | Primitive             | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
@@ -210,6 +233,9 @@ only if real consumers need native form submission semantics.
 | select                | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single selection popup listbox with roving focus, object values, typeahead, dismissal and Overlay placement  |
 | tabs                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Roving-focus tabs with automatic/manual activation, orientation and RTL horizontal navigation                |
 | accordion             | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single, collapsible and multiple disclosure sections with trigger/panel ARIA                                 |
+| sidebar               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Push/overlay app sidebar with open/collapsed, responsive mode, logical sides and dismissal                   |
+| navbar                | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Sticky/scrolled/stuck/reveal state and dismissible responsive menu                                           |
+| stepper               | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Value-based sequential flow with linear completion contract, keyboard and dynamic step recovery              |
 | switch                | ✅       | ✅         | ✅        | ✅                                  | Button-first ARIA switch with controlled checked state                                                       |
 | checkbox              | ✅       | ✅         | ✅        | ✅                                  | Button-first ARIA checkbox with checked/unchecked/indeterminate state                                        |
 | radio-group           | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Standalone radio group using Collection + Directionality                                                     |
@@ -266,7 +292,8 @@ change behaviour or that are easy to regress:
 
 ## In progress / next up
 
-- **Next composition primitive**: TBD after the 0.3.0 release lands and npm publishes.
+- **Next composition primitive**: TBD after 0.4.0 ships and real navigation/layout usage
+  reveals the next missing pattern.
 
 ## Known issues / gotchas (live)
 
