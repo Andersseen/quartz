@@ -41,6 +41,20 @@ describe('DialogService', () => {
     ref.close();
   });
 
+  it('keeps backdrop styles structural and does not impose a visual background', () => {
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef);
+    const backdrop = document.querySelector<HTMLElement>('[data-qz-dialog-backdrop]');
+
+    expect(backdrop?.style.position).toBe('fixed');
+    expect(backdrop?.style.pointerEvents).toBe('auto');
+    expect(backdrop?.style.background).toBe('');
+
+    ref.close();
+  });
+
   it('should close when Escape is pressed', () => {
     const panel = document.createElement('div');
     const { templateRef, viewContainerRef } = createTemplateMocks(panel);

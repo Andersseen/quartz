@@ -166,4 +166,33 @@ describe('CLI smoke — quartz add', () => {
     expect(fs.existsSync(path.join(outDir, 'overlay'))).toBe(false);
     expect(fs.existsSync(path.join(outDir, 'collection'))).toBe(false);
   });
+
+  it('should copy 0.3.0 controls with correct peer boundaries', () => {
+    const outDir = runAdd(tmpDir, [
+      'checkbox',
+      'radio-group',
+      'toggle',
+      'toggle-group',
+      'slider',
+    ]);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual([
+      'checkbox',
+      'radio-group',
+      'slider',
+      'toggle',
+      'toggle-group',
+    ]);
+    expect(copied.checkbox).toContain('checkbox.directive.ts');
+    expect(copied['radio-group']).toContain('radio-group.directive.ts');
+    expect(copied['radio-group']).toContain('radio.directive.ts');
+    expect(copied.toggle).toContain('toggle.directive.ts');
+    expect(copied['toggle-group']).toContain('toggle-group.directive.ts');
+    expect(copied['toggle-group']).toContain('toggle-item.directive.ts');
+    expect(copied.slider).toContain('slider.directive.ts');
+    expect(copied.slider).toContain('slider-thumb.directive.ts');
+    expect(fs.existsSync(path.join(outDir, 'collection'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, 'directionality'))).toBe(false);
+  });
 });

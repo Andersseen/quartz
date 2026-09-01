@@ -13,6 +13,8 @@ import { LayoutService } from '../../services/layout.service';
 import { LmnGithubIcon, LmnMenuIcon, LmnXIcon } from 'lumen-icons';
 
 const COMPONENT_ROUTES = [
+  '/components',
+  '/directionality',
   '/overlay',
   '/dialog',
   '/splitter',
@@ -21,6 +23,19 @@ const COMPONENT_ROUTES = [
   '/drag-drop',
   '/tree',
   '/listbox',
+  '/menu',
+  '/popover',
+  '/combobox',
+  '/scroll-lock',
+  '/select',
+  '/tabs',
+  '/accordion',
+  '/switch',
+  '/checkbox',
+  '/radio-group',
+  '/toggle',
+  '/toggle-group',
+  '/slider',
   '/virtual-scroll',
   '/viewport',
 ];

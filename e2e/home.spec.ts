@@ -33,6 +33,14 @@ test.describe('Home Page', () => {
     await expect(page.getByText('Composes cleanly', { exact: true })).toBeVisible();
   });
 
+  test('should show the current Core and Primitives catalogue', async ({ page }) => {
+    await expect(page.getByText('10 APIs', { exact: true })).toBeVisible();
+    await expect(page.getByText('17 controls', { exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Checkbox/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /RadioGroup/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Slider/ })).toBeVisible();
+  });
+
   test('should have correct page title', async ({ page }) => {
     await expect(page).toHaveTitle(/Quartz Headless/);
   });

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   VoltBadge,
   VoltCard,
@@ -18,6 +19,7 @@ import { MOVEMENT_DIRECTIVES } from 'angular-movement';
     VoltCardHeader,
     VoltCardTitle,
     VoltCardDescription,
+    RouterLink,
     ...MOVEMENT_DIRECTIVES,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +57,48 @@ import { MOVEMENT_DIRECTIVES } from 'angular-movement';
             </volt-card>
           }
         </div>
+
+        <div [move]="'fade-up'" [moveDelay]="120" class="mt-16 grid gap-10 lg:grid-cols-[1fr_1fr]">
+          <section>
+            <div class="mb-5 flex items-center justify-between gap-4">
+              <h3 class="text-xl font-bold text-white">Core infrastructure</h3>
+              <span class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500"
+                >10 APIs</span
+              >
+            </div>
+            <div class="grid gap-2 sm:grid-cols-2">
+              @for (item of core; track item.path) {
+                <a
+                  [routerLink]="item.path"
+                  class="group border border-white/8 bg-black/20 px-3 py-3 text-sm text-slate-300 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.04] hover:text-white"
+                >
+                  <span class="block font-medium">{{ item.name }}</span>
+                  <span class="mt-1 block text-xs leading-5 text-slate-500">{{ item.detail }}</span>
+                </a>
+              }
+            </div>
+          </section>
+
+          <section>
+            <div class="mb-5 flex items-center justify-between gap-4">
+              <h3 class="text-xl font-bold text-white">Primitives</h3>
+              <span class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500"
+                >17 controls</span
+              >
+            </div>
+            <div class="grid gap-2 sm:grid-cols-2">
+              @for (item of primitives; track item.path) {
+                <a
+                  [routerLink]="item.path"
+                  class="group border border-white/8 bg-black/20 px-3 py-3 text-sm text-slate-300 transition-colors hover:border-emerald-300/30 hover:bg-emerald-300/[0.04] hover:text-white"
+                >
+                  <span class="block font-medium">{{ item.name }}</span>
+                  <span class="mt-1 block text-xs leading-5 text-slate-500">{{ item.detail }}</span>
+                </a>
+              }
+            </div>
+          </section>
+        </div>
       </div>
     </section>
   `,
@@ -79,5 +123,42 @@ export class HomeFeaturesComponent {
       description: 'Small primitives that become menus, command palettes and more.',
       detail: 'Signals + standalone',
     },
+  ];
+
+  readonly core = [
+    { name: 'Collection', path: '/docs', detail: 'Registration, DOM order and roving focus' },
+    { name: 'Focus', path: '/docs', detail: 'Trap, restore and initial focus helpers' },
+    { name: 'Dismiss', path: '/docs', detail: 'Escape, outside pointer, focus and scroll' },
+    { name: 'Directionality', path: '/directionality', detail: 'LTR/RTL resolution and keys' },
+    { name: 'Overlay', path: '/overlay', detail: 'Portal positioning for floating UI' },
+    { name: 'Scroll Lock', path: '/scroll-lock', detail: 'Document-scoped modal scroll locks' },
+    { name: 'Viewport', path: '/viewport', detail: 'Reactive breakpoint matching' },
+    { name: 'Drag & Drop', path: '/drag-drop', detail: 'Native pointer-based drag flows' },
+    {
+      name: 'Virtual Scroll',
+      path: '/virtual-scroll',
+      detail: 'Windowed rendering for long lists',
+    },
+    { name: 'Splitter', path: '/splitter', detail: 'Resizable panels and handles' },
+  ];
+
+  readonly primitives = [
+    { name: 'Dialog', path: '/dialog', detail: 'Modal dialog and drawer behavior' },
+    { name: 'Tooltip', path: '/tooltip', detail: 'Hover and focus descriptions' },
+    { name: 'Popover', path: '/popover', detail: 'Dismissible floating content' },
+    { name: 'Menu', path: '/menu', detail: 'Menu, submenu and checkable items' },
+    { name: 'Listbox', path: '/listbox', detail: 'Single and multi selection' },
+    { name: 'Combobox', path: '/combobox', detail: 'Editable suggestions' },
+    { name: 'Select', path: '/select', detail: 'Button-triggered listbox popup' },
+    { name: 'Tree', path: '/tree', detail: 'Hierarchical navigation' },
+    { name: 'Tabs', path: '/tabs', detail: 'Tablist and panels' },
+    { name: 'Accordion', path: '/accordion', detail: 'Disclosure sections' },
+    { name: 'Switch', path: '/switch', detail: 'Boolean setting control' },
+    { name: 'Checkbox', path: '/checkbox', detail: 'Checked, unchecked and mixed state' },
+    { name: 'RadioGroup', path: '/radio-group', detail: 'Standalone radio selection' },
+    { name: 'Toggle', path: '/toggle', detail: 'Pressed button state' },
+    { name: 'ToggleGroup', path: '/toggle-group', detail: 'Single or multiple pressed items' },
+    { name: 'Slider', path: '/slider', detail: 'Single-thumb range input' },
+    { name: 'Toast', path: '/toast', detail: 'Accessible notifications' },
   ];
 }

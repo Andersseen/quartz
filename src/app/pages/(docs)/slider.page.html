@@ -1,0 +1,139 @@
+<app-demo-page
+  badge="Primitive"
+  title="Slider"
+  description="A single-thumb headless slider with normalization, keyboard support, Pointer Events, RTL mapping and geometry CSS variables."
+  [features]="[
+    { title: 'API', description: 'qzSlider, qzSliderTrack, qzSliderRange, qzSliderThumb' },
+    { title: 'Keyboard', description: 'Arrows, Home/End, PageUp/PageDown' },
+    { title: 'Pointer', description: 'Track press and drag via pointer capture' },
+    { title: 'CLI', description: 'pnpm quartz add slider' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">
+      Basic, decimal, vertical, RTL and disabled
+    </h2>
+    <app-code-block [code]="code">
+      <div preview class="grid gap-8">
+        <div
+          qzSlider
+          [(value)]="volume"
+          [valueText]="valueText"
+          class="relative h-8 w-full max-w-md touch-none"
+        >
+          <div
+            qzSliderTrack
+            class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+          >
+            <div
+              qzSliderRange
+              class="h-full bg-cyan-400"
+              [style.width]="'var(--qz-slider-percent)'"
+            ></div>
+            <button
+              qzSliderThumb
+              aria-label="Volume"
+              class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+              [style.left]="'calc(var(--qz-slider-percent) - 10px)'"
+            ></button>
+          </div>
+        </div>
+        <div
+          qzSlider
+          [(value)]="decimal"
+          [min]="0"
+          [max]="1"
+          [step]="0.1"
+          class="relative h-8 w-full max-w-md touch-none"
+        >
+          <div
+            qzSliderTrack
+            class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+          >
+            <div
+              qzSliderRange
+              class="h-full bg-emerald-400"
+              [style.width]="'var(--qz-slider-percent)'"
+            ></div>
+            <button
+              qzSliderThumb
+              aria-label="Decimal amount"
+              class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+              [style.left]="'calc(var(--qz-slider-percent) - 10px)'"
+            ></button>
+          </div>
+        </div>
+        <div class="flex gap-8">
+          <div
+            qzSlider
+            [(value)]="vertical"
+            orientation="vertical"
+            class="relative h-36 w-8 touch-none"
+          >
+            <div
+              qzSliderTrack
+              class="absolute bottom-0 left-1/2 top-0 w-2 -translate-x-1/2 bg-white/10"
+            >
+              <div
+                qzSliderRange
+                class="absolute bottom-0 w-full bg-fuchsia-400"
+                [style.height]="'var(--qz-slider-percent)'"
+              ></div>
+              <button
+                qzSliderThumb
+                aria-label="Vertical amount"
+                class="absolute left-1/2 h-5 w-5 -translate-x-1/2 border border-white bg-[#151923]"
+                [style.bottom]="'calc(var(--qz-slider-percent) - 10px)'"
+              ></button>
+            </div>
+          </div>
+          <div qzSlider [(value)]="rtl" dir="rtl" class="relative h-8 w-full max-w-xs touch-none">
+            <div
+              qzSliderTrack
+              class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+            >
+              <div
+                qzSliderRange
+                class="h-full bg-amber-300"
+                [style.width]="'var(--qz-slider-percent)'"
+              ></div>
+              <button
+                qzSliderThumb
+                aria-label="RTL amount"
+                class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+                [style.right]="'calc(var(--qz-slider-percent) - 10px)'"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div
+          qzSlider
+          [(value)]="disabled"
+          [disabled]="true"
+          class="relative h-8 w-full max-w-md opacity-50"
+        >
+          <div
+            qzSliderTrack
+            class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+          >
+            <div
+              qzSliderRange
+              class="h-full bg-gray-500"
+              [style.width]="'var(--qz-slider-percent)'"
+            ></div>
+            <button
+              qzSliderThumb
+              aria-label="Disabled amount"
+              class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+              [style.left]="'calc(var(--qz-slider-percent) - 10px)'"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </app-code-block>
+    <p class="mt-4 text-sm text-gray-500">
+      Quartz exposes <code>--qz-slider-percent</code> and state attributes only. Track, thumb,
+      range, color, radius and motion belong to the consumer.
+    </p>
+  </section>
+</app-demo-page>

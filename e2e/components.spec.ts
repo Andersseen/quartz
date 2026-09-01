@@ -18,6 +18,11 @@ test.describe('Components Pages', () => {
     { path: '/tabs', title: 'Tabs' },
     { path: '/accordion', title: 'Accordion' },
     { path: '/switch', title: 'Switch' },
+    { path: '/checkbox', title: 'Checkbox' },
+    { path: '/radio-group', title: 'RadioGroup' },
+    { path: '/toggle', title: 'Toggle' },
+    { path: '/toggle-group', title: 'ToggleGroup' },
+    { path: '/slider', title: 'Slider' },
   ];
 
   for (const component of components) {
@@ -32,5 +37,13 @@ test.describe('Components Pages', () => {
     await page.goto('/overlay');
     await page.click('text=Dialog');
     await expect(page).toHaveURL('/dialog');
+  });
+
+  test('should show the full catalogue on /components', async ({ page }) => {
+    await page.goto('/components');
+    await expect(page.getByText('10 APIs', { exact: true })).toBeVisible();
+    await expect(page.getByText('17 primitives', { exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Accordion/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /ToggleGroup/ })).toBeVisible();
   });
 });

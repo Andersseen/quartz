@@ -53,7 +53,6 @@ export class DialogService {
       backdropEl.style.cssText = [
         'position:fixed',
         'inset:0',
-        'background:rgba(0,0,0,0.55)',
         'z-index:9998',
         'pointer-events:auto',
       ].join(';');

@@ -1,8 +1,17 @@
-import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ElementRef,
+  effect,
+  input,
+  inject,
+  viewChild,
+} from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { version } from '../../../../packages/core/package.json';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
+import { LayoutService } from '../../services/layout.service';
 import {
   VoltBadge,
   VoltSidebarContent,
@@ -30,6 +39,11 @@ interface SidebarItem {
   label: string;
   icon: 'bell' | 'database' | 'grid' | 'info' | 'list' | 'file' | 'refresh' | 'zap' | 'package';
   soon: boolean;
+}
+
+interface SidebarGroup {
+  label: string;
+  items: SidebarItem[];
 }
 
 @Component({
@@ -66,6 +80,8 @@ export class SidebarComponent {
   open = input(false);
 
   private readonly router = inject(Router);
+  private readonly layout = inject(LayoutService);
+  private readonly content = viewChild<ElementRef<HTMLElement>>('sidebarContent');
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
@@ -78,10 +94,28 @@ export class SidebarComponent {
 
   readonly version = version;
 
-  readonly coreGroupLabel = 'Core';
-  readonly primitivesGroupLabel = 'Primitives';
+  readonly coreGroupLabel = '@quartz-headless/core';
+  readonly primitivesGroupLabel = '@quartz-headless/primitives';
 
   readonly coreItems: SidebarItem[] = [
+    {
+      path: '/docs',
+      label: 'Collection',
+      icon: 'list' as const,
+      soon: false,
+    },
+    {
+      path: '/docs',
+      label: 'Focus',
+      icon: 'info' as const,
+      soon: false,
+    },
+    {
+      path: '/docs',
+      label: 'Dismiss',
+      icon: 'zap' as const,
+      soon: false,
+    },
     {
       path: '/directionality',
       label: 'Directionality',
@@ -126,18 +160,67 @@ export class SidebarComponent {
     },
   ];
 
-  readonly primitiveItems: SidebarItem[] = [
-    { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false },
-    { path: '/tooltip', label: 'Tooltip', icon: 'info' as const, soon: false },
-    { path: '/toast', label: 'Toast', icon: 'bell' as const, soon: false },
-    { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
-    { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
-    { path: '/menu', label: 'Menu', icon: 'list' as const, soon: false },
-    { path: '/popover', label: 'Popover', icon: 'package' as const, soon: false },
-    { path: '/combobox', label: 'Combobox', icon: 'list' as const, soon: false },
-    { path: '/select', label: 'Select', icon: 'list' as const, soon: false },
-    { path: '/tabs', label: 'Tabs', icon: 'grid' as const, soon: false },
-    { path: '/accordion', label: 'Accordion', icon: 'file' as const, soon: false },
-    { path: '/switch', label: 'Switch', icon: 'zap' as const, soon: false },
+  readonly primitiveGroups: SidebarGroup[] = [
+    {
+      label: 'Floating / Selection',
+      items: [
+        { path: '/dialog', label: 'Dialog', icon: 'file' as const, soon: false },
+        { path: '/tooltip', label: 'Tooltip', icon: 'info' as const, soon: false },
+        { path: '/popover', label: 'Popover', icon: 'package' as const, soon: false },
+        { path: '/menu', label: 'Menu', icon: 'list' as const, soon: false },
+        { path: '/listbox', label: 'Listbox', icon: 'list' as const, soon: false },
+        { path: '/combobox', label: 'Combobox', icon: 'list' as const, soon: false },
+        { path: '/select', label: 'Select', icon: 'list' as const, soon: false },
+      ],
+    },
+    {
+      label: 'Navigation / Disclosure',
+      items: [
+        { path: '/tree', label: 'Tree', icon: 'list' as const, soon: false },
+        { path: '/tabs', label: 'Tabs', icon: 'grid' as const, soon: false },
+        { path: '/accordion', label: 'Accordion', icon: 'file' as const, soon: false },
+      ],
+    },
+    {
+      label: 'Controls',
+      items: [
+        { path: '/switch', label: 'Switch', icon: 'zap' as const, soon: false },
+        { path: '/checkbox', label: 'Checkbox', icon: 'zap' as const, soon: false },
+        { path: '/radio-group', label: 'RadioGroup', icon: 'list' as const, soon: false },
+        { path: '/toggle', label: 'Toggle', icon: 'zap' as const, soon: false },
+        { path: '/toggle-group', label: 'ToggleGroup', icon: 'grid' as const, soon: false },
+        { path: '/slider', label: 'Slider', icon: 'grid' as const, soon: false },
+      ],
+    },
+    {
+      label: 'Feedback',
+      items: [{ path: '/toast', label: 'Toast', icon: 'bell' as const, soon: false }],
+    },
   ];
+
+  constructor() {
+    effect(() => {
+      this.currentUrl();
+      const element = this.content()?.nativeElement;
+
+      if (!element) {
+        return;
+      }
+
+      const restore = (): void => {
+        element.scrollTop = this.layout.sidebarScrollTop();
+      };
+
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(restore);
+        return;
+      }
+
+      restore();
+    });
+  }
+
+  rememberSidebarScroll(event: Event): void {
+    this.layout.rememberSidebarScroll((event.currentTarget as HTMLElement).scrollTop);
+  }
 }

@@ -1,6 +1,6 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-08-31** (0.2.0 navigation, selection and controls on feature/0.2.0-navigation-selection-controls)
+> **Last updated: 2026-09-01** (0.3.0 Controls & Interaction)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
@@ -117,7 +117,7 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.2.0** in their
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.3.0** in their
   `package.json`. CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
   `main` whenever a package's `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
@@ -168,6 +168,30 @@ implementation decisions. The scoped packages are prepared as
   `@quartz-headless/primitives` peers on `@quartz-headless/core@^0.2.0`.
   Presence/exit animations remain explicitly out of scope for this minor.
 
+## Quartz 0.3.0 Controls & Interaction (2026-09-01)
+
+This release adds Checkbox, RadioGroup, Toggle, ToggleGroup and Slider as primitives, while
+leaving Core without a new control/form/range foundation. The controls consume the existing
+Core pieces where useful: RadioGroup and ToggleGroup use `CollectionStore` plus
+Directionality for roving focus, disabled skipping, DOM-order navigation and RTL horizontal
+keys; Slider uses Directionality for consistent horizontal RTL pointer and keyboard mapping.
+
+Dialog received a headless cleanup: its backdrop no longer gets a default visual
+`background`, retaining only structural styles required for positioning and backdrop
+interaction. `docs/architecture/foundations.md` now records the structural CSS policy:
+behavioral layout/geometry is allowed, visual color/shadow/border/typography/animation is
+consumer-owned. Slider's `--qz-slider-percent` is explicitly a geometry hook, not a visual
+token.
+
+Forms decision for 0.3.0: no CVA or Signal Forms adapter yet. The control APIs stay based on
+`model()`/`input()` so consumers can integrate them from the outside; a reusable forms
+adapter can be revisited if future controls reveal meaningful duplication.
+
+Checkbox decision for 0.3.0: `qzCheckbox` is button-first only. Native
+`<input type="checkbox">` support was not added because browser input state, `indeterminate`
+DOM properties and the button ARIA pattern would create two subtly different surfaces. Revisit
+only if real consumers need native form submission semantics.
+
 ## Primitive status matrix
 
 | Primitive             | Lib code | Unit tests | Demo page | CLI registry                        | Notes                                                                                                        |
@@ -187,6 +211,11 @@ implementation decisions. The scoped packages are prepared as
 | tabs                  | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Roving-focus tabs with automatic/manual activation, orientation and RTL horizontal navigation                |
 | accordion             | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single, collapsible and multiple disclosure sections with trigger/panel ARIA                                 |
 | switch                | ✅       | ✅         | ✅        | ✅                                  | Button-first ARIA switch with controlled checked state                                                       |
+| checkbox              | ✅       | ✅         | ✅        | ✅                                  | Button-first ARIA checkbox with checked/unchecked/indeterminate state                                        |
+| radio-group           | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Standalone radio group using Collection + Directionality                                                     |
+| toggle                | ✅       | ✅         | ✅        | ✅                                  | Button-first pressed/unpressed toggle with aria-pressed                                                      |
+| toggle-group          | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single/multiple toggle group with roving focus                                                               |
+| slider                | ✅       | ✅         | ✅        | ✅ peerDeps:[@quartz-headless/core] | Single-thumb ARIA slider with keyboard, pointer and RTL support                                              |
 | virtual-scroll        | ✅       | ✅         | ✅        | ✅                                  | Has ResizeObserver support                                                                                   |
 | viewport              | ✅       | ✅         | ✅        | ✅                                  |                                                                                                              |
 | directionality (Core) | ✅       | ✅ (+SSR)  | ✅        | ✅                                  | No `MutationObserver`; `refresh()`/`set()` for dynamic dir. See `docs/ai/specs/directionality.md`            |
@@ -237,14 +266,14 @@ change behaviour or that are easy to regress:
 
 ## In progress / next up
 
-- **Next composition primitive**: TBD after the 0.2.0 release lands and npm publishes.
+- **Next composition primitive**: TBD after the 0.3.0 release lands and npm publishes.
 
 ## Known issues / gotchas (live)
 
 - **AnalogJS route cache**: new `(docs)/*.page.ts` files still need a manual entry in
   `extraRoutes` (`src/app/app.config.ts`). Currently listed there: tree, virtual-scroll,
   viewport, tooltip, listbox, directionality, combobox, scroll-lock, select, tabs,
-  accordion and switch. Do not remove entries without
+  accordion, switch, checkbox, radio-group, toggle, toggle-group and slider. Do not remove entries without
   re-verifying the route in a fresh `.angular`/Vite cache.
 - CLAUDE.md may lag reality on small details. When CLAUDE.md and the code disagree,
   **the code wins**; then fix CLAUDE.md.

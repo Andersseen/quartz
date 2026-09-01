@@ -77,9 +77,26 @@ test.describe('Navigation', () => {
     }
   });
 
-  test('should redirect /components to /overlay', async ({ page }) => {
+  test('should navigate to 0.3.0 control pages', async ({ page }) => {
+    for (const [path, title] of [
+      ['/checkbox', 'Checkbox'],
+      ['/radio-group', 'RadioGroup'],
+      ['/toggle', 'Toggle'],
+      ['/toggle-group', 'ToggleGroup'],
+      ['/slider', 'Slider'],
+    ] as const) {
+      await page.goto(path);
+      await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
+    }
+  });
+
+  test('should render the components catalogue', async ({ page }) => {
     await page.goto('/components');
-    await expect(page).toHaveURL(/\/overlay/);
+    await expect(
+      page.getByRole('heading', { name: 'Two packages. Everything Quartz ships.' }),
+    ).toBeVisible();
+    await expect(page.getByRole('link', { name: /Accordion/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Slider/ })).toBeVisible();
   });
 
   test('should have sidebar navigation on component pages', async ({ page }) => {
@@ -94,5 +111,45 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Tabs').first()).toBeVisible();
     await expect(page.locator('text=Accordion').first()).toBeVisible();
     await expect(page.locator('text=Switch').first()).toBeVisible();
+    await expect(page.locator('text=Checkbox').first()).toBeVisible();
+    await expect(page.locator('text=RadioGroup').first()).toBeVisible();
+    await expect(page.locator('text=ToggleGroup').first()).toBeVisible();
+    await expect(page.locator('text=Slider').first()).toBeVisible();
+  });
+
+  test('should keep the docs sidebar mounted while navigating between component pages', async ({
+    page,
+  }) => {
+    await page.goto('/dialog');
+
+    const sidebar = page.locator('aside[aria-label="Component navigation"]');
+    const scroller = page.locator('volt-sidebar-content');
+    const sliderLink = page.getByRole('link', { name: /Slider/ });
+
+    await expect(sidebar).toBeVisible();
+    await sliderLink.scrollIntoViewIfNeeded();
+
+    const scrollTopBefore = await scroller.evaluate((element) => element.scrollTop);
+    await page.evaluate(() => {
+      (window as Window & { __quartzSidebar?: Element | null }).__quartzSidebar =
+        document.querySelector('aside[aria-label="Component navigation"]');
+    });
+
+    await sliderLink.click();
+    await expect(page).toHaveURL('/slider');
+    await expect(page.getByRole('heading', { name: 'Slider', level: 1 })).toBeVisible();
+
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            document.querySelector('aside[aria-label="Component navigation"]') ===
+            (window as Window & { __quartzSidebar?: Element | null }).__quartzSidebar,
+        ),
+      )
+      .toBe(true);
+    await expect
+      .poll(() => scroller.evaluate((element) => element.scrollTop))
+      .toBe(scrollTopBefore);
   });
 });

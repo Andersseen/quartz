@@ -7,6 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-09-01
+
+Release target: `@quartz-headless/core@0.3.0` and
+`@quartz-headless/primitives@0.3.0`.
+
+### Added
+
+- **Checkbox.** New button-first `qzCheckbox` primitive with `checked` state
+  (`false | true | 'indeterminate'`), `role="checkbox"`, `aria-checked` and
+  headless state hooks.
+- **RadioGroup.** New standalone `qzRadioGroup` / `qzRadio` controls with
+  controlled `value`, `compareWith`, disabled group/items, orientation,
+  Collection-backed roving focus, DOM-order registration and RTL-aware
+  horizontal keyboard navigation.
+- **Toggle.** New `qzToggle` primitive for pressed/unpressed buttons using
+  native button activation and `aria-pressed`.
+- **ToggleGroup.** New `qzToggleGroup` / `qzToggleItem` primitive with single
+  and multiple selection, roving focus, disabled skipping, loop control and RTL
+  horizontal keys.
+- **Slider.** New single-thumb `qzSlider`, `qzSliderTrack`, `qzSliderRange` and
+  `qzSliderThumb` primitives with value normalization, decimal step rounding,
+  keyboard support, Pointer Events, pointer capture cleanup, vertical and RTL
+  mapping, `aria-valuetext` support and `--qz-slider-percent`.
+- Docs/demo pages and CLI registry entries for `/checkbox`, `/radio-group`,
+  `/toggle`, `/toggle-group` and `/slider`.
+
+### Changed
+
+- `DialogService` no longer applies a visual backdrop background. The backdrop
+  retains structural positioning and pointer interaction hooks only.
+- `@quartz-headless/primitives` now peers on `@quartz-headless/core@^0.3.0`.
+- Package verification now checks the 0.3.0 control exports.
+
+### Accessibility
+
+- Checkbox, RadioGroup, Toggle and Slider follow their WAI-ARIA control
+  semantics without rendering visual affordances.
+- RadioGroup moves focus and selection together during arrow navigation, matching
+  native radio group expectations.
+- ToggleGroup single selection intentionally remains toggle-button semantics
+  instead of radio semantics.
+- Slider keyboard and pointer behavior use the same visual direction model:
+  horizontal LTR increases to the right, horizontal RTL increases to the left,
+  and vertical increases upward.
+
+### DX
+
+- The new controls use `model()` / `input()` APIs and are compatible with
+  zoneless Angular usage.
+- No ControlValueAccessor layer was added for 0.3.0. The Signals API is
+  sufficient for this minor, and a reusable forms adapter can be revisited after
+  more form-like primitives prove the duplication.
+
+### Breaking
+
+- No public breaking changes are intended.
+
 ## [0.2.0] — 2026-08-31
 
 Release target: `@quartz-headless/core@0.2.0` and

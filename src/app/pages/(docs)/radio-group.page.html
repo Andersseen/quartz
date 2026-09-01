@@ -1,0 +1,84 @@
+<app-demo-page
+  badge="Primitive"
+  title="RadioGroup"
+  description="A standalone radio group with Collection-powered registration, roving focus, disabled skipping, orientation and RTL."
+  [features]="[
+    { title: 'API', description: 'qzRadioGroup with [(value)], compareWith and qzRadio items' },
+    { title: 'Keyboard', description: 'Arrows move focus and selection; Home/End jump' },
+    { title: 'ARIA', description: 'radiogroup, radio, aria-checked, aria-disabled' },
+    { title: 'CLI', description: 'pnpm quartz add radio-group' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Vertical, horizontal, disabled and RTL</h2>
+    <app-code-block [code]="code">
+      <div preview class="grid gap-5 text-sm">
+        <div qzRadioGroup [(value)]="plan" orientation="vertical" class="grid gap-2">
+          <button
+            qzRadio="free"
+            class="border border-white/15 px-3 py-2 text-left data-[qz-state=checked]:bg-cyan-500/20"
+          >
+            Free
+          </button>
+          <button
+            qzRadio="pro"
+            class="border border-white/15 px-3 py-2 text-left data-[qz-state=checked]:bg-cyan-500/20"
+          >
+            Pro
+          </button>
+          <button
+            qzRadio="team"
+            [qzRadioDisabled]="true"
+            class="border border-white/15 px-3 py-2 text-left text-gray-600"
+          >
+            Team
+          </button>
+        </div>
+        <div qzRadioGroup [(value)]="density" orientation="horizontal" class="flex gap-2">
+          <button
+            qzRadio="compact"
+            class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-emerald-500/20"
+          >
+            Compact
+          </button>
+          <button
+            qzRadio="cozy"
+            class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-emerald-500/20"
+          >
+            Cozy
+          </button>
+        </div>
+        <div
+          qzRadioGroup
+          [(value)]="rtlValue"
+          orientation="horizontal"
+          dir="rtl"
+          class="flex gap-2"
+        >
+          <button
+            qzRadio="left"
+            class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+          >
+            Left
+          </button>
+          <button
+            qzRadio="center"
+            class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+          >
+            Center
+          </button>
+          <button
+            qzRadio="right"
+            class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+          >
+            Right
+          </button>
+        </div>
+      </div>
+    </app-code-block>
+    <p class="mt-4 text-sm text-gray-500">
+      Focus and selection intentionally move together for keyboard navigation, matching native radio
+      group expectations.
+    </p>
+  </section>
+</app-demo-page>

@@ -1,0 +1,30 @@
+<app-demo-page
+  badge="Primitive"
+  title="Toggle"
+  description="A pressed/unpressed button primitive. Use it for stateful buttons, not on/off settings where Switch is the clearer semantic."
+  [features]="[
+    { title: 'API', description: 'qzToggle with [(pressed)]' },
+    { title: 'Keyboard', description: 'Click, Enter and Space through native button behavior' },
+    { title: 'ARIA', description: 'aria-pressed without role switch' },
+    { title: 'CLI', description: 'pnpm quartz add toggle' },
+  ]"
+>
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Single toggle</h2>
+    <app-code-block [code]="code">
+      <div preview class="flex justify-center">
+        <button
+          qzToggle
+          [(pressed)]="bold"
+          class="border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=on]:bg-fuchsia-500/20"
+        >
+          Bold {{ bold() ? 'on' : 'off' }}
+        </button>
+      </div>
+    </app-code-block>
+    <p class="mt-4 text-sm text-gray-500">
+      Hooks: <code>data-qz-state=&quot;on|off&quot;</code> and <code>data-qz-disabled</code>. SSR
+      and zoneless friendly.
+    </p>
+  </section>
+</app-demo-page>

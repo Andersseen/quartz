@@ -95,26 +95,25 @@ import { version } from '../../../../../../packages/core/package.json';
               class="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-slate-300 sm:p-5 sm:text-sm sm:leading-7"
             >
               <p>
-                <span class="text-violet-300">const</span> menu =
-                <span class="text-cyan-300">inject</span>(OverlayService);
+                <span class="text-violet-300">const</span> volume =
+                <span class="text-cyan-300">signal</span>(50);
               </p>
-              <p class="mt-3 text-slate-500">// positioning, focus and escape</p>
-              <p>menu.<span class="text-emerald-300">create</span>(template, vcr, trigger);</p>
-              <p class="mt-4 text-slate-500">// your markup. your visual system.</p>
+              <p class="mt-3 text-slate-500">// keyboard, pointer, RTL and ARIA</p>
+              <p>&lt;div <span class="text-emerald-300">qzSlider</span> [(value)]="volume"&gt;</p>
+              <p class="mt-4 text-slate-500">// headless hooks, consumer visuals</p>
               <p>
-                <span class="text-violet-300">export</span>
-                <span class="text-violet-300">class</span>
-                <span class="text-cyan-200">Menu</span> &#123; ... &#125;
+                &lt;button <span class="text-emerald-300">qzSliderThumb</span>
+                aria-label="Volume"&gt;&lt;/button&gt;
               </p>
             </div>
             <div class="mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
               <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
-                <p class="text-base font-bold text-white sm:text-lg">10</p>
+                <p class="text-base font-bold text-white sm:text-lg">17</p>
                 <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Primitives</p>
               </div>
               <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
-                <p class="text-base font-bold text-white sm:text-lg">0</p>
-                <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Themes</p>
+                <p class="text-base font-bold text-white sm:text-lg">10</p>
+                <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Core APIs</p>
               </div>
               <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
                 <p class="text-base font-bold text-white sm:text-lg">A11y</p>
