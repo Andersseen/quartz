@@ -113,6 +113,50 @@ export {
 } from './accordion';
 export type { AccordionConfig, AccordionType } from './accordion';
 
+// Navigation & Layout
+export {
+  SidebarDirective,
+  SidebarPanelDirective,
+  SidebarContentDirective,
+  SidebarTriggerDirective,
+  DEFAULT_SIDEBAR_CONFIG,
+} from './sidebar';
+export type {
+  SidebarBreakpoint,
+  SidebarConfig,
+  SidebarFocusMode,
+  SidebarMode,
+  SidebarSide,
+  SidebarState,
+} from './sidebar';
+export {
+  NavbarDirective,
+  NavbarTriggerDirective,
+  NavbarMenuDirective,
+  DEFAULT_NAVBAR_CONFIG,
+} from './navbar';
+export type {
+  NavbarBreakpoint,
+  NavbarConfig,
+  NavbarRevealMode,
+  NavbarScrollDirection,
+} from './navbar';
+export {
+  StepperDirective,
+  StepDirective,
+  StepTriggerDirective,
+  StepPanelDirective,
+  StepperNextDirective,
+  StepperPreviousDirective,
+  DEFAULT_STEPPER_CONFIG,
+} from './stepper';
+export type {
+  StepState,
+  StepperActivationMode,
+  StepperConfig,
+  StepperOrientation,
+} from './stepper';
+
 // Switch
 export { SwitchDirective } from './switch';
 

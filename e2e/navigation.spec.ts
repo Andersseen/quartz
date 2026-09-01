@@ -90,6 +90,17 @@ test.describe('Navigation', () => {
     }
   });
 
+  test('should navigate to 0.4.0 navigation and layout pages', async ({ page }) => {
+    for (const [path, title] of [
+      ['/sidebar', 'Sidebar'],
+      ['/navbar', 'Navbar'],
+      ['/stepper', 'Stepper'],
+    ] as const) {
+      await page.goto(path);
+      await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
+    }
+  });
+
   test('should render the components catalogue', async ({ page }) => {
     await page.goto('/components');
     await expect(
@@ -108,6 +119,9 @@ test.describe('Navigation', () => {
     await expect(page.locator('text=Menu').first()).toBeVisible();
     await expect(page.locator('text=Popover').first()).toBeVisible();
     await expect(page.locator('text=Select').first()).toBeVisible();
+    await expect(page.locator('text=Sidebar').first()).toBeVisible();
+    await expect(page.locator('text=Navbar').first()).toBeVisible();
+    await expect(page.locator('text=Stepper').first()).toBeVisible();
     await expect(page.locator('text=Tabs').first()).toBeVisible();
     await expect(page.locator('text=Accordion').first()).toBeVisible();
     await expect(page.locator('text=Switch').first()).toBeVisible();

@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-09-01
+
+Release target: `@quartz-headless/core@0.4.0` and
+`@quartz-headless/primitives@0.4.0`.
+
+### Added
+
+- **Sidebar.** New `qzSidebar`, `qzSidebarPanel`, `qzSidebarContent` and
+  `qzSidebarTrigger` primitive with controlled open/collapsed state, push and overlay modes,
+  responsive desktop/mobile mode selection, logical inline-start/inline-end sides, structural
+  size hooks and overlay dismissal.
+- **Navbar.** New `qzNavbar`, `qzNavbarTrigger` and `qzNavbarMenu` primitive with static/sticky
+  behavior, thresholded scrolled/stuck state, scroll direction, reveal state and dismissible
+  responsive menu control.
+- **Stepper.** New value-based `qzStepper`, `qzStep`, `qzStepTrigger`, `qzStepPanel`,
+  `qzStepperNext` and `qzStepperPrevious` primitive with linear/non-linear navigation,
+  completed and disabled state, orientation, RTL keyboard focus and dynamic step recovery.
+- Docs/demo pages and CLI registry entries for `/sidebar`, `/navbar` and `/stepper`.
+
+### Changed
+
+- `@quartz-headless/primitives` now peers on `@quartz-headless/core@^0.4.0`.
+- Package verification now checks the 0.4.0 navigation and layout exports.
+
+### Accessibility
+
+- Sidebar and Navbar triggers expose `aria-expanded` and `aria-controls`; overlay/menu surfaces
+  support Escape and outside pointer dismissal without imposing visual presentation.
+- Stepper uses existing ARIA concepts instead of an invented role: buttons, `aria-current="step"`
+  and trigger/panel relationships.
+- Stepper keyboard navigation reuses Core Collection, including orientation and RTL-aware
+  horizontal arrows.
+
+### DX
+
+- The new primitives are standalone, signals-first and router-agnostic.
+- No shared public `NavItem` primitive was added for 0.4.0; active route matching remains
+  consumer-owned until real duplication proves a useful abstraction.
+
+### Breaking
+
+- No public breaking changes are intended.
+
 ## [0.3.0] — 2026-09-01
 
 Release target: `@quartz-headless/core@0.3.0` and

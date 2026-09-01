@@ -214,6 +214,39 @@ const extraRoutes: Routes = [
     ],
   },
   {
+    path: 'sidebar',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/sidebar.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'navbar',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/navbar.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
+    path: 'stepper',
+    data: { shell: 'docs' },
+    loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/(docs)/stepper.page').then((m) => m.default),
+      },
+    ],
+  },
+  {
     path: 'switch',
     data: { shell: 'docs' },
     loadComponent: () => import('./pages/(docs).page').then((m) => m.default),
