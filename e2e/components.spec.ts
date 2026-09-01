@@ -42,7 +42,7 @@ test.describe('Components Pages', () => {
   test('should show the full catalogue on /components', async ({ page }) => {
     await page.goto('/components');
     await expect(page.getByText('10 APIs', { exact: true })).toBeVisible();
-    await expect(page.getByText('17 primitives', { exact: true })).toBeVisible();
+    await expect(page.getByText('20 primitives', { exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: /Accordion/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /ToggleGroup/ })).toBeVisible();
   });
