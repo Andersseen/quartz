@@ -134,13 +134,14 @@ all green). Some fixes are **deliberate, pre-1.0 breaking changes** — see the 
   the 26-file id-counter DX dedup; Toast's `gap`/`padding` as hardcoded pixels; a real
   keyboard-operable drag-and-drop model (separate design project, explicitly out of scope).
 
-**Versioning recommendation**: this round mixes compatible bug fixes with **deliberate
-pre-1.0 breaking changes** — Tree's custom-template contract, Tooltip's `tooltipInteractive`
-removal, Controls' `button[...]` selector tightening, and Switch's `toggled` rename. None of
-these affect this repo's own demo/tests (verified per-area in `STABILITY_AUDIT.md`), but they
-are real breaks for any external 0.4.0 consumer. Recommend **`0.5.0`, not `0.4.1`** when this
-ships — version was deliberately **not** bumped as part of this audit itself, per the audit's
-own scope (documented recommendation only).
+**Versioning**: this round mixes compatible bug fixes with **deliberate pre-1.0 breaking
+changes** — Tree's custom-template contract, Tooltip's `tooltipInteractive` removal,
+Controls' `button[...]` selector tightening, and Switch's `toggled` rename. None of these
+affect this repo's own demo/tests (verified per-area in `STABILITY_AUDIT.md`), but they are
+real breaks for any external 0.4.0 consumer — a minor bump, not a patch, per semver's
+pre-1.0 convention (breaking changes bump minor). Both packages were bumped to **`0.5.0`**
+(see "Version & publish status" below) in a follow-up commit on the same branch; not
+published yet.
 
 ## Directionality Core foundation (2026-08-28)
 
@@ -254,9 +255,14 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.4.0** in their
-  `package.json`. CI's `publish` job (`.github/workflows/deploy.yml`) auto-publishes on
-  `main` whenever a package's `package.json` version isn't already live on npm.
+- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.5.0** in their
+  `package.json` (bumped from 0.4.0 — the 2026-09-02 stability audit round included
+  deliberate breaking changes: Tree's custom-template contract, Tooltip's
+  `tooltipInteractive` removal, the `button[qzX]` selector tightenings, and Switch's
+  `toggled` rename — see the Stability Audit entry above and `docs/ai/STABILITY_AUDIT.md`).
+  Primitives' peer range on Core bumped to `^0.5.0` alongside it. CI's `publish` job
+  (`.github/workflows/deploy.yml`) auto-publishes on `main` whenever a package's
+  `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
   CI on push to `main` (see "Publish" row in ARCHITECTURE.md's build/test topology table).
 - Docs site live at <https://quartz-headless.pages.dev> (Cloudflare Pages).
