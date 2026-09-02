@@ -54,13 +54,20 @@ export class OverlayRef {
       return;
     }
 
+    // Re-append the shared container to move it to the end of <body>'s children. Every
+    // overlay-based primitive (Menu/Select/Popover/Tooltip) shares one persistent container;
+    // without this, a container created before a given Dialog opens would stay earlier in
+    // DOM order than the Dialog's own backdrop/wrapper (same z-index), so an overlay nested
+    // inside that Dialog would render behind it. appendChild on an attached node moves it.
+    this.document.body.appendChild(this.containerEl);
+
     // Create wrapper and append to container (body portal)
     this.wrapperEl = this.document.createElement('div');
     this.wrapperEl.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 9999;
+      z-index: var(--qz-overlay-z-index, 9999);
       pointer-events: none;
     `;
     this.containerEl.appendChild(this.wrapperEl);
@@ -256,7 +263,10 @@ function isElementNode(node: unknown): node is Element {
   return !!node && typeof node === 'object' && 'nodeType' in node && node.nodeType === 1;
 }
 
-function getScrollParents(anchor: OverlayAnchor, document: Document): (Element | Document)[] {
+export function getScrollParents(
+  anchor: OverlayAnchor,
+  document: Document,
+): (Element | Document)[] {
   const parents: (Element | Document)[] = [];
   let current: Element | null = isVirtualAnchor(anchor) ? null : anchor.parentElement;
 

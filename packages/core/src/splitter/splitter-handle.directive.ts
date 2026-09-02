@@ -1,4 +1,4 @@
-import { Directive, ElementRef, inject, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, inject, OnDestroy } from '@angular/core';
 import { SplitterService } from './splitter.service';
 import { SplitterContainerDirective } from './splitter-container.directive';
 
@@ -21,22 +21,27 @@ import { SplitterContainerDirective } from './splitter-container.directive';
     '[style.user-select]': '"none"',
     '[style.touch-action]': '"none"',
 
-    '(mousedown)': 'onMouseDown($event)',
-    '(touchstart)': 'onTouchStart($event)',
+    '(pointerdown)': 'onPointerDown($event)',
+    '(pointermove)': 'onPointerMove($event)',
+    '(pointerup)': 'onPointerEnd($event)',
+    '(pointercancel)': 'onPointerEnd($event)',
     '(keydown)': 'onKeydown($event)',
   },
 })
 export class SplitterHandleDirective implements OnDestroy {
   private elementRef = inject(ElementRef<HTMLElement>);
-  private renderer = inject(Renderer2);
   protected splitterService = inject(SplitterService);
   private container = inject(SplitterContainerDirective, { optional: true });
 
   private isDragging = false;
-  private unlisteners: (() => void)[] = [];
+  private pointerId: number | null = null;
 
   ngOnDestroy(): void {
-    this.removeListeners();
+    if (this.pointerId !== null) {
+      this.elementRef.nativeElement.releasePointerCapture?.(this.pointerId);
+      this.pointerId = null;
+    }
+    this.stopDrag();
   }
 
   private updateContainerRect(): void {
@@ -45,18 +50,28 @@ export class SplitterHandleDirective implements OnDestroy {
     }
   }
 
-  onMouseDown(event: MouseEvent): void {
+  onPointerDown(event: PointerEvent): void {
     event.preventDefault();
     event.stopPropagation();
+    this.pointerId = event.pointerId;
+    this.elementRef.nativeElement.setPointerCapture?.(event.pointerId);
     this.startDrag();
-    this.addDocumentListeners();
   }
 
-  onTouchStart(event: TouchEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.startDrag();
-    this.addTouchListeners();
+  onPointerMove(event: PointerEvent): void {
+    if (this.pointerId !== event.pointerId || !this.isDragging) return;
+    const newPosition = this.splitterService.calculatePositionFromEvent(
+      event.clientX,
+      event.clientY,
+    );
+    this.splitterService.setPosition(newPosition);
+  }
+
+  onPointerEnd(event: PointerEvent): void {
+    if (this.pointerId !== event.pointerId) return;
+    this.elementRef.nativeElement.releasePointerCapture?.(event.pointerId);
+    this.pointerId = null;
+    this.stopDrag();
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -95,54 +110,8 @@ export class SplitterHandleDirective implements OnDestroy {
   }
 
   private stopDrag(): void {
+    if (!this.isDragging) return;
     this.isDragging = false;
     this.splitterService.stopDragging();
-    this.removeListeners();
-  }
-
-  private addDocumentListeners(): void {
-    this.unlisteners.push(
-      this.renderer.listen('document', 'mousemove', (e) => this.onMouseMove(e)),
-      this.renderer.listen('document', 'mouseup', () => this.onMouseUp()),
-    );
-  }
-
-  private addTouchListeners(): void {
-    this.unlisteners.push(
-      this.renderer.listen('document', 'touchmove', (e) => this.onTouchMove(e)),
-      this.renderer.listen('document', 'touchend', () => this.onTouchEnd()),
-      this.renderer.listen('document', 'touchcancel', () => this.onTouchEnd()),
-    );
-  }
-
-  private removeListeners(): void {
-    this.unlisteners.forEach((unlisten) => unlisten());
-    this.unlisteners = [];
-  }
-
-  private onMouseMove(event: MouseEvent): void {
-    if (!this.isDragging) return;
-    const newPosition = this.splitterService.calculatePositionFromEvent(
-      event.clientX,
-      event.clientY,
-    );
-    this.splitterService.setPosition(newPosition);
-  }
-
-  private onMouseUp(): void {
-    this.stopDrag();
-  }
-
-  private onTouchMove(event: TouchEvent): void {
-    if (!this.isDragging) return;
-    const touch = event.touches[0];
-    if (touch) {
-      const newPosition = this.splitterService.calculatePositionFromTouch(touch);
-      this.splitterService.setPosition(newPosition);
-    }
-  }
-
-  private onTouchEnd(): void {
-    this.stopDrag();
   }
 }

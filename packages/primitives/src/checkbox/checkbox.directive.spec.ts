@@ -7,13 +7,19 @@ import { CheckboxDirective, type CheckboxState } from './checkbox.directive';
   standalone: true,
   imports: [CheckboxDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<button qzCheckbox [(checked)]="checked" [disabled]="disabled()">
+  template: `<button
+    qzCheckbox
+    [(checked)]="checked"
+    [disabled]="disabled()"
+    (checkedChangeCommitted)="commits.push($event)"
+  >
     Accept terms
   </button>`,
 })
 class CheckboxHost {
   readonly checked = signal<CheckboxState>(false);
   readonly disabled = signal(false);
+  commits: CheckboxState[] = [];
 }
 
 describe('Checkbox', () => {
@@ -57,5 +63,20 @@ describe('Checkbox', () => {
     expect(fixture.componentInstance.checked()).toBe(false);
     expect(checkbox).toHaveAttribute('aria-disabled', 'true');
     expect(checkbox).toHaveAttribute('data-qz-disabled');
+  });
+
+  it('emits checkedChangeCommitted only for a real user interaction, not a programmatic model write', async () => {
+    const { fixture } = await render(CheckboxHost);
+    const checkbox = screen.getByRole('checkbox', { name: 'Accept terms' });
+
+    fireEvent.click(checkbox);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.commits).toEqual([true]);
+
+    // A programmatic write to the model (e.g. driven by an external form value) must not
+    // be conflated with a user commit.
+    fixture.componentInstance.checked.set('indeterminate');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.commits).toEqual([true]);
   });
 });

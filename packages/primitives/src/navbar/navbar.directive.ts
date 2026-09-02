@@ -81,7 +81,13 @@ export class NavbarDirective implements OnDestroy {
   readonly trapFocus = input(false, { transform: booleanAttribute });
 
   readonly scrolled = signal(false);
-  readonly stuck = signal(false);
+  // Derived from scrolled, not an independently-tracked signal: this is a threshold proxy
+  // for "sticky positioning has visually engaged," not true CSS sticky-boundary detection
+  // (that would need real geometry — an IntersectionObserver sentinel — which this directive
+  // doesn't do). Deriving it from `scrolled` guarantees `stuck` can never be true while
+  // `scrolled` is false, which a separately-tracked signal with its own threshold could
+  // previously produce (a real, confusing inconsistency for consumers).
+  readonly stuck = computed(() => this.sticky() && this.scrolled());
   readonly scrollDirection = signal<NavbarScrollDirection>('none');
   readonly isDesktop = computed(() => this.viewport.width() >= this.breakpointPx());
   readonly visible = computed(() => {
@@ -171,13 +177,11 @@ export class NavbarDirective implements OnDestroy {
     const threshold = Math.max(0, this.scrollThreshold());
     const directionThreshold = Math.max(0, this.directionThreshold());
     const nextScrolled = scrollY > threshold;
-    const nextStuck = this.sticky() && scrollY > 0;
     const delta = scrollY - this.lastScrollY;
     const nextDirection =
       Math.abs(delta) < directionThreshold ? this.scrollDirection() : delta > 0 ? 'down' : 'up';
 
     if (this.scrolled() !== nextScrolled) this.scrolled.set(nextScrolled);
-    if (this.stuck() !== nextStuck) this.stuck.set(nextStuck);
     if (this.scrollDirection() !== nextDirection) this.scrollDirection.set(nextDirection);
     this.lastScrollY = scrollY;
   }

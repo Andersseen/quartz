@@ -9,7 +9,13 @@ import { PopoverTriggerDirective } from './popover-trigger.directive';
   imports: [PopoverDirective, PopoverTriggerDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button qzPopoverTrigger [popover]="popover" [(open)]="open" [autoFocus]="autoFocus()">
+    <button
+      qzPopoverTrigger
+      [popover]="popover"
+      [(open)]="open"
+      [autoFocus]="autoFocus()"
+      (closed)="closedCount = closedCount + 1"
+    >
       Details
     </button>
     <ng-template #popover>
@@ -22,6 +28,7 @@ import { PopoverTriggerDirective } from './popover-trigger.directive';
 class PopoverHost {
   readonly open = signal(false);
   readonly autoFocus = signal(false);
+  closedCount = 0;
 }
 
 describe('Popover', () => {
@@ -66,5 +73,38 @@ describe('Popover', () => {
 
     await waitFor(() => expect(screen.queryByText('Inside')).toBeNull());
     expect(document.activeElement).toBe(trigger);
+  });
+
+  it('does not emit closed when destroyed without ever having been opened', async () => {
+    const { fixture } = await render(PopoverHost);
+    expect(fixture.componentInstance.closedCount).toBe(0);
+
+    fixture.destroy();
+    expect(fixture.componentInstance.closedCount).toBe(0);
+  });
+
+  it('emits closed exactly once when destroyed while open (not zero, not twice)', async () => {
+    const { fixture } = await render(PopoverHost);
+    const trigger = screen.getByText('Details');
+    fireEvent.click(trigger);
+    await screen.findByText('Inside');
+    expect(fixture.componentInstance.closedCount).toBe(0);
+
+    fixture.destroy();
+    expect(fixture.componentInstance.closedCount).toBe(1);
+  });
+
+  it('does not double-emit closed when destroyed after already closing', async () => {
+    const { fixture } = await render(PopoverHost);
+    const trigger = screen.getByText('Details');
+    fireEvent.click(trigger);
+    await screen.findByText('Inside');
+
+    fireEvent.click(trigger);
+    await waitFor(() => expect(screen.queryByText('Inside')).toBeNull());
+    expect(fixture.componentInstance.closedCount).toBe(1);
+
+    fixture.destroy();
+    expect(fixture.componentInstance.closedCount).toBe(1);
   });
 });

@@ -1,7 +1,10 @@
 import { Directive, booleanAttribute, input, model, output } from '@angular/core';
 
 @Directive({
-  selector: '[qzToggle]',
+  // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
+  // disabled, and Enter/Space-to-click semantics — this directive doesn't even bind its
+  // own keydown handler, so a non-button host had zero keyboard support at all.
+  selector: 'button[qzToggle]',
   exportAs: 'qzToggle',
   standalone: true,
   host: {

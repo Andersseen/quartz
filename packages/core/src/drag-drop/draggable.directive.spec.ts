@@ -67,4 +67,60 @@ describe('DraggableDirective', () => {
     expect(event.defaultPrevented).toBe(true);
     expect(element).toHaveAttribute('draggable', 'false');
   });
+
+  it('never sets the deprecated aria-grabbed attribute', async () => {
+    await render(HandleHost);
+    const handle = screen.getByText('Handle');
+    const host = handle.closest('[qzDraggable]')!;
+
+    expect(host).not.toHaveAttribute('aria-grabbed');
+
+    const start = new Event('dragstart', { bubbles: true, cancelable: true }) as DragEvent;
+    handle.dispatchEvent(start);
+    expect(host).not.toHaveAttribute('aria-grabbed');
+
+    const end = new Event('dragend', { bubbles: true, cancelable: true }) as DragEvent;
+    host.dispatchEvent(end);
+    expect(host).not.toHaveAttribute('aria-grabbed');
+  });
+
+  it('exposes data-qz-dragging/data-qz-disabled instead of relying on classes alone', async () => {
+    const { fixture } = await render(HandleHost);
+    const handle = screen.getByText('Handle');
+    const host = handle.closest('[qzDraggable]')!;
+
+    expect(host).not.toHaveAttribute('data-qz-dragging');
+
+    const start = new Event('dragstart', { bubbles: true, cancelable: true }) as DragEvent;
+    handle.dispatchEvent(start);
+    fixture.detectChanges();
+    expect(host).toHaveAttribute('data-qz-dragging');
+
+    const end = new Event('dragend', { bubbles: true, cancelable: true }) as DragEvent;
+    host.dispatchEvent(end);
+    fixture.detectChanges();
+    expect(host).not.toHaveAttribute('data-qz-dragging');
+  });
+
+  it('does not apply decorative opacity/transform to the drag-image clone', async () => {
+    await render(HandleHost);
+    const handle = screen.getByText('Handle');
+
+    const dataTransfer = {
+      effectAllowed: '',
+      setData: () => {},
+      setDragImage: () => {},
+    } as unknown as DataTransfer;
+    const start = new Event('dragstart', { bubbles: true, cancelable: true }) as DragEvent;
+    Object.defineProperty(start, 'dataTransfer', { value: dataTransfer });
+    handle.dispatchEvent(start);
+
+    // The clone is appended to document.body (position:fixed, off-screen) by createDragImage.
+    const clones = Array.from(document.body.querySelectorAll('div')).filter(
+      (el) => el.style.position === 'fixed' && el.style.top === '-1000px',
+    );
+    expect(clones.length).toBe(1);
+    expect(clones[0].style.opacity).toBe('');
+    expect(clones[0].style.transform).toBe('');
+  });
 });

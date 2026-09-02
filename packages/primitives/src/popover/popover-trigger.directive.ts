@@ -139,7 +139,10 @@ export class PopoverTriggerDirective implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.finishClose(false);
+    // Route through close()'s guard rather than calling finishClose() directly — a trigger
+    // that was destroyed while never opened (or already closed) must not emit a spurious
+    // `closed` event for a transition that never happened.
+    this.close(false);
   }
 
   private finishClose(restoreFocus: boolean): void {

@@ -11,10 +11,16 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
   template: `
     @for (position of positions; track position) {
       @let toasts = toastService.toastsByPosition().get(position) ?? [];
+      <!--
+        aria-live is deliberately "off" here: announcement politeness must come from what a
+        toast says, not from where it's visually placed. Each qz-toast sets its own role
+        (alert = assertive for type "error", status = polite otherwise), which establishes
+        its own live region independent of this container.
+      -->
       <div
         class="qz-toast-container"
         [class]="'qz-toast-container--' + position"
-        [attr.aria-live]="position.startsWith('top') ? 'assertive' : 'polite'"
+        aria-live="off"
         [attr.aria-atomic]="'false'"
       >
         @for (toast of toasts; track toast.id) {

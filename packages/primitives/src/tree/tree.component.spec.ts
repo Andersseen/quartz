@@ -52,6 +52,16 @@ class ProjectedTemplateHost {
   nodes = MOCK_NODES;
 }
 
+@Component({
+  standalone: true,
+  imports: [TreeComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<qz-tree [nodes]="nodes" aria-label="Project files" />`,
+})
+class TreeWithAriaLabelHost {
+  nodes = MOCK_NODES;
+}
+
 describe('TreeComponent', () => {
   it('should render root nodes', async () => {
     await render(TestHost);
@@ -181,5 +191,55 @@ describe('TreeComponent', () => {
 
     expect(screen.getByText('closed:Root')).toBeInTheDocument();
     expect(screen.getByText('leaf:Another')).toBeInTheDocument();
+  });
+
+  it('keeps Quartz-owned role/tabindex/aria-* on a custom-templated row (the row element itself, not just its projected content)', async () => {
+    await render(ProjectedTemplateHost);
+
+    const items = screen.getAllByRole('treeitem');
+    expect(items).toHaveLength(2); // fails pre-fix: custom template rows carried no role at all
+
+    const [root, another] = items;
+    expect(root).toHaveAttribute('tabindex', '0');
+    expect(another).toHaveAttribute('tabindex', '-1');
+    expect(root).toHaveAttribute('aria-level', '1');
+    expect(root).toHaveAttribute('aria-setsize', '2');
+    expect(root).toHaveAttribute('aria-posinset', '1');
+    expect(root).toHaveAttribute('aria-expanded', 'false');
+    expect(root).toHaveAttribute('aria-selected', 'false');
+  });
+
+  it('drives keyboard navigation and real DOM focus through a custom-templated row', async () => {
+    const { fixture } = await render(ProjectedTemplateHost);
+    const [root, another] = screen.getAllByRole('treeitem');
+
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    fixture.detectChanges();
+
+    expect(another).toHaveAttribute('tabindex', '0');
+    expect(root).toHaveAttribute('tabindex', '-1');
+    // Pre-fix, the roving-focus effect looked up a template-ref that only existed in the
+    // default (non-custom-template) branch, so DOM focus never actually followed here.
+    expect(document.activeElement).toBe(another);
+  });
+
+  it('expands a custom-templated row with ArrowRight and selects it with Enter', async () => {
+    const { fixture } = await render(ProjectedTemplateHost);
+    const [root] = screen.getAllByRole('treeitem');
+    expect(screen.queryByText('leaf:Child 1')).toBeNull();
+
+    fireEvent.keyDown(root, { key: 'ArrowRight' });
+    fixture.detectChanges();
+    expect(screen.getByText('leaf:Child 1')).toBeInTheDocument();
+    expect(root).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.keyDown(root, { key: 'Enter' });
+    fixture.detectChanges();
+    expect(root).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('exposes an accessible name for the tree container via plain attribute passthrough', async () => {
+    await render(TreeWithAriaLabelHost);
+    expect(screen.getByRole('tree', { name: 'Project files' })).toBeInTheDocument();
   });
 });

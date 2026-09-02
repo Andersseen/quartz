@@ -1,7 +1,7 @@
 <app-demo-page
   badge="Primitive"
   title="Tooltip"
-  description="Accessible, hover/focus tooltip with configurable placement, delays, rich templates, and interactive mode. Built on the same overlay engine as dialogs and menus."
+  description="Accessible, hover/focus tooltip with configurable placement, delays, and rich templates. Built on the same overlay engine as dialogs and menus."
   [features]="[
     { title: 'Hover & Focus', description: 'Opens on mouseenter or focus' },
     { title: '12 Placements', description: 'All overlay positions supported' },
@@ -80,26 +80,18 @@
       </app-code-block>
     </section>
 
-    <!-- Interactive Mode -->
+    <!-- Interactive content: use Popover, not Tooltip -->
     <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
-      <h2 class="text-lg font-semibold text-gray-200 mb-2">Interactive Mode</h2>
+      <h2 class="text-lg font-semibold text-gray-200 mb-2">Need interactive content?</h2>
       <p class="text-sm text-gray-500 mb-6 leading-relaxed">
-        Enable <code>tooltipInteractive</code> to let users move the cursor into the tooltip content
-        without closing it. Useful for links or extra actions.
+        A tooltip (<code>role="tooltip"</code>) must never contain focusable or interactive content
+        per WAI-ARIA — that's what <code>Popover</code> is for. Quartz removed the earlier
+        <code>tooltipInteractive</code> option for exactly this reason; use
+        <a href="/popover" class="text-emerald-400 hover:underline">Popover</a>
+        for links, buttons, or any content a user needs to interact with.
       </p>
 
-      <app-code-block [code]="interactiveCode">
-        <div preview class="flex items-center gap-4 flex-wrap justify-center">
-          <volt-button
-            variant="outline"
-            qzTooltip="Move the cursor here"
-            tooltipPlacement="top"
-            [tooltipInteractive]="true"
-          >
-            Interactive
-          </volt-button>
-        </div>
-      </app-code-block>
+      <app-code-block [code]="interactiveCode" [preview]="false" />
     </section>
 
     <!-- Delay -->

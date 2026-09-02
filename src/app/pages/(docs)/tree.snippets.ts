@@ -27,21 +27,16 @@ export const EXPANDED_SNIPPET = `const nodes: TreeNode[] = [
 <qz-tree [nodes]="nodes" />`;
 
 export const CUSTOM_SNIPPET = `// Project an <ng-template> into <qz-tree>, or pass one via [nodeTemplate].
+// Quartz's <qz-tree-node> host already owns role="treeitem", tabindex, every aria-*,
+// indentation, and click/keydown/focus — the template only supplies content/visuals.
+// Don't add role, tabindex, aria-* or a row-level (click) handler here; that would
+// duplicate what the host already provides.
 <qz-tree [nodes]="nodes">
-  <ng-template
-    let-node
-    let-level="level"
-    let-expanded="expanded"
-    let-hasChildren="hasChildren"
-    let-toggle="toggle"
-    let-select="select"
-  >
-    <div [style.padding-left.px]="level * 20" (click)="select()">
-      @if (hasChildren) {
-        <span (click)="toggle(); $event.stopPropagation()">{{ expanded ? '▼' : '▶' }}</span>
-      }
-      {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }} {{ node.label }}
-    </div>
+  <ng-template let-node let-expanded="expanded" let-hasChildren="hasChildren" let-toggle="toggle">
+    @if (hasChildren) {
+      <span (click)="toggle(); $event.stopPropagation()">{{ expanded ? '▼' : '▶' }}</span>
+    }
+    {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }} {{ node.label }}
   </ng-template>
 </qz-tree>`;
 
@@ -65,10 +60,11 @@ readonly loadChildren: TreeLoadChildrenFn = async (node) => {
 
 <qz-tree [nodes]="nodes" [loadChildren]="loadChildren" [nodeTemplate]="tpl" />
 
+<!-- aria-busy already comes from the host while loading() is true — the template only
+     needs to render content/visuals, same as any other custom node template. -->
 <ng-template
   #tpl
   let-node
-  let-level="level"
   let-expanded="expanded"
   let-hasChildren="hasChildren"
   let-loading="loading"
@@ -76,13 +72,11 @@ readonly loadChildren: TreeLoadChildrenFn = async (node) => {
   let-toggle="toggle"
   let-retry="retry"
 >
-  <div role="treeitem" [attr.aria-level]="level + 1" [attr.aria-busy]="loading() || null">
-    @if (hasChildren) {
-      <button (click)="error() ? retry() : toggle()">
-        {{ loading() ? '…' : error() ? '↻' : expanded ? '▼' : '▶' }}
-      </button>
-    }
-    {{ node.label }}
-    @if (error()) { <span>{{ $any(error()).message }}</span> }
-  </div>
+  @if (hasChildren) {
+    <button (click)="error() ? retry() : toggle()">
+      {{ loading() ? '…' : error() ? '↻' : expanded ? '▼' : '▶' }}
+    </button>
+  }
+  {{ node.label }}
+  @if (error()) { <span>{{ $any(error()).message }}</span> }
 </ng-template>`;

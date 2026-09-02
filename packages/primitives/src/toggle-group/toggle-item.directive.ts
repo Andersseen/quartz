@@ -13,7 +13,11 @@ import { ToggleGroupDirective } from './toggle-group.directive';
 let toggleItemId = 0;
 
 @Directive({
-  selector: '[qzToggleItem]',
+  // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
+  // disabled, and Enter/Space-to-click semantics. The group's own keydown handling
+  // (Collection.handleKeydown) only covers Arrow/Home/End/typeahead, not activation, so a
+  // non-button host had no way to activate an item from the keyboard at all.
+  selector: 'button[qzToggleItem]',
   exportAs: 'qzToggleItem',
   standalone: true,
   host: {

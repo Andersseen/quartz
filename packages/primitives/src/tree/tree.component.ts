@@ -43,7 +43,7 @@ export interface TreeNodeContext {
   providers: [TreeService],
   imports: [TreeNodeComponent],
   template: `
-    <div class="qz-tree" role="tree">
+    <div class="qz-tree">
       @for (node of treeService.nodes(); track node.id; let i = $index, count = $count) {
         <qz-tree-node
           [node]="node"
@@ -68,6 +68,7 @@ export interface TreeNodeContext {
     `,
   ],
   host: {
+    role: 'tree',
     '[class.qz-tree-host]': 'true',
   },
 })

@@ -1,7 +1,10 @@
 import { Directive, booleanAttribute, input, model, output } from '@angular/core';
 
 @Directive({
-  selector: '[qzSwitch]',
+  // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
+  // disabled, and Enter/Space-to-click semantics. A bare attribute selector would compile
+  // on any element while only half-supporting it (no tabindex, no full keyboard handling).
+  selector: 'button[qzSwitch]',
   exportAs: 'qzSwitch',
   standalone: true,
   host: {
@@ -19,14 +22,16 @@ import { Directive, booleanAttribute, input, model, output } from '@angular/core
 export class SwitchDirective {
   readonly checked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
-  readonly toggled = output<boolean>();
+  // Named to match the <model>ChangeCommitted convention used by Checkbox
+  // (checkedChangeCommitted) and Toggle (pressedChangeCommitted) — was `toggled`.
+  readonly checkedChangeCommitted = output<boolean>();
 
   toggle(event?: Event): void {
     if (this.disabled()) return;
     event?.preventDefault();
     const next = !this.checked();
     this.checked.set(next);
-    this.toggled.emit(next);
+    this.checkedChangeCommitted.emit(next);
   }
 
   onKeydown(event: KeyboardEvent): void {

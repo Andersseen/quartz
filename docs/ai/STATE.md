@@ -1,9 +1,146 @@
 # STATE — Current Project Status
 
-> **Last updated: 2026-09-01** (0.4.0 Navigation & Layout)
+> **Last updated: 2026-09-02** (Stability Audit — Core + all 0.4.0 Primitives)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
 > (new primitive, status change, publish, new known issue). Update the date and commit ref.
+
+## Stability Audit — Core + all Primitives (2026-09-02)
+
+Full audit of `@quartz-headless/core@0.4.0` + `@quartz-headless/primitives@0.4.0` against the
+architectural rules in `ARCHITECTURE.md`/`BEST_PRACTICES.md` — consolidation, not horizontal
+growth. No new primitives, no new Core foundations. Full findings matrix (P0–P3, evidence,
+resolutions) in `docs/ai/STABILITY_AUDIT.md`. All confirmed P0/P1 findings were fixed and
+verified (`pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:coverage
+&& pnpm build:lib && pnpm verify:build && pnpm verify:consumer && pnpm build:demo && pnpm e2e`
+all green). Some fixes are **deliberate, pre-1.0 breaking changes** — see the tally below.
+
+- **Focus**: `getFocusableElements()` now excludes elements with an explicit `tabindex="-1"`
+  on every selector branch (previously only the generic `[tabindex]` branch did); the trap's
+  forward-Tab branch now reclaims focus when it's already outside the container (previously
+  only Shift+Tab did); `isFocusable()` now treats an `aria-hidden="true"` ancestor the same
+  as `hidden`/`inert`; the zero-focusable fallback now makes the container script-focusable
+  itself before falling back to it, instead of requiring every consumer to replicate
+  Dialog's manual `tabindex="-1"` workaround.
+- **Dismiss**: the open-layer stack is now keyed per `Document`
+  (`WeakMap<Document, ...>`, mirroring `scroll-lock`) instead of module-global, so Escape
+  /outside-pointer routing in one Document can't be starved by a layer registered in an
+  unrelated one (iframe, second Angular app root). Outside-pointer dismissal now registers a
+  single `pointerdown` listener instead of `pointerdown`+`mousedown`+`click` together, which
+  could fire the dismiss callback more than once per physical interaction.
+- **Collection**: `activeId()` is now derived from `activeItem()` (a computed), not a
+  separately-tracked signal — previously, if the active item's `disabled` flipped `true` in
+  place (no explicit navigation call), `activeId()` kept returning the stale id while
+  `activeItem()` correctly went `null`, and `activeTabIndex()` kept pinning `tabindex=0` on
+  the now-disabled item. This affected every Collection-based primitive (Tabs, Accordion,
+  Stepper, ToggleGroup, RadioGroup, Select, Menu, Listbox, Combobox).
+- **Overlay**: `OverlayRef.open()` now re-appends the shared portal container to `document
+.body` on every open, guaranteeing correct DOM stacking order against Dialog's own backdrop
+  /wrapper (same z-index) regardless of which opened first — previously a Menu/Select/Popover
+  opened _inside_ an already-open Dialog could render behind it. `getScrollParents` is now
+  exported from Core (used internally and by Tooltip, see below).
+- **Viewport**: documented the `0×0` SSR default and the mitigation (seed a known default via
+  the already-public `setSize()` before first render) directly on `ViewportService`; added
+  `viewport.service.ssr.spec.ts`. No new API.
+- **DragDrop** (Core): removed the `cursor`/drag-image `opacity`/`rotate` visual opinions and
+  the deprecated `aria-grabbed` attribute (native HTML5 DnD isn't keyboard-operable — this
+  wrapper's scope is now documented as such, not falsely implied via ARIA); added an optional
+  `orientation` input to `DropZoneConfig` (the `width>height` heuristic remains the default
+  when unset); added `data-qz-dragging`/`data-qz-disabled`/`data-qz-drag-over`/`data-qz-can-drop`
+  alongside the existing legacy classes (kept, not removed).
+- **Splitter**: migrated from separate mouse/touch listeners to unified Pointer Events
+  (mirroring Slider's existing pattern), fixing a real multi-instance/multi-touch coordinate
+  bug and a destroy-mid-drag leak where the container-scoped service's `isDragging` could get
+  stuck `true` forever. Keyboard behavior (including the deliberately physical, unmirrored
+  Left/Right model) is unchanged.
+- **Toast**: `aria-live` politeness no longer depends on container position — each toast now
+  sets its own `role` (`alert` for `type: 'error'`, `status` otherwise), and the container's
+  `aria-live` is a fixed `"off"`. The countdown interval now starts/stops based on whether any
+  toast actually has active countdown work (`duration > 0 && !isPaused`), not array emptiness
+  — a persistent (`duration: 0`) toast no longer keeps a 100ms interval running forever, and
+  ticks that change nothing no longer force a signal write. Added `data-qz-type` alongside
+  the existing `qz-toast--{type}` class.
+- **Tooltip**: removed `tooltipInteractive`/`TooltipConfig.interactive` — it kept
+  `role="tooltip"` while making content genuinely focusable/hoverable, a real WAI-ARIA
+  violation; migrate to Popover for interactive content (demo page updated with the
+  migration). De-duplicated scroll-dismiss: Tooltip's own single dismiss controller now
+  handles scroll (`closeOnScroll: false` passed to Overlay instead of doubling up).
+- **Tree** (the biggest change this round): `TreeNodeComponent`'s host — not a
+  template-internal wrapper — now owns `role="treeitem"`, roving `tabindex`, every `aria-*`
+  attribute, and click/keydown/focus handling, for _both_ the default markup and a custom
+  `nodeTemplate`. Previously, supplying a custom template silently dropped all of the above,
+  including real DOM focus (the roving-focus effect targeted a `viewChild` that only existed
+  in the default-template branch). **Breaking**: existing custom templates must remove
+  `role`/`tabindex`/`aria-*`/row-level click/keydown handlers from their own template root
+  (Quartz's host now owns them) — demo (`tree.page.html`, `tree.snippets.ts`) updated to the
+  new contract. `role="tree"` moved from an inner `<div>` to the component host, so
+  `aria-label`/`aria-labelledby` passthrough on `<qz-tree>` now actually works (was silently
+  inert before). Stripped the full visual stylesheet (colors, hover/selected backgrounds,
+  border-radius, transitions, font-size) from `TreeNodeComponent`, keeping only structural
+  layout + indentation. Also found and fixed, during e2e verification of the above (not in
+  the original audit pass): the roving-focus side effect used a plain `effect()`, which can
+  run before a render cycle's DOM update is committed, letting a real browser silently drop
+  the `.focus()` call — reproduced directly in Chromium (Home/End focus landing late or not
+  at all in ~2 of 5 runs). Fixed by switching to `afterRenderEffect()` (the pattern already
+  used elsewhere, e.g. `navbar.directive.ts`), verified stable across repeated real-browser
+  e2e runs.
+- **Navbar**: `stuck` is now `computed(() => sticky() && scrolled())` instead of a
+  separately-thresholded signal — previously `stuck` could be `true` while `scrolled` was
+  `false` (different, inconsistent thresholds), a real contradictory-attribute-pair bug. Real
+  CSS-pinned-state detection (IntersectionObserver sentinel) would need new DOM authoring
+  this directive doesn't do and has no prior art for — documented as deferred, not built.
+- **Dialog**: added `viewRef.onDestroy(() => ref.close())` — if the host `ViewContainerRef`
+  is destroyed while the dialog is open (e.g. a route navigation away from its host),
+  Angular previously tore down the view directly, bypassing `DialogRef#close()` and leaking
+  the backdrop/wrapper, the scroll lock, and the document keydown listener permanently.
+- **Popover / Combobox**: `ngOnDestroy` now routes through the existing guarded
+  `close()`/`closePopup()` instead of calling the internal `finishClose()` directly — a
+  trigger/combobox destroyed while never opened (or already closed) no longer emits a
+  spurious `closed` event for a transition that never happened. Confirmed as the identical
+  bug independently in both primitives.
+- **Controls — breaking cleanup**: `[qzCheckbox]`, `[qzSwitch]`, `[qzToggle]`,
+  `[qzToggleItem]` selectors tightened to `button[qzX]` (they already relied on native
+  button tabindex/disabled/Enter-Space-activation and had zero real non-button usage in this
+  repo — Toggle didn't even bind its own keydown handler, so a non-button host had no
+  keyboard support at all). `RadioGroup`/`RadioDirective` deliberately kept generic
+  (`[qzRadio]`, no tag restriction) — it already drives selection itself (Space handling,
+  `role="radio"`, click delegation) rather than relying on native button semantics; this is
+  now covered by a regression test rendering `<span qzRadio>`. Switch's `toggled` output
+  renamed to `checkedChangeCommitted`, matching the `<model>ChangeCommitted` convention
+  already used by Checkbox/Toggle. All three commit outputs confirmed to carry genuinely
+  distinct information from their models (they don't fire on a programmatic model write,
+  only on real user interaction) — kept, not removed.
+- **ID generation / SSR**: audited, found **no confirmed defect** — no `Math.random()`/
+  `Date.now()` anywhere, every id+its paired `aria-*` reference is generated together off
+  the same counter read (can't diverge within one render), and this demo app runs SPA-only
+  (`ssr: false`) so there's no live SSR exposure today regardless. 26 files hand-roll an
+  identical id-counter pattern — real duplication, but deferred (P2, DX-only; no suitable
+  official Angular primitive exists to replace it with, and it doesn't warrant a Core
+  `IdManagerService`).
+- **Real package consumer smoke test**: `scripts/verify-build.js` only ever inspected the
+  built `dist/` folders directly — it could never catch a broken `exports` map, an
+  unsatisfiable peerDependency range, or a file ng-packagr silently failed to ship. Added
+  `pnpm verify:consumer` (`scripts/consumer-smoke.js` + `scripts/consumer-smoke/fixture/`):
+  packs both built packages into real npm tarballs, installs them into a throwaway fixture
+  outside the pnpm workspace, and `tsc --noEmit`s a file that imports only the bare
+  `@quartz-headless/core`/`@quartz-headless/primitives` specifiers (`CollectionStore`,
+  `DialogService`, `CheckboxDirective`, `SliderDirective`, `ToastContainerComponent`). Wired
+  into CI right after `verify:build`; not part of pre-commit (real network install).
+- **Deferred** (documented in `STABILITY_AUDIT.md`, not built this round — see that file for
+  the full P2/P3 list): Collection's unregister/move recovery target (first-enabled, not
+  nearest-neighbor); Sidebar's `desktopOpen` seeding edge case when starting mobile with
+  `[open]="false"`; Overlay reposition-on-resize; `OverlayTriggerDirective` never firing
+  `closed` on destroy; Navbar/Sidebar not resetting their `open` model on destroy-while-open;
+  the 26-file id-counter DX dedup; Toast's `gap`/`padding` as hardcoded pixels; a real
+  keyboard-operable drag-and-drop model (separate design project, explicitly out of scope).
+
+**Versioning recommendation**: this round mixes compatible bug fixes with **deliberate
+pre-1.0 breaking changes** — Tree's custom-template contract, Tooltip's `tooltipInteractive`
+removal, Controls' `button[...]` selector tightening, and Switch's `toggled` rename. None of
+these affect this repo's own demo/tests (verified per-area in `STABILITY_AUDIT.md`), but they
+are real breaks for any external 0.4.0 consumer. Recommend **`0.5.0`, not `0.4.1`** when this
+ships — version was deliberately **not** bumped as part of this audit itself, per the audit's
+own scope (documented recommendation only).
 
 ## Directionality Core foundation (2026-08-28)
 

@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { describe, expect, it, vi } from 'vitest';
 import { CollectionStore, findRelativeItem } from './collection';
 import type { CollectionItem } from './collection.types';
@@ -139,6 +140,44 @@ describe('CollectionStore', () => {
 
     expect(store.activeItem()).toBeNull();
     expect(store.activeTabIndex('one')).toBe(-1);
+  });
+
+  it('reconciles public activeId with activeItem when the active item becomes disabled in place, with no explicit navigation call', () => {
+    // `disabled` is backed by a real signal here, matching how real consumers pass it
+    // (e.g. `disabled: () => this.disabled()` off an input() signal) — this is what makes
+    // the enabledItems()/activeItem() computeds reactively invalidate on change; a plain
+    // closure over a mutable outer variable would not be tracked as a dependency at all.
+    const twoDisabled = signal(false);
+    const store = new CollectionStore<CollectionItem>({}, document);
+    store.register({ id: 'one' });
+    store.register({ id: 'two', disabled: twoDisabled });
+    store.setActive('two');
+    expect(store.activeId()).toBe('two');
+
+    twoDisabled.set(true); // reactive disable only — no next()/previous()/setActive() call
+    expect(store.activeItem()).toBeNull();
+    expect(store.activeId()).toBeNull();
+  });
+
+  it('falls back roving tabindex to the first enabled item when the active item disables in place', () => {
+    const twoDisabled = signal(false);
+    const one = document.createElement('button');
+    const twoEl = document.createElement('button');
+    document.body.append(one, twoEl);
+    const store = new CollectionStore<CollectionItem>(
+      { focusStrategy: 'roving-tabindex' },
+      document,
+    );
+    store.register({ id: 'one', element: one });
+    store.register({ id: 'two', element: twoEl, disabled: twoDisabled });
+    store.setActive('two');
+
+    twoDisabled.set(true);
+    expect(store.activeTabIndex('two')).toBe(-1);
+    expect(store.activeTabIndex('one')).toBe(0);
+
+    one.remove();
+    twoEl.remove();
   });
 
   it('handles dynamic add/remove and active item removal', () => {

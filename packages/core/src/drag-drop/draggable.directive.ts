@@ -14,6 +14,13 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DragDropService } from './drag-drop.service';
 import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.types';
 
+/**
+ * Wraps native HTML5 Drag and Drop (`dragstart`/`dragend`/`dragenter`/`dragleave`/`dragover`/
+ * `drop`). This is pointer-only, low-level infrastructure — native browser drag-and-drop is not
+ * keyboard-operable by design, and this directive does not attempt to provide a keyboard
+ * alternative. Applications that need keyboard/AT-accessible reordering should provide an
+ * alternative interaction (e.g. move-up/move-down buttons) alongside this.
+ */
 @Directive({
   selector: '[qzDraggable]',
   standalone: true,
@@ -22,8 +29,8 @@ import type { DragDropConfig, QzDragInfo, QzDragEndInfo } from './drag-drop.type
     '[class.qz-draggable]': 'true',
     '[class.qz-dragging]': 'isDragging()',
     '[class.qz-disabled]': 'isDisabled()',
-    '[style.cursor]': 'isDisabled() ? "not-allowed" : "grab"',
-    '[attr.aria-grabbed]': 'isDragging()',
+    '[attr.data-qz-dragging]': 'isDragging() ? "" : null',
+    '[attr.data-qz-disabled]': 'isDisabled() ? "" : null',
     '(dragstart)': 'onDragStart($event)',
     '(dragend)': 'onDragEnd($event)',
   },
@@ -75,7 +82,6 @@ export class DraggableDirective {
 
     this.isDragging.set(true);
     const element = this.elementRef.nativeElement;
-    this.renderer.setAttribute(element, 'aria-grabbed', 'true');
 
     const config = this.getConfig();
     const dragData = this.qzDraggableData() ?? config.data;
@@ -101,7 +107,6 @@ export class DraggableDirective {
   onDragEnd(event: DragEvent): void {
     this.isDragging.set(false);
     const element = this.elementRef.nativeElement;
-    this.renderer.setAttribute(element, 'aria-grabbed', 'false');
 
     this.removeDragImage();
 
@@ -127,8 +132,6 @@ export class DraggableDirective {
     this.dragImage = original.cloneNode(true) as HTMLElement;
     this.renderer.setStyle(this.dragImage, 'position', 'fixed');
     this.renderer.setStyle(this.dragImage, 'top', '-1000px');
-    this.renderer.setStyle(this.dragImage, 'opacity', '0.9');
-    this.renderer.setStyle(this.dragImage, 'transform', 'rotate(3deg)');
     this.renderer.setStyle(this.dragImage, 'pointer-events', 'none');
     this.renderer.setStyle(this.dragImage, 'z-index', '9999');
     this.renderer.setStyle(this.dragImage, 'width', original.offsetWidth + 'px');

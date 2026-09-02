@@ -1,0 +1,17 @@
+{
+  "name": "quartz-consumer-smoke-fixture",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@quartz-headless/core": "file:__CORE_TARBALL__",
+    "@quartz-headless/primitives": "file:__PRIMITIVES_TARBALL__",
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2"
+  }
+}

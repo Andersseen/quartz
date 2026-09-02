@@ -122,6 +122,12 @@ export class DialogService {
       { $implicit: ref, ariaLabelledBy, ariaDescribedBy },
     );
     viewRef.detectChanges();
+    // Safety net: if the host ViewContainerRef is destroyed while the dialog is still open
+    // (e.g. a router navigation away from the host), Angular tears down viewRef directly
+    // without going through DialogRef#close() — without this, the backdrop/wrapper, scroll
+    // lock, and document keydown listener would all leak permanently, and closed$ would
+    // never fire. ref.close() is idempotent, so this is a no-op when already closed.
+    viewRef.onDestroy(() => ref.close());
 
     for (const node of viewRef.rootNodes) {
       if (node instanceof HTMLElement) panelEl.appendChild(node);

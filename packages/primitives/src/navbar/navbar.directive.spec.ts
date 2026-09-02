@@ -72,6 +72,26 @@ describe('Navbar', () => {
     expect(nav).toHaveAttribute('data-qz-visible');
   });
 
+  it('never reports stuck while scrolled is false (stuck is derived from scrolled, not a separate threshold)', async () => {
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) =>
+      window.setTimeout(() => cb(0), 0),
+    );
+    const { fixture } = await render(NavbarHost);
+    const nav = fixture.nativeElement.querySelector('[data-qz-navbar]') as HTMLElement;
+
+    // scrollThreshold is 8 on this host — scrollY=4 is > 0 (what the old, separate "stuck"
+    // threshold used) but below the actual scrolled threshold. Under the old logic this
+    // produced the contradictory pair stuck=true/scrolled=false.
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 4 });
+    fireEvent.scroll(window);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(nav).not.toHaveAttribute('data-qz-scrolled');
+    expect(nav).not.toHaveAttribute('data-qz-stuck');
+  });
+
   it('dismisses the mobile menu with Escape and outside pointer', async () => {
     const { fixture } = await render(NavbarHost);
     const trigger = screen.getByRole('button', { name: 'Menu' });

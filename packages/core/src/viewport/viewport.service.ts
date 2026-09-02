@@ -5,6 +5,17 @@ import { DEFAULT_BREAKPOINTS, type ViewportMatchResult } from './viewport.types'
 /**
  * Root-level service that tracks viewport dimensions and media-query matches
  * using reactive signals. Tree-shakeable and side-effect free.
+ *
+ * SSR default: `width`/`height` start at `0` on the server (there is no `window`), so
+ * `isMobile()` reads `true` and `isDesktop()` reads `false` until the client's first observed
+ * resize. Consumers that branch structurally (`@if`) on `isDesktop()`/`isMobile()` and also use
+ * Angular's `provideClientHydration()` should seed a known default before first render — e.g.
+ * call `setSize(width, height)` from an app-level bootstrap hook (a resolver, an
+ * `APP_INITIALIZER`-equivalent, or the server entry point) with whatever default fits the app
+ * (assume desktop for a dashboard-style app, mobile for a content site) — otherwise the false
+ * "mobile" SSR reading can produce a structural DOM mismatch against the client's real value.
+ * `setSize()` is the only mechanism for this; there is no separate `'unknown'` breakpoint state,
+ * since introducing one would give every consumer's boolean check a third branch to handle.
  */
 @Injectable({ providedIn: 'root' })
 export class ViewportService implements OnDestroy {

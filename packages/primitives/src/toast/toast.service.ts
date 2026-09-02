@@ -96,18 +96,19 @@ export class ToastService implements OnDestroy {
 
   dismiss(id: string): void {
     this.#toasts.update((toasts) => toasts.filter((t) => t.id !== id));
-    this.#stopTimerIfEmpty();
+    this.#stopTimerIfNoWork();
   }
 
   dismissAll(): void {
     this.#toasts.set([]);
-    this.#stopTimerIfEmpty();
+    this.#stopTimerIfNoWork();
   }
 
   pause(id: string): void {
     this.#toasts.update((toasts) =>
       toasts.map((t) => (t.id === id ? { ...t, isPaused: true } : t)),
     );
+    this.#stopTimerIfNoWork();
   }
 
   resume(id: string): void {
@@ -125,11 +126,22 @@ export class ToastService implements OnDestroy {
         };
       }),
     );
+    // Resuming a toast can reintroduce active countdown work after the timer was stopped
+    // (e.g. it was the only non-persistent toast and had been paused).
+    this.#ensureTimer();
+  }
+
+  /** Is there at least one toast whose countdown actually needs ticking? A persistent
+   * (`duration: 0`) toast never does, and a paused toast doesn't while paused — so a
+   * persistent-only or fully-paused toast list must never keep the interval alive. */
+  #hasActiveWork(toasts: Toast[] = this.#toasts()): boolean {
+    return toasts.some((toast) => toast.duration > 0 && !toast.isPaused);
   }
 
   #ensureTimer(): void {
-    // SSR guard: do not start timers when there is no browser window.
-    if (!this.document.defaultView || this.timerId !== null) {
+    // SSR guard: do not start timers when there is no browser window. Also don't start
+    // (or keep) a timer when there's no active countdown work to do.
+    if (!this.document.defaultView || this.timerId !== null || !this.#hasActiveWork()) {
       return;
     }
 
@@ -137,32 +149,38 @@ export class ToastService implements OnDestroy {
     const view = this.document.defaultView;
 
     this.timerId = view.setInterval(() => {
-      this.#toasts.update((toasts) => {
-        const now = new Date().getTime();
+      const toasts = this.#toasts();
+      const now = Date.now();
+      let changed = false;
 
-        const remaining = toasts
-          .map((toast) => {
-            if (toast.isPaused || toast.duration === 0) return toast;
+      const remaining = toasts
+        .map((toast) => {
+          if (toast.isPaused || toast.duration === 0) return toast;
 
-            const elapsed = now - toast.createdAt.getTime();
-            const remainingTime = Math.max(0, toast.duration - elapsed);
+          const elapsed = now - toast.createdAt.getTime();
+          const remainingTime = Math.max(0, toast.duration - elapsed);
+          if (remainingTime === toast.remainingTime) return toast;
 
-            return { ...toast, remainingTime };
-          })
-          .filter((toast) => toast.duration === 0 || toast.remainingTime > 0);
+          changed = true;
+          return { ...toast, remainingTime };
+        })
+        .filter((toast) => toast.duration === 0 || toast.remainingTime > 0);
 
-        // Stop the timer lazily when there is nothing left to count down.
-        if (remaining.length === 0) {
-          queueMicrotask(() => this.#stopTimerIfEmpty());
-        }
+      if (remaining.length !== toasts.length) changed = true;
+      // Only write the signal when something actually changed — a tick where every
+      // toast is paused or persistent, or where nothing crossed a boundary, should not
+      // force a recompute/re-render of toasts()/toastsByPosition() for no reason.
+      if (changed) this.#toasts.set(remaining);
 
-        return remaining;
-      });
+      // Safe to clear the interval from within its own callback; and since `remaining` is
+      // already the up-to-date value (whether or not it was just written), no deferral is
+      // needed to avoid reading a stale signal.
+      if (!this.#hasActiveWork(remaining)) this.#stopTimerIfNoWork();
     }, TICK);
   }
 
-  #stopTimerIfEmpty(): void {
-    if (this.#toasts().length === 0 && this.timerId !== null) {
+  #stopTimerIfNoWork(): void {
+    if (!this.#hasActiveWork() && this.timerId !== null) {
       this.document.defaultView?.clearInterval(this.timerId);
       this.timerId = null;
     }

@@ -8,6 +8,7 @@
     "build:lib": "ng build quartz-core && cp README.md packages/core/dist/ && cp LICENSE packages/core/dist/ && ng build quartz-primitives && cp README.md packages/primitives/dist/ && cp LICENSE packages/primitives/dist/",
     "build:demo": "vite build",
     "verify:build": "node scripts/verify-build.js",
+    "verify:consumer": "node scripts/consumer-smoke.js",
     "pages:build": "vite build",
     "pages:deploy": "pnpm pages:build && wrangler pages deploy dist/client",
     "test": "vitest run",

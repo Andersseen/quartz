@@ -14,6 +14,14 @@ export interface DropZoneConfig {
   disabled?: boolean;
   /** Whether to allow sorting/reordering */
   sortable?: boolean;
+  /**
+   * Explicit layout axis for before/after drop-position and sortable-index calculation.
+   * When unset, falls back to measuring `getBoundingClientRect().width > height` — a
+   * heuristic that can misjudge square-ish zones, short vertical lists in wide containers,
+   * or wrapping layouts. Set this explicitly whenever the dropzone's aspect ratio doesn't
+   * reliably reflect its scroll/item axis.
+   */
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export interface QzDragInfo {

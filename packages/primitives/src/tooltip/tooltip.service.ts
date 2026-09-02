@@ -22,7 +22,10 @@ export class TooltipService {
       offset: resolved.offset,
       closeOnClickOutside: false,
       closeOnEscape: false,
-      closeOnScroll: true,
+      // TooltipDirective's own single dismiss controller already handles scroll (and
+      // Escape) — letting Overlay's internal dismiss also fire on scroll would run two
+      // independent scroll-close paths for the same tooltip.
+      closeOnScroll: false,
       flip: true,
       flipAxis: 'main',
       matchAnchorWidth: false,

@@ -181,4 +181,48 @@ describe('TooltipDirective', () => {
     expect(tooltip?.style.transform).toMatch(/^translate\(/);
     expect(tooltip?.style.visibility).toBe('visible');
   });
+
+  it('dismisses a string tooltip on scroll, through a single dismiss controller', async () => {
+    await render(TestHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+
+    document.dispatchEvent(new Event('scroll'));
+    expect(document.querySelector('.qz-tooltip')).toBeNull();
+  });
+
+  it('dismisses a template tooltip on scroll exactly once (no duplicate Overlay-internal scroll-dismiss)', async () => {
+    @Component({
+      standalone: true,
+      imports: [TooltipDirective],
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      template: `
+        <button [qzTooltip]="tooltip">Hover me</button>
+        <ng-template #tooltip>
+          <div class="rich-tooltip">Rich tooltip</div>
+        </ng-template>
+      `,
+    })
+    class TemplateHost {}
+
+    const { fixture } = await render(TemplateHost);
+    const button = screen.getByText('Hover me');
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.advanceTimersByTime(400);
+    fixture.detectChanges();
+    expect(document.querySelector('.rich-tooltip')).not.toBeNull();
+
+    document.dispatchEvent(new Event('scroll'));
+    fixture.detectChanges();
+
+    expect(document.querySelector('.rich-tooltip')).toBeNull();
+    // A leftover Overlay-internal scroll listener firing a second, redundant close would
+    // still leave the tooltip gone, but let's also make sure nothing throws when a second
+    // scroll fires against an already-closed tooltip.
+    expect(() => document.dispatchEvent(new Event('scroll'))).not.toThrow();
+  });
 });

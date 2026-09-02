@@ -346,7 +346,10 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.finishClose('programmatic');
+    // Route through closePopup()'s guard rather than calling finishClose() directly — a
+    // combobox destroyed while never opened (or already closed) must not emit a spurious
+    // `closed` event for a transition that never happened.
+    this.closePopup('programmatic');
     this.collection.destroy();
   }
 
