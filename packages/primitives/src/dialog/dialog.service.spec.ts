@@ -78,7 +78,7 @@ describe('DialogService', () => {
     ref.closed$.subscribe(closed);
 
     const backdrop = document.querySelector('[data-qz-dialog-backdrop]');
-    backdrop?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    backdrop?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
 
     expect(closed).toHaveBeenCalled();
     expect(document.querySelector('[data-qz-dialog-wrapper]')).toBeNull();
@@ -207,6 +207,7 @@ describe('DialogService', () => {
         return {
           rootNodes: [panel],
           detectChanges: () => {},
+          onDestroy: () => {},
           destroy: () => panel.remove(),
         };
       },
@@ -316,20 +317,64 @@ describe('DialogService', () => {
 
     ref.close();
   });
+
+  it('cleans up backdrop, wrapper, scroll lock and fires closed$ when the host view is destroyed directly, without DialogRef#close() ever being called', () => {
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef, destroyViewDirectly } = createTemplateMocks(panel);
+    const ref = service.open(templateRef, viewContainerRef);
+
+    expect(document.querySelector('[data-qz-dialog-backdrop]')).not.toBeNull();
+    expect(document.querySelector('[data-qz-dialog-wrapper]')).not.toBeNull();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    const closed = vi.fn();
+    ref.closed$.subscribe(closed);
+
+    // Simulates Angular tearing down the embedded view directly (e.g. a router navigation
+    // away from the dialog's host while it's still open) — DialogRef#close() is never called.
+    destroyViewDirectly();
+
+    expect(closed).toHaveBeenCalled();
+    expect(document.querySelector('[data-qz-dialog-backdrop]')).toBeNull();
+    expect(document.querySelector('[data-qz-dialog-wrapper]')).toBeNull();
+    expect(document.body.style.overflow).toBe('');
+  });
 });
 
 function createTemplateMocks(content: HTMLElement): {
   templateRef: TemplateRef<unknown>;
   viewContainerRef: ViewContainerRef;
+  /** Simulates Angular tearing down the *most recently created* embedded view directly
+   * (bypassing DialogRef#close), e.g. because the host ViewContainerRef itself was
+   * destroyed (a route navigation away from the dialog's host while it's still open). */
+  destroyViewDirectly: () => void;
 } {
+  // Scoped per createEmbeddedView() call — a mock viewContainerRef can back more than one
+  // open() call (see the multi-dialog specs below), and each embedded view's onDestroy
+  // callbacks must stay independent so closing one dialog can't fire another's callback.
+  let latestOnDestroyCallbacks: Array<() => void> = [];
   return {
     templateRef: {} as TemplateRef<unknown>,
     viewContainerRef: {
-      createEmbeddedView: () => ({
-        rootNodes: [content],
-        detectChanges: () => {},
-        destroy: () => content.remove(),
-      }),
+      createEmbeddedView: () => {
+        const onDestroyCallbacks: Array<() => void> = [];
+        latestOnDestroyCallbacks = onDestroyCallbacks;
+        return {
+          rootNodes: [content],
+          detectChanges: () => {},
+          onDestroy: (cb: () => void) => {
+            onDestroyCallbacks.push(cb);
+          },
+          destroy: () => {
+            content.remove();
+            onDestroyCallbacks.forEach((cb) => cb());
+          },
+        };
+      },
     } as unknown as ViewContainerRef,
+    destroyViewDirectly: () => {
+      content.remove();
+      latestOnDestroyCallbacks.forEach((cb) => cb());
+    },
   };
 }

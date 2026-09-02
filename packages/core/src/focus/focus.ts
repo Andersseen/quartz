@@ -23,21 +23,40 @@ export interface FocusRestorer {
 
 export function getFocusableElements(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-    isFocusable,
+    (el) => isFocusable(el) && !hasNegativeTabIndex(el),
   );
+}
+
+// Checks the `tabindex` attribute directly rather than the live `tabIndex` IDL property:
+// several of FOCUSABLE_SELECTOR's native-tag branches (button, [href], contenteditable, ...)
+// don't themselves exclude an explicit tabindex="-1", and jsdom's `tabIndex` getter doesn't
+// implement the implicit tabIndex=0 default for contenteditable hosts — reading the attribute
+// avoids both problems and matches the actual intent: exclude only an *explicit* negative value.
+function hasNegativeTabIndex(el: HTMLElement): boolean {
+  const explicit = el.getAttribute('tabindex');
+  return explicit !== null && Number(explicit) < 0;
 }
 
 export function isFocusable(element: HTMLElement): boolean {
   if (element.hasAttribute('disabled')) return false;
-  if (element.getAttribute('aria-hidden') === 'true') return false;
-  if (element.closest('[hidden], [inert]')) return false;
+  if (element.closest('[hidden], [inert], [aria-hidden="true"]')) return false;
   const style = element.ownerDocument.defaultView?.getComputedStyle(element);
   if (style && (style.display === 'none' || style.visibility === 'hidden')) return false;
   return true;
 }
 
+function ensureScriptFocusable(container: HTMLElement): void {
+  if (!container.hasAttribute('tabindex')) {
+    container.tabIndex = -1;
+  }
+}
+
 export function focusInitialElement(container: HTMLElement): HTMLElement | null {
-  const target = getFocusableElements(container)[0] ?? container;
+  const target = getFocusableElements(container)[0];
+  if (!target) {
+    ensureScriptFocusable(container);
+    return focusSafely(container);
+  }
   return focusSafely(target);
 }
 
@@ -68,6 +87,7 @@ export function createFocusTrap(container: HTMLElement, document: Document): Foc
       const focusable = getFocusableElements(container);
       if (!focusable.length) {
         event.preventDefault();
+        ensureScriptFocusable(container);
         focusSafely(container);
         return;
       }
@@ -82,7 +102,7 @@ export function createFocusTrap(container: HTMLElement, document: Document): Foc
         return;
       }
 
-      if (!event.shiftKey && active === last) {
+      if (!event.shiftKey && (active === last || !container.contains(active))) {
         event.preventDefault();
         focusSafely(first);
       }

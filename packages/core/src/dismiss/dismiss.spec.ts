@@ -33,11 +33,36 @@ describe('dismiss foundation', () => {
       onDismiss,
     });
 
-    inside.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    inside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     expect(onDismiss).not.toHaveBeenCalled();
 
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    expect(onDismiss).toHaveBeenCalledWith('outside-pointer', expect.any(PointerEvent));
+
+    controller.destroy();
+    root.remove();
+  });
+
+  it('registers a single pointerdown listener for outside-pointer dismissal, not mousedown/click as well', () => {
+    // A single physical outside click must not be able to fire the dismiss callback more
+    // than once, and a drag-selection starting inside the root and ending outside it must
+    // not trigger dismissal via a trailing click event.
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const onDismiss = vi.fn();
+
+    const controller = createDismissController({
+      document,
+      outsidePointer: true,
+      rootElements: () => [root],
+      onDismiss,
+    });
+
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-    expect(onDismiss).toHaveBeenCalledWith('outside-pointer', expect.any(MouseEvent));
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
 
     controller.destroy();
     root.remove();
@@ -63,7 +88,7 @@ describe('dismiss foundation', () => {
       onDismiss: innerDismiss,
     });
 
-    document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     expect(innerDismiss).toHaveBeenCalledTimes(1);
     expect(outerDismiss).not.toHaveBeenCalled();
 
@@ -71,6 +96,40 @@ describe('dismiss foundation', () => {
     outerController.destroy();
     outer.remove();
     inner.remove();
+  });
+
+  it('routes Escape to only the topmost layer within its own Document, and does not let a layer registered in a different Document steal that position', () => {
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    const iframeDocument = iframe.contentDocument!;
+
+    const outerDismiss = vi.fn();
+    const iframeDismiss = vi.fn();
+
+    // Registered first, in the main document.
+    const outerController = createDismissController({
+      document,
+      escape: true,
+      rootElements: () => [],
+      onDismiss: outerDismiss,
+    });
+    // Registered second, in a completely different Document — under the old module-global
+    // layer stack this would incorrectly become the "global top", starving the main
+    // document's own (legitimately topmost, for its own document) layer.
+    const iframeController = createDismissController({
+      document: iframeDocument,
+      escape: true,
+      rootElements: () => [],
+      onDismiss: iframeDismiss,
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(outerDismiss).toHaveBeenCalledTimes(1);
+    expect(iframeDismiss).not.toHaveBeenCalled();
+
+    outerController.destroy();
+    iframeController.destroy();
+    iframe.remove();
   });
 
   it('dismisses on focus outside and scroll', () => {

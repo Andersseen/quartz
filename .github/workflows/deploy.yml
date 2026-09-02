@@ -64,6 +64,9 @@ jobs:
       - name: Verify Build Artifacts
         run: pnpm verify:build
 
+      - name: Consumer Install Smoke Test
+        run: pnpm verify:consumer
+
       - name: Run Unit Tests with Coverage
         run: pnpm test:coverage
 

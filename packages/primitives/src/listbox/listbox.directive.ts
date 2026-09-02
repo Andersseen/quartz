@@ -1,12 +1,14 @@
 import {
   booleanAttribute,
   Directive,
+  ElementRef,
   input,
   model,
   computed,
   inject,
   OnDestroy,
 } from '@angular/core';
+import { inlineEndKey, inlineStartKey, resolveDirection } from '@quartz-headless/core';
 import { ListboxService } from './listbox.service';
 import {
   DEFAULT_LISTBOX_CONFIG,
@@ -32,6 +34,7 @@ import type { ListboxOptionDirective } from './listbox-option.directive';
 })
 export class ListboxDirective<T> implements OnDestroy {
   private readonly service = inject(ListboxService);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** Selected value. Supports Angular two-way binding: [(value)]="selection". */
   readonly value = model<T | T[] | null>(null);
@@ -88,12 +91,18 @@ export class ListboxDirective<T> implements OnDestroy {
     if (this.disabled()) return;
     this.configureCollection();
     const horizontal = this.orientation() === 'horizontal';
+    // Horizontal navigation follows reading direction (RTL: ArrowRight = previous, ArrowLeft
+    // = next); vertical Up/Down are never mirrored. LTR is byte-for-byte the historical
+    // ArrowRight/ArrowLeft mapping.
+    const direction = resolveDirection(this.elementRef.nativeElement);
+    const nextKey = horizontal ? inlineEndKey(direction) : 'ArrowDown';
+    const previousKey = horizontal ? inlineStartKey(direction) : 'ArrowUp';
     switch (event.key) {
-      case horizontal ? 'ArrowRight' : 'ArrowDown':
+      case nextKey:
         event.preventDefault();
         this.service.next();
         return;
-      case horizontal ? 'ArrowLeft' : 'ArrowUp':
+      case previousKey:
         event.preventDefault();
         this.service.previous();
         return;

@@ -32,6 +32,7 @@ const COMBOBOX_IMPORTS = [
       [filter]="filter()"
       [loading]="loading()"
       [allowFreeform]="allowFreeform()"
+      (closed)="closedCount = closedCount + 1"
     >
       <input aria-label="Fruit" qzComboboxInput />
       <button qzComboboxTrigger>Toggle</button>
@@ -66,6 +67,7 @@ class StringHost {
   readonly filter = signal<((option: string, query: string, label: string) => boolean) | null>(
     (option, query, label) => label.toLowerCase().includes(query.toLowerCase()),
   );
+  closedCount = 0;
 }
 
 interface User {
@@ -272,5 +274,25 @@ describe('Combobox', () => {
     expect(fixture.componentInstance.selected()).toBeNull();
 
     outside.remove();
+  });
+
+  it('does not emit closed when destroyed without ever having been opened', async () => {
+    const { fixture } = await render(StringHost);
+    expect(fixture.componentInstance.closedCount).toBe(0);
+
+    fixture.destroy();
+    expect(fixture.componentInstance.closedCount).toBe(0);
+  });
+
+  it('emits closed exactly once when destroyed while open (not zero, not twice)', async () => {
+    const { fixture } = await render(StringHost);
+    const input = screen.getByRole('combobox', { name: 'Fruit' });
+    fireEvent.input(input, { target: { value: 'ap' } });
+    fixture.detectChanges();
+    await screen.findAllByRole('option');
+    expect(fixture.componentInstance.closedCount).toBe(0);
+
+    fixture.destroy();
+    expect(fixture.componentInstance.closedCount).toBe(1);
   });
 });

@@ -20,6 +20,9 @@ import type { DropZoneConfig, QzDropInfo, QzDragOverInfo } from './drag-drop.typ
     '[class.qz-drag-over]': 'isDragOver()',
     '[class.qz-drop-disabled]': 'isDisabled()',
     '[class.qz-can-drop]': 'canDrop()',
+    '[attr.data-qz-drag-over]': 'isDragOver() ? "" : null',
+    '[attr.data-qz-can-drop]': 'canDrop() ? "" : null',
+    '[attr.data-qz-disabled]': 'isDisabled() ? "" : null',
     '(dragenter)': 'onDragEnter($event)',
     '(dragleave)': 'onDragLeave($event)',
     '(dragover)': 'onDragOver($event)',
@@ -43,6 +46,13 @@ export class DropZoneDirective {
   readonly sortable = input(false, {
     alias: 'qzDropZoneSortable',
     transform: booleanAttribute,
+  });
+  /**
+   * Explicit layout axis for before/after drop-position and sortable-index calculation.
+   * When unset, falls back to the existing `width > height` measurement heuristic.
+   */
+  readonly orientation = input<'horizontal' | 'vertical' | undefined>(undefined, {
+    alias: 'qzDropZoneOrientation',
   });
 
   /** Emitted when item is dropped */
@@ -161,11 +171,17 @@ export class DropZoneDirective {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    if (rect.width > rect.height) {
+    if (this.isHorizontal(rect)) {
       return event.clientX < centerX ? 'before' : 'after';
     } else {
       return event.clientY < centerY ? 'before' : 'after';
     }
+  }
+
+  private isHorizontal(rect: DOMRect): boolean {
+    const explicit = this.orientation() ?? this.getConfig().orientation;
+    if (explicit) return explicit === 'horizontal';
+    return rect.width > rect.height;
   }
 
   private calculateDropIndex(event: DragEvent): number | undefined {
@@ -177,13 +193,13 @@ export class DropZoneDirective {
     if (children.length === 0) return 0;
 
     const rect = element.getBoundingClientRect();
-    const isHorizontal = rect.width > rect.height;
+    const horizontal = this.isHorizontal(rect);
 
     for (let i = 0; i < children.length; i++) {
       const child = children[i] as HTMLElement;
       const childRect = child.getBoundingClientRect();
 
-      if (isHorizontal) {
+      if (horizontal) {
         if (event.clientX < childRect.left + childRect.width / 2) {
           return i;
         }

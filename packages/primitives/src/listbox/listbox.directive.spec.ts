@@ -14,6 +14,8 @@ import { ListboxOptionDirective } from './listbox-option.directive';
       [value]="selected()"
       (valueChange)="selected.set($event)"
       [multiple]="multiple()"
+      [orientation]="orientation()"
+      [attr.dir]="dir()"
     >
       <div qzListboxOption="one">One</div>
       <div qzListboxOption="two" [qzListboxOptionDisabled]="disabled()">Two</div>
@@ -25,6 +27,8 @@ class Host {
   readonly selected = signal<string | string[] | null>(null);
   readonly multiple = signal(false);
   readonly disabled = signal(false);
+  readonly orientation = signal<'horizontal' | 'vertical'>('vertical');
+  readonly dir = signal<'ltr' | 'rtl'>('ltr');
 }
 
 describe('ListboxDirective', () => {
@@ -46,6 +50,55 @@ describe('ListboxDirective', () => {
     fireEvent.keyDown(listbox, { key: 'ArrowDown' });
     fixture.detectChanges();
     expect(listbox).toHaveAttribute('aria-activedescendant', options[2].id);
+  });
+
+  it('defaults horizontal navigation to ltr (ArrowRight = next, ArrowLeft = previous)', async () => {
+    const { fixture } = await render(Host);
+    fixture.componentInstance.orientation.set('horizontal');
+    fixture.detectChanges();
+    const listbox = screen.getByRole('listbox');
+    const options = screen.getAllByRole('option');
+
+    fireEvent.keyDown(listbox, { key: 'ArrowRight' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[1].id);
+
+    fireEvent.keyDown(listbox, { key: 'ArrowLeft' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[0].id);
+  });
+
+  it('mirrors horizontal arrow keys in rtl (ArrowLeft = next, ArrowRight = previous)', async () => {
+    const { fixture } = await render(Host);
+    fixture.componentInstance.orientation.set('horizontal');
+    fixture.componentInstance.dir.set('rtl');
+    fixture.detectChanges();
+    const listbox = screen.getByRole('listbox');
+    const options = screen.getAllByRole('option');
+
+    fireEvent.keyDown(listbox, { key: 'ArrowLeft' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[1].id);
+
+    fireEvent.keyDown(listbox, { key: 'ArrowRight' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[0].id);
+  });
+
+  it('never mirrors vertical Up/Down regardless of direction', async () => {
+    const { fixture } = await render(Host);
+    fixture.componentInstance.dir.set('rtl');
+    fixture.detectChanges();
+    const listbox = screen.getByRole('listbox');
+    const options = screen.getAllByRole('option');
+
+    fireEvent.keyDown(listbox, { key: 'ArrowDown' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[1].id);
+
+    fireEvent.keyDown(listbox, { key: 'ArrowUp' });
+    fixture.detectChanges();
+    expect(listbox).toHaveAttribute('aria-activedescendant', options[0].id);
   });
 
   it('selects the active option with Enter and reflects programmatic values', async () => {

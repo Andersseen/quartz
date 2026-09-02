@@ -387,16 +387,22 @@ test.describe('Tree behavior', () => {
     return page.getByTestId('basic-tree');
   }
 
+  // A treeitem's row now structurally contains its expanded children (the correct
+  // WAI-ARIA APG nesting — role="group" is a DOM descendant of its role="treeitem"), so a
+  // plain `.filter({ hasText })` on 'src'/'README.md'/etc would also match the ancestor
+  // "quartz" row, since its own text content includes every descendant's text too.
+  // getByRole's accessible-name matching (`name`, `exact: true`) targets only that row's
+  // own label instead of its full descendant text, so it disambiguates correctly.
   test('should expand and collapse with arrow keys', async ({ page }) => {
     await page.goto('/tree');
 
-    const root = basicTree(page).getByRole('treeitem').filter({ hasText: 'quartz' });
+    const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     await expect(root).toHaveAttribute('aria-expanded', 'false');
 
     await root.focus();
     await page.keyboard.press('ArrowRight');
     await expect(root).toHaveAttribute('aria-expanded', 'true');
-    await expect(basicTree(page).getByRole('treeitem').filter({ hasText: 'src' })).toBeVisible();
+    await expect(basicTree(page).getByRole('treeitem', { name: 'src', exact: true })).toBeVisible();
 
     await page.keyboard.press('ArrowLeft');
     await expect(root).toHaveAttribute('aria-expanded', 'false');
@@ -405,7 +411,7 @@ test.describe('Tree behavior', () => {
   test('should navigate visible nodes with ArrowDown and ArrowUp', async ({ page }) => {
     await page.goto('/tree');
 
-    const root = basicTree(page).getByRole('treeitem').filter({ hasText: 'quartz' });
+    const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     // Focus rather than click: with `toggleOnClick` (default) a click would already
     // expand the row, and this test is about keyboard navigation only.
     await root.focus();
@@ -414,7 +420,7 @@ test.describe('Tree behavior', () => {
     // Expand root so there are children to navigate.
     await page.keyboard.press('ArrowRight');
 
-    const firstChild = basicTree(page).getByRole('treeitem').filter({ hasText: 'src' });
+    const firstChild = basicTree(page).getByRole('treeitem', { name: 'src', exact: true });
     await expect(firstChild).toBeVisible();
 
     await page.keyboard.press('ArrowDown');
@@ -429,7 +435,7 @@ test.describe('Tree behavior', () => {
   test('should select node with Enter', async ({ page }) => {
     await page.goto('/tree');
 
-    const root = basicTree(page).getByRole('treeitem').filter({ hasText: 'quartz' });
+    const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     await root.evaluate((el: HTMLElement) => el.focus());
     await page.keyboard.press('Enter');
     await expect(root).toHaveAttribute('aria-selected', 'true');
@@ -439,19 +445,25 @@ test.describe('Tree behavior', () => {
     await page.goto('/tree');
 
     const tree = basicTree(page);
-    const root = tree.getByRole('treeitem').filter({ hasText: 'quartz' });
+    const root = tree.getByRole('treeitem', { name: 'quartz', exact: true });
     await root.focus();
     await page.keyboard.press('ArrowRight');
 
     await page.keyboard.press('End');
-    const readme = tree.getByRole('treeitem').filter({ hasText: 'README.md' });
+    const readme = tree.getByRole('treeitem', { name: 'README.md', exact: true });
     await expect(readme).toHaveAttribute('tabindex', '0');
+    // The next ArrowUp is dispatched to whatever element currently has real DOM focus —
+    // wait for it to actually land here (not just the tabindex attribute) before pressing,
+    // or a keydown fired before the roving-focus effect finishes moving focus would hit
+    // the wrong (stale-focused) element.
+    await expect(readme).toBeFocused();
 
     await page.keyboard.press('ArrowUp');
-    const disabledPackage = tree.getByRole('treeitem').filter({ hasText: 'package.json' });
-    const packages = tree.getByRole('treeitem').filter({ hasText: 'packages' });
+    const disabledPackage = tree.getByRole('treeitem', { name: 'package.json', exact: true });
+    const packages = tree.getByRole('treeitem', { name: 'packages', exact: true });
     await expect(disabledPackage).toHaveAttribute('aria-disabled', 'true');
     await expect(packages).toHaveAttribute('tabindex', '0');
+    await expect(packages).toBeFocused();
 
     await page.keyboard.press('Home');
     await expect(root).toHaveAttribute('tabindex', '0');

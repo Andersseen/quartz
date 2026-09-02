@@ -20,13 +20,18 @@ export const RICH_SNIPPET = `<!-- Rich HTML tooltip via template -->
   </div>
 </ng-template>`;
 
-export const INTERACTIVE_SNIPPET = `<!-- Keep the tooltip open while hovering it -->
-<button
-  qzTooltip="Click to learn more"
-  tooltipPlacement="top"
-  [tooltipInteractive]="true">
-  Interactive
-</button>`;
+export const INTERACTIVE_SNIPPET = `<!-- A tooltip with focusable/interactive content (links, buttons) violates the
+     WAI-ARIA tooltip pattern — role="tooltip" must never receive focus or stay
+     open while the pointer moves into it. Use Popover for that case instead: -->
+<button qzPopoverTrigger [popover]="details" type="button">
+  Learn more
+</button>
+
+<ng-template #details>
+  <div qzPopover class="popover">
+    <a href="/docs">Read the docs</a>
+  </div>
+</ng-template>`;
 
 export const DELAY_SNIPPET = `<!-- Customize show/hide delay -->
 <button

@@ -1,6 +1,6 @@
 {
   "name": "@quartz-headless/core",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Low-level interaction infrastructure for Quartz Headless — overlay, focus, dismiss, scroll lock, collection, viewport, drag & drop, virtual scroll, splitter.",
   "keywords": [
     "angular",

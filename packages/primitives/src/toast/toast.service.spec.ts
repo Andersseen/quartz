@@ -81,4 +81,58 @@ describe('ToastService', () => {
     vi.advanceTimersByTime(1100);
     expect(service.toasts().length).toBe(0);
   });
+
+  it('never starts the countdown interval for a persistent (duration: 0) toast', () => {
+    service.info('Persists forever', undefined, { duration: 0 });
+    expect(service.toasts().length).toBe(1);
+
+    // No countdown work exists, so no interval should have been started at all.
+    expect(vi.getTimerCount()).toBe(0);
+
+    vi.advanceTimersByTime(10_000);
+    expect(service.toasts().length).toBe(1);
+  });
+
+  it('stops the countdown interval once its last timed toast elapses, even while a persistent toast remains', () => {
+    service.info('Persists forever', undefined, { duration: 0 });
+    service.info('Times out', undefined, { duration: 500 });
+    expect(vi.getTimerCount()).toBe(1);
+
+    vi.advanceTimersByTime(600);
+    expect(service.toasts().map((t) => t.message)).toEqual(['Persists forever']);
+
+    // The interval must be torn down now — nothing left has an active countdown.
+    expect(vi.getTimerCount()).toBe(0);
+
+    // And it must stay stopped: advancing time further must not reintroduce any effect.
+    vi.advanceTimersByTime(10_000);
+    expect(service.toasts().length).toBe(1);
+  });
+
+  it('stops the interval when the only active toast is paused, and restarts it on resume', () => {
+    const id = service.warning('Pausable', undefined, { duration: 1000 });
+    expect(vi.getTimerCount()).toBe(1);
+
+    service.pause(id);
+    expect(vi.getTimerCount()).toBe(0);
+
+    service.resume(id);
+    expect(vi.getTimerCount()).toBe(1);
+
+    vi.advanceTimersByTime(1100);
+    expect(service.toasts().length).toBe(0);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('stops the interval on dismiss/dismissAll', () => {
+    const id = service.warning('One', undefined, { duration: 1000 });
+    service.warning('Two', undefined, { duration: 1000 });
+    expect(vi.getTimerCount()).toBe(1);
+
+    service.dismiss(id);
+    expect(vi.getTimerCount()).toBe(1); // "Two" is still ticking
+
+    service.dismissAll();
+    expect(vi.getTimerCount()).toBe(0);
+  });
 });

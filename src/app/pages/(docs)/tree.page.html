@@ -60,14 +60,18 @@
             class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
           >
             <qz-tree [nodes]="customNodes">
+              <!--
+                qz-tree-node's own host already owns role="treeitem", tabindex, every
+                aria-*, indentation and click/keydown/focus handling for the row — this
+                template only supplies content/visuals. Don't re-add role, tabindex, aria-*
+                or a row-level select() handler here; that would duplicate the host.
+              -->
               <ng-template
                 let-node
-                let-level="level"
                 let-expanded="expanded"
                 let-selected="selected"
                 let-hasChildren="hasChildren"
                 let-toggle="toggle"
-                let-select="select"
               >
                 <div
                   [class]="
@@ -76,14 +80,6 @@
                       ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
                       : 'text-gray-200 hover:bg-white/5')
                   "
-                  [style.padding-left.px]="level * 24"
-                  (click)="select()"
-                  (keydown.enter)="select()"
-                  tabindex="0"
-                  role="treeitem"
-                  [attr.aria-level]="level + 1"
-                  [attr.aria-expanded]="hasChildren ? expanded : null"
-                  [attr.aria-selected]="selected"
                 >
                   @if (hasChildren) {
                     <span
@@ -128,17 +124,20 @@
             class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[420px] w-full"
             data-testid="lazy-tree"
           >
+            <!--
+              qz-tree-node's own host already owns role="treeitem", tabindex, every aria-*
+              (including aria-busy while loading()), indentation and click/keydown/focus
+              handling for the row — this template only supplies content/visuals.
+            -->
             <ng-template
               #lazyTpl
               let-node
-              let-level="level"
               let-expanded="expanded"
               let-selected="selected"
               let-hasChildren="hasChildren"
               let-loading="loading"
               let-error="error"
               let-toggle="toggle"
-              let-select="select"
               let-retry="retry"
             >
               <div
@@ -148,15 +147,6 @@
                     ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
                     : 'text-gray-200 hover:bg-white/5')
                 "
-                [style.padding-left.px]="level * 20"
-                role="treeitem"
-                tabindex="0"
-                [attr.aria-level]="level + 1"
-                [attr.aria-expanded]="hasChildren ? expanded : null"
-                [attr.aria-selected]="selected"
-                [attr.aria-busy]="loading() ? true : null"
-                (click)="select()"
-                (keydown.enter)="select()"
               >
                 @if (hasChildren) {
                   <span

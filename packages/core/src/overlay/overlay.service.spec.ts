@@ -51,6 +51,35 @@ describe('OverlayService', () => {
     document.body.removeChild(anchor);
   });
 
+  it('should move its shared container to the end of <body> on every open, so it stacks above elements appended after it (e.g. a Dialog opened before it)', async () => {
+    const content = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(content);
+    const anchor = document.createElement('div');
+    document.body.appendChild(anchor);
+
+    // Creating the ref lazily creates (and appends) the shared overlay container.
+    const ref = service.create(templateRef, viewContainerRef, anchor);
+    const container = document.querySelector('[data-qz-overlay-container]')!;
+
+    // Simulate a Dialog-like element (its own backdrop/wrapper) appended to <body>
+    // *after* the overlay container already exists — this is the scenario that
+    // previously left the shared container behind the dialog in DOM order.
+    const dialogLikeEl = document.createElement('div');
+    document.body.appendChild(dialogLikeEl);
+    expect(container.nextSibling).not.toBeNull(); // container is no longer the last child
+
+    ref.open();
+    await waitForOverlayFrame();
+
+    // Opening must re-append the container, moving it after the dialog-like element.
+    expect(container.nextSibling).toBeNull();
+    expect(document.body.lastElementChild).toBe(container);
+
+    ref.close();
+    dialogLikeEl.remove();
+    anchor.remove();
+  });
+
   it('should open an overlay anchored to viewport coordinates', async () => {
     const content = document.createElement('div');
     const { templateRef, viewContainerRef } = createTemplateMocks(content);
@@ -96,7 +125,7 @@ describe('OverlayService', () => {
     // the opening click; give it an extra tick to register.
     await new Promise((resolve) => setTimeout(resolve, 50));
 
-    document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
 
     expect(ref.isOpen).toBe(false);
 

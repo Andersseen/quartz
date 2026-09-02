@@ -12,7 +12,11 @@ module.exports = [
       "coverage/**/*",
       ".angular/**/*",
       "node_modules/**/*",
-      "**/*.config.ts"
+      "**/*.config.ts",
+      // Deliberately isolated fixture for scripts/consumer-smoke.js: type-checked on its
+      // own via its own local tsconfig.json (tsc --noEmit against the installed packages,
+      // outside the workspace), not part of any of the monorepo's own tsconfig `include`s.
+      "scripts/consumer-smoke/fixture/**/*"
     ],
   },
   {
@@ -40,6 +44,15 @@ module.exports = [
       ],
       "@angular-eslint/prefer-standalone": "error",
       "@angular-eslint/prefer-on-push-component-change-detection": "error",
+      // no-input-rename's "is this alias just <selector><Property>" heuristic strips
+      // brackets from the raw selector text without separating a tag qualifier, so a
+      // tag-qualified attribute selector like `button[qzToggleItem]` no longer matches
+      // against an alias composed from just the attribute part (`qzToggleItemDisabled`).
+      // Button-first-only selectors need exactly this shape (see docs/ai/STABILITY_AUDIT.md).
+      "@angular-eslint/no-input-rename": [
+        "error",
+        { "allowedNames": ["qzToggleItemDisabled"] }
+      ],
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

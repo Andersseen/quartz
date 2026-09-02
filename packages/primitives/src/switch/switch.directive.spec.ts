@@ -7,11 +7,19 @@ import { SwitchDirective } from './switch.directive';
   standalone: true,
   imports: [SwitchDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<button qzSwitch [(checked)]="checked" [disabled]="disabled()">Notifications</button>`,
+  template: `<button
+    qzSwitch
+    [(checked)]="checked"
+    [disabled]="disabled()"
+    (checkedChangeCommitted)="commits.push($event)"
+  >
+    Notifications
+  </button>`,
 })
 class SwitchHost {
   readonly checked = signal(false);
   readonly disabled = signal(false);
+  commits: boolean[] = [];
 }
 
 describe('Switch', () => {
@@ -38,5 +46,19 @@ describe('Switch', () => {
 
     expect(fixture.componentInstance.checked()).toBe(false);
     expect(control).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('emits checkedChangeCommitted only for a real user interaction, not a programmatic model write', async () => {
+    const { fixture } = await render(SwitchHost);
+    const control = screen.getByRole('switch', { name: 'Notifications' });
+
+    fireEvent.click(control);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.commits).toEqual([true]);
+
+    // A programmatic write to the model must not be conflated with a user commit.
+    fixture.componentInstance.checked.set(false);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.commits).toEqual([true]);
   });
 });

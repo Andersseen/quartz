@@ -9,6 +9,8 @@ import { Toast } from './toast.types';
     <div
       class="qz-toast"
       [class]="'qz-toast--' + toast().type"
+      [attr.data-qz-type]="toast().type"
+      [attr.role]="toast().type === 'error' ? 'alert' : 'status'"
       (mouseenter)="onMouseEnter()"
       (mouseleave)="onMouseLeave()"
     >

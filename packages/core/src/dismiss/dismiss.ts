@@ -17,7 +17,19 @@ export interface DismissConfig {
 
 export type DismissReason = 'escape' | 'outside-pointer' | 'focus-outside' | 'scroll';
 
-const layers: DismissControllerImpl[] = [];
+// Keyed per-Document (mirrors scroll-lock's WeakMap<Document, ...> pattern) so Escape/outside-
+// pointer routing in one Document (e.g. an iframe, or a second Angular app root sharing this
+// module) can never be starved by a later layer registered in an unrelated Document.
+const layersByDocument = new WeakMap<Document, DismissControllerImpl[]>();
+
+function getLayers(document: Document): DismissControllerImpl[] {
+  let layers = layersByDocument.get(document);
+  if (!layers) {
+    layers = [];
+    layersByDocument.set(document, layers);
+  }
+  return layers;
+}
 
 export function createDismissController(config: DismissConfig): DismissController {
   return new DismissControllerImpl(config);
@@ -37,12 +49,14 @@ class DismissControllerImpl implements DismissController {
     if (!this.#enabled() || !this.#document.defaultView) return;
 
     this.#attached = true;
-    layers.push(this);
+    getLayers(this.#document).push(this);
     if (config.escape) this.#document.addEventListener('keydown', this.#onKeydown, true);
+    // A single Pointer Event covers mouse/touch/pen — registering mousedown/click as well
+    // would let one physical interaction fire #onPointer up to three times, and would
+    // additionally misfire on the trailing click of a text-selection drag that starts inside
+    // the root and ends outside it.
     if (config.outsidePointer) {
       this.#document.addEventListener('pointerdown', this.#onPointer, true);
-      this.#document.addEventListener('mousedown', this.#onPointer, true);
-      this.#document.addEventListener('click', this.#onPointer, true);
     }
     if (config.focusOutside) this.#document.addEventListener('focusin', this.#onFocusIn, true);
     if (config.scroll) {
@@ -59,13 +73,12 @@ class DismissControllerImpl implements DismissController {
     this.#destroyed = true;
     if (!this.#attached) return;
 
+    const layers = getLayers(this.#document);
     const index = layers.indexOf(this);
     if (index !== -1) layers.splice(index, 1);
 
     this.#document.removeEventListener('keydown', this.#onKeydown, true);
     this.#document.removeEventListener('pointerdown', this.#onPointer, true);
-    this.#document.removeEventListener('mousedown', this.#onPointer, true);
-    this.#document.removeEventListener('click', this.#onPointer, true);
     this.#document.removeEventListener('focusin', this.#onFocusIn, true);
 
     for (const { target, handler } of this.#scrollListeners) {
@@ -105,6 +118,7 @@ class DismissControllerImpl implements DismissController {
   }
 
   #isTopLayer(): boolean {
+    const layers = getLayers(this.#document);
     return layers[layers.length - 1] === this;
   }
 

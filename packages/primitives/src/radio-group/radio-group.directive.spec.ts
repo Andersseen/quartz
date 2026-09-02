@@ -35,6 +35,21 @@ class RadioGroupHost {
   readonly compareWith = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 }
 
+@Component({
+  standalone: true,
+  imports: [RadioGroupDirective, RadioDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div qzRadioGroup [(value)]="value">
+      <span qzRadio="free">Free</span>
+      <span qzRadio="pro">Pro</span>
+    </div>
+  `,
+})
+class NonButtonRadioGroupHost {
+  readonly value = signal<string | null>(null);
+}
+
 describe('RadioGroup', () => {
   it('selects items and exposes radiogroup ARIA', async () => {
     const { fixture } = await render(RadioGroupHost);
@@ -75,5 +90,25 @@ describe('RadioGroup', () => {
     fixture.componentInstance.showPro.set(false);
     fixture.detectChanges();
     expect(screen.queryByRole('radio', { name: 'Pro' })).toBeNull();
+  });
+
+  it('works correctly on a non-button host — click, Space, and arrow-key selection all function (unlike Checkbox/Switch/Toggle, RadioGroup drives selection itself rather than relying on native button activation)', async () => {
+    const { fixture } = await render(NonButtonRadioGroupHost);
+    const free = screen.getByRole('radio', { name: 'Free' });
+    const pro = screen.getByRole('radio', { name: 'Pro' });
+
+    fireEvent.click(pro);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.value()).toBe('pro');
+
+    free.focus();
+    fireEvent.keyDown(screen.getByRole('radiogroup'), { key: ' ' });
+    fixture.detectChanges();
+    expect(fixture.componentInstance.value()).toBe('free');
+
+    fireEvent.keyDown(screen.getByRole('radiogroup'), { key: 'ArrowDown' });
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(pro);
+    expect(fixture.componentInstance.value()).toBe('pro');
   });
 });

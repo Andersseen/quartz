@@ -5,8 +5,7 @@ import {
   TemplateRef,
   inject,
   computed,
-  effect,
-  viewChild,
+  afterRenderEffect,
   ElementRef,
 } from '@angular/core';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
@@ -14,44 +13,53 @@ import { TreeNode } from './tree.types';
 import { TreeService } from './tree.service';
 import { TreeNodeContext } from './tree.component';
 
+/**
+ * Quartz owns the accessible row — `role="treeitem"`, roving `tabindex`, every `aria-*`
+ * attribute, and click/keydown/focus handling all live on this component's own host, not on
+ * a template-internal wrapper. That way a custom `nodeTemplate` only ever supplies inner
+ * content/visuals; it renders *inside* the already-semantic `<qz-tree-node>` element instead
+ * of replacing it, so a consumer reskinning a node never has to reimplement its
+ * accessibility. (Before this, supplying a custom template silently dropped all of the
+ * above — see docs/ai/STABILITY_AUDIT.md.)
+ */
 @Component({
   selector: 'qz-tree-node',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet],
+  host: {
+    role: 'treeitem',
+    '[attr.tabindex]': 'tabindex()',
+    '[attr.aria-level]': 'level() + 1',
+    '[attr.aria-setsize]': 'setsize()',
+    '[attr.aria-posinset]': 'posinset()',
+    '[attr.aria-expanded]': 'hasChildren() ? isExpanded() : null',
+    '[attr.aria-selected]': 'isSelected()',
+    '[attr.aria-disabled]': 'node().disabled ? true : null',
+    '[attr.aria-busy]': 'isLoading() ? true : null',
+    '[attr.data-qz-load-state]': "loadState() === 'idle' ? null : loadState()",
+    '[class.qz-tree-node]': 'true',
+    '[class.qz-tree-node--expanded]': 'isExpanded()',
+    '[class.qz-tree-node--selected]': 'isSelected()',
+    '[style.display]': '"flex"',
+    '[style.align-items]': '"center"',
+    '[style.padding-left.px]': 'level() * 20',
+    '(click)': 'onClick($event)',
+    '(focus)': 'onFocus()',
+    '(keydown)': 'onKeydown($event)',
+  },
   template: `
     @if (template()) {
       <ng-container *ngTemplateOutlet="template()!; context: getContext()"></ng-container>
     } @else {
-      <div
-        #item
-        class="qz-tree-node"
-        role="treeitem"
-        [attr.tabindex]="tabindex()"
-        [attr.aria-level]="level() + 1"
-        [attr.aria-setsize]="setsize()"
-        [attr.aria-posinset]="posinset()"
-        [attr.aria-expanded]="hasChildren() ? isExpanded() : null"
-        [attr.aria-selected]="isSelected()"
-        [attr.aria-disabled]="node().disabled ? true : null"
-        [attr.aria-busy]="isLoading() ? true : null"
-        [attr.data-qz-load-state]="loadState() === 'idle' ? null : loadState()"
-        [class.qz-tree-node--expanded]="isExpanded()"
-        [class.qz-tree-node--selected]="isSelected()"
-        [style.padding-left.px]="level() * 20"
-        (click)="onClick($event)"
-        (focus)="onFocus()"
-        (keydown)="onKeydown($event)"
-      >
-        @if (hasChildren()) {
-          <span class="qz-tree-node__toggle" aria-hidden="true" (click)="onToggleClick($event)">
-            {{ toggleGlyph() }}
-          </span>
-        } @else {
-          <span class="qz-tree-node__spacer"></span>
-        }
-        <span class="qz-tree-node__label">{{ node().label }}</span>
-      </div>
+      @if (hasChildren()) {
+        <span class="qz-tree-node__toggle" aria-hidden="true" (click)="onToggleClick($event)">
+          {{ toggleGlyph() }}
+        </span>
+      } @else {
+        <span class="qz-tree-node__spacer"></span>
+      }
+      <span class="qz-tree-node__label">{{ node().label }}</span>
     }
 
     @if (isExpanded() && node().children?.length) {
@@ -70,40 +78,12 @@ import { TreeNodeContext } from './tree.component';
   `,
   styles: [
     `
-      :host {
-        display: block;
-      }
-
-      .qz-tree-node {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 8px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.1s;
-        font-size: 0.875rem;
-        color: #e5e7eb;
-      }
-
-      .qz-tree-node:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .qz-tree-node--selected {
-        background: rgba(124, 58, 237, 0.15);
-        color: #a78bfa;
-      }
-
       .qz-tree-node__toggle {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 16px;
         height: 16px;
-        font-size: 0.65rem;
-        color: #6b7280;
-        cursor: pointer;
         flex-shrink: 0;
       }
 
@@ -122,6 +102,7 @@ import { TreeNodeContext } from './tree.component';
 export class TreeNodeComponent {
   private readonly treeService = inject(TreeService);
   private readonly document = inject(DOCUMENT);
+  private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly node = input.required<TreeNode>();
   readonly level = input<number>(0);
@@ -132,8 +113,6 @@ export class TreeNodeComponent {
   readonly posinset = input<number>(1);
   /** True for the very first node in the tree — seeds the roving tabindex. */
   readonly isFirst = input<boolean>(false);
-
-  private readonly itemEl = viewChild<ElementRef<HTMLElement>>('item');
 
   readonly isExpanded = computed(() => this.treeService.expandedIds().has(this.node().id));
   readonly isSelected = computed(() => this.treeService.selectedIds().has(this.node().id));
@@ -164,11 +143,16 @@ export class TreeNodeComponent {
   });
 
   constructor() {
-    // Move DOM focus to whichever node becomes active via keyboard navigation.
-    effect(() => {
+    // Move DOM focus to whichever node becomes active via keyboard navigation. Targets the
+    // component's own host — the treeitem row — regardless of whether a custom template or
+    // the default markup is rendered inside it. Uses afterRenderEffect (not a plain
+    // effect()) because moving real DOM focus is a DOM side effect that must run after
+    // this cycle's rendering has actually been committed — a plain effect() can run before
+    // that, which lets the browser silently drop the .focus() call.
+    afterRenderEffect(() => {
       if (this.treeService.activeId() !== this.node().id) return;
       if (!this.document.defaultView) return; // SSR guard
-      this.itemEl()?.nativeElement.focus();
+      this.hostElement.nativeElement.focus();
     });
   }
 

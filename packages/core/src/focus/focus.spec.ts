@@ -5,6 +5,7 @@ import {
   focusInitialElement,
   focusSafely,
   getFocusableElements,
+  isFocusable,
 } from './focus';
 
 describe('focus foundation', () => {
@@ -82,6 +83,81 @@ describe('focus foundation', () => {
 
     before.remove();
     after.remove();
+  });
+
+  it('excludes tabindex="-1" elements even on native-tag selector branches', () => {
+    const container = document.createElement('div');
+    container.innerHTML = `
+      <button tabindex="-1">Decoy</button>
+      <button>Real1</button>
+      <a href="#" tabindex="-1">DecoyLink</a>
+      <button>Real2</button>
+    `;
+    document.body.appendChild(container);
+
+    expect(getFocusableElements(container).map((el) => el.textContent?.trim())).toEqual([
+      'Real1',
+      'Real2',
+    ]);
+
+    container.remove();
+  });
+
+  it('excludes elements inside an aria-hidden ancestor', () => {
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('aria-hidden', 'true');
+    const target = document.createElement('button');
+    target.id = 'target';
+    wrapper.appendChild(target);
+    document.body.appendChild(wrapper);
+
+    expect(isFocusable(target)).toBe(false);
+
+    wrapper.remove();
+  });
+
+  it('reclaims focus on a plain Tab when focus has already escaped the container', () => {
+    const container = document.createElement('div');
+    container.tabIndex = -1;
+    const first = document.createElement('button');
+    const last = document.createElement('button');
+    container.append(first, last);
+    document.body.appendChild(container);
+    const trap = createFocusTrap(container, document);
+
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+
+    const forward = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    trap.handleKeydown(forward);
+    expect(forward.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(first);
+
+    outside.focus();
+    const backward = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      shiftKey: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    trap.handleKeydown(backward);
+    expect(document.activeElement).toBe(last);
+
+    trap.destroy();
+    outside.remove();
+    container.remove();
+  });
+
+  it('makes a tabindex-less container script-focusable before falling back to it with zero focusable descendants', () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    expect(container.hasAttribute('tabindex')).toBe(false);
+    expect(focusInitialElement(container)).toBe(container);
+    expect(document.activeElement).toBe(container);
+
+    container.remove();
   });
 
   it('traps Tab and Shift+Tab inside a container', () => {

@@ -3,7 +3,10 @@ import { Directive, booleanAttribute, computed, input, model, output } from '@an
 export type CheckboxState = boolean | 'indeterminate';
 
 @Directive({
-  selector: '[qzCheckbox]',
+  // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
+  // disabled, and Enter/Space-to-click semantics. A bare attribute selector would compile
+  // on any element while only half-supporting it (no tabindex, no full keyboard handling).
+  selector: 'button[qzCheckbox]',
   exportAs: 'qzCheckbox',
   standalone: true,
   host: {

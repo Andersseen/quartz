@@ -28,7 +28,7 @@ export class OverlayService {
       style.setProperty('left', '0');
       style.setProperty('width', '0');
       style.setProperty('height', '0');
-      style.setProperty('z-index', '9999');
+      style.setProperty('z-index', 'var(--qz-overlay-z-index, 9999)');
       style.setProperty('pointer-events', 'none');
 
       this.document.body.appendChild(this.#containerEl);

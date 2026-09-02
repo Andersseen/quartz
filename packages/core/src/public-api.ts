@@ -60,6 +60,7 @@ export {
   OverlayService,
   OverlayRef,
   calculatePosition,
+  getScrollParents,
   DEFAULT_OVERLAY_CONFIG,
 } from './overlay';
 export type {

@@ -17,10 +17,15 @@ export class CollectionStore<T extends CollectionItem> {
 
   readonly items = this.#items.asReadonly();
   readonly enabledItems = computed(() => this.#items().filter((item) => !isDisabled(item)));
-  readonly activeId = this.#activeId.asReadonly();
   readonly activeItem = computed(
     () => this.enabledItems().find((item) => item.id === this.#activeId()) ?? null,
   );
+  // Derived from activeItem, not a direct readonly view of #activeId: if the active item's
+  // `disabled` accessor flips to true in place (no unregister, no explicit nav call),
+  // activeItem reactively becomes null via enabledItems() filtering it out — but a plain
+  // #activeId.asReadonly() would keep returning the stale, now-disabled id, producing a
+  // public activeId/activeItem pair that disagree. This keeps them always consistent.
+  readonly activeId = computed(() => this.activeItem()?.id ?? null);
 
   constructor(config: Partial<CollectionConfig> = {}, document: Document | null = null) {
     this.#config = { ...DEFAULT_COLLECTION_CONFIG, ...config };
@@ -141,7 +146,11 @@ export class CollectionStore<T extends CollectionItem> {
 
   activeTabIndex(id: string): 0 | -1 {
     if (this.#config.focusStrategy !== 'roving-tabindex') return -1;
-    const active = this.#activeId();
+    // Reads the reconciled activeItem rather than the raw private #activeId: if the active
+    // item just became disabled in place, activeItem is already null here, so this falls
+    // into the same "nothing active" fallback used on cold start, instead of keeping
+    // tabindex=0 pinned on a now-disabled, unreachable element.
+    const active = this.activeItem()?.id ?? null;
     if (active === null) return this.enabledItems()[0]?.id === id ? 0 : -1;
     return active === id ? 0 : -1;
   }

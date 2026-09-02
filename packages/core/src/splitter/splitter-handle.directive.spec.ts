@@ -60,17 +60,76 @@ describe('SplitterHandleDirective', () => {
     expect(service.position()).toBe(0);
   });
 
-  it('toggles dragging state on mousedown/mouseup', async () => {
+  it('toggles dragging state on pointerdown/pointerup', async () => {
     const { fixture } = await render(Host);
-    const handle = screen.getByText('handle');
+    const handle = screen.getByText('handle') as HTMLElement;
+    handle.setPointerCapture = () => undefined;
+    handle.releasePointerCapture = () => undefined;
     const service = fixture.componentInstance.container.splitterService;
 
-    fireEvent.mouseDown(handle);
+    fireEvent.pointerDown(handle, { pointerId: 1 });
     fixture.detectChanges();
     expect(service.isDragging()).toBe(true);
 
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    fireEvent.pointerUp(handle, { pointerId: 1 });
     fixture.detectChanges();
+    expect(service.isDragging()).toBe(false);
+  });
+
+  it('stops dragging on pointercancel', async () => {
+    const { fixture } = await render(Host);
+    const handle = screen.getByText('handle') as HTMLElement;
+    handle.setPointerCapture = () => undefined;
+    handle.releasePointerCapture = () => undefined;
+    const service = fixture.componentInstance.container.splitterService;
+
+    fireEvent.pointerDown(handle, { pointerId: 1 });
+    fixture.detectChanges();
+    expect(service.isDragging()).toBe(true);
+
+    fireEvent.pointerCancel(handle, { pointerId: 1 });
+    fixture.detectChanges();
+    expect(service.isDragging()).toBe(false);
+  });
+
+  it('ignores pointermove/pointerup from a different pointer than the one that started the drag', async () => {
+    const { fixture } = await render(Host);
+    const handle = screen.getByText('handle') as HTMLElement;
+    handle.setPointerCapture = () => undefined;
+    handle.releasePointerCapture = () => undefined;
+    handle.getBoundingClientRect = () => ({ left: 0, top: 0, width: 100, height: 10 }) as DOMRect;
+    const service = fixture.componentInstance.container.splitterService;
+
+    fireEvent.pointerDown(handle, { pointerId: 1 });
+    fixture.detectChanges();
+    const positionAfterStart = service.position();
+
+    // A second instance's finger/pointer moving must not affect this handle.
+    fireEvent.pointerMove(handle, { pointerId: 2, clientX: 90, clientY: 5 });
+    fixture.detectChanges();
+    expect(service.position()).toBe(positionAfterStart);
+
+    fireEvent.pointerUp(handle, { pointerId: 2 });
+    fixture.detectChanges();
+    expect(service.isDragging()).toBe(true); // still dragging — wrong pointer's "up" was ignored
+
+    fireEvent.pointerUp(handle, { pointerId: 1 });
+    fixture.detectChanges();
+    expect(service.isDragging()).toBe(false);
+  });
+
+  it('stops dragging on the service when the handle is destroyed mid-drag', async () => {
+    const { fixture } = await render(Host);
+    const handle = screen.getByText('handle') as HTMLElement;
+    handle.setPointerCapture = () => undefined;
+    handle.releasePointerCapture = () => undefined;
+    const service = fixture.componentInstance.container.splitterService;
+
+    fireEvent.pointerDown(handle, { pointerId: 1 });
+    fixture.detectChanges();
+    expect(service.isDragging()).toBe(true);
+
+    fixture.destroy();
     expect(service.isDragging()).toBe(false);
   });
 });
