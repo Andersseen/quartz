@@ -15,6 +15,18 @@ library builds/artifact verification, external tarball install + TypeScript smok
 Angular AOT or hydration; coverage thresholds and full API contract gates are proposed work.
 The audit below remains historical context and does not supersede the current manifest version.
 
+## 0.6 contracts development — 2026-09-05
+
+Phase 0.6 has started on branch `v1-roadmap`. New contract artifacts:
+`docs/api/public-surface.md`, `docs/api/v1-scope.md`,
+`docs/ai/specs/v1-core-contract.md`, `docs/ai/specs/v1-floating-contract.md`,
+`docs/ai/specs/v1-selection-controls-contract.md`, `docs/ai/specs/v1-forms.md`,
+`docs/releases/0.5-migration.md` and `docs/releases/0.6-acceptance.md`.
+
+Coverage config now lives in root `vitest.config.ts` with package-aware baseline thresholds.
+The old per-package `coverage.all` entries were removed because Vitest 4 no longer uses that
+option. No library runtime behavior, public exports or package versions changed in this pass.
+
 > **Last updated: 2026-09-02** (Stability Audit — Core + all 0.4.0 Primitives)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
