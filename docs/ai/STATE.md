@@ -1,5 +1,20 @@
 # STATE — Current Project Status
 
+## Roadmap 1.0 planning — 2026-09-05
+
+Documentation-only review of base commit `9a615d9` (local package manifests: `0.5.0`).
+No library implementation, API, version or workflow changes were made. The proposed roadmap
+is in [ROADMAP.md](../../ROADMAP.md), with an evidence-based
+[readiness audit](../releases/V1_AUDIT.md) and
+[per-minor execution briefs](../roadmap/README.md) for bounded model assignments.
+Scope decisions are proposals, not approved API removals or completed milestones.
+
+Baseline verification passed: typecheck, lint, format check, 358 tests across 49 files,
+library builds/artifact verification, external tarball install + TypeScript smoke, and
+258 E2E runs (86 cases across Chromium/Firefox/WebKit). The consumer smoke does not run
+Angular AOT or hydration; coverage thresholds and full API contract gates are proposed work.
+The audit below remains historical context and does not supersede the current manifest version.
+
 > **Last updated: 2026-09-02** (Stability Audit — Core + all 0.4.0 Primitives)
 >
 > ⚠️ **Agents: update this file at the end of any session that changes what's true here**
