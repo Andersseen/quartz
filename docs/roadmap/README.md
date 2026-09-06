@@ -1,6 +1,6 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado inicial: **plan propuesto; ninguna tarea de implementación iniciada**.
+> Estado actual: **0.6 preparado para release; siguiente minor activa: 0.7 Core**.
 > Fecha: 2026-09-05. Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).
 
@@ -144,12 +144,11 @@ cerrados no se reutilizan. Un fallo posterior abre regresión enlazada con su ta
 
 ## 10. Estado inicial de las fases
 
-| Fase            | Estado      | Condición para iniciar implementación                                    |
-| --------------- | ----------- | ------------------------------------------------------------------------ |
-| 0.6             | Propuesta   | Encargos de inventario/medición definidos; cambios de contrato aprobados |
-| 0.7             | No iniciada | Gate de 0.6                                                              |
-| 0.8             | No iniciada | Gate de 0.7                                                              |
-| 0.9             | No iniciada | Contratos comunes de 0.8 integrados                                      |
-| 0.10            | No iniciada | Todas las familias incluidas estabilizadas                               |
-| 0.11            | No iniciada | Matriz de consumo/compatibilidad aceptada                                |
-| Beta / RC / 1.0 | No iniciada | API congelada y autorización de la release correspondiente               |
+| Fase            | Estado      | Condición para iniciar implementación                      |
+| --------------- | ----------- | ---------------------------------------------------------- |
+| 0.7             | Siguiente   | Usar contratos base ya preparados                          |
+| 0.8             | No iniciada | Gate de 0.7                                                |
+| 0.9             | No iniciada | Contratos comunes de 0.8 integrados                        |
+| 0.10            | No iniciada | Todas las familias incluidas estabilizadas                 |
+| 0.11            | No iniciada | Matriz de consumo/compatibilidad aceptada                  |
+| Beta / RC / 1.0 | No iniciada | API congelada y autorización de la release correspondiente |

@@ -1,7 +1,8 @@
 # Roadmap hacia Quartz Headless 1.0
 
-> Propuesta de planificación · 2026-09-05 · Base revisada: `9a615d9`, paquetes `0.5.0`.
-> Este documento propone alcance y criterios; no modifica la API ni anuncia versiones publicadas.
+> Plan activo · 2026-09-06 · 0.6 preparado para release, siguiente fase: 0.7 Core.
+> Este documento recoge el camino restante hacia 1.0; el hito 0.6 queda archivado en
+> [0.6 acceptance](docs/releases/0.6-acceptance.md).
 > Evidencias y resultados: [diagnóstico técnico](docs/releases/V1_AUDIT.md).
 > Encargos por minor, reparto de responsabilidades y protocolo para modelos:
 > [manual de ejecución](docs/roadmap/README.md).
@@ -33,12 +34,12 @@ sin depender de las áreas más complejas. La categoría condicionada no implica
 sea malo: Toggle, por ejemplo, es sencillo; Tree y Combobox tienen muchos más estados.
 Se trata de limitar compromisos, no de clasificar calidad por tamaño.
 
-**Decisión obligatoria en 0.6:** para cada candidato condicionado, elegir una de estas salidas:
+**Decisión registrada en 0.6:** para cada candidato condicionado, elegir una de estas salidas:
 
 1. Incluirlo en 1.0 porque un consumidor lo necesita y asignarle los mismos criterios de
    estabilidad y pruebas que al núcleo, dentro de su familia correspondiente.
 2. Retirarlo de los exports de la futura 1.0 durante la etapa 0.x, con guía de migración.
-   Los usuarios actuales pueden mantener temporalmente su versión 0.5; no prometer soporte
+   Los usuarios actuales pueden mantener temporalmente su versión 0.5/0.6; no prometer soporte
    indefinido de esa línea. Si existe demanda activa de evolución, valorar una distribución
    experimental independiente `0.x`, con mantenimiento explícito.
 
@@ -80,8 +81,7 @@ Estos scopes organizan issues y PRs; no obligan a crear nuevos paquetes ni entry
 
 | Versión objetivo | Resultado principal                            | Dependencia                      | Puerta de salida                                                    |
 | ---------------- | ---------------------------------------------- | -------------------------------- | ------------------------------------------------------------------- |
-| `0.6.0`          | Alcance, contratos y medición fiables          | Diagnóstico actual               | Cada export tiene destino; cobertura y API se controlan en CI       |
-| `0.7.0`          | Core consolidado                               | Contratos de 0.6                 | Ciclo de vida, foco, capas y geometría verificados                  |
+| `0.7.0`          | Core consolidado                               | Contratos de 0.6 cerrados        | Ciclo de vida, foco, capas y geometría verificados                  |
 | `0.8.0`          | Flotantes y feedback consolidados              | Core de 0.7                      | Dialog, Tooltip, Popover, Menu y Toast funcionan también compuestos |
 | `0.9.0`          | Selección, controles y navegación consolidados | 0.7 y contratos de 0.8           | Estado, teclado y formularios tienen contratos comprobados          |
 | `0.10.0`         | Consumo real, SSR e hidratación                | Familias incluidas estabilizadas | Tarballs compilados y ejecutados fuera del monorepo                 |
@@ -93,38 +93,6 @@ Estos scopes organizan issues y PRs; no obligan a crear nuevos paquetes ni entry
 Las versiones son objetivos, no fechas comprometidas. No publicar una minor para cumplir
 calendario si su puerta de salida sigue abierta. Los defectos de una familia se corrigen allí;
 no se trasladan automáticamente al siguiente hito.
-
-### 0.6.0 — Contratos, alcance y medición
-
-**Scopes:** `api`, `testing`, `docs`. **Objetivo:** saber exactamente qué se estabiliza y cómo
-se detectará una regresión.
-
-- **API-01:** inventariar los dos `public-api.ts`: símbolos, selectores, inputs, models,
-  outputs, métodos, tipos, contexto de templates, atributos `data-qz-*`, variables CSS y
-  estructura DOM de la que depende el consumidor. Separar utilidades públicas deliberadas
-  de detalles exportados accidentalmente; no convertir todo en API «por si acaso».
-- **API-02:** resolver el alcance de todos los candidatos. Identificar consumidores reales,
-  registrar inclusiones/exclusiones y escribir migraciones antes de retirar exports.
-- **API-03:** definir por familia los defaults, valores vacíos (`null`/colección vacía),
-  identidad y `compareWith`, propiedad del estado, métodos programáticos, orden y número
-  de eventos, diferencia entre `modelChange` y `ChangeCommitted`, cierre y destrucción.
-  Mantener diferencias justificadas, como Overlay reutilizable frente a Dialog de un uso.
-- **API-04:** decidir el contrato de integración con Angular Forms. Recomendación: adaptadores
-  opcionales para controles de formulario incluidos en 1.0, preservando la API de signals.
-  Diseñar en esta versión y entregar en 0.9; declarar correctamente `@angular/forms` si
-  la implementación lo requiere. No introducir una dependencia de Forms en Core.
-- **TEST-01:** configurar cobertura en la raíz de Vitest, con includes explícitos de ambas
-  libs, exclusiones justificadas y umbrales. Eliminar `coverage.all`, retirado en Vitest 4.
-  Separar métricas de biblioteca de CLI/demo y comprobar que los archivos sin ejecutar cuentan.
-- **TEST-02:** añadir verificación del contrato público: comparación revisable de declaraciones
-  y pruebas de tipos/plantillas para inferencia genérica, valores inválidos y bindings.
-- **DOC-01:** reconciliar los manifiestos `0.5.0`, el changelog que acaba en `0.4.0` y STATE;
-  documentar las migraciones de la auditoría anterior sin inventar fechas de publicación.
-
-**Aceptación:** inventario sin exports sin clasificar; matriz requisito→prueba para cada área
-incluida; baseline de cobertura reproducible; CI rechaza deliberadamente una caída bajo el
-umbral y una alteración no aprobada del contrato. Probar estos fallos en una rama/fixture,
-sin dejar tests rotos. No introducir features de catálogo.
 
 ### 0.7.0 — Core: comportamiento y ciclo de vida
 
@@ -292,8 +260,8 @@ por paquete, ≥95 % statements/lines/functions y ≥90 % branches; por archivo 
 de cleanup, cubrir el 100 % de los escenarios críticos especificados. Son metas del proyecto,
 no una norma universal ni prueba de accesibilidad.
 
-Empezar 0.6 con un baseline correcto que no pueda empeorar y elevarlo por familia hasta esos
-objetivos. Revisar ramas generadas por Angular y excluir únicamente código generado,
+0.6 deja un baseline correcto que no puede empeorar; elevarlo por familia hasta esos objetivos.
+Revisar ramas generadas por Angular y excluir únicamente código generado,
 declaraciones sin ejecución y barrels con justificación. Nunca ocultar lógica propia para
 alcanzar el número. Cualquier exclusión se revisa; un fallo de contrato no queda dispensado
 por cumplir porcentajes.
@@ -322,17 +290,18 @@ Prioridad: **P0** bloqueo grave/crash/pérdida de interacción; **P1** ruptura d
 accesibilidad esencial o instalación; **P2** mejora compatible; **P3** ampliación.
 Reclasificar como bloqueante cualquier P2 anterior que impida cumplir la promesa concreta de 1.0.
 
-No fijar una fecha de 1.0 antes de cerrar 0.6. Estimar cada familia una vez decidido qué exports
-se mantienen y corregida la medición; reservar capacidad de cada entrega para regresiones y
+No fijar una fecha de 1.0 hasta medir 0.7 y 0.8 con los contratos ya preparados. Estimar cada
+familia según los exports que se mantienen; reservar capacidad de cada entrega para regresiones y
 feedback. Si hay que recortar, recortar alcance antes de recortar validación.
 
 ## 7. Primer ciclo de ejecución
 
-1. Resolver **API-01/API-02**: inventario de exports y consumidores; seleccionar alcance estable.
-2. Ejecutar **TEST-01**: medición correcta y umbrales iniciales que CI haga cumplir.
-3. Completar **DOC-01**: versión base y migraciones de 0.5 trazables.
-4. Cerrar **API-03/API-04** y preparar **TEST-02** antes de modificar familias.
-5. Entregar 0.6 cuando cumpla sus criterios; empezar Core sobre esos contratos.
+1. Abrir **0.7 Core** desde los contratos de `docs/ai/specs/v1-core-contract.md`.
+2. Resolver primero Focus, Dismiss/Layering, Overlay lifecycle y Viewport SSR.
+3. Mantener Splitter, Drag and drop y Virtual scroll como candidatos condicionales hasta que
+   tengan contrato y evidencia equivalente.
+4. Preparar los checks de API/tipos que quedaron como siguiente paso de tooling.
+5. Cerrar 0.7 solo con cobertura, unit tests, build y E2E de composición pertinentes.
 
 El trabajo de esta revisión termina en el diagnóstico y esta propuesta. La implementación
 de los milestones, cambios de API y publicaciones son trabajos posteriores.
@@ -346,7 +315,6 @@ resuelto, archivos permitidos y aceptación concreta. Los encargos se detallan a
 | Documento                                                              | Encargos                                                |
 | ---------------------------------------------------------------------- | ------------------------------------------------------- |
 | [Responsabilidades y protocolo](docs/roadmap/README.md)                | Cómo asignar, implementar, revisar y transferir trabajo |
-| [0.6 — Contratos y medición](docs/roadmap/0.6-contracts.md)            | `06-01` a `06-08`                                       |
 | [0.7 — Core](docs/roadmap/0.7-core.md)                                 | `07-01` a `07-08`                                       |
 | [0.8 — Flotantes y feedback](docs/roadmap/0.8-floating.md)             | `08-01` a `08-07`                                       |
 | [0.9 — Selección y controles](docs/roadmap/0.9-controls.md)            | `09-01` a `09-08`                                       |

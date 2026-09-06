@@ -2,7 +2,7 @@
 
 - **Status:** Draft
 - **Branch:** v1-roadmap
-- **Date:** 2026-09-05
+- **Date:** 2026-09-06
 - **Related:** `docs/api/public-surface.md`, `docs/api/v1-scope.md`
 
 ## 1. Problem

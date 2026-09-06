@@ -2,7 +2,7 @@
 
 - **Status:** Draft
 - **Branch:** v1-roadmap
-- **Date:** 2026-09-05
+- **Date:** 2026-09-06
 - **Related:** `docs/api/v1-scope.md`, `docs/ai/specs/v1-selection-controls-contract.md`
 
 ## 1. Problem

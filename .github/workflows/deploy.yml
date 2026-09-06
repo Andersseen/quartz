@@ -206,16 +206,6 @@ jobs:
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build @quartz-headless/core
-        if: steps.version-core.outputs.published == 'true'
-        run: pnpm exec ng build quartz-core
-
-      - name: Publish @quartz-headless/core
-        if: steps.version-core.outputs.published == 'true'
-        run: npm publish ./packages/core/dist --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Check @quartz-headless/primitives version availability
         id: version-primitives
         run: |
@@ -229,9 +219,15 @@ jobs:
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Build @quartz-headless/primitives
-        if: steps.version-primitives.outputs.published == 'true'
-        run: pnpm exec ng build quartz-core && pnpm exec ng build quartz-primitives
+      - name: Build publishable library artifacts
+        if: steps.version-core.outputs.published == 'true' || steps.version-primitives.outputs.published == 'true'
+        run: pnpm build:lib
+
+      - name: Publish @quartz-headless/core
+        if: steps.version-core.outputs.published == 'true'
+        run: npm publish ./packages/core/dist --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @quartz-headless/primitives
         if: steps.version-primitives.outputs.published == 'true'

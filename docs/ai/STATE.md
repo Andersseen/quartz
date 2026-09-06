@@ -15,17 +15,25 @@ library builds/artifact verification, external tarball install + TypeScript smok
 Angular AOT or hydration; coverage thresholds and full API contract gates are proposed work.
 The audit below remains historical context and does not supersede the current manifest version.
 
-## 0.6 contracts development — 2026-09-05
+## 0.6 contracts release prep — 2026-09-06
 
-Phase 0.6 has started on branch `v1-roadmap`. New contract artifacts:
+Phase 0.6 is prepared for release on branch `v1-roadmap`. New contract artifacts:
 `docs/api/public-surface.md`, `docs/api/v1-scope.md`,
 `docs/ai/specs/v1-core-contract.md`, `docs/ai/specs/v1-floating-contract.md`,
 `docs/ai/specs/v1-selection-controls-contract.md`, `docs/ai/specs/v1-forms.md`,
-`docs/releases/0.5-migration.md` and `docs/releases/0.6-acceptance.md`.
+`docs/releases/0.5-migration.md`, archived `docs/releases/0.6-contracts.md` and
+`docs/releases/0.6-acceptance.md`.
 
 Coverage config now lives in root `vitest.config.ts` with package-aware baseline thresholds.
 The old per-package `coverage.all` entries were removed because Vitest 4 no longer uses that
-option. No library runtime behavior, public exports or package versions changed in this pass.
+option. No library runtime behavior or public exports changed in this pass. Package versions are
+prepared as `0.6.0`, and `@quartz-headless/primitives` peers on `@quartz-headless/core@^0.6.0`.
+The existing CI workflow publishes npm and creates the GitHub Release after a merge to `main` if
+those package versions are not already present on npm.
+
+Release-prep verification passed locally: `pnpm build:lib`, `pnpm verify:build`,
+`pnpm verify:consumer` with a temporary npm cache, `pnpm lint`, `pnpm format:check`,
+`pnpm typecheck`, `pnpm test:coverage` and `pnpm e2e` outside the sandbox for localhost binding.
 
 > **Last updated: 2026-09-02** (Stability Audit — Core + all 0.4.0 Primitives)
 >
@@ -282,12 +290,12 @@ items remain open.
 
 - `quartz-headless` (legacy, unscoped) is **frozen** at its last published version
   (v0.2.1) — no longer built or published from CI.
-- `@quartz-headless/core` and `@quartz-headless/primitives` are at **v0.5.0** in their
+- `@quartz-headless/core` and `@quartz-headless/primitives` are prepared as **v0.6.0** in their
   `package.json` (bumped from 0.4.0 — the 2026-09-02 stability audit round included
   deliberate breaking changes: Tree's custom-template contract, Tooltip's
   `tooltipInteractive` removal, the `button[qzX]` selector tightenings, and Switch's
   `toggled` rename — see the Stability Audit entry above and `docs/ai/STABILITY_AUDIT.md`).
-  Primitives' peer range on Core bumped to `^0.5.0` alongside it. CI's `publish` job
+  Primitives' peer range on Core is `^0.6.0`. CI's `publish` job
   (`.github/workflows/deploy.yml`) auto-publishes on `main` whenever a package's
   `package.json` version isn't already live on npm.
 - Root monorepo package stays `"private": true`; npm publication happens per-package from
