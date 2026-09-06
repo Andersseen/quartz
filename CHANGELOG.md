@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-09-06
+
+Release target: `@quartz-headless/core@0.6.0` and
+`@quartz-headless/primitives@0.6.0`.
+
+### Added
+
+- Phase 0.6 v1 planning artifacts: public API inventory, initial v1 scope decisions, draft
+  contracts for Core/floating/selection/control behavior, Forms adapter design and 0.5 migration
+  notes.
+
+### Changed
+
+- Coverage configuration now lives in the root Vitest workspace config, removes the obsolete
+  `coverage.all` option and applies baseline thresholds for Core and Primitives source coverage.
+- `@quartz-headless/primitives` now peers on `@quartz-headless/core@^0.6.0`.
+
 ## [0.4.0] — 2026-09-01
 
 Release target: `@quartz-headless/core@0.4.0` and
