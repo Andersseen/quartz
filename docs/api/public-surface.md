@@ -93,3 +93,19 @@ best-effort source copy.
   become public by accident.
 - Service classes exported from primitives expose public methods beyond directives. Their method
   contracts need snapshots or type examples before 1.0.
+
+## 0.7.0 contract notes
+
+The exported names and signatures are unchanged from 0.6.0 and are now enforced by declaration
+snapshots (`docs/api/snapshots/core.json`, `primitives.json`, checked by `pnpm verify:build`;
+regenerate deliberately with `node scripts/api-guard.js --update`). Behaviour clarified in 0.7.0:
+
+- `isFocusable`: programmatic-focus target (connected, focusable selector or `tabindex`, visible,
+  enabled, not inert/aria-hidden). `getFocusableElements`: the Tab-order subset.
+- `createFocusTrap`: only the newest live trap per Document handles Tab.
+- `OverlayRef`/`OverlayTriggerDirective`: repositions on resize, content/anchor resize and (with
+  `closeOnScroll: false`) scroll; closes when the anchor leaves the document; `flipAxis` values
+  `main | cross | both | none` are all honoured; destroyed refs cannot reopen.
+- `CollectionStore`: nearest-neighbour active recovery; typeahead no-match keeps the active item.
+- `ViewportService`: `resize`-driven size; inert after `destroy()`.
+- `resolveDirection`: ignores invalid `dir` values.

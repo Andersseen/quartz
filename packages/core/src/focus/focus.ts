@@ -37,12 +37,50 @@ function hasNegativeTabIndex(el: HTMLElement): boolean {
   return explicit !== null && Number(explicit) < 0;
 }
 
+/**
+ * Whether `element` can receive *programmatic* focus (`element.focus()`) right now.
+ *
+ * - Must be connected, and match the focusable selector or carry a `tabindex` attribute
+ *   (so `tabindex="-1"` is a valid script-focus target; a plain `<div>` is not).
+ * - Excluded: `disabled` itself or inside a disabled `<fieldset>`, `hidden`/`inert`/
+ *   `aria-hidden="true"` ancestors, `display: none` on the element or any ancestor, and
+ *   `visibility: hidden`.
+ *
+ * Sequential (Tab) reachability is stricter — see `getFocusableElements`, which also drops
+ * negative tabindex.
+ */
 export function isFocusable(element: HTMLElement): boolean {
+  if (!element.isConnected) return false;
   if (element.hasAttribute('disabled')) return false;
+  if (!matchesFocusTarget(element)) return false;
   if (element.closest('[hidden], [inert], [aria-hidden="true"]')) return false;
-  const style = element.ownerDocument.defaultView?.getComputedStyle(element);
-  if (style && (style.display === 'none' || style.visibility === 'hidden')) return false;
+  if (isInDisabledFieldset(element)) return false;
+  const view = element.ownerDocument.defaultView;
+  if (!view) return true;
+  if (view.getComputedStyle(element).visibility === 'hidden') return false;
+  for (let node: HTMLElement | null = element; node; node = node.parentElement) {
+    if (view.getComputedStyle(node).display === 'none') return false;
+  }
   return true;
+}
+
+function matchesFocusTarget(element: HTMLElement): boolean {
+  if (element.tagName === 'INPUT' && (element as HTMLInputElement).type === 'hidden') return false;
+  return element.hasAttribute('tabindex') || element.matches(FOCUSABLE_SELECTOR);
+}
+
+// A control inside `<fieldset disabled>` is disabled unless it sits in the fieldset's first
+// `<legend>`.
+function isInDisabledFieldset(element: HTMLElement): boolean {
+  for (
+    let fieldset = element.parentElement?.closest('fieldset[disabled]') ?? null;
+    fieldset;
+    fieldset = fieldset.parentElement?.closest('fieldset[disabled]') ?? null
+  ) {
+    const legend = Array.from(fieldset.children).find((child) => child.tagName === 'LEGEND');
+    if (!legend?.contains(element)) return true;
+  }
+  return false;
 }
 
 function ensureScriptFocusable(container: HTMLElement): void {
@@ -71,18 +109,54 @@ export function focusSafely(element: HTMLElement | null | undefined): HTMLElemen
   }
 }
 
+/**
+ * Captures the currently focused element and returns a restorer for it. `restore()` is a
+ * no-op when the captured element was removed from the document, became unfocusable, or was
+ * never a real target (`body`/`documentElement`) — it never throws and never reclaims focus
+ * for a destroyed target.
+ */
 export function createFocusRestorer(document: Document): FocusRestorer {
   const previous = document.defaultView ? (document.activeElement as HTMLElement | null) : null;
   return {
-    restore: () => focusSafely(previous),
+    restore: () => {
+      if (!previous?.isConnected) return;
+      focusSafely(previous);
+    },
   };
 }
 
+/**
+ * Overlay content is rendered in a portal under this container. A focus trap treats focus
+ * inside it as belonging to a child popup (menu, select, popover) owned by the trapped layer,
+ * so it must not yank focus back into its own container.
+ */
+const RELATED_PORTAL_SELECTOR = '[data-qz-overlay-container]';
+
+// Traps are scoped per Document; only the most recently created, still-active trap handles
+// Tab so stacked modals never compete for the same event.
+const trapsByDocument = new WeakMap<Document, object[]>();
+
 export function createFocusTrap(container: HTMLElement, document: Document): FocusTrap {
+  const token = {};
+  let stack = trapsByDocument.get(document);
+  if (!stack) {
+    stack = [];
+    trapsByDocument.set(document, stack);
+  }
+  stack.push(token);
+  const isActiveTrap = () => {
+    const current = trapsByDocument.get(document);
+    return !!current && current[current.length - 1] === token;
+  };
+
   return {
     handleKeydown(event: KeyboardEvent): void {
       if (event.key !== 'Tab') return;
       if (!document.defaultView) return;
+      if (!isActiveTrap()) return;
+
+      const active = document.activeElement;
+      if (active && !container.contains(active) && active.closest(RELATED_PORTAL_SELECTOR)) return;
 
       const focusable = getFocusableElements(container);
       if (!focusable.length) {
@@ -94,7 +168,6 @@ export function createFocusTrap(container: HTMLElement, document: Document): Foc
 
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
 
       if (event.shiftKey && (active === first || !container.contains(active))) {
         event.preventDefault();
@@ -108,7 +181,9 @@ export function createFocusTrap(container: HTMLElement, document: Document): Foc
       }
     },
     destroy(): void {
-      // Stateless trap: exposed for API symmetry with listener-backed foundations.
+      const current = trapsByDocument.get(document);
+      const index = current?.indexOf(token) ?? -1;
+      if (index !== -1) current!.splice(index, 1);
     },
   };
 }

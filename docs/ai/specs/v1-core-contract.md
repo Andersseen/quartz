@@ -1,8 +1,8 @@
 # Spec: v1 core contract
 
-- **Status:** Draft
-- **Branch:** v1-roadmap
-- **Date:** 2026-09-06
+- **Status:** Implemented in 0.7.0 (Overlay/Viewport/Focus/Collection/Dismiss behaviors below)
+- **Branch:** feat/quartz-0.7-core-consolidation
+- **Date:** 2026-10-22
 - **Related:** `docs/api/public-surface.md`, `docs/api/v1-scope.md`, `docs/releases/0.6-contracts.md`
 
 ## 1. Problem
@@ -68,9 +68,22 @@ separate include/remove decision is implemented.
       migration note.
 - [ ] Coverage gate and public API checks run in CI.
 
-## 8. Open questions
+## 8. Resolved questions (0.7.0)
 
-1. Should `isFocusable` be renamed or narrowed if current behavior intentionally means
-   "matches focusable selector" rather than "can receive focus now"?
-2. Should Overlay auto-update on `resize` and content resize, or remain manual with a documented
-   `updatePosition()` obligation?
+1. `isFocusable` keeps its name and now means "can receive programmatic focus now": a plain
+   `<div>` without `tabindex` is not focusable, `tabindex="-1"` is. Sequential reachability is
+   `getFocusableElements` (adds the non-negative tabindex rule). See
+   `docs/releases/0.7-acceptance.md`.
+2. Overlay auto-updates on window `resize`, overlay/anchor size changes (ResizeObserver) and — when
+   `closeOnScroll` is off — scroll. A removed anchor closes it. Position-only layout shifts that
+   change neither size nor scroll still require `updatePosition()`.
+3. Layer ownership: `docs/ai/specs/v1-layer-composition.md`.
+
+## 9. 0.7 behaviours added to the list above
+
+11. Collection recovers the active item to the nearest enabled neighbour (next, else previous);
+    typeahead with no match keeps the active item.
+12. Focus traps are stack-scoped per Document; only the newest trap handles Tab.
+13. `flipAxis`: `main` = opposite side, `cross` = opposite alignment, `both` = side then alignment,
+    `none` = never; first fitting candidate wins, else the preferred placement is clamped.
+14. Viewport updates `width`/`height` from the window `resize` event (height-only changes included).

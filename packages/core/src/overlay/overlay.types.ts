@@ -21,7 +21,12 @@ export interface OverlayConfig {
   offset: number;
   /** Whether to flip placement when there's not enough space. Default: true */
   flip: boolean;
-  /** Which axis to flip on. Default: 'main' */
+  /**
+   * Which alternatives `flip` may try when the placement overflows the viewport.
+   * `main`: opposite side. `cross`: opposite alignment on the same side (`-start` ↔ `-end`).
+   * `both`: opposite side, then opposite alignment, then both. `none`: never flip.
+   * Default: 'main'
+   */
   flipAxis: OverlayFlipAxis;
   /** Close when user clicks outside the overlay. Default: true */
   closeOnClickOutside: boolean;

@@ -16,6 +16,15 @@ export class OverlayRef {
   private anchor: OverlayAnchor;
   private clickOutsideTimer: ReturnType<typeof setTimeout> | null = null;
   private dismissController: DismissController | null = null;
+  // Bumped on every open/close/destroy. Deferred work captures the value it was scheduled
+  // under and bails out when it no longer matches, so a callback from an earlier opening
+  // session can never touch a later one.
+  #session = 0;
+  #cancelFrame: (() => void) | null = null;
+  #outsideArmed = false;
+  #scrollArmed = false;
+  #destroyed = false;
+  #untrack: (() => void) | null = null;
 
   /**
    * Plain `Subject` on purpose: an overlay is reusable (open/close/open), so replaying
@@ -47,7 +56,7 @@ export class OverlayRef {
   }
 
   open(): void {
-    if (this.isOpen) return;
+    if (this.#destroyed || this.isOpen) return;
 
     // SSR guard: do not attach to the DOM when there is no browser window.
     if (!this.document.defaultView || !this.containerEl) {
@@ -73,8 +82,14 @@ export class OverlayRef {
     this.containerEl.appendChild(this.wrapperEl);
 
     // Render template into the wrapper
+    const session = ++this.#session;
     this.viewRef = this.viewContainerRef.createEmbeddedView(this.templateRef);
     this.viewRef.detectChanges();
+    // If the host view container is destroyed while open (e.g. route change), Angular tears
+    // down our view without calling close(); release the wrapper and listeners here.
+    this.viewRef.onDestroy(() => {
+      if (this.#session === session) this.close();
+    });
 
     for (const node of this.viewRef.rootNodes) {
       if (isElementNode(node)) {
@@ -84,32 +99,42 @@ export class OverlayRef {
       }
     }
 
+    // Register the dismiss layer synchronously so layer order matches open order even when
+    // another layer opens before the next animation frame.
+    this.attachListeners();
+
     const firstChild = this.wrapperEl.firstElementChild as HTMLElement | null;
     if (firstChild) {
       this.#mounted$.next(firstChild);
     }
 
     // Position after render so we have real dimensions
-    this.queueFrame(() => {
-      if (!this.isOpen) return;
+    this.#cancelFrame = this.queueFrame(() => {
+      this.#cancelFrame = null;
+      if (!this.isOpen || this.#session !== session) return;
+      this.#scrollArmed = true;
       this.updatePosition();
-      this.attachListeners();
+      this.#startTracking(session);
     });
   }
 
   close(): void {
     if (!this.isOpen) return;
+    this.#session++;
+    this.#cancelFrame?.();
+    this.#cancelFrame = null;
+    this.#untrack?.();
+    this.#untrack = null;
     this.detachListeners();
 
-    if (this.viewRef) {
-      this.viewRef.destroy();
-      this.viewRef = null;
-    }
-
-    if (this.wrapperEl) {
-      this.wrapperEl.remove();
-      this.wrapperEl = null;
-    }
+    // Clear state before destroying the view: viewRef.destroy() re-enters close() through
+    // the onDestroy hook above, which must see an already-closed overlay.
+    const viewRef = this.viewRef;
+    const wrapperEl = this.wrapperEl;
+    this.viewRef = null;
+    this.wrapperEl = null;
+    viewRef?.destroy();
+    wrapperEl?.remove();
 
     this.#closed$.next();
   }
@@ -130,6 +155,12 @@ export class OverlayRef {
 
   updatePosition(): void {
     if (!this.wrapperEl) return;
+
+    // An element anchor that left the document has no geometry to follow: close.
+    if (!isVirtualAnchor(this.anchor) && !this.anchor.isConnected) {
+      this.close();
+      return;
+    }
 
     const firstChild = this.wrapperEl.firstElementChild as HTMLElement | null;
     if (!firstChild) return;
@@ -158,34 +189,38 @@ export class OverlayRef {
   // ── Listeners ──────────────────────────────────────────────────────────────
 
   private attachListeners(): void {
-    const attachDismiss = (outsidePointer: boolean) => {
-      if (!this.isOpen) return;
-      if (!this.config.closeOnEscape && !outsidePointer && !this.config.closeOnScroll) return;
-      this.dismissController?.destroy();
-      this.dismissController = createDismissController({
-        document: this.document,
-        escape: this.config.closeOnEscape,
-        outsidePointer,
-        scroll: this.config.closeOnScroll,
-        rootElements: () => [this.wrapperEl],
-        excludeElements: () => [this.getAnchorElement()],
-        scrollTargets: () => getScrollParents(this.anchor, this.document),
-        onDismiss: (reason, event) => {
-          if (reason === 'escape') event.stopPropagation();
-          this.close();
-        },
-      });
-    };
+    const { closeOnEscape, closeOnClickOutside, closeOnScroll } = this.config;
+    if (!closeOnEscape && !closeOnClickOutside && !closeOnScroll) return;
 
-    if (this.config.closeOnClickOutside) {
-      // Use setTimeout to avoid catching the same click that opened the overlay
+    // One controller for the whole open session, so the overlay keeps a single stable slot
+    // in the layer stack. Outside-pointer is armed one tick later to avoid catching the very
+    // gesture that opened the overlay.
+    this.#outsideArmed = false;
+    this.dismissController = createDismissController({
+      document: this.document,
+      escape: closeOnEscape,
+      outsidePointer: closeOnClickOutside,
+      scroll: closeOnScroll,
+      rootElements: () => [this.wrapperEl],
+      excludeElements: () => [this.getAnchorElement()],
+      scrollTargets: () => getScrollParents(this.anchor, this.document),
+      onDismiss: (reason, event) => {
+        if (reason === 'outside-pointer' && !this.#outsideArmed) return;
+        // Scrolls caused by opening itself (autofocus scrolling the panel into view) happen
+        // before the first frame and must not dismiss it.
+        if (reason === 'scroll' && !this.#scrollArmed) return;
+        if (reason === 'escape') event.stopPropagation();
+        this.close();
+      },
+    });
+
+    if (closeOnClickOutside) {
+      const session = this.#session;
       this.clickOutsideTimer = setTimeout(() => {
         this.clickOutsideTimer = null;
-        attachDismiss(true);
+        if (this.#session === session) this.#outsideArmed = true;
       });
     }
-
-    attachDismiss(false);
   }
 
   private detachListeners(): void {
@@ -193,9 +228,57 @@ export class OverlayRef {
       clearTimeout(this.clickOutsideTimer);
       this.clickOutsideTimer = null;
     }
+    this.#outsideArmed = false;
+    this.#scrollArmed = false;
 
     this.dismissController?.destroy();
     this.dismissController = null;
+  }
+
+  /**
+   * Geometry contract while open: the overlay re-positions on window resize, on size changes
+   * of the overlay content or the anchor element (ResizeObserver) and — when `closeOnScroll`
+   * is off — on scroll of any ancestor. Updates are coalesced to one per animation frame.
+   * A removed anchor closes the overlay.
+   */
+  #startTracking(session: number): void {
+    const view = this.document.defaultView;
+    if (!view || this.#session !== session) return;
+
+    let pending: (() => void) | null = null;
+    const schedule = () => {
+      if (pending) return;
+      pending = this.queueFrame(() => {
+        pending = null;
+        if (this.#session === session) this.updatePosition();
+      });
+    };
+
+    const cleanups: Array<() => void> = [() => pending?.()];
+
+    view.addEventListener('resize', schedule);
+    cleanups.push(() => view.removeEventListener('resize', schedule));
+
+    if (!this.config.closeOnScroll) {
+      this.document.addEventListener('scroll', schedule, { capture: true, passive: true });
+      cleanups.push(() =>
+        this.document.removeEventListener('scroll', schedule, {
+          capture: true,
+        } as EventListenerOptions),
+      );
+    }
+
+    const ViewResizeObserver = view.ResizeObserver;
+    if (ViewResizeObserver) {
+      const observer = new ViewResizeObserver(schedule);
+      const content = this.wrapperEl?.firstElementChild;
+      if (content) observer.observe(content);
+      const anchorEl = this.getAnchorElement();
+      if (anchorEl) observer.observe(anchorEl);
+      cleanups.push(() => observer.disconnect());
+    }
+
+    this.#untrack = () => cleanups.forEach((cleanup) => cleanup());
   }
 
   private getAnchorElement(): HTMLElement | null {
@@ -236,17 +319,21 @@ export class OverlayRef {
     };
   }
 
-  private queueFrame(callback: () => void): void {
+  /** Schedules `callback` for the next frame and returns a function that cancels it. */
+  private queueFrame(callback: () => void): () => void {
     const view = this.document.defaultView;
     if (view?.requestAnimationFrame) {
-      view.requestAnimationFrame(callback);
-      return;
+      const id = view.requestAnimationFrame(callback);
+      return () => view.cancelAnimationFrame(id);
     }
-    setTimeout(callback);
+    const id = setTimeout(callback);
+    return () => clearTimeout(id);
   }
 
   destroy(): void {
+    if (this.#destroyed) return;
     this.close();
+    this.#destroyed = true;
     this.#closed$.complete();
     this.#mounted$.complete();
     this.#position$.complete();

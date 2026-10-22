@@ -73,4 +73,26 @@ describe('DirectionalityService', () => {
     service.set('rtl');
     expect(service.resolve()).toBe('rtl');
   });
+
+  it('refresh() discards an explicit set() and re-reads the document', () => {
+    TestBed.configureTestingModule({});
+    const service = TestBed.inject(DirectionalityService);
+    service.set('rtl');
+    service.refresh();
+    expect(service.direction()).toBe('ltr');
+  });
+
+  it('resolves nested [dir] overrides below an rtl document without changing the document value', () => {
+    document.documentElement.setAttribute('dir', 'rtl');
+    TestBed.configureTestingModule({});
+    const service = TestBed.inject(DirectionalityService);
+    const el = document.createElement('div');
+    el.setAttribute('dir', 'ltr');
+    const child = document.createElement('span');
+    el.appendChild(child);
+    document.body.appendChild(el);
+    expect(service.resolve(child)).toBe('ltr');
+    expect(service.direction()).toBe('rtl');
+    el.remove();
+  });
 });

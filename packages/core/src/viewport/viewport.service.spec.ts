@@ -70,8 +70,6 @@ describe('ViewportService', () => {
       removeEventListener: removeListener,
     }));
     vi.stubGlobal('matchMedia', matchMedia);
-    service.destroy();
-    service = TestBed.inject(ViewportService);
 
     const first = service.minWidth(900);
     const second = service.minWidth(900);

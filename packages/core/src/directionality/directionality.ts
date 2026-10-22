@@ -9,7 +9,8 @@ import type {
  * Resolves the effective direction for an element by walking up to the nearest
  * ancestor (including itself) that carries a `dir` attribute — the same
  * resolution `<html dir="rtl">` and a subtree-overriding `<div dir="rtl">` get
- * from the browser. Falls back to `'ltr'` when nothing in the chain sets it.
+ * from the browser. Falls back to `'ltr'` when nothing in the chain sets it. `dir="auto"` and
+ * other invalid values are skipped (inherit from the next ancestor).
  *
  * Deliberately attribute-based rather than `getComputedStyle`-based: it needs
  * nothing beyond `Element.closest`/`getAttribute`, which server-side DOM
@@ -17,8 +18,15 @@ import type {
  * `document`/`window` guard.
  */
 export function resolveDirection(element: Element | null | undefined): Direction {
-  const withDir = element?.closest?.('[dir]');
-  return withDir?.getAttribute('dir')?.toLowerCase() === 'rtl' ? 'rtl' : 'ltr';
+  // Only valid values participate: `dir="auto"` or a typo is ignored by the browser (the
+  // element inherits), so the walk continues upward instead of stopping at it. A manual walk
+  // (not a `[dir="rtl" i]` selector) keeps this working in server DOM implementations with
+  // limited selector support.
+  for (let node: Element | null | undefined = element; node; node = node.parentElement) {
+    const value = node.getAttribute?.('dir')?.toLowerCase();
+    if (value === 'rtl' || value === 'ltr') return value;
+  }
+  return 'ltr';
 }
 
 /** The other direction. */

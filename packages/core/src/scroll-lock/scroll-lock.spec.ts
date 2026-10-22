@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { createScrollLock } from './scroll-lock';
 
 describe('createScrollLock', () => {
@@ -77,5 +77,57 @@ describe('createScrollLock', () => {
     }).not.toThrow();
     expect(lock.locked).toBe(false);
     expect(fakeDocument.body.style.overflow).toBe('auto');
+  });
+});
+
+describe('createScrollLock composition', () => {
+  afterEach(() => {
+    document.body.style.overflow = '';
+  });
+
+  it('independent controllers compose and may unlock out of order', () => {
+    document.body.style.overflow = 'scroll';
+    const a = createScrollLock(document);
+    const b = createScrollLock(document);
+    a.lock();
+    b.lock();
+    a.unlock();
+    expect(document.body.style.overflow).toBe('hidden');
+    b.unlock();
+    expect(document.body.style.overflow).toBe('scroll');
+  });
+
+  it('repeated unlock/destroy are harmless and never over-release another lock', () => {
+    const a = createScrollLock(document);
+    const b = createScrollLock(document);
+    a.lock();
+    b.lock();
+    a.unlock();
+    a.unlock();
+    a.destroy();
+    a.destroy();
+    expect(document.body.style.overflow).toBe('hidden');
+    b.destroy();
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('destroy releases all of a controller’s nested locks exactly once', () => {
+    document.body.style.overflow = 'auto';
+    const a = createScrollLock(document);
+    a.lock();
+    a.lock();
+    a.destroy();
+    expect(document.body.style.overflow).toBe('auto');
+    expect(a.locked).toBe(false);
+  });
+
+  it('is a no-op without a document or window', () => {
+    const lock = createScrollLock(null);
+    expect(() => {
+      lock.lock();
+      lock.unlock();
+      lock.destroy();
+    }).not.toThrow();
+    expect(lock.locked).toBe(false);
   });
 });

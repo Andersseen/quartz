@@ -30,19 +30,19 @@ this file does not remove exports.
 
 ## Conditional before v1
 
-| Package    | Area           | Default decision                                              | Promotion condition                                                                   |
-| ---------- | -------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Core       | Splitter       | Keep exported during 0.x, do not promise v1 until 0.7 review. | Full pointer, keyboard, constraints and cleanup tests.                                |
-| Core       | Drag and drop  | Keep exported during 0.x, do not promise full accessible DnD. | Product accepts native pointer DnD as the contract or scopes keyboard DnD separately. |
-| Core       | Virtual scroll | Keep exported during 0.x, conditional for v1.                 | Browser resize/scroll contract and consumer fixture.                                  |
-| Primitives | Combobox       | Conditional, likely split into a later minor if kept.         | IME, async stale result, freeform and Forms contract accepted.                        |
-| Primitives | Tree           | Conditional, likely split into a later minor if kept.         | Lazy load, error/retry, template context and selection state all covered.             |
-| Primitives | Slider         | Conditional.                                                  | Browser pointer capture, keyboard, decimal step and Forms adapter complete.           |
-| Primitives | Toggle         | Conditional.                                                  | Include if product wants it as a basic control beside Switch/Checkbox.                |
-| Primitives | ToggleGroup    | Conditional.                                                  | Include only with Toggle, with single/multiple semantics documented.                  |
-| Primitives | Sidebar        | Conditional layout primitive.                                 | Responsive, focus and scroll-lock behavior proven in real browser.                    |
-| Primitives | Navbar         | Conditional layout primitive.                                 | Scroll-state and responsive menu contract proven.                                     |
-| Primitives | Stepper        | Conditional flow primitive.                                   | Linear mode, validation handoff and dynamic step recovery contract accepted.          |
+| Package    | Area           | Default decision                                                                     | Promotion condition                                                                   |
+| ---------- | -------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Core       | Splitter       | Keep exported during 0.x; 0.7 review: still conditional (needs browser pointer E2E). | Full pointer, keyboard, constraints and cleanup tests.                                |
+| Core       | Drag and drop  | Keep exported during 0.x; 0.7 review: pointer-only, not keyboard accessible.         | Product accepts native pointer DnD as the contract or scopes keyboard DnD separately. |
+| Core       | Virtual scroll | Keep exported during 0.x; 0.7 review: fixed-size only, no browser contract yet.      | Browser resize/scroll contract and consumer fixture.                                  |
+| Primitives | Combobox       | Conditional, likely split into a later minor if kept.                                | IME, async stale result, freeform and Forms contract accepted.                        |
+| Primitives | Tree           | Conditional, likely split into a later minor if kept.                                | Lazy load, error/retry, template context and selection state all covered.             |
+| Primitives | Slider         | Conditional.                                                                         | Browser pointer capture, keyboard, decimal step and Forms adapter complete.           |
+| Primitives | Toggle         | Conditional.                                                                         | Include if product wants it as a basic control beside Switch/Checkbox.                |
+| Primitives | ToggleGroup    | Conditional.                                                                         | Include only with Toggle, with single/multiple semantics documented.                  |
+| Primitives | Sidebar        | Conditional layout primitive.                                                        | Responsive, focus and scroll-lock behavior proven in real browser.                    |
+| Primitives | Navbar         | Conditional layout primitive.                                                        | Scroll-state and responsive menu contract proven.                                     |
+| Primitives | Stepper        | Conditional flow primitive.                                                          | Linear mode, validation handoff and dynamic step recovery contract accepted.          |
 
 ## Migration stance
 

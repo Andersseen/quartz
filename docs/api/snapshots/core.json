@@ -1,0 +1,277 @@
+{
+  "calculatePosition": {
+    "kind": "function",
+    "signatures": [
+      "(anchorRect: DOMRect, overlayEl: HTMLElement, placement: OverlayPlacement, offset: number, flip: boolean, flipAxis?: OverlayFlipAxis, viewport?: { width: number; height: number; }, direction?: Direction): OverlayPosition"
+    ]
+  },
+  "CollectionConfig": {
+    "kind": "interface"
+  },
+  "CollectionFocusStrategy": {
+    "kind": "type"
+  },
+  "CollectionItem": {
+    "kind": "interface"
+  },
+  "CollectionNavigationResult": {
+    "kind": "interface"
+  },
+  "CollectionOrientation": {
+    "kind": "type"
+  },
+  "CollectionStore": {
+    "kind": "class"
+  },
+  "compareDomOrder": {
+    "kind": "function",
+    "signatures": ["(a: HTMLElement | null, b: HTMLElement | null): number"]
+  },
+  "createDismissController": {
+    "kind": "function",
+    "signatures": ["(config: DismissConfig): DismissController"]
+  },
+  "createFocusRestorer": {
+    "kind": "function",
+    "signatures": ["(document: Document): FocusRestorer"]
+  },
+  "createFocusTrap": {
+    "kind": "function",
+    "signatures": ["(container: HTMLElement, document: Document): FocusTrap"]
+  },
+  "createScrollLock": {
+    "kind": "function",
+    "signatures": ["(document: Document | null | undefined): ScrollLock"]
+  },
+  "DEFAULT_BREAKPOINTS": {
+    "kind": "const"
+  },
+  "DEFAULT_COLLECTION_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_OVERLAY_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_SPLITTER_CONFIG": {
+    "kind": "const"
+  },
+  "Direction": {
+    "kind": "type"
+  },
+  "DirectionalityService": {
+    "kind": "class"
+  },
+  "DismissConfig": {
+    "kind": "interface"
+  },
+  "DismissController": {
+    "kind": "interface"
+  },
+  "DismissReason": {
+    "kind": "type"
+  },
+  "DragDropConfig": {
+    "kind": "interface"
+  },
+  "DragDropService": {
+    "kind": "class"
+  },
+  "DraggableDirective": {
+    "kind": "class"
+  },
+  "DropZoneConfig": {
+    "kind": "interface"
+  },
+  "DropZoneDirective": {
+    "kind": "class"
+  },
+  "findByTypeahead": {
+    "kind": "function",
+    "signatures": [
+      "<T extends CollectionItem>(items: readonly T[], activeId: string | null, query: string): CollectionNavigationResult<T>"
+    ]
+  },
+  "findRelativeItem": {
+    "kind": "function",
+    "signatures": [
+      "<T extends CollectionItem>(items: readonly T[], activeId: string | null, direction: 1 | -1, options?: { wrap?: boolean; }): CollectionNavigationResult<T>"
+    ]
+  },
+  "firstItem": {
+    "kind": "function",
+    "signatures": ["<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"]
+  },
+  "FOCUSABLE_SELECTOR": {
+    "kind": "const"
+  },
+  "focusInitialElement": {
+    "kind": "function",
+    "signatures": ["(container: HTMLElement): HTMLElement | null"]
+  },
+  "FocusRestorer": {
+    "kind": "interface"
+  },
+  "focusSafely": {
+    "kind": "function",
+    "signatures": ["(element: HTMLElement | null | undefined): HTMLElement | null"]
+  },
+  "FocusTrap": {
+    "kind": "interface"
+  },
+  "getElement": {
+    "kind": "function",
+    "signatures": ["(item: CollectionItem | null): HTMLElement | null"]
+  },
+  "getFocusableElements": {
+    "kind": "function",
+    "signatures": ["(container: HTMLElement): HTMLElement[]"]
+  },
+  "getLabel": {
+    "kind": "function",
+    "signatures": ["(item: CollectionItem | null): string"]
+  },
+  "getScrollParents": {
+    "kind": "function",
+    "signatures": ["(anchor: OverlayAnchor, document: Document): (Element | Document)[]"]
+  },
+  "InlineArrowKey": {
+    "kind": "type"
+  },
+  "inlineEndKey": {
+    "kind": "function",
+    "signatures": ["(direction: Direction): InlineArrowKey"]
+  },
+  "inlineStartKey": {
+    "kind": "function",
+    "signatures": ["(direction: Direction): InlineArrowKey"]
+  },
+  "inlineToPhysical": {
+    "kind": "function",
+    "signatures": ["(direction: Direction, logical: LogicalInlineDirection): PhysicalHorizontal"]
+  },
+  "isDisabled": {
+    "kind": "function",
+    "signatures": ["(item: CollectionItem | null): boolean"]
+  },
+  "isFocusable": {
+    "kind": "function",
+    "signatures": ["(element: HTMLElement): boolean"]
+  },
+  "lastItem": {
+    "kind": "function",
+    "signatures": ["<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"]
+  },
+  "LogicalInlineDirection": {
+    "kind": "type"
+  },
+  "oppositeDirection": {
+    "kind": "function",
+    "signatures": ["(direction: Direction): Direction"]
+  },
+  "OverlayAnchor": {
+    "kind": "type"
+  },
+  "OverlayConfig": {
+    "kind": "interface"
+  },
+  "OverlayFlipAxis": {
+    "kind": "type"
+  },
+  "OverlayPlacement": {
+    "kind": "type"
+  },
+  "OverlayPosition": {
+    "kind": "interface"
+  },
+  "OverlayRef": {
+    "kind": "class"
+  },
+  "OverlayService": {
+    "kind": "class"
+  },
+  "OverlayTriggerDirective": {
+    "kind": "class"
+  },
+  "OverlayVirtualAnchor": {
+    "kind": "interface"
+  },
+  "PhysicalHorizontal": {
+    "kind": "type"
+  },
+  "physicalToInline": {
+    "kind": "function",
+    "signatures": ["(direction: Direction, physical: PhysicalHorizontal): LogicalInlineDirection"]
+  },
+  "QzDragEndInfo": {
+    "kind": "interface"
+  },
+  "QzDragInfo": {
+    "kind": "interface"
+  },
+  "QzDragOverInfo": {
+    "kind": "interface"
+  },
+  "QzDropInfo": {
+    "kind": "interface"
+  },
+  "resolveDirection": {
+    "kind": "function",
+    "signatures": ["(element: Element | null | undefined): Direction"]
+  },
+  "resolveInlineArrowKey": {
+    "kind": "function",
+    "signatures": ["(direction: Direction, key: string): LogicalInlineDirection | null"]
+  },
+  "ScrollLock": {
+    "kind": "interface"
+  },
+  "sortByDomOrder": {
+    "kind": "function",
+    "signatures": ["<T extends CollectionItem>(items: readonly T[]): T[]"]
+  },
+  "SplitterConfig": {
+    "kind": "interface"
+  },
+  "SplitterContainerDirective": {
+    "kind": "class"
+  },
+  "SplitterHandleDirective": {
+    "kind": "class"
+  },
+  "SplitterOrientation": {
+    "kind": "type"
+  },
+  "SplitterPanelDirective": {
+    "kind": "class"
+  },
+  "SplitterService": {
+    "kind": "class"
+  },
+  "SplitterState": {
+    "kind": "interface"
+  },
+  "ViewportBreakpoint": {
+    "kind": "type"
+  },
+  "ViewportBreakpoints": {
+    "kind": "interface"
+  },
+  "ViewportMatchDirective": {
+    "kind": "class"
+  },
+  "ViewportMatchResult": {
+    "kind": "interface"
+  },
+  "ViewportService": {
+    "kind": "class"
+  },
+  "VirtualScrollConfig": {
+    "kind": "interface"
+  },
+  "VirtualScrollDirective": {
+    "kind": "class"
+  },
+  "VirtualScrollRow": {
+    "kind": "interface"
+  }
+}

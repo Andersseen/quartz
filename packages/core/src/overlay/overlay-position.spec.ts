@@ -180,3 +180,70 @@ describe('calculatePosition — direction', () => {
     expect(pos.top).toBe(nearTopAnchor.bottom + 4);
   });
 });
+
+describe('calculatePosition — flipAxis and geometry limits', () => {
+  const vp = { width: 400, height: 300 };
+  const run = (
+    anchor: DOMRect,
+    size: [number, number],
+    placement: Parameters<typeof calculatePosition>[2],
+    axis: Parameters<typeof calculatePosition>[5],
+    direction: 'ltr' | 'rtl' = 'ltr',
+    viewport = vp,
+  ) => calculatePosition(anchor, overlayEl(...size), placement, 4, true, axis, viewport, direction);
+
+  it('main: flips to the opposite side when the preferred side overflows', () => {
+    // Anchor at the bottom: nothing fits below.
+    const anchor = new DOMRect(100, 270, 50, 20);
+    expect(run(anchor, [80, 100], 'bottom-start', 'main').placement).toBe('top-start');
+  });
+
+  it('main: does not change alignment when the cross axis overflows', () => {
+    // Anchor near the right edge: bottom-start overflows horizontally, main flip cannot help.
+    const anchor = new DOMRect(360, 50, 30, 20);
+    const pos = run(anchor, [80, 40], 'bottom-start', 'main');
+    expect(pos.placement).toBe('bottom-start');
+    expect(pos.left).toBe(400 - 80 - 8); // clamped
+  });
+
+  it('cross: flips alignment (start → end) when the cross axis overflows', () => {
+    const anchor = new DOMRect(320, 50, 30, 20);
+    const pos = run(anchor, [80, 40], 'bottom-start', 'cross');
+    expect(pos.placement).toBe('bottom-end');
+    expect(pos.left).toBe(350 - 80);
+  });
+
+  it('cross: never flips the side', () => {
+    const anchor = new DOMRect(100, 270, 50, 20);
+    expect(run(anchor, [80, 100], 'bottom-start', 'cross').placement).toBe('bottom-start');
+  });
+
+  it('cross: leaves centered placements unchanged', () => {
+    const anchor = new DOMRect(380, 50, 10, 20);
+    expect(run(anchor, [80, 40], 'bottom', 'cross').placement).toBe('bottom');
+  });
+
+  it('both: finds the first fitting candidate across side and alignment', () => {
+    // Bottom-right corner: only top-end fits.
+    const anchor = new DOMRect(340, 270, 30, 20);
+    expect(run(anchor, [80, 100], 'bottom-start', 'both').placement).toBe('top-end');
+  });
+
+  it('none: never flips, even when flip is true', () => {
+    const anchor = new DOMRect(100, 270, 50, 20);
+    expect(run(anchor, [80, 100], 'bottom-start', 'none').placement).toBe('bottom-start');
+  });
+
+  it('rtl: cross flip operates on the mirrored physical placement', () => {
+    // rtl bottom-start renders as bottom-end (right-aligned); near the left edge it overflows
+    // to the left and cross-flips to physical bottom-start.
+    const anchor = new DOMRect(10, 50, 30, 20);
+    expect(run(anchor, [80, 40], 'bottom-start', 'cross', 'rtl').placement).toBe('bottom-start');
+  });
+
+  it('clamps oversized content deterministically to the start margin', () => {
+    const pos = run(new DOMRect(100, 100, 50, 20), [500, 400], 'bottom-start', 'main');
+    expect(pos.left).toBe(8);
+    expect(pos.top).toBe(8);
+  });
+});
