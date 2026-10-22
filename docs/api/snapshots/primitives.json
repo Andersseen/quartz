@@ -1,0 +1,416 @@
+{
+  "AccordionConfig": {
+    "kind": "interface"
+  },
+  "AccordionDirective": {
+    "kind": "class"
+  },
+  "AccordionItemDirective": {
+    "kind": "class"
+  },
+  "AccordionPanelDirective": {
+    "kind": "class"
+  },
+  "AccordionTriggerDirective": {
+    "kind": "class"
+  },
+  "AccordionType": {
+    "kind": "type"
+  },
+  "CheckboxDirective": {
+    "kind": "class"
+  },
+  "CheckboxState": {
+    "kind": "type"
+  },
+  "ComboboxAutocomplete": {
+    "kind": "type"
+  },
+  "ComboboxCloseReason": {
+    "kind": "type"
+  },
+  "ComboboxCompareWith": {
+    "kind": "type"
+  },
+  "ComboboxConfig": {
+    "kind": "interface"
+  },
+  "ComboboxContentDirective": {
+    "kind": "class"
+  },
+  "ComboboxDirective": {
+    "kind": "class"
+  },
+  "ComboboxDisplayWith": {
+    "kind": "type"
+  },
+  "ComboboxFilter": {
+    "kind": "type"
+  },
+  "ComboboxInputDirective": {
+    "kind": "class"
+  },
+  "ComboboxListboxDirective": {
+    "kind": "class"
+  },
+  "ComboboxOpenReason": {
+    "kind": "type"
+  },
+  "ComboboxOptionDirective": {
+    "kind": "class"
+  },
+  "ComboboxTriggerDirective": {
+    "kind": "class"
+  },
+  "DEFAULT_ACCORDION_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_COMBOBOX_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_DIALOG_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_LISTBOX_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_MENU_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_NAVBAR_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_POPOVER_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_RADIO_GROUP_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_SELECT_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_SIDEBAR_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_SLIDER_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_STEPPER_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_TABS_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_TOAST_OPTIONS": {
+    "kind": "const"
+  },
+  "DEFAULT_TOGGLE_GROUP_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_TOOLTIP_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_TREE_CONFIG": {
+    "kind": "const"
+  },
+  "DialogConfig": {
+    "kind": "interface"
+  },
+  "DialogPosition": {
+    "kind": "type"
+  },
+  "DialogRef": {
+    "kind": "class"
+  },
+  "DialogService": {
+    "kind": "class"
+  },
+  "ListboxConfig": {
+    "kind": "interface"
+  },
+  "ListboxDirective": {
+    "kind": "class"
+  },
+  "ListboxOptionDirective": {
+    "kind": "class"
+  },
+  "ListboxOrientation": {
+    "kind": "type"
+  },
+  "ListboxService": {
+    "kind": "class"
+  },
+  "MenuCheckboxItemDirective": {
+    "kind": "class"
+  },
+  "MenuCollectionEntry": {
+    "kind": "interface"
+  },
+  "MenuConfig": {
+    "kind": "interface"
+  },
+  "MenuDirective": {
+    "kind": "class"
+  },
+  "MenuItemDirective": {
+    "kind": "class"
+  },
+  "MenuRadioGroupDirective": {
+    "kind": "class"
+  },
+  "MenuRadioItemDirective": {
+    "kind": "class"
+  },
+  "MenuSeparatorDirective": {
+    "kind": "class"
+  },
+  "MenuService": {
+    "kind": "class"
+  },
+  "MenuTriggerDirective": {
+    "kind": "class"
+  },
+  "NavbarBreakpoint": {
+    "kind": "type"
+  },
+  "NavbarConfig": {
+    "kind": "interface"
+  },
+  "NavbarDirective": {
+    "kind": "class"
+  },
+  "NavbarMenuDirective": {
+    "kind": "class"
+  },
+  "NavbarRevealMode": {
+    "kind": "type"
+  },
+  "NavbarScrollDirection": {
+    "kind": "type"
+  },
+  "NavbarTriggerDirective": {
+    "kind": "class"
+  },
+  "PopoverConfig": {
+    "kind": "interface"
+  },
+  "PopoverDirective": {
+    "kind": "class"
+  },
+  "PopoverTriggerDirective": {
+    "kind": "class"
+  },
+  "RadioDirective": {
+    "kind": "class"
+  },
+  "RadioGroupConfig": {
+    "kind": "interface"
+  },
+  "RadioGroupDirective": {
+    "kind": "class"
+  },
+  "RadioGroupOrientation": {
+    "kind": "type"
+  },
+  "SelectCloseReason": {
+    "kind": "type"
+  },
+  "SelectConfig": {
+    "kind": "interface"
+  },
+  "SelectContentDirective": {
+    "kind": "class"
+  },
+  "SelectDirective": {
+    "kind": "class"
+  },
+  "SelectListboxDirective": {
+    "kind": "class"
+  },
+  "SelectOpenReason": {
+    "kind": "type"
+  },
+  "SelectOptionDirective": {
+    "kind": "class"
+  },
+  "SelectTriggerDirective": {
+    "kind": "class"
+  },
+  "SidebarBreakpoint": {
+    "kind": "type"
+  },
+  "SidebarConfig": {
+    "kind": "interface"
+  },
+  "SidebarContentDirective": {
+    "kind": "class"
+  },
+  "SidebarDirective": {
+    "kind": "class"
+  },
+  "SidebarFocusMode": {
+    "kind": "type"
+  },
+  "SidebarMode": {
+    "kind": "type"
+  },
+  "SidebarPanelDirective": {
+    "kind": "class"
+  },
+  "SidebarSide": {
+    "kind": "type"
+  },
+  "SidebarState": {
+    "kind": "type"
+  },
+  "SidebarTriggerDirective": {
+    "kind": "class"
+  },
+  "SliderConfig": {
+    "kind": "interface"
+  },
+  "SliderDirective": {
+    "kind": "class"
+  },
+  "SliderOrientation": {
+    "kind": "type"
+  },
+  "SliderRangeDirective": {
+    "kind": "class"
+  },
+  "SliderThumbDirective": {
+    "kind": "class"
+  },
+  "SliderTrackDirective": {
+    "kind": "class"
+  },
+  "StepDirective": {
+    "kind": "class"
+  },
+  "StepPanelDirective": {
+    "kind": "class"
+  },
+  "StepperActivationMode": {
+    "kind": "type"
+  },
+  "StepperConfig": {
+    "kind": "interface"
+  },
+  "StepperDirective": {
+    "kind": "class"
+  },
+  "StepperNextDirective": {
+    "kind": "class"
+  },
+  "StepperOrientation": {
+    "kind": "type"
+  },
+  "StepperPreviousDirective": {
+    "kind": "class"
+  },
+  "StepState": {
+    "kind": "type"
+  },
+  "StepTriggerDirective": {
+    "kind": "class"
+  },
+  "SwitchDirective": {
+    "kind": "class"
+  },
+  "TabDirective": {
+    "kind": "class"
+  },
+  "TabListDirective": {
+    "kind": "class"
+  },
+  "TabPanelDirective": {
+    "kind": "class"
+  },
+  "TabsActivationMode": {
+    "kind": "type"
+  },
+  "TabsConfig": {
+    "kind": "interface"
+  },
+  "TabsDirective": {
+    "kind": "class"
+  },
+  "TabsOrientation": {
+    "kind": "type"
+  },
+  "Toast": {
+    "kind": "interface"
+  },
+  "ToastComponent": {
+    "kind": "class"
+  },
+  "ToastContainerComponent": {
+    "kind": "class"
+  },
+  "ToastOptions": {
+    "kind": "interface"
+  },
+  "ToastPosition": {
+    "kind": "type"
+  },
+  "ToastService": {
+    "kind": "class"
+  },
+  "ToastType": {
+    "kind": "type"
+  },
+  "ToggleDirective": {
+    "kind": "class"
+  },
+  "ToggleGroupConfig": {
+    "kind": "interface"
+  },
+  "ToggleGroupDirective": {
+    "kind": "class"
+  },
+  "ToggleGroupOrientation": {
+    "kind": "type"
+  },
+  "ToggleGroupType": {
+    "kind": "type"
+  },
+  "ToggleItemDirective": {
+    "kind": "class"
+  },
+  "TooltipConfig": {
+    "kind": "interface"
+  },
+  "TooltipDirective": {
+    "kind": "class"
+  },
+  "TooltipPlacement": {
+    "kind": "type"
+  },
+  "TooltipService": {
+    "kind": "class"
+  },
+  "TreeComponent": {
+    "kind": "class"
+  },
+  "TreeConfig": {
+    "kind": "interface"
+  },
+  "TreeLoadChildrenFn": {
+    "kind": "type"
+  },
+  "TreeNode": {
+    "kind": "interface"
+  },
+  "TreeNodeComponent": {
+    "kind": "class"
+  },
+  "TreeNodeContext": {
+    "kind": "interface"
+  },
+  "TreeNodeLoadState": {
+    "kind": "type"
+  },
+  "TreeService": {
+    "kind": "class"
+  }
+}

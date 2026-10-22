@@ -11,5 +11,10 @@
     "lib": ["ES2022", "dom"],
     "noEmit": true
   },
-  "files": ["consumer.ts"]
+  "files": ["consumer.ts"],
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  }
 }

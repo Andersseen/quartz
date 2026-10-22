@@ -1,6 +1,6 @@
 # Roadmap hacia Quartz Headless 1.0
 
-> Plan activo · 2026-09-06 · 0.6 preparado para release, siguiente fase: 0.7 Core.
+> Plan activo · 2026-10-22 · 0.7 Core implementado (ver [0.7 acceptance](docs/releases/0.7-acceptance.md)), siguiente fase: 0.8 flotantes y feedback.
 > Este documento recoge el camino restante hacia 1.0; el hito 0.6 queda archivado en
 > [0.6 acceptance](docs/releases/0.6-acceptance.md).
 > Evidencias y resultados: [diagnóstico técnico](docs/releases/V1_AUDIT.md).

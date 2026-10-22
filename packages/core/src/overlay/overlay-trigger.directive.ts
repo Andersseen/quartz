@@ -97,6 +97,8 @@ export class OverlayTriggerDirective implements OnDestroy {
     });
 
     this.overlayRef.open();
+    // open() is a no-op without a browser window; only report a genuine open.
+    if (!this.overlayRef.isOpen) return;
     this._isOpen.set(true);
     this.opened.emit();
   }
@@ -131,6 +133,12 @@ export class OverlayTriggerDirective implements OnDestroy {
 
   // ── Lifecycle ────────────────────────────────────────────────────────────
 
+  /**
+   * Destroying the host while the overlay is open closes it: the overlay's view is a child of
+   * the host and is torn down first, so `closed` emits exactly once, and the overlay DOM,
+   * listeners and pending frames are released. A trigger that is destroyed with nothing open
+   * emits nothing.
+   */
   ngOnDestroy(): void {
     this.unsubscribeClosed();
     this.overlayRef?.destroy();

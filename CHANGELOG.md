@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-10-22
+
+Release target: `@quartz-headless/core@0.7.0` and
+`@quartz-headless/primitives@0.7.0`. Core consolidation; no public export or signature changes.
+
+### Fixed
+
+- **Focus:** `isFocusable` no longer reports plain, non-interactive elements as focusable and now
+  honours detached elements, disabled `<fieldset>`, `input[type=hidden]` and `display:none`
+  ancestors. `createFocusRestorer().restore()` never refocuses a removed element.
+- **Layers:** stacked focus traps no longer compete for Tab (only the newest live trap per Document
+  handles it; focus inside an overlay portal is left alone). Dialog closes without stealing focus
+  when another layer owns it. One pointer/keyboard event is claimed by a single dismissal.
+- **Overlay:** pending position frames are cancelled on close/destroy; destroyed overlays cannot
+  reopen; the dismiss layer is registered once, synchronously on open, so a newer layer keeps
+  Escape ownership; destroying the host view container releases the overlay and emits `closed`
+  once; `OverlayTriggerDirective` no longer reports `opened` when nothing opened (SSR).
+- **Collection:** removing the active item activates its nearest enabled neighbour; navigation
+  from an item disabled in place continues from its position; typeahead with no match keeps the
+  active item; typeahead buffers expire without a `Document` and leave no timer after `destroy()`;
+  repeated registration replaces instead of duplicating.
+- **Viewport:** `height()` now follows height-only window resizes; `destroy()` is idempotent and
+  later `observe()` calls are inert.
+- **Directionality:** `resolveDirection` skips invalid `dir` values (e.g. `auto`) and inherits.
+
+### Changed
+
+- Overlay repositions on window resize, overlay/anchor size changes and (when `closeOnScroll` is
+  `false`) scroll; an anchor removed from the document closes the overlay.
+- `flipAxis` `cross` and `both` now flip alignment as documented (previously equal to `main`).
+- `pnpm verify:build` checks a declaration-based public API snapshot; `pnpm verify:consumer` now
+  runs the Angular AOT compiler (`ngc`, `strictTemplates`) on the installed tarballs.
+- `@quartz-headless/primitives` now peers on `@quartz-headless/core@^0.7.0`.
+
+### Added
+
+- `docs/ai/specs/v1-layer-composition.md`, `docs/releases/0.7-acceptance.md`, `/e2e-layers` test
+  fixture and `e2e/core-contracts.spec.ts` (Chromium, Firefox, WebKit).
+
+### Migration
+
+See `docs/releases/0.7-acceptance.md#breaking-changes-and-migration` — notably, call
+`element.tabIndex = -1` before relying on `focusSafely(div)`.
+
 ## [0.6.0] — 2026-09-06
 
 Release target: `@quartz-headless/core@0.6.0` and

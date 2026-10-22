@@ -339,6 +339,94 @@ describe('DialogService', () => {
     expect(document.querySelector('[data-qz-dialog-wrapper]')).toBeNull();
     expect(document.body.style.overflow).toBe('');
   });
+
+  describe('nested dialogs', () => {
+    function openWithButtons(label: string, trigger?: HTMLElement) {
+      const panel = document.createElement('div');
+      panel.innerHTML = `<button id="${label}-1">1</button><button id="${label}-2">2</button>`;
+      const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+      trigger?.focus();
+      const ref = service.open(templateRef, viewContainerRef);
+      return { ref, panel };
+    }
+    const tab = (shiftKey = false) => {
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey, cancelable: true });
+      document.dispatchEvent(event);
+      return event;
+    };
+
+    it('Escape closes only the topmost dialog, then the next', () => {
+      const a = openWithButtons('a');
+      const b = openWithButtons('b');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(document.body.contains(b.panel)).toBe(false);
+      expect(document.body.contains(a.panel)).toBe(true);
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(document.body.contains(a.panel)).toBe(false);
+    });
+
+    it('only the upper dialog traps Tab; the lower one does not pull focus back', () => {
+      const a = openWithButtons('a');
+      const b = openWithButtons('b');
+      const b2 = b.panel.querySelector<HTMLElement>('#b-2')!;
+      b2.focus();
+      tab();
+      expect(document.activeElement?.id).toBe('b-1');
+      b.ref.close();
+      const a2 = a.panel.querySelector<HTMLElement>('#a-2')!;
+      a2.focus();
+      tab();
+      expect(document.activeElement?.id).toBe('a-1');
+      a.ref.close();
+    });
+
+    it('closing B restores focus to its opener inside A, closing A restores A’s opener', () => {
+      const outer = document.createElement('button');
+      document.body.appendChild(outer);
+      const a = openWithButtons('a', outer);
+      const inA = a.panel.querySelector<HTMLElement>('#a-2')!;
+      const b = openWithButtons('b', inA);
+      b.ref.close();
+      expect(document.activeElement).toBe(inA);
+      a.ref.close();
+      expect(document.activeElement).toBe(outer);
+      outer.remove();
+    });
+
+    it('closing A out of order does not steal focus from the open B, and B closes cleanly after', () => {
+      const outer = document.createElement('button');
+      document.body.appendChild(outer);
+      const a = openWithButtons('a', outer);
+      const b = openWithButtons('b', a.panel.querySelector<HTMLElement>('#a-1')!);
+      const focusedInB = document.activeElement;
+      a.ref.close();
+      expect(document.activeElement).toBe(focusedInB);
+      expect(document.body.style.overflow).toBe('hidden');
+      b.ref.close();
+      expect(document.body.style.overflow).toBe('');
+      expect(document.querySelector('[data-qz-dialog-wrapper]')).toBeNull();
+      outer.remove();
+    });
+
+    it('does not restore focus to an opener that was removed while the dialog was open', () => {
+      const opener = document.createElement('button');
+      document.body.appendChild(opener);
+      const a = openWithButtons('a', opener);
+      opener.remove();
+      expect(() => a.ref.close()).not.toThrow();
+      expect(document.activeElement).not.toBe(opener);
+    });
+
+    it('releases the scroll lock only after the last dialog closes; double close is safe', () => {
+      const a = openWithButtons('a');
+      const b = openWithButtons('b');
+      b.ref.close();
+      b.ref.close();
+      expect(document.body.style.overflow).toBe('hidden');
+      a.ref.close();
+      expect(document.body.style.overflow).toBe('');
+    });
+  });
 });
 
 function createTemplateMocks(content: HTMLElement): {

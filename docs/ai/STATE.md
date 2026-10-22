@@ -1,5 +1,19 @@
 # STATE — Current Project Status
 
+## 0.7.0 Core consolidation — 2026-10-22
+
+Branch `feat/quartz-0.7-core-consolidation` (baseline `main` @ `1e14aab`, 0.6.0). Delivers
+CORE-01…05 / 07-01…07-08: focus contract, layer composition
+([spec](specs/v1-layer-composition.md)), overlay lifecycle/geometry, Collection recovery and
+Viewport/Directionality fixes. Details, decisions, migration and limitations:
+[0.7 acceptance](../releases/0.7-acceptance.md). Public exports/signatures are unchanged
+(declaration snapshots in `docs/api/snapshots/`). Packages are `0.7.0`; Primitives peers on
+`@quartz-headless/core@^0.7.0`. Validation results are recorded in the acceptance note and the PR.
+
+Open follow-ups: modal background isolation and floating-surface composition (0.8); real
+SSR/hydration and wider AOT matrix (0.10); conditional Core areas (Splitter, Drag & Drop,
+Virtual scroll) stay conditional.
+
 ## Roadmap 1.0 planning — 2026-09-05
 
 Documentation-only review of base commit `9a615d9` (local package manifests: `0.5.0`).

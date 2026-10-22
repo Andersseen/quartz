@@ -64,9 +64,8 @@ export class ViewportService implements OnDestroy {
   private readonly mediaListeners = new Map<string, (e: MediaQueryListEvent) => void>();
   private readonly mediaSignals = new Map<string, Signal<boolean>>();
 
-  private resizeObserver: ResizeObserver | null = null;
   private resizeHandler: (() => void) | null = null;
-  private observing = false;
+  private destroyed = false;
 
   constructor() {
     // SSR guard: only attach browser observers when a window is available.
@@ -84,10 +83,10 @@ export class ViewportService implements OnDestroy {
     if (existing) return existing;
 
     const view = this.document.defaultView;
-    if (!view?.matchMedia) {
-      const s = signal(false).asReadonly();
-      this.mediaSignals.set(query, s);
-      return s;
+    if (this.destroyed || !view?.matchMedia) {
+      // Inert fallback (SSR, no matchMedia, or a destroyed service): a constant `false`
+      // that is not cached, so nothing is retained and no listener can leak.
+      return signal(false).asReadonly();
     }
 
     const mql = view.matchMedia(query);
@@ -133,11 +132,13 @@ export class ViewportService implements OnDestroy {
     this.#height.set(height);
   }
 
-  /** Clean up all observers. Useful for testing. */
+  /**
+   * Removes every listener registered by this instance. Idempotent; after it the service keeps
+   * its last values and no longer observes anything (new `observe()` calls return a constant
+   * `false`).
+   */
   destroy(): void {
-    this.resizeObserver?.disconnect();
-    this.resizeObserver = null;
-    this.observing = false;
+    this.destroyed = true;
 
     const view = this.document.defaultView;
     if (view && this.resizeHandler) {
@@ -169,15 +170,9 @@ export class ViewportService implements OnDestroy {
 
     updateSize();
 
-    const ViewResizeObserver = view.ResizeObserver;
-    if (ViewResizeObserver) {
-      // Observe documentElement for size changes (includes zoom, devicePixelRatio changes)
-      this.resizeObserver = new ViewResizeObserver(() => updateSize());
-      this.resizeObserver.observe(this.document.documentElement);
-      this.observing = true;
-    } else {
-      this.resizeHandler = updateSize;
-      view.addEventListener('resize', updateSize);
-    }
+    // `resize` rather than a ResizeObserver on <html>: the root element's box does not change
+    // when only the window height changes, which would leave `height()` stale.
+    this.resizeHandler = updateSize;
+    view.addEventListener('resize', updateSize);
   }
 }

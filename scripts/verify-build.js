@@ -16,6 +16,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { checkApiSurface } = require('./api-guard');
 
 const PACKAGES = {
   core: {
@@ -192,6 +193,7 @@ function main() {
   for (const [name, config] of Object.entries(PACKAGES)) {
     verifyPackage(name, config);
   }
+  checkApiSurface();
   console.log(
     '✓ Build verification passed for @quartz-headless/core and @quartz-headless/primitives',
   );

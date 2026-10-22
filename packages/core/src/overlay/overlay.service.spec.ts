@@ -27,7 +27,7 @@ describe('OverlayService', () => {
     // The container lazily creates when invoking `.create()`
     const mockTemplateRef = {} as TemplateRef<unknown>;
     const mockViewContainerRef = {
-      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {} }),
+      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {}, onDestroy: () => {} }),
     } as unknown as ViewContainerRef;
 
     // We append the anchor so we can get bounded rects from it
@@ -143,7 +143,12 @@ describe('OverlayService', () => {
     // one-shot, deliberately replays instead).
     const mockTemplateRef = {} as TemplateRef<unknown>;
     const mockViewContainerRef = {
-      createEmbeddedView: () => ({ rootNodes: [], detectChanges: () => {}, destroy: () => {} }),
+      createEmbeddedView: () => ({
+        rootNodes: [],
+        detectChanges: () => {},
+        onDestroy: () => {},
+        destroy: () => {},
+      }),
     } as unknown as ViewContainerRef;
 
     const anchor = document.createElement('div');
@@ -176,6 +181,7 @@ function createTemplateMocks(content: HTMLElement): {
       createEmbeddedView: () => ({
         rootNodes: [content],
         detectChanges: () => {},
+        onDestroy: () => {},
         destroy: () => content.remove(),
       }),
     } as unknown as ViewContainerRef,

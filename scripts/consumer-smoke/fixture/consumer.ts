@@ -5,7 +5,17 @@
 // the monorepo's own workspace-symlink-based dev flow would never surface it.
 
 import { Component, TemplateRef, ViewContainerRef, inject } from '@angular/core';
-import { CollectionStore, type CollectionItem } from '@quartz-headless/core';
+import {
+  CollectionStore,
+  OverlayTriggerDirective,
+  createDismissController,
+  createFocusRestorer,
+  createFocusTrap,
+  createScrollLock,
+  isFocusable,
+  type CollectionItem,
+  type DismissReason,
+} from '@quartz-headless/core';
 import {
   CheckboxDirective,
   DialogRef,
@@ -57,3 +67,53 @@ class ControlsComponent {
 
 void DialogHostComponent;
 void ControlsComponent;
+
+// Core 0.7 contracts, compiled by the Angular AOT compiler against the installed tarball
+// (`ngc` with strictTemplates — see scripts/consumer-smoke.js).
+@Component({
+  selector: 'app-consumer-smoke-overlay',
+  standalone: true,
+  imports: [OverlayTriggerDirective],
+  template: `
+    <button
+      qzOverlayTrigger
+      [overlayTemplate]="panel"
+      placement="bottom-end"
+      flipAxis="both"
+      [closeOnScroll]="false"
+      (opened)="opened = true"
+      (closed)="opened = false"
+    >
+      Toggle
+    </button>
+    <ng-template #panel><div>Panel</div></ng-template>
+  `,
+})
+class OverlayHostComponent {
+  opened = false;
+}
+
+export function layerContract(doc: Document, root: HTMLElement): () => void {
+  const restorer = createFocusRestorer(doc);
+  const trap = createFocusTrap(root, doc);
+  const lock = createScrollLock(doc);
+  lock.lock();
+  const reasons: DismissReason[] = [];
+  const dismiss = createDismissController({
+    document: doc,
+    escape: true,
+    outsidePointer: true,
+    rootElements: () => [root],
+    onDismiss: (reason) => reasons.push(reason),
+  });
+  const focusable: boolean = isFocusable(root);
+  void focusable;
+  return () => {
+    dismiss.destroy();
+    lock.destroy();
+    trap.destroy();
+    restorer.restore();
+  };
+}
+
+void OverlayHostComponent;

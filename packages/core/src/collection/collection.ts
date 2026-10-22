@@ -11,7 +11,8 @@ export class CollectionStore<T extends CollectionItem> {
   readonly #items = signal<T[]>([]);
   readonly #activeId = signal<string | null>(null);
   #typeahead = '';
-  #typeaheadTimer: number | null = null;
+  #typeaheadTimer: ReturnType<typeof setTimeout> | null = null;
+  #destroyed = false;
   #config: CollectionConfig;
   #document: Document | null;
 
@@ -36,18 +37,37 @@ export class CollectionStore<T extends CollectionItem> {
     this.#config = { ...this.#config, ...config };
   }
 
+  /**
+   * Registers `item` in DOM order. Registering the same object (or another object with the
+   * same `id`) again replaces the earlier entry instead of duplicating it.
+   */
   register(item: T): void {
-    this.#items.update((items) => sortByDomOrder([...items, item]));
+    this.#items.update((items) => {
+      // Replace in place so element-less items (no DOM order to re-derive) keep their slot.
+      const existing = items.findIndex((c) => c === item || c.id === item.id);
+      const next = [...items];
+      if (existing === -1) next.push(item);
+      else next[existing] = item;
+      return sortByDomOrder(next);
+    });
     if (this.#activeId() === null && !isDisabled(item)) {
       this.#activeId.set(item.id);
     }
   }
 
+  /**
+   * Removes `item`. If it was active, activation moves to the nearest enabled neighbour:
+   * the item that now occupies its position (its next sibling) first, otherwise the previous
+   * one, otherwise nothing.
+   */
   unregister(item: T): void {
+    const before = this.#items();
+    const index = before.indexOf(item);
+    if (index === -1) return;
     const wasActive = this.#activeId() === item.id;
-    this.#items.update((items) => items.filter((current) => current !== item));
+    this.#items.set(before.filter((current) => current !== item));
     if (wasActive) {
-      this.#activeId.set(this.enabledItems()[0]?.id ?? null);
+      this.#activeId.set(this.#nearestEnabled(index)?.id ?? null);
     }
   }
 
@@ -124,6 +144,7 @@ export class CollectionStore<T extends CollectionItem> {
   }
 
   typeahead(character: string, options: { focus?: boolean } = {}): T | null {
+    if (this.#destroyed) return null;
     const items = this.enabledItems();
     if (!items.length) return null;
 
@@ -132,16 +153,16 @@ export class CollectionStore<T extends CollectionItem> {
     const query = repeated ? this.#typeahead[0] : this.#typeahead;
     this.#clearTypeahead(false);
 
+    // Works without a Document too (plain `setTimeout`), so the buffer always expires.
     const view = this.#document?.defaultView;
-    if (view) {
-      this.#typeaheadTimer = view.setTimeout(
-        () => this.#clearTypeahead(),
-        this.#config.typeaheadTimeoutMs,
-      );
-    }
+    this.#typeaheadTimer = (view ?? globalThis).setTimeout(
+      () => this.#clearTypeahead(),
+      this.#config.typeaheadTimeoutMs,
+    );
 
     const result = findByTypeahead(items, this.#activeId(), query);
-    return this.#activate(result.item, options);
+    // No match keeps the current active item: a stray key must not drop the user's position.
+    return result.item ? this.#activate(result.item, options) : null;
   }
 
   activeTabIndex(id: string): 0 | -1 {
@@ -151,7 +172,7 @@ export class CollectionStore<T extends CollectionItem> {
     // into the same "nothing active" fallback used on cold start, instead of keeping
     // tabindex=0 pinned on a now-disabled, unreachable element.
     const active = this.activeItem()?.id ?? null;
-    if (active === null) return this.enabledItems()[0]?.id === id ? 0 : -1;
+    if (active === null) return this.#fallbackItem()?.id === id ? 0 : -1;
     return active === id ? 0 : -1;
   }
 
@@ -161,12 +182,31 @@ export class CollectionStore<T extends CollectionItem> {
   }
 
   destroy(): void {
+    this.#destroyed = true;
     this.#clearTypeahead();
   }
 
+  /** Enabled item closest to `index` in the current list: the one at/after it, else before. */
+  #nearestEnabled(index: number): T | null {
+    const items = this.#items();
+    for (let i = index; i < items.length; i++) if (!isDisabled(items[i])) return items[i];
+    for (let i = Math.min(index, items.length) - 1; i >= 0; i--) {
+      if (!isDisabled(items[i])) return items[i];
+    }
+    return null;
+  }
+
+  /**
+   * Where the tab stop / next navigation should land when no item is currently active: the
+   * enabled neighbour of an active item that was disabled in place, otherwise the first enabled.
+   */
+  #fallbackItem(): T | null {
+    const index = this.#items().findIndex((item) => item.id === this.#activeId());
+    return index === -1 ? (this.enabledItems()[0] ?? null) : this.#nearestEnabled(index);
+  }
+
   #move(direction: 1 | -1, options: { focus?: boolean; wrap?: boolean } = {}): T | null {
-    const items = this.enabledItems();
-    const result = findRelativeItem(items, this.#activeId(), direction, {
+    const result = findRelativeItem(this.#items(), this.#activeId(), direction, {
       wrap: options.wrap ?? this.#config.wrap,
     });
     return this.#activate(result.item, options);
@@ -180,13 +220,19 @@ export class CollectionStore<T extends CollectionItem> {
 
   #clearTypeahead(reset = true): void {
     if (this.#typeaheadTimer !== null) {
-      this.#document?.defaultView?.clearTimeout(this.#typeaheadTimer);
+      (this.#document?.defaultView ?? globalThis).clearTimeout(this.#typeaheadTimer);
       this.#typeaheadTimer = null;
     }
     if (reset) this.#typeahead = '';
   }
 }
 
+/**
+ * Next/previous enabled item relative to `activeId`. If `activeId` is itself disabled (or
+ * was disabled in place), movement starts from its position, so the neighbour in the requested
+ * direction is chosen rather than jumping to an end. Unknown/`null` ids start from the first
+ * (forward) or last (backward) enabled item.
+ */
 export function findRelativeItem<T extends CollectionItem>(
   items: readonly T[],
   activeId: string | null,
@@ -196,18 +242,34 @@ export function findRelativeItem<T extends CollectionItem>(
   const enabled = items.filter((item) => !isDisabled(item));
   if (!enabled.length) return { item: null, index: -1 };
 
+  const edge = direction === 1 ? 0 : enabled.length - 1;
+  const position = items.findIndex((item) => item.id === activeId);
+  if (position === -1) return { item: enabled[edge], index: edge };
+
   const current = enabled.findIndex((item) => item.id === activeId);
-  if (current === -1) {
-    const index = direction === 1 ? 0 : enabled.length - 1;
-    return { item: enabled[index], index };
+  let next: number;
+  if (current !== -1) {
+    next = current + direction;
+  } else if (direction === 1) {
+    // Disabled active: first enabled item after its position.
+    next = enabled.findIndex((item) => items.indexOf(item) > position);
+    if (next === -1) next = enabled.length;
+  } else {
+    let before = -1;
+    enabled.forEach((item, i) => {
+      if (items.indexOf(item) < position) before = i;
+    });
+    next = before;
   }
 
-  const next = current + direction;
   if (next >= 0 && next < enabled.length) return { item: enabled[next], index: next };
-  if (!options.wrap) return { item: enabled[current], index: current };
-
-  const index = direction === 1 ? 0 : enabled.length - 1;
-  return { item: enabled[index], index };
+  if (!options.wrap) {
+    // Clamp: stay on the active item, or — if it is disabled — on the enabled item nearest
+    // to the boundary that was hit.
+    const clamped = current !== -1 ? current : direction === 1 ? enabled.length - 1 : 0;
+    return { item: enabled[clamped], index: clamped };
+  }
+  return { item: enabled[edge], index: edge };
 }
 
 export function firstItem<T extends CollectionItem>(

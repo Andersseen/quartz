@@ -224,11 +224,20 @@ export class DialogService {
       this.document.removeEventListener('keydown', focusTrap.handleKeydown, true);
       focusTrap.destroy();
     }
+    // Restore focus only if this dialog still owns it (or focus was lost to <body>). Closing
+    // a lower dialog out of order, or while a child popup/dialog holds focus, must not pull
+    // focus away from the layer the user is actually in.
+    const active = this.document.activeElement;
+    const ownsFocus =
+      !active ||
+      active === this.document.body ||
+      active === this.document.documentElement ||
+      wrapper.contains(active);
     backdrop?.remove();
     wrapper.remove();
     view.destroy();
     this.#scrollLock.unlock();
-    focusRestorer.restore();
+    if (ownsFocus) focusRestorer.restore();
   }
 
   #applyAriaReference(

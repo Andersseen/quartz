@@ -22,6 +22,11 @@ export type DismissReason = 'escape' | 'outside-pointer' | 'focus-outside' | 'sc
 // module) can never be starved by a later layer registered in an unrelated Document.
 const layersByDocument = new WeakMap<Document, DismissControllerImpl[]>();
 
+// One physical event may reach several controllers on the same Document (every layer has its
+// own capture listener). The first dismissal claims the event so a layer that becomes the top
+// layer *because* the previous one just closed cannot react to the very same event.
+const claimedEvents = new WeakSet<Event>();
+
 function getLayers(document: Document): DismissControllerImpl[] {
   let layers = layersByDocument.get(document);
   if (!layers) {
@@ -108,6 +113,10 @@ class DismissControllerImpl implements DismissController {
 
   #dismiss(reason: DismissReason, event: Event): void {
     if (!this.#enabled() || !this.#isTopLayer()) return;
+    if (reason !== 'scroll') {
+      if (claimedEvents.has(event)) return;
+      claimedEvents.add(event);
+    }
     this.#config.onDismiss(reason, event);
   }
 

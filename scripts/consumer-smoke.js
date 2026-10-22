@@ -10,8 +10,8 @@
  * satisfiability, and whether ng-packagr actually shipped every needed file). This script
  * does that: it `npm pack`s both built packages into real tarballs, installs them into a
  * throwaway fixture project OUTSIDE the pnpm workspace (so nothing resolves via the
- * workspace symlink or a tsconfig path alias), and runs `tsc --noEmit` against a fixture
- * file that imports from the bare `@quartz-headless/core` / `@quartz-headless/primitives`
+ * workspace symlink or a tsconfig path alias), and runs the Angular AOT compiler (`ngc`, strictTemplates) against a
+ * fixture file that imports from the bare `@quartz-headless/core` / `@quartz-headless/primitives`
  * specifiers only.
  *
  * Run after `pnpm build:lib` (via `pnpm verify:consumer`). Not part of the pre-commit hook —
@@ -79,8 +79,8 @@ function main() {
       stdio: 'inherit',
     });
 
-    console.log('→ Type-checking against only the installed packages (no workspace aliases)…');
-    execFileSync('npx', ['tsc', '--noEmit'], { cwd: tmpDir, stdio: 'inherit' });
+    console.log('→ AOT-compiling (ngc, strictTemplates) against only the installed packages…');
+    execFileSync('npx', ['ngc', '-p', 'tsconfig.json'], { cwd: tmpDir, stdio: 'inherit' });
 
     console.log('\n✓ Consumer smoke test passed: a real external install + compile succeeds.\n');
   } catch (error) {

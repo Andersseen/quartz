@@ -116,3 +116,18 @@ describe('keyboard direction helpers', () => {
     expect(resolveInlineArrowKey('ltr', 'Enter')).toBeNull();
   });
 });
+
+describe('resolveDirection — invalid and nested values', () => {
+  it('skips dir="auto" / invalid values and inherits from the next valid ancestor', () => {
+    document.body.innerHTML =
+      '<div dir="rtl"><section dir="auto"><p id="p" dir="bogus"></p></section></div>';
+    expect(resolveDirection(document.getElementById('p'))).toBe('rtl');
+    document.body.innerHTML = '';
+  });
+
+  it('a nearer explicit ltr overrides an rtl ancestor, case-insensitively', () => {
+    document.body.innerHTML = '<div dir="RTL"><p id="p" dir="LtR"></p></div>';
+    expect(resolveDirection(document.getElementById('p'))).toBe('ltr');
+    document.body.innerHTML = '';
+  });
+});

@@ -40,6 +40,20 @@ const FLIP_MAP: Record<OverlayPlacement, OverlayPlacement> = {
   'right-end': 'left-end',
 };
 
+// Cross-axis flip swaps the alignment on the axis perpendicular to the placement's side
+// (`bottom-start` ↔ `bottom-end`, `left-start` ↔ `left-end`). Centered placements have no
+// alternative alignment, so they are absent here and `cross` leaves them unchanged.
+const CROSS_MAP: Partial<Record<OverlayPlacement, OverlayPlacement>> = {
+  'top-start': 'top-end',
+  'top-end': 'top-start',
+  'bottom-start': 'bottom-end',
+  'bottom-end': 'bottom-start',
+  'left-start': 'left-end',
+  'left-end': 'left-start',
+  'right-start': 'right-end',
+  'right-end': 'right-start',
+};
+
 function computeRaw(
   anchor: DOMRect,
   overlay: { width: number; height: number },
@@ -114,16 +128,28 @@ export function calculatePosition(
   let resolvedPlacement = physicalPlacement;
   let pos = computeRaw(anchorRect, overlay, physicalPlacement, offset);
 
-  // `flipAxis` controls which axis may be flipped. The current implementation
-  // supports main-axis flipping; cross-axis and both-axis flipping are not yet
-  // implemented and fall back to main-axis behavior. `none` disables flipping.
-  const canFlip = flip && flipAxis !== 'none';
-  if (canFlip && !fitsInViewport(pos, overlay, resolvedViewport)) {
-    const flipped = FLIP_MAP[physicalPlacement];
-    const flippedPos = computeRaw(anchorRect, overlay, flipped, offset);
-    if (fitsInViewport(flippedPos, overlay, resolvedViewport)) {
-      pos = flippedPos;
-      resolvedPlacement = flipped;
+  // `flipAxis` selects which alternatives are tried when the preferred placement overflows
+  // the viewport; the first candidate that fits wins, otherwise the preferred one is kept
+  // (and clamped below):
+  //   main  → opposite side                          (default)
+  //   cross → opposite alignment on the same side
+  //   both  → opposite side, opposite alignment, then both together
+  //   none  → never flip (same as `flip: false`)
+  if (flip && flipAxis !== 'none' && !fitsInViewport(pos, overlay, resolvedViewport)) {
+    const main = FLIP_MAP[physicalPlacement];
+    const cross = CROSS_MAP[physicalPlacement];
+    const candidates: OverlayPlacement[] = [];
+    if (flipAxis === 'main' || flipAxis === 'both') candidates.push(main);
+    if ((flipAxis === 'cross' || flipAxis === 'both') && cross) candidates.push(cross);
+    if (flipAxis === 'both' && cross) candidates.push(FLIP_MAP[cross]);
+
+    for (const candidate of candidates) {
+      const candidatePos = computeRaw(anchorRect, overlay, candidate, offset);
+      if (fitsInViewport(candidatePos, overlay, resolvedViewport)) {
+        pos = candidatePos;
+        resolvedPlacement = candidate;
+        break;
+      }
     }
   }
 
