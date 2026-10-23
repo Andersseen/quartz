@@ -50,6 +50,7 @@ export class MenuTriggerDirective implements OnDestroy {
   private closedSubscription: Subscription | null = null;
   private menuService: MenuService | null = null;
   private focusRestorer: FocusRestorer | null = null;
+  private cancelFocusFrame: (() => void) | null = null;
 
   readonly menu = input.required<TemplateRef<unknown>>();
   readonly placement = input<OverlayPlacement>('bottom-start');
@@ -96,7 +97,12 @@ export class MenuTriggerDirective implements OnDestroy {
       this.menuService?.registerRootClose(this.closeFromService);
       if (options.focus === 'last') this.menuService?.focusLast();
       else this.menuService?.focusFirst();
-      queueFrame(this.document, () => {
+      // Re-focus after layout: the panel may not be focusable on the first synchronous attempt.
+      // Cancelled on close so a menu closed and reopened within one frame cannot be focused
+      // by the previous opening's callback.
+      this.cancelFocusFrame?.();
+      this.cancelFocusFrame = queueFrame(this.document, () => {
+        this.cancelFocusFrame = null;
         if (!this.isOpen()) return;
         if (options.focus === 'last') this.menuService?.focusLast();
         else this.menuService?.focusFirst();
@@ -141,6 +147,8 @@ export class MenuTriggerDirective implements OnDestroy {
   private finishClose(restoreFocus: boolean): void {
     if (!this.overlayRef && !this.#isOpen()) return;
     const overlay = this.overlayRef;
+    this.cancelFocusFrame?.();
+    this.cancelFocusFrame = null;
     const panel = overlay
       ? (this.document.getElementById(this.#panelId() ?? '') as HTMLElement | null)
       : null;
@@ -168,8 +176,13 @@ function getMenuService(panel: HTMLElement): MenuService | null {
   );
 }
 
-function queueFrame(document: Document, callback: () => void): void {
+/** Schedules `callback` for the next frame and returns a function that cancels it. */
+function queueFrame(document: Document, callback: () => void): () => void {
   const view = document.defaultView;
-  if (view?.requestAnimationFrame) view.requestAnimationFrame(callback);
-  else callback();
+  if (view?.requestAnimationFrame) {
+    const id = view.requestAnimationFrame(callback);
+    return () => view.cancelAnimationFrame(id);
+  }
+  callback();
+  return () => undefined;
 }

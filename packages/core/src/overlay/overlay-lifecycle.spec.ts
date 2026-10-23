@@ -10,6 +10,7 @@ interface Harness {
   anchor: HTMLElement;
   content: HTMLElement;
   destroyView: () => void;
+  viewDestroyCalls: () => number;
 }
 
 describe('OverlayRef lifecycle and geometry', () => {
@@ -50,12 +51,14 @@ describe('OverlayRef lifecycle and geometry', () => {
     doc.body.appendChild(anchor);
     const content = doc.createElement('div');
     let destroyHandler: (() => void) | null = null;
+    let destroyCalls = 0;
     const viewContainerRef = {
       createEmbeddedView: () => ({
         rootNodes: [content],
         detectChanges: () => {},
         onDestroy: (fn: () => void) => (destroyHandler = fn),
         destroy: () => {
+          destroyCalls++;
           content.remove();
           destroyHandler?.();
         },
@@ -66,6 +69,7 @@ describe('OverlayRef lifecycle and geometry', () => {
       ref,
       anchor,
       content,
+      viewDestroyCalls: () => destroyCalls,
       // Simulates Angular tearing the view down because its host container was destroyed.
       destroyView: () => {
         content.remove();
@@ -73,6 +77,28 @@ describe('OverlayRef lifecycle and geometry', () => {
       },
     };
   }
+
+  it('does not destroy a view Angular is already destroying (re-entrant destroy corrupts the view tree)', () => {
+    const { ref, destroyView, viewDestroyCalls } = setup();
+    const closed = vi.fn();
+    ref.closed$.subscribe(closed);
+    ref.open();
+
+    destroyView();
+
+    expect(viewDestroyCalls()).toBe(0);
+    expect(closed).toHaveBeenCalledTimes(1);
+    expect(doc.querySelector('[data-qz-overlay-container]')?.children.length).toBe(0);
+    ref.destroy();
+    expect(viewDestroyCalls()).toBe(0);
+  });
+
+  it('still destroys its view on an explicit close', () => {
+    const { ref, viewDestroyCalls } = setup();
+    ref.open();
+    ref.close();
+    expect(viewDestroyCalls()).toBe(1);
+  });
 
   it('cancels the pending position frame on close, so it cannot affect a later session', () => {
     const { ref } = setup();

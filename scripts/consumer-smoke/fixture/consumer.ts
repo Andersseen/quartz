@@ -20,8 +20,15 @@ import {
   CheckboxDirective,
   DialogRef,
   DialogService,
+  MenuDirective,
+  MenuItemDirective,
+  MenuTriggerDirective,
+  PopoverDirective,
+  PopoverTriggerDirective,
   SliderDirective,
   ToastContainerComponent,
+  ToastService,
+  TooltipDirective,
 } from '@quartz-headless/primitives';
 
 // Core service.
@@ -44,7 +51,10 @@ class DialogHostComponent {
   private readonly dialogs = inject(DialogService);
 
   open(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef): DialogRef {
-    return this.dialogs.open(templateRef, viewContainerRef, { position: 'center' });
+    return this.dialogs.open(templateRef, viewContainerRef, {
+      position: 'center',
+      ariaLabel: 'Settings',
+    });
   }
 }
 
@@ -117,3 +127,63 @@ export function layerContract(doc: Document, root: HTMLElement): () => void {
 }
 
 void OverlayHostComponent;
+
+// Primitives 0.8 floating + feedback contracts, compiled with strictTemplates: the Dialog
+// template context (`ariaLabelledBy` / `ariaDescribedBy`), the Menu / Popover triggers and the
+// Tooltip directive.
+@Component({
+  selector: 'app-consumer-smoke-floating',
+  standalone: true,
+  imports: [
+    MenuDirective,
+    MenuItemDirective,
+    MenuTriggerDirective,
+    PopoverDirective,
+    PopoverTriggerDirective,
+    TooltipDirective,
+  ],
+  template: `
+    <ng-template
+      #dialogTpl
+      let-ref
+      let-labelledBy="ariaLabelledBy"
+      let-describedBy="ariaDescribedBy"
+    >
+      <h2 [id]="labelledBy">Title</h2>
+      <p [id]="describedBy">Description</p>
+      <button (click)="ref.close()">Close</button>
+    </ng-template>
+
+    <button qzTooltip="Save" tooltipPlacement="bottom" [tooltipDelay]="100" aria-describedby="hint">
+      Save
+    </button>
+
+    <button qzPopoverTrigger [popover]="pop" [(open)]="popOpen" [autoFocus]="true">Popover</button>
+    <ng-template #pop><div qzPopover>Body</div></ng-template>
+
+    <button qzMenuTrigger [menu]="menu" (opened)="menuOpen = true" (closed)="menuOpen = false">
+      Menu
+    </button>
+    <ng-template #menu>
+      <div qzMenu>
+        <button qzMenuItem (selected)="picked = 'one'">One</button>
+        <button qzMenuItem [submenu]="sub">More</button>
+        <ng-template #sub>
+          <div qzMenu><button qzMenuItem>Nested</button></div>
+        </ng-template>
+      </div>
+    </ng-template>
+  `,
+})
+class FloatingComponent {
+  popOpen = false;
+  menuOpen = false;
+  picked: string | null = null;
+  private readonly toasts = inject(ToastService);
+
+  notify(): string {
+    return this.toasts.error('Failed', 'Error', { duration: 0 });
+  }
+}
+
+void FloatingComponent;

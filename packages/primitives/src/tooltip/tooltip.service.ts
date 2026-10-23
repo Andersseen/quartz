@@ -44,6 +44,7 @@ export class TooltipService {
     el.textContent = text;
     el.className = 'qz-tooltip';
     el.setAttribute('role', 'tooltip');
+    el.setAttribute('data-qz-tooltip', '');
     el.style.cssText = `
       position: fixed;
       top: 0;

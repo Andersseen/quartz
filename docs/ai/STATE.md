@@ -1,5 +1,22 @@
 # STATE — Current Project Status
 
+## 0.8.0 Floating & feedback consolidation — 2026-10-23
+
+Branch `feat/quartz-0.8-floating-feedback` (baseline `main` @ `c0fe057`, 0.7.0). Delivers
+08-01…08-07: Dialog contract + true modal isolation (`inert`, internal, per-Document ref-counted),
+Tooltip description preservation / interaction sources, Popover and Menu lifecycle fixes, Toast
+exact pause/resume + announcement semantics + CSS variables, and cross-primitive Playwright
+composition (`e2e/floating.spec.ts`, fixture `/e2e-floating`) in three engines. Decisions:
+[floating contract](specs/v1-floating-contract.md) §8–9; evidence, limitations and migration:
+[0.8 acceptance](../releases/0.8-acceptance.md). Public exports/signatures unchanged (snapshots
+identical); additive `DialogConfig.ariaLabel`. One narrow Core fix (`OverlayRef` no longer
+re-destroys a view Angular is destroying). Packages are `0.8.0`; Primitives peers on
+`@quartz-headless/core@^0.8.0`.
+
+Open follow-ups: Select listbox has no default accessible name (0.9 Select/Forms); manual
+screen-reader validation of Toast/Dialog pending; consumer-owned `<body>` portals during a modal
+are background (no opt-in hook); real SSR/hydration matrix (0.10).
+
 ## 0.7.0 Core consolidation — 2026-10-22
 
 Branch `feat/quartz-0.7-core-consolidation` (baseline `main` @ `1e14aab`, 0.6.0). Delivers

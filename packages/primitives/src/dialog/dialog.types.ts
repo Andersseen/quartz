@@ -47,10 +47,18 @@ export interface DialogConfig {
 
   /**
    * ID of the element that labels the dialog.
-   * Used for `aria-labelledby`. If omitted, a fallback ID is generated and
-   * exposed via the template context so consumers can bind it to a title element.
+   * Used for `aria-labelledby`; it is only applied when the element exists in the document.
+   * If omitted, a fallback ID is generated and exposed via the template context
+   * (`let-labelledBy="ariaLabelledBy"`) so consumers can bind it to a title element.
    */
   ariaLabelledBy?: string;
+
+  /**
+   * Accessible name used when the dialog has no visible title element. Ignored when a valid
+   * `aria-labelledby` reference resolves. A dialog with neither has no accessible name, and
+   * a development-mode warning is logged.
+   */
+  ariaLabel?: string;
 
   /**
    * ID of the element that describes the dialog.

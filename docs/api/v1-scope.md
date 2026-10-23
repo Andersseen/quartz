@@ -6,27 +6,27 @@ this file does not remove exports.
 
 ## Included in v1
 
-| Package    | Area           | Reason                                                             | Required before freeze                                        |
-| ---------- | -------------- | ------------------------------------------------------------------ | ------------------------------------------------------------- |
-| Core       | Collection     | Shared keyboard/active item foundation used by several primitives. | Contract current behavior and add type/API checks.            |
-| Core       | Focus          | Required by Dialog, Popover and layered surfaces.                  | Clarify `isFocusable` and hidden ancestor behavior.           |
-| Core       | Dismiss        | Required for overlays and modal surfaces.                          | Define top-layer ownership.                                   |
-| Core       | Scroll lock    | Required for Dialog/Sidebar-like surfaces.                         | Lock nesting and destroy coverage.                            |
-| Core       | Directionality | Required for RTL support across navigation and floating placement. | Runtime direction changes and SSR behavior.                   |
-| Core       | Overlay        | Required by Tooltip, Popover, Menu, Select and Combobox if kept.   | Resize/scroll/anchor lifecycle contract.                      |
-| Core       | Viewport       | Required by responsive primitives and consumer utilities.          | SSR first render and multi-window tests.                      |
-| Primitives | Dialog         | Core modal surface for product usage.                              | Nested modal/popup composition, close result typing decision. |
-| Primitives | Tooltip        | Common non-interactive floating help pattern.                      | Keep non-interactive contract explicit.                       |
-| Primitives | Popover        | Interactive floating surface used where Tooltip is insufficient.   | Close reasons and focus rules.                                |
-| Primitives | Menu           | Common application/menu pattern.                                   | Submenu and checked/radio item contracts.                     |
-| Primitives | Listbox        | Selection base for consumers and composed controls.                | Object identity and dynamic option recovery.                  |
-| Primitives | Select         | High-value composed control.                                       | Forms adapter in 0.9 and external consumer fixture.           |
-| Primitives | Tabs           | Common navigation/disclosure primitive.                            | Dynamic tabs and activation mode tests.                       |
-| Primitives | Accordion      | Common disclosure primitive.                                       | Single/multiple/collapsible contract.                         |
-| Primitives | Checkbox       | Form control.                                                      | Forms adapter in 0.9.                                         |
-| Primitives | Switch         | Form control.                                                      | Forms adapter in 0.9.                                         |
-| Primitives | RadioGroup     | Form control.                                                      | Forms adapter in 0.9.                                         |
-| Primitives | Toast          | Feedback primitive.                                                | Announcement/timer contract and route cleanup.                |
+| Package    | Area           | Reason                                                             | Required before freeze                                                                                                                    |
+| ---------- | -------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Core       | Collection     | Shared keyboard/active item foundation used by several primitives. | Contract current behavior and add type/API checks.                                                                                        |
+| Core       | Focus          | Required by Dialog, Popover and layered surfaces.                  | Clarify `isFocusable` and hidden ancestor behavior.                                                                                       |
+| Core       | Dismiss        | Required for overlays and modal surfaces.                          | Define top-layer ownership.                                                                                                               |
+| Core       | Scroll lock    | Required for Dialog/Sidebar-like surfaces.                         | Lock nesting and destroy coverage.                                                                                                        |
+| Core       | Directionality | Required for RTL support across navigation and floating placement. | Runtime direction changes and SSR behavior.                                                                                               |
+| Core       | Overlay        | Required by Tooltip, Popover, Menu, Select and Combobox if kept.   | Resize/scroll/anchor lifecycle contract.                                                                                                  |
+| Core       | Viewport       | Required by responsive primitives and consumer utilities.          | SSR first render and multi-window tests.                                                                                                  |
+| Primitives | Dialog         | Core modal surface for product usage.                              | Nested modal/popup composition and modal isolation shipped in 0.8; typed close result decided against (see `v1-floating-contract.md` §8). |
+| Primitives | Tooltip        | Common non-interactive floating help pattern.                      | Keep non-interactive contract explicit.                                                                                                   |
+| Primitives | Popover        | Interactive floating surface used where Tooltip is insufficient.   | Close reasons and focus rules.                                                                                                            |
+| Primitives | Menu           | Common application/menu pattern.                                   | Submenu and checked/radio item contracts.                                                                                                 |
+| Primitives | Listbox        | Selection base for consumers and composed controls.                | Object identity and dynamic option recovery.                                                                                              |
+| Primitives | Select         | High-value composed control.                                       | Forms adapter in 0.9 and external consumer fixture.                                                                                       |
+| Primitives | Tabs           | Common navigation/disclosure primitive.                            | Dynamic tabs and activation mode tests.                                                                                                   |
+| Primitives | Accordion      | Common disclosure primitive.                                       | Single/multiple/collapsible contract.                                                                                                     |
+| Primitives | Checkbox       | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
+| Primitives | Switch         | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
+| Primitives | RadioGroup     | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
+| Primitives | Toast          | Feedback primitive.                                                | Announcement/timer contract and route cleanup.                                                                                            |
 
 ## Conditional before v1
 

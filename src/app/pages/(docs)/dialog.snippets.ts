@@ -6,6 +6,9 @@ private readonly vcr = inject(ViewContainerRef);
 open() {
   const ref = this.dialog.open(this.modalTemplate, this.vcr, {
     position: 'center',
+    // Name the dialog: bind the template's \`ariaLabelledBy\` context value to your title,
+    // pass \`ariaLabelledBy\` (an existing id), or set \`ariaLabel\` when there is no title.
+    ariaLabel: 'Confirm action',
   });
   ref.closed$.subscribe(() => console.log('Dialog closed'));
 }`;

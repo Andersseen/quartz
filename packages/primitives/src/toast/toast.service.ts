@@ -105,8 +105,17 @@ export class ToastService implements OnDestroy {
   }
 
   pause(id: string): void {
+    const now = Date.now();
     this.#toasts.update((toasts) =>
-      toasts.map((t) => (t.id === id ? { ...t, isPaused: true } : t)),
+      toasts.map((t) => {
+        if (t.id !== id || t.isPaused) return t;
+        // Freeze the exact remaining time: the last tick can be up to one interval stale.
+        const remainingTime =
+          t.duration > 0
+            ? Math.max(0, t.duration - (now - t.createdAt.getTime()))
+            : t.remainingTime;
+        return { ...t, isPaused: true, remainingTime };
+      }),
     );
     this.#stopTimerIfNoWork();
   }
@@ -114,7 +123,8 @@ export class ToastService implements OnDestroy {
   resume(id: string): void {
     this.#toasts.update((toasts) =>
       toasts.map((t) => {
-        if (t.id !== id) return t;
+        // Resuming a toast that is not paused must not shift its deadline.
+        if (t.id !== id || !t.isPaused) return t;
 
         const elapsed = t.duration - t.remainingTime;
         const newCreatedAt = new Date(Date.now() - elapsed);

@@ -7,6 +7,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-10-23
+
+Release target: `@quartz-headless/core@0.8.0` and `@quartz-headless/primitives@0.8.0`.
+Floating surfaces and feedback consolidation; no public export or signature changes.
+Details and evidence: `docs/releases/0.8-acceptance.md`.
+
+### Added
+
+- **Dialog:** true modal isolation — the background becomes `inert` (`aria-hidden` fallback) while
+  a modal is open and is restored exactly on close; works for nested modals and out-of-order
+  closes, and leaves Menu/Popover/Select panels opened from the dialog (and the Toast portal)
+  operable. Optional `DialogConfig.ariaLabel`.
+- Cross-primitive Playwright coverage (`e2e/floating.spec.ts`, fixture `/e2e-floating`) in
+  Chromium, Firefox and WebKit, including `@axe-core/playwright` scans of open states.
+- Toast container CSS variables: `--qz-toast-inset`, `--qz-toast-gap`, `--qz-toast-max-width`,
+  `--qz-toast-z-index` (defaults equal the previous fixed values).
+
+### Fixed
+
+- **Dialog / Overlay:** destroying a Dialog's host (route change) while a Menu/Popover opened from
+  it was open left the dialog, backdrop, scroll lock and focus trap behind and never emitted
+  `closed$`: `OverlayRef` and `DialogService` re-destroyed a view Angular was already destroying,
+  which made Angular skip ancestor cleanup. `closed$` subscribers can now write signals during
+  such closes.
+- **Dialog:** `aria-labelledby` / `aria-describedby` no longer point to elements that do not
+  exist; an unnamed dialog logs a development-mode warning; `closed$` emits once even if
+  teardown throws.
+- **Tooltip:** no longer overwrites or deletes a consumer's `aria-describedby`; hover and focus
+  are tracked independently (the tooltip stays while either remains); overlapping `hide()` calls
+  no longer orphan a timer; the string tooltip's positioning frame is cancelled on teardown;
+  content changes while visible update the tooltip; a consumer `id` on a template tooltip is kept.
+- **Popover:** the autofocus frame is cancelled on close/destroy; the `open` model cannot stay
+  `true` while a disabled trigger refuses to open; disabling an open trigger closes it.
+- **Menu:** stale focus frames are cancelled on close; hovering a plain sibling closes the open
+  submenu (after the hover delay); closing a submenu no longer focuses twice.
+- **Toast:** `pause()` freezes the exact remaining time; `resume()` on an unpaused toast no longer
+  shifts its deadline; the progress bar is hidden from assistive technology so progress never
+  re-announces; toasts are `aria-atomic`.
+
+### Changed
+
+- `TooltipDirective` manages `aria-describedby` imperatively (append/remove its own id).
+- `@quartz-headless/primitives` now peers on `@quartz-headless/core@^0.8.0`.
+- `pnpm verify:consumer` compiles the 0.8 floating APIs (Dialog context, Menu, Popover, Tooltip).
+
+### Migration
+
+No code changes are required. Consumers who bound `aria-describedby` dynamically on a
+`[qzTooltip]` host should know Quartz now appends its id to the current value while shown.
+Dialogs rely on a title bound to `ariaLabelledBy`, a valid configured id, or `ariaLabel` for an
+accessible name. Content you render into `<body>` while a modal is open is treated as background.
+
 ## [0.7.0] — 2026-10-22
 
 Release target: `@quartz-headless/core@0.7.0` and

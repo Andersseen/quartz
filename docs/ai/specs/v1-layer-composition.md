@@ -76,10 +76,12 @@ the layer's root(s) or its excluded elements (an overlay excludes its anchor). C
 
 ### 3.4 Modal isolation
 
-A modal Dialog isolates the background with: backdrop that captures pointer events, the Tab trap
-(3.3), Escape/outside ownership (3.1/3.2) and the scroll lock (3.5). Quartz does **not** set
-`inert` / `aria-hidden` on siblings in 0.7; screen-reader virtual-cursor isolation is the consumer's
-responsibility and is tracked for 0.8 (Dialog/Popover composition).
+Implemented in 0.8.0 (design in `v1-floating-contract.md` §9.2). A modal Dialog isolates the
+background with the backdrop (pointer), the Tab trap (3.3), Escape/outside ownership (3.1/3.2),
+the scroll lock (3.5) **and native `inert`** (`aria-hidden` fallback) on the siblings along the
+path from the dialog to `<html>`. Quartz-owned portals opened from inside the modal stay
+operable; overlays that were already open are isolated; nested modals isolate the lower dialog;
+state is reference-counted and restored exactly.
 
 ### 3.5 Scroll lock
 
@@ -117,5 +119,5 @@ Two Documents never share a stack, trap list or lock count (each is its own `Wea
 
 ## 5. Non-goals
 
-No public layer manager, no background `inert`, no change to selectors or `data-qz-*` hooks, no
+No public layer manager, no change to selectors or `data-qz-*` hooks, no
 change to Dialog/Overlay public config.

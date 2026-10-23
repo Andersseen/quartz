@@ -5,9 +5,11 @@ import {
   inject,
   DOCUMENT,
   EmbeddedViewRef,
+  isDevMode,
 } from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
 import { DialogRef } from './dialog-ref';
+import { isolateBackground, type ModalIsolation } from './modal-isolation';
 import {
   createDismissController,
   createScrollLock,
@@ -97,6 +99,8 @@ export class DialogService {
     // -- Build DialogRef (cleanup uses closures captured above) -----------------
     let focusTrap: FocusTrap | null = null;
     let dismissController: DismissController | null = null;
+    let isolation: ModalIsolation | null = null;
+    let viewDestroying = false;
     const focusRestorer = createFocusRestorer(this.document);
     let viewRef!: EmbeddedViewRef<unknown>;
 
@@ -108,7 +112,9 @@ export class DialogService {
         viewRef,
         focusTrap,
         dismissController,
+        isolation,
         focusRestorer,
+        viewDestroying,
       );
     });
 
@@ -127,18 +133,20 @@ export class DialogService {
     // without going through DialogRef#close() — without this, the backdrop/wrapper, scroll
     // lock, and document keydown listener would all leak permanently, and closed$ would
     // never fire. ref.close() is idempotent, so this is a no-op when already closed.
-    viewRef.onDestroy(() => ref.close());
+    viewRef.onDestroy(() => {
+      viewDestroying = true;
+      ref.close();
+    });
 
     for (const node of viewRef.rootNodes) {
       if (node instanceof HTMLElement) panelEl.appendChild(node);
     }
     wrapperEl.appendChild(panelEl);
 
-    // A configured id is applied as-is (it may point anywhere in the document). A
-    // *generated* fallback id is only useful once the consumer has bound it to a title /
-    // description element in the template, so it is applied only when that element exists
-    // — a dangling reference gives the dialog no accessible name at all.
-    this.#applyAriaReference(
+    // Accessible name / description. A reference is only written when its target exists, so the
+    // dialog never carries a dangling `aria-labelledby`: a configured id must resolve somewhere
+    // in the document, a generated fallback id must have been bound inside the template.
+    const labelled = this.#applyAriaReference(
       panelEl,
       'aria-labelledby',
       ariaLabelledBy,
@@ -150,6 +158,17 @@ export class DialogService {
       ariaDescribedBy,
       !!resolvedConfig.ariaDescribedBy,
     );
+    if (!labelled && resolvedConfig.ariaLabel) {
+      panelEl.setAttribute('aria-label', resolvedConfig.ariaLabel);
+    }
+    if (!panelEl.hasAttribute('aria-labelledby') && !panelEl.hasAttribute('aria-label')) {
+      this.#warnUnnamed();
+    }
+
+    // -- Modal isolation -----------------------------------------------------------
+    // Backdrop and wrapper stay live; everything else that was in the document is inert until
+    // this dialog closes. Overlay panels opened later from inside the dialog stay interactive.
+    isolation = isolateBackground(this.document, [backdropEl, wrapperEl]);
 
     // -- Focus management -------------------------------------------------------
     focusInitialElement(panelEl);
@@ -215,7 +234,9 @@ export class DialogService {
     view: EmbeddedViewRef<unknown>,
     focusTrap: FocusTrap | null,
     dismissController: DismissController | null,
+    isolation: ModalIsolation | null,
     focusRestorer: { restore(): void },
+    viewDestroying: boolean,
   ): void {
     if (!this.#openDialogs.has(ref)) return;
     this.#openDialogs.delete(ref);
@@ -235,18 +256,35 @@ export class DialogService {
       wrapper.contains(active);
     backdrop?.remove();
     wrapper.remove();
-    view.destroy();
+    // Never destroy a view Angular is already destroying: re-entrant destruction detaches it
+    // mid-walk and makes Angular skip the cleanup of its ancestors.
+    if (!viewDestroying) view.destroy();
     this.#scrollLock.unlock();
+    // The background must be live again before focus returns to an opener that lives in it.
+    isolation?.release();
     if (ownsFocus) focusRestorer.restore();
   }
 
+  /** Returns whether the reference was written. */
   #applyAriaReference(
     panel: HTMLElement,
     attribute: string,
     id: string,
     isExplicit: boolean,
-  ): void {
-    if (!isExplicit && !panel.querySelector(`[id="${id}"]`)) return;
+  ): boolean {
+    const target = isExplicit
+      ? this.document.getElementById(id)
+      : panel.querySelector(`[id="${id}"]`);
+    if (!target) return false;
     panel.setAttribute(attribute, id);
+    return true;
+  }
+
+  #warnUnnamed(): void {
+    if (!isDevMode()) return;
+    console.warn(
+      '[quartz] Dialog has no accessible name. Bind the `ariaLabelledBy` template context value ' +
+        'to a title element, pass `ariaLabelledBy` / `ariaLabel` in the dialog config.',
+    );
   }
 }

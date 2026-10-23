@@ -135,4 +135,67 @@ describe('ToastService', () => {
     service.dismissAll();
     expect(vi.getTimerCount()).toBe(0);
   });
+
+  it('freezes the exact remaining time on pause, even between interval ticks', () => {
+    const id = service.info('Exact', undefined, { duration: 1000 });
+    vi.advanceTimersByTime(350); // last tick was at 300ms
+    service.pause(id);
+    expect(service.toasts()[0].remainingTime).toBe(650);
+
+    vi.advanceTimersByTime(5000);
+    service.resume(id);
+    vi.advanceTimersByTime(600);
+    expect(service.toasts().length).toBe(1);
+    vi.advanceTimersByTime(100);
+    expect(service.toasts().length).toBe(0);
+  });
+
+  it('repeated pause/resume neither loses nor gains time', () => {
+    const id = service.info('Repeat', undefined, { duration: 1000 });
+    vi.advanceTimersByTime(200);
+    service.pause(id);
+    service.pause(id);
+    vi.advanceTimersByTime(3000);
+    service.resume(id);
+    service.resume(id);
+    vi.advanceTimersByTime(300);
+    service.pause(id);
+    service.resume(id);
+    expect(service.toasts()[0].remainingTime).toBeGreaterThanOrEqual(480);
+    vi.advanceTimersByTime(520);
+    expect(service.toasts().length).toBe(0);
+  });
+
+  it('dismissing a paused toast leaves no timer behind', () => {
+    const id = service.info('Paused', undefined, { duration: 1000 });
+    service.pause(id);
+    service.dismiss(id);
+    expect(service.toasts().length).toBe(0);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('tracks several concurrent toasts with different durations independently', () => {
+    service.info('short', undefined, { duration: 300 });
+    service.info('long', undefined, { duration: 900 });
+    service.info('forever', undefined, { duration: 0 });
+    vi.advanceTimersByTime(400);
+    expect(service.toasts().map((t) => t.message)).toEqual(['long', 'forever']);
+    vi.advanceTimersByTime(600);
+    expect(service.toasts().map((t) => t.message)).toEqual(['forever']);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('clears the interval when the service is destroyed', () => {
+    service.info('Running', undefined, { duration: 5000 });
+    expect(vi.getTimerCount()).toBe(1);
+    TestBed.resetTestingModule();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('survives rapid add/dismiss cycles without leaking timers', () => {
+    for (let i = 0; i < 50; i++)
+      service.dismiss(service.info(`t${i}`, undefined, { duration: 500 }));
+    expect(service.toasts().length).toBe(0);
+    expect(vi.getTimerCount()).toBe(0);
+  });
 });

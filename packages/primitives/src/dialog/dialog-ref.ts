@@ -1,3 +1,4 @@
+import { untracked } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
 export class DialogRef {
@@ -20,8 +21,16 @@ export class DialogRef {
   close(): void {
     if (this.#isClosed) return;
     this.#isClosed = true;
-    this.onCloseFn();
-    this.#closed$.next();
-    this.#closed$.complete();
+    try {
+      this.onCloseFn();
+    } finally {
+      // Teardown that throws must still notify: `closed$` fires exactly once per dialog.
+      // `untracked`: a dialog can close while Angular is rendering (its host view was removed),
+      // and subscribers must still be allowed to write signals from `closed$`.
+      untracked(() => {
+        this.#closed$.next();
+        this.#closed$.complete();
+      });
+    }
   }
 }

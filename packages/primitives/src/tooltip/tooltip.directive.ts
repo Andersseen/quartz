@@ -8,6 +8,7 @@ import {
   OnDestroy,
   signal,
   effect,
+  untracked,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -18,6 +19,7 @@ import {
   calculatePosition,
   createDismissController,
   getScrollParents,
+  resolveDirection,
   type DismissController,
 } from '@quartz-headless/core';
 
@@ -44,7 +46,6 @@ let tooltipIdCounter = 0;
   exportAs: 'qzTooltip',
   standalone: true,
   host: {
-    '[attr.aria-describedby]': 'tooltipId()',
     '(mouseenter)': 'onMouseEnter()',
     '(mouseleave)': 'onMouseLeave()',
     '(focus)': 'onFocus()',
@@ -77,6 +78,13 @@ export class TooltipDirective implements OnDestroy {
   private hideTimer: number | null = null;
   private overlayMountedSubscription: Subscription | null = null;
   private dismissController: DismissController | null = null;
+  private cancelFrame: (() => void) | null = null;
+  // Interaction sources are tracked separately so one ending (pointer leaves, focus leaves)
+  // cannot hide a tooltip the other source still asks for.
+  private hovered = false;
+  private focused = false;
+  // The id this tooltip appended to the host's `aria-describedby` (removed again on teardown).
+  private describedId: string | null = null;
 
   readonly tooltipId = signal<string | null>(null);
 
@@ -84,10 +92,17 @@ export class TooltipDirective implements OnDestroy {
 
   constructor() {
     effect(() => {
-      // Losing the content — or being disabled while open — must take the tooltip down.
-      if (!this.qzTooltip() || this.tooltipDisabled()) {
-        this.hideImmediately();
-      }
+      const content = this.qzTooltip();
+      const disabled = this.tooltipDisabled();
+      untracked(() => {
+        // Losing the content — or being disabled while open — must take the tooltip down.
+        if (!content || disabled) {
+          this.hideImmediately();
+          return;
+        }
+        // Content changed while visible: swap it in place rather than showing stale text.
+        if (this.isVisible()) this.render();
+      });
     });
   }
 
@@ -121,7 +136,10 @@ export class TooltipDirective implements OnDestroy {
       return;
     }
 
+    // One pending hide at a time: a second call must not orphan the first timer.
+    this.clearHideTimer();
     this.hideTimer = view.setTimeout(() => {
+      this.hideTimer = null;
       this.destroyTooltip();
     }, this.tooltipHideDelay());
   }
@@ -156,22 +174,27 @@ export class TooltipDirective implements OnDestroy {
 
   private renderText(text: string): void {
     this.destroyTooltip();
-    this.textTooltipEl = this.tooltipService.createTextElement(text);
-    this.tooltipId.set(this.textTooltipEl.id || this.generateId());
-    this.textTooltipEl.id = this.tooltipId()!;
+    const el = this.tooltipService.createTextElement(text);
+    this.textTooltipEl = el;
+    el.id = el.id || this.generateId();
+    this.tooltipId.set(el.id);
+    this.addDescription(el.id);
 
     // Hidden until measured, otherwise it flashes at the viewport origin for a frame.
-    this.textTooltipEl.style.visibility = 'hidden';
-    this.queueFrame(() => {
-      const el = this.textTooltipEl;
-      if (!el) return;
-      const anchorRect = this.elementRef.nativeElement.getBoundingClientRect();
+    el.style.visibility = 'hidden';
+    this.cancelFrame = this.queueFrame(() => {
+      this.cancelFrame = null;
+      if (this.textTooltipEl !== el) return;
+      const view = this.document.defaultView;
       const pos = calculatePosition(
-        anchorRect,
+        this.elementRef.nativeElement.getBoundingClientRect(),
         el,
         this.tooltipPlacement(),
         this.tooltipOffset(),
         true,
+        'main',
+        view ? { width: view.innerWidth, height: view.innerHeight } : undefined,
+        resolveDirection(this.elementRef.nativeElement),
       );
       el.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
       el.style.visibility = 'visible';
@@ -195,8 +218,9 @@ export class TooltipDirective implements OnDestroy {
     );
 
     this.overlayMountedSubscription = this.overlayRef.mounted$.subscribe((child) => {
-      child.id = this.generateId();
+      child.id = child.id || this.generateId();
       this.tooltipId.set(child.id);
+      this.addDescription(child.id);
       child.setAttribute('role', 'tooltip');
       this.templateTooltipChild = child;
     });
@@ -206,6 +230,9 @@ export class TooltipDirective implements OnDestroy {
   }
 
   private destroyTooltip(): void {
+    this.cancelFrame?.();
+    this.cancelFrame = null;
+    this.removeDescription();
     this.overlayMountedSubscription?.unsubscribe();
     this.overlayMountedSubscription = null;
 
@@ -261,35 +288,62 @@ export class TooltipDirective implements OnDestroy {
     return `qz-tooltip-${++tooltipIdCounter}`;
   }
 
-  private queueFrame(callback: () => void): void {
+  /** Schedules `callback` for the next frame and returns a function that cancels it. */
+  private queueFrame(callback: () => void): () => void {
     const view = this.document.defaultView;
     if (view?.requestAnimationFrame) {
-      view.requestAnimationFrame(callback);
-      return;
+      const id = view.requestAnimationFrame(callback);
+      return () => view.cancelAnimationFrame(id);
     }
-
     callback();
+    return () => undefined;
+  }
+
+  /** Appends `id` to the host's `aria-describedby`, keeping any descriptions it already has. */
+  private addDescription(id: string): void {
+    this.removeDescription();
+    const host: HTMLElement = this.elementRef.nativeElement;
+    const tokens = (host.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+    if (!tokens.includes(id)) tokens.push(id);
+    host.setAttribute('aria-describedby', tokens.join(' '));
+    this.describedId = id;
+  }
+
+  /** Removes only this tooltip's id; the attribute goes away only if nothing else remains. */
+  private removeDescription(): void {
+    if (this.describedId === null) return;
+    const host: HTMLElement = this.elementRef.nativeElement;
+    const tokens = (host.getAttribute('aria-describedby') ?? '')
+      .split(/\s+/)
+      .filter((token) => token && token !== this.describedId);
+    if (tokens.length) host.setAttribute('aria-describedby', tokens.join(' '));
+    else host.removeAttribute('aria-describedby');
+    this.describedId = null;
   }
 
   // ── Host event handlers (declared in host to avoid decorator bloat) ──────
 
   /** @internal */
   onMouseEnter(): void {
+    this.hovered = true;
     this.show();
   }
 
   /** @internal */
   onMouseLeave(): void {
-    this.hide();
+    this.hovered = false;
+    if (!this.focused) this.hide();
   }
 
   /** @internal */
   onFocus(): void {
+    this.focused = true;
     this.show();
   }
 
   /** @internal */
   onBlur(): void {
-    this.hide();
+    this.focused = false;
+    if (!this.hovered) this.hide();
   }
 }

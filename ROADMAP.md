@@ -121,6 +121,8 @@ de Core aprobados. Sin nueva abstracción pública salvo necesidad demostrada de
 
 ### 0.8.0 — Superficies flotantes y feedback
 
+> **Implementada en 0.8.0** — ver [`docs/releases/0.8-acceptance.md`](docs/releases/0.8-acceptance.md).
+
 **Scopes:** `primitives/floating`, `primitives/feedback`.
 
 - **FLOAT-01:** Dialog: nombre accesible, contenido sin controles, apertura/cierre programáticos,

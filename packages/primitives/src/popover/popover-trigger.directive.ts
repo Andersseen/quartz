@@ -52,6 +52,7 @@ export class PopoverTriggerDirective implements OnDestroy {
   private closedSubscription: Subscription | null = null;
   private focusRestorer: FocusRestorer | null = null;
   private readonly internalSync = signal(false);
+  private cancelAutoFocus: (() => void) | null = null;
 
   readonly popover = input.required<TemplateRef<unknown>>();
   readonly openState = model(false, { alias: 'open' });
@@ -83,9 +84,18 @@ export class PopoverTriggerDirective implements OnDestroy {
       const shouldOpen = this.openState();
       if (this.internalSync()) return;
       untracked(() => {
-        if (shouldOpen) this.open();
-        else this.close(false);
+        if (shouldOpen) {
+          this.open();
+          // The model must never claim "open" while the DOM is closed: a disabled trigger
+          // refuses to open, so push the real state back.
+          if (!this.isOpen() && this.disabled()) this.syncOpenState(false);
+        } else this.close(false);
       });
+    });
+    // Disabling a trigger while its popover is open closes it (no focus move: the user did not
+    // ask for one).
+    effect(() => {
+      if (this.disabled()) untracked(() => this.close(false));
     });
   }
 
@@ -113,7 +123,14 @@ export class PopoverTriggerDirective implements OnDestroy {
       const id = panel.id || `qz-popover-${++popoverId}`;
       panel.id = id;
       this.#panelId.set(id);
-      if (this.autoFocus()) queueFrame(this.document, () => focusInitialElement(panel));
+      if (this.autoFocus()) {
+        // The frame is cancelled on close, so a popover that closed (or was destroyed) before
+        // it fires can never pull focus.
+        this.cancelAutoFocus = queueFrame(this.document, () => {
+          this.cancelAutoFocus = null;
+          if (this.overlayRef) focusInitialElement(panel);
+        });
+      }
     });
     this.closedSubscription = this.overlayRef.closed$.subscribe(() => this.finishClose(true));
     this.overlayRef.open();
@@ -147,6 +164,8 @@ export class PopoverTriggerDirective implements OnDestroy {
 
   private finishClose(restoreFocus: boolean): void {
     const overlay = this.overlayRef;
+    this.cancelAutoFocus?.();
+    this.cancelAutoFocus = null;
     this.mountedSubscription?.unsubscribe();
     this.closedSubscription?.unsubscribe();
     this.mountedSubscription = null;
@@ -168,8 +187,13 @@ export class PopoverTriggerDirective implements OnDestroy {
   }
 }
 
-function queueFrame(document: Document, callback: () => void): void {
+/** Schedules `callback` for the next frame and returns a function that cancels it. */
+function queueFrame(document: Document, callback: () => void): () => void {
   const view = document.defaultView;
-  if (view?.requestAnimationFrame) view.requestAnimationFrame(callback);
-  else callback();
+  if (view?.requestAnimationFrame) {
+    const id = view.requestAnimationFrame(callback);
+    return () => view.cancelAnimationFrame(id);
+  }
+  callback();
+  return () => undefined;
 }
