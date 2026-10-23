@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../out-tsc/primitives-forms-lib",
+    "declaration": true,
+    "rootDir": "..",
+    "types": [],
+    "paths": {
+      "@quartz-headless/primitives": ["./packages/primitives/src/public-api.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts"]
+}

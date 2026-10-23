@@ -2,9 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/primitives-spec",
-    "types": ["vitest/globals", "node"]
+    "types": ["vitest/globals", "node"],
+    "paths": {
+      "@quartz-headless/primitives/forms": ["./packages/primitives/forms/src/public-api.ts"],
+      "@quartz-headless/primitives": ["./packages/primitives/src/public-api.ts"]
+    }
   },
   "files": ["src/test-setup.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "forms/src/**/*.spec.ts"],
   "exclude": ["vitest.config.ts", "vite.config.ts"]
 }

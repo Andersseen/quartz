@@ -8,6 +8,7 @@ import {
   inject,
   input,
   model,
+  signal,
 } from '@angular/core';
 import { CollectionStore, resolveDirection, type CollectionItem } from '@quartz-headless/core';
 import type { TabDirective } from './tab.directive';
@@ -18,8 +19,6 @@ import {
   type TabsConfig,
   type TabsOrientation,
 } from './tabs.types';
-
-let tabsId = 0;
 
 @Directive({
   selector: '[qzTabs]',
@@ -33,8 +32,8 @@ export class TabsDirective<T> implements OnDestroy {
     { focusStrategy: 'roving-tabindex', orientation: 'horizontal' },
     this.document,
   );
-  private readonly generatedId = `qz-tabs-${++tabsId}`;
-  private readonly panels = new Set<TabPanelDirective<T>>();
+  private readonly panels = signal<readonly TabPanelDirective<T>[]>([]);
+  private destroyed = false;
 
   readonly value = model<T | null>(null);
   readonly orientation = input<TabsOrientation>(DEFAULT_TABS_CONFIG.orientation);
@@ -60,15 +59,25 @@ export class TabsDirective<T> implements OnDestroy {
   unregisterTab(tab: TabDirective<T>): void {
     const selected = this.isSelected(tab);
     this.collection.unregister(tab as TabDirective<T> & CollectionItem);
-    if (selected) this.value.set(this.collection.enabledItems()[0]?.value() ?? null);
+    if (!selected) return;
+    // Recover to a valid tab only once the removal settled: the widget may be torn down as a
+    // whole (the bound value must survive) or the tab re-created with the same value (@for).
+    queueMicrotask(() => {
+      const value = this.value();
+      if (this.destroyed || value === null || !this.compareWith()(value, tab.value())) return;
+      if (this.collection.items().some((current) => this.compareWith()(current.value(), value))) {
+        return;
+      }
+      this.value.set(this.collection.enabledItems()[0]?.value() ?? null);
+    });
   }
 
   registerPanel(panel: TabPanelDirective<T>): void {
-    this.panels.add(panel);
+    this.panels.update((panels) => [...panels, panel]);
   }
 
   unregisterPanel(panel: TabPanelDirective<T>): void {
-    this.panels.delete(panel);
+    this.panels.update((panels) => panels.filter((current) => current !== panel));
   }
 
   activate(tab: TabDirective<T>, options: { focus?: boolean } = {}): void {
@@ -96,11 +105,10 @@ export class TabsDirective<T> implements OnDestroy {
     return value !== null && this.compareWith()(value, panel.value());
   }
 
-  panelIdFor(tab: TabDirective<T>): string {
-    const panel = [...this.panels].find((current) =>
-      this.compareWith()(current.value(), tab.value()),
-    );
-    return panel?.id ?? `${this.generatedId}-panel-${tab.id}`;
+  panelIdFor(tab: TabDirective<T>): string | null {
+    const panel = this.panels().find((current) => this.compareWith()(current.value(), tab.value()));
+    // No registered panel (e.g. lazily rendered): omit aria-controls instead of dangling.
+    return panel?.id ?? null;
   }
 
   tabIdFor(panel: TabPanelDirective<T>): string | null {
@@ -120,6 +128,7 @@ export class TabsDirective<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
     this.collection.destroy();
   }
 

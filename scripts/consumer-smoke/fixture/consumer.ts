@@ -5,6 +5,7 @@
 // the monorepo's own workspace-symlink-based dev flow would never surface it.
 
 import { Component, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   CollectionStore,
   OverlayTriggerDirective,
@@ -29,7 +30,18 @@ import {
   ToastContainerComponent,
   ToastService,
   TooltipDirective,
+  ListboxDirective,
+  ListboxOptionDirective,
+  RadioDirective,
+  RadioGroupDirective,
+  SelectContentDirective,
+  SelectDirective,
+  SelectListboxDirective,
+  SelectOptionDirective,
+  SelectTriggerDirective,
+  SwitchDirective,
 } from '@quartz-headless/primitives';
+import { QUARTZ_FORMS } from '@quartz-headless/primitives/forms';
 
 // Core service.
 interface Row extends CollectionItem {
@@ -187,3 +199,62 @@ class FloatingComponent {
 }
 
 void FloatingComponent;
+
+// Angular Forms (opt-in `/forms` entry point): Reactive and template-driven bindings on every
+// adapted control, compiled with strictTemplates against the installed packages only.
+@Component({
+  selector: 'app-forms',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    CheckboxDirective,
+    SwitchDirective,
+    RadioGroupDirective,
+    RadioDirective,
+    SelectDirective,
+    SelectTriggerDirective,
+    SelectContentDirective,
+    SelectListboxDirective,
+    SelectOptionDirective,
+    ListboxDirective,
+    ListboxOptionDirective,
+    ...QUARTZ_FORMS,
+  ],
+  template: `
+    <form [formGroup]="form">
+      <button qzCheckbox formControlName="terms" aria-label="Terms">Terms</button>
+      <button qzSwitch formControlName="notify" aria-label="Notify">Notify</button>
+      <div qzRadioGroup formControlName="plan" aria-label="Plan">
+        <button qzRadio="free">Free</button>
+        <button qzRadio="pro">Pro</button>
+      </div>
+      <div qzSelect formControlName="fruit">
+        <button qzSelectTrigger aria-label="Fruit">{{ form.controls.fruit.value }}</button>
+        <ng-template qzSelectContent>
+          <div qzSelectListbox>
+            <div qzSelectOption="apple">Apple</div>
+            <div qzSelectOption="pear">Pear</div>
+          </div>
+        </ng-template>
+      </div>
+      <div qzListbox [multiple]="true" formControlName="tags" aria-label="Tags">
+        <div qzListboxOption="a">A</div>
+        <div qzListboxOption="b">B</div>
+      </div>
+    </form>
+    <button qzSwitch [(ngModel)]="legacy" aria-label="Legacy">Legacy</button>
+  `,
+})
+class FormsComponent {
+  legacy = false;
+  readonly form = new FormGroup({
+    terms: new FormControl<boolean | 'indeterminate'>(false, { nonNullable: true }),
+    notify: new FormControl(true, { nonNullable: true }),
+    plan: new FormControl<string | null>(null),
+    fruit: new FormControl<string | null>('apple'),
+    tags: new FormControl<string[] | null>(null),
+  });
+}
+
+void FormsComponent;

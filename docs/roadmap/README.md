@@ -1,7 +1,8 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado actual: **0.8 flotantes y feedback implementado; siguiente minor activa: 0.9 selección, controles y navegación**.
-> Fecha: 2026-09-05. Este directorio contiene documentación, no autorización para publicar.
+> Estado actual: **0.9 selección, controles y Forms implementado; siguiente minor activa: 0.10 selección avanzada**.
+> Fecha: 2026-10-23. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
+> ([inventario](../api/volt-parity.md)); por eso hay siete minors de paridad (0.10–0.16) antes de consumo (0.17) y congelación (0.18). Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).
 
 ## 1. Cómo usar este plan con modelos pequeños
@@ -144,11 +145,13 @@ cerrados no se reutilizan. Un fallo posterior abre regresión enlazada con su ta
 
 ## 10. Estado inicial de las fases
 
-| Fase            | Estado       | Condición para iniciar implementación                      |
-| --------------- | ------------ | ---------------------------------------------------------- |
-| 0.7             | Implementada | Ver `docs/releases/0.7-acceptance.md`                      |
-| 0.8             | Implementada | Ver `docs/releases/0.8-acceptance.md`                      |
-| 0.9             | No iniciada  | Contratos comunes de 0.8 integrados                        |
-| 0.10            | No iniciada  | Todas las familias incluidas estabilizadas                 |
-| 0.11            | No iniciada  | Matriz de consumo/compatibilidad aceptada                  |
-| Beta / RC / 1.0 | No iniciada  | API congelada y autorización de la release correspondiente |
+| Fase            | Estado       | Condición para iniciar implementación                                           |
+| --------------- | ------------ | ------------------------------------------------------------------------------- |
+| 0.7             | Implementada | Ver `docs/releases/0.7-acceptance.md`                                           |
+| 0.8             | Implementada | Ver `docs/releases/0.8-acceptance.md`                                           |
+| 0.9             | Implementada | Ver `docs/releases/0.9-acceptance.md`                                           |
+| 0.10            | No iniciada  | 0.9 aceptada                                                                    |
+| 0.11 – 0.16     | No iniciadas | Hito anterior de paridad aceptado (una familia por minor)                       |
+| 0.17            | No iniciada  | Todas las familias de paridad (0.9–0.16) aceptadas                              |
+| 0.18            | No iniciada  | Matriz de consumo/compatibilidad (0.17) aceptada                                |
+| Beta / RC / 1.0 | No iniciada  | API congelada, **inventario Volt sin filas C/P/M** y autorización de la release |

@@ -12,7 +12,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: 'coverage',
-      include: ['packages/{core,primitives}/src/**/*.ts'],
+      include: ['packages/{core,primitives}/src/**/*.ts', 'packages/primitives/forms/src/**/*.ts'],
       exclude: [
         '**/*.spec.ts',
         '**/index.ts',

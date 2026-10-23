@@ -22,6 +22,7 @@ export class AccordionDirective<T> implements OnDestroy {
     { focusStrategy: 'roving-tabindex', orientation: 'vertical' },
     this.document,
   );
+  private destroyed = false;
 
   readonly value = model<T | T[] | null>(null);
   readonly type = input<AccordionType>(DEFAULT_ACCORDION_CONFIG.type);
@@ -44,8 +45,16 @@ export class AccordionDirective<T> implements OnDestroy {
   unregisterItem(item: AccordionItemDirective<T>): void {
     const wasOpen = this.isOpen(item);
     this.collection.unregister(item as AccordionItemDirective<T> & CollectionItem);
-    if (wasOpen) this.removeValue(item.value());
-    this.ensureRequiredOpenItem();
+    // Settle first: the accordion may be torn down as a whole (the bound value must survive) or
+    // the item re-created with the same value (@for), in which case nothing was really removed.
+    queueMicrotask(() => {
+      if (this.destroyed) return;
+      const returned = this.collection
+        .items()
+        .some((current) => this.compareWith()(current.value(), item.value()));
+      if (wasOpen && !returned) this.removeValue(item.value());
+      this.ensureRequiredOpenItem();
+    });
   }
 
   activeTabIndex(id: string): 0 | -1 {
@@ -107,6 +116,7 @@ export class AccordionDirective<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
     this.collection.destroy();
   }
 

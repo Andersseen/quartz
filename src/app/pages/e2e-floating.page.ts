@@ -130,7 +130,7 @@ import {
             {{ sel.selectedLabel() || 'Choose' }}
           </button>
           <ng-template qzSelectContent>
-            <div qzSelectListbox aria-label="Options" id="x-listbox" style="background: white">
+            <div qzSelectListbox id="x-listbox" style="background: white">
               <button id="x-opt-a" type="button" qzSelectOption="a">Option A</button>
               <button id="x-opt-b" type="button" qzSelectOption="b">Option B</button>
             </div>

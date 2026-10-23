@@ -64,6 +64,8 @@ export class SelectDirective<T> implements OnDestroy {
   private triggerElement: HTMLElement | null = null;
   private listboxElement: HTMLElement | null = null;
   private preferredActivation: 'selected' | 'first' | 'last' = 'selected';
+  private destroyed = false;
+  readonly #formDisabled = signal(false);
 
   readonly value = model<T | null>(null);
   readonly open = model(false);
@@ -96,6 +98,13 @@ export class SelectDirective<T> implements OnDestroy {
   readonly opened = output<void>();
   readonly closed = output<void>();
   readonly selected = output<T>();
+  /** Fires once per user selection that changed the value; never for programmatic writes. */
+  readonly valueChangeCommitted = output<T>();
+  /** Fires when focus leaves the control (trigger blur with the popup closed, or a close that does not return focus to the trigger). */
+  readonly touched = output<void>();
+
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly activeId = this.collection.activeId;
   readonly activeOption = computed(() => this.collection.activeItem());
@@ -118,6 +127,35 @@ export class SelectDirective<T> implements OnDestroy {
         else this.closePopup('programmatic');
       });
     });
+    effect(() => {
+      if (this.isDisabled()) untracked(() => this.closePopup('programmatic'));
+    });
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
+  }
+
+  /**
+   * Gives an unlabelled popup its accessible name from the trigger: the trigger's `aria-label`
+   * or `aria-labelledby` when present, otherwise a reference to the trigger itself. A listbox
+   * the consumer labelled (`aria-label` / `aria-labelledby`, static or bound) is left alone.
+   * Attributes are read as they are when the popup opens, so `[attr.aria-label]` bindings work.
+   */
+  nameListbox(listbox: HTMLElement): void {
+    const trigger = this.triggerElement;
+    if (!trigger || listbox.hasAttribute('aria-label') || listbox.hasAttribute('aria-labelledby')) {
+      return;
+    }
+    const label = trigger.getAttribute('aria-label');
+    const labelledby = trigger.getAttribute('aria-labelledby') || trigger.id;
+    if (label) listbox.setAttribute('aria-label', label);
+    else if (labelledby) listbox.setAttribute('aria-labelledby', labelledby);
+  }
+
+  onTriggerBlur(): void {
+    if (!this.isOpen()) this.touched.emit();
   }
 
   setTriggerElement(element: HTMLElement | null): void {
@@ -153,7 +191,7 @@ export class SelectDirective<T> implements OnDestroy {
     reason: SelectOpenReason,
     options: { activate?: 'selected' | 'first' | 'last' } = {},
   ): void {
-    if (this.disabled() || this.isOpen()) return;
+    if (this.isDisabled() || this.isOpen()) return;
     const template = this.content() ?? this.projectedContent()?.templateRef;
     if (!template || !this.triggerElement || !this.document.defaultView) return;
 
@@ -201,17 +239,21 @@ export class SelectDirective<T> implements OnDestroy {
     this.syncOpen(false);
     this.closed.emit();
     if (restoreFocus) focusSafely(this.triggerElement);
+    else if (!this.destroyed) this.touched.emit();
   }
 
   selectOption(option: SelectOptionDirective<T>): void {
-    if (this.disabled() || option.optionDisabled()) return;
+    if (this.isDisabled() || option.optionDisabled()) return;
+    const previous = this.value();
+    const changed = previous === null || !this.compareWith()(previous, option.value());
     this.value.set(option.value());
     this.selected.emit(option.value());
+    if (changed) this.valueChangeCommitted.emit(option.value());
     this.closePopup('selection');
   }
 
   handleTriggerKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       this.openPopup('keyboard', { activate: 'selected' });
@@ -229,7 +271,7 @@ export class SelectDirective<T> implements OnDestroy {
   }
 
   handleListboxKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       const active = this.activeOption();
@@ -242,7 +284,9 @@ export class SelectDirective<T> implements OnDestroy {
       return;
     }
     if (event.key === 'Tab') {
-      this.closePopup('tab', false);
+      // Hand focus back to the trigger *before* the browser moves it, so Tab/Shift+Tab continue
+      // from the trigger's position in the page instead of from the portal at the end of <body>.
+      this.closePopup('tab');
       return;
     }
     this.collection.configure({
@@ -254,6 +298,7 @@ export class SelectDirective<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
     this.closePopup('programmatic', false);
     this.collection.destroy();
   }

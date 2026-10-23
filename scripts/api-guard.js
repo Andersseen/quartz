@@ -26,6 +26,9 @@ const SNAPSHOT_DIR = path.join(ROOT, 'docs/api/snapshots');
 const PACKAGES = {
   core: { dts: 'packages/core/dist/types/quartz-headless-core.d.ts' },
   primitives: { dts: 'packages/primitives/dist/types/quartz-headless-primitives.d.ts' },
+  'primitives-forms': {
+    dts: 'packages/primitives/dist/types/quartz-headless-primitives-forms.d.ts',
+  },
 };
 
 function describeExports(dtsPath) {

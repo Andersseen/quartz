@@ -1,4 +1,4 @@
-import { Directive, booleanAttribute, computed, input, model, output } from '@angular/core';
+import { Directive, booleanAttribute, computed, input, model, output, signal } from '@angular/core';
 
 export type CheckboxState = boolean | 'indeterminate';
 
@@ -13,10 +13,10 @@ export type CheckboxState = boolean | 'indeterminate';
     type: 'button',
     '[attr.role]': '"checkbox"',
     '[attr.aria-checked]': 'ariaChecked()',
-    '[attr.aria-disabled]': 'disabled() || null',
-    '[attr.disabled]': 'disabled() ? "" : null',
+    '[attr.aria-disabled]': 'isDisabled() || null',
+    '[attr.disabled]': 'isDisabled() ? "" : null',
     '[attr.data-qz-state]': 'state()',
-    '[attr.data-qz-disabled]': 'disabled() ? "" : null',
+    '[attr.data-qz-disabled]': 'isDisabled() ? "" : null',
     '(click)': 'toggle($event)',
     '(keydown)': 'onKeydown($event)',
   },
@@ -26,6 +26,10 @@ export class CheckboxDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly checkedChangeCommitted = output<CheckboxState>();
 
+  readonly #formDisabled = signal(false);
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+
   readonly state = computed(() =>
     this.checked() === 'indeterminate' ? 'indeterminate' : this.checked() ? 'checked' : 'unchecked',
   );
@@ -34,11 +38,16 @@ export class CheckboxDirective {
   );
 
   toggle(event?: Event): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     event?.preventDefault();
     const next = this.checked() === true ? false : true;
     this.checked.set(next);
     this.checkedChangeCommitted.emit(next);
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
   }
 
   onKeydown(event: KeyboardEvent): void {

@@ -1,6 +1,7 @@
 # Roadmap hacia Quartz Headless 1.0
 
-> Plan activo · 2026-10-22 · 0.7 Core implementado (ver [0.7 acceptance](docs/releases/0.7-acceptance.md)), siguiente fase: 0.8 flotantes y feedback.
+> Plan activo · 2026-10-23 · 0.7 Core y 0.8 flotantes implementados; **0.9 selección, controles y Forms implementado** (ver [0.9 acceptance](docs/releases/0.9-acceptance.md)).
+> Requisito de producto nuevo: la 1.0 cubre el comportamiento headless de **todos** los componentes de Volt UI ([inventario](docs/api/volt-parity.md)). Por eso la secuencia 0.10/0.11 anterior (consumo y congelación) pasa a 0.17/0.18, detrás de siete hitos de paridad.
 > Este documento recoge el camino restante hacia 1.0; el hito 0.6 queda archivado en
 > [0.6 acceptance](docs/releases/0.6-acceptance.md).
 > Evidencias y resultados: [diagnóstico técnico](docs/releases/V1_AUDIT.md).
@@ -18,16 +19,38 @@ La prioridad es reducir incertidumbre en lo que se promete mantener.
 Una 1.0 no garantiza ausencia absoluta de bugs; sí contratos explícitos, evidencias repetibles
 y un proceso fiable para corregir regresiones sin romper a los consumidores.
 
+### Paridad con Volt UI: tres planos distintos
+
+Quartz es la base headless alternativa de Volt UI 2.0 (junto a ng-primitives). Se separan tres cosas
+que no deben confundirse:
+
+| Plano                                      | Qué es                                                                                                                                                                                                   | Se demuestra con                                         | Hito                                                                 |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
+| **A. Paridad de funcionalidad Quartz**     | Cada componente público de Volt (commit fijado en el inventario) tiene un equivalente de comportamiento observable en Quartz, o queda cubierto por HTML nativo/Angular/composición documentada y probada | `docs/api/volt-parity.md` con evidencia por fila (V o N) | 0.9 (inventario + Listbox/Select/controles/Forms), 0.10–0.16 (resto) |
+| **B. Compatibilidad Angular / de paquete** | Los tarballs instalados compilan y funcionan en Angular 21.2 **y 22**, con SSR+hidratación reales                                                                                                        | Fixtures externos, matriz en CI                          | 0.17                                                                 |
+| **C. Adopción en Volt UI 2.0**             | Volt migra sus componentes sobre Quartz mediante adaptadores propios                                                                                                                                     | Integración consumidora (una de las dos de la beta)      | Beta; **no es trabajo de este repositorio**                          |
+
+Este repositorio implementa A y B. Un “Quartz aceptado en 0.9” **no** significa “Quartz 1.0 compatible
+con Volt”: tras 0.9 solo 5 de 46 filas son V (ver inventario).
+
 ## 2. Alcance recomendado
 
 Congelar desde ahora la incorporación de nuevos componentes. Clasificar cada export, no solo
 cada carpeta, antes de empezar la siguiente familia. Estas categorías son una **propuesta**;
 el código actual sigue exportando todo el catálogo.
 
-| Paquete    | Núcleo candidato para 1.0                                                                             | Candidatos condicionados a necesidad y coste de estabilización        |
-| ---------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Core       | Overlay, Focus, Dismiss, Scroll Lock, Collection, Directionality, Viewport                            | Drag & Drop, Virtual Scroll, Splitter                                 |
-| Primitives | Dialog, Tooltip, Popover, Menu, Listbox, Select, Tabs, Accordion, Checkbox, Switch, RadioGroup, Toast | Combobox, Tree, Slider, Toggle, ToggleGroup, Sidebar, Navbar, Stepper |
+| Paquete    | Núcleo candidato para 1.0                                                                             | Candidatos condicionados a necesidad y coste de estabilización |
+| ---------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Core       | Overlay, Focus, Dismiss, Scroll Lock, Collection, Directionality, Viewport, Splitter (para Resizable) | Drag & Drop, Virtual Scroll                                    |
+| Primitives | Dialog, Tooltip, Popover, Menu, Listbox, Select, Tabs, Accordion, Checkbox, Switch, RadioGroup, Toast | Tree, Navbar, Stepper (no existen en Volt)                     |
+
+**Revisión 0.9 (paridad Volt):** lo que Volt exporta ya no es “condicionado indefinidamente”.
+Combobox, Slider, Toggle, ToggleGroup, Sidebar y Splitter (equivalente de Resizable) pasan a
+**obligatorios para 1.0**, con hito propietario (0.10, 0.11, 0.13, 0.16) y criterios de aceptación
+en `docs/api/volt-parity.md`. Siguen siendo decisión de alcance explícita solo las áreas que Volt
+no necesita: Tree, Navbar, Stepper, Drag & Drop y Virtual Scroll. Además se añaden familias que no
+existen aún (Date/DateRange, RangeSlider, NavigationMenu, Toolbar, Pagination, InputOTP, FileUpload,
+Autofill, FormField, Progress, Meter, Avatar) y huecos de Drawer, Tooltip/Popover, Toast y Accordion.
 
 El núcleo permite construir formularios, navegación, confirmaciones y superficies flotantes
 sin depender de las áreas más complejas. La categoría condicionada no implica que el código
@@ -62,7 +85,7 @@ cumplir los criterios; no exigir nuevos componentes para compensar exclusiones.
   sus pruebas y su documentación. Evitar PRs que mezclen renombrados, nuevas features y CI.
 - Los tests se entregan **junto a cada cambio**. La etapa de integración completa las pruebas
   entre paquetes y entornos; no es una fase final para empezar a probar.
-- No hay obligación de saltar de `0.9` a `1.0`: `0.10` y `0.11` son versiones válidas.
+- No hay obligación de saltar de `0.9` a `1.0`; el número final de minors lo dictan las familias de paridad pendientes, no un calendario (hoy: `0.10`…`0.18`).
 
 | Scope de trabajo/PR   | Responsabilidad                                                       |
 | --------------------- | --------------------------------------------------------------------- |
@@ -79,16 +102,30 @@ Estos scopes organizan issues y PRs; no obligan a crear nuevos paquetes ni entry
 
 ## 4. Secuencia de entregas
 
-| Versión objetivo | Resultado principal                            | Dependencia                      | Puerta de salida                                                    |
-| ---------------- | ---------------------------------------------- | -------------------------------- | ------------------------------------------------------------------- |
-| `0.7.0`          | Core consolidado                               | Contratos de 0.6 cerrados        | Ciclo de vida, foco, capas y geometría verificados                  |
-| `0.8.0`          | Flotantes y feedback consolidados              | Core de 0.7                      | Dialog, Tooltip, Popover, Menu y Toast funcionan también compuestos |
-| `0.9.0`          | Selección, controles y navegación consolidados | 0.7 y contratos de 0.8           | Estado, teclado y formularios tienen contratos comprobados          |
-| `0.10.0`         | Consumo real, SSR e hidratación                | Familias incluidas estabilizadas | Tarballs compilados y ejecutados fuera del monorepo                 |
-| `0.11.0`         | Distribución, documentación y API congelada    | Matriz de 0.10                   | Publicación ensayada y migración completa                           |
-| `1.0.0-beta.N`   | Validación en proyectos consumidores           | Congelación de 0.11              | Dos integraciones independientes completadas                        |
-| `1.0.0-rc.N`     | Candidato exacto verificable                   | Beta aceptada                    | Matriz completa en verde sobre el artefacto candidato               |
-| `1.0.0`          | Promesa de estabilidad                         | RC aceptada                      | Mismos contratos y checklist final firmado                          |
+| Versión objetivo | Resultado principal                                              | Dependencia                       | Puerta de salida                                                         |
+| ---------------- | ---------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------ |
+| `0.7.0`          | Core consolidado                                                 | Contratos de 0.6 cerrados         | Ciclo de vida, foco, capas y geometría verificados                       |
+| `0.8.0`          | Flotantes y feedback consolidados                                | Core de 0.7                       | Dialog, Tooltip, Popover, Menu y Toast funcionan también compuestos      |
+| `0.9.0`          | Selección, controles, Forms e inventario de paridad Volt         | 0.7 y contratos de 0.8            | Contratos comprobados + `volt-parity.md` completo con hito por hueco     |
+| `0.10.0`         | Selección avanzada (Combobox, Select múltiple/grupos)            | 0.9                               | Filas `select`, `combobox`, `listbox` en V                               |
+| `0.11.0`         | Controles de rango y alternancia (Slider, RangeSlider, Toggle\*) | 0.10                              | Filas `slider`, `range-slider`, `toggle`, `toggle-group` en V            |
+| `0.12.0`         | Fecha y rango de fechas                                          | 0.11                              | Filas `date-picker`, `date-range-picker` en V                            |
+| `0.13.0`         | Navegación y foco rodante (NavigationMenu, Toolbar, Pagination…) | 0.12                              | Filas `navigation-menu`, `toolbar`, `pagination`, `accordion`, `sidebar` |
+| `0.14.0`         | Entradas de texto, archivos y form-field                         | 0.13                              | Filas `input-otp`, `autofill`, `file-upload`, `form-field`               |
+| `0.15.0`         | Feedback e indicadores de valor                                  | 0.14                              | Filas `progress`, `meter`, `avatar`, `toast`                             |
+| `0.16.0`         | Drawer, resizable y completitud flotante                         | 0.15                              | Filas `drawer`, `resizable`, `tooltip`, `popover`, `dropdown-menu`       |
+| `0.17.0`         | Consumo real, Angular 21.2/22, SSR e hidratación (antes 0.10)    | **Todas las familias de paridad** | Tarballs en Angular 21.2 y 22; SSR→hidratación→interacción por fila      |
+| `0.18.0`         | Distribución, documentación y API congelada (antes 0.11)         | Matriz de 0.17                    | Publicación ensayada y migración completa                                |
+| `1.0.0-beta.N`   | Validación en proyectos consumidores                             | Congelación de 0.18               | Dos integraciones independientes (una es el adaptador de Volt UI 2.0)    |
+| `1.0.0-rc.N`     | Candidato exacto verificable                                     | Beta aceptada                     | Matriz completa en verde sobre el artefacto candidato                    |
+| `1.0.0`          | Promesa de estabilidad                                           | RC aceptada                       | Mismos contratos y checklist final firmado                               |
+
+**Reglas de la secuencia.** No se congela API mientras falte una capacidad exigida por Volt. La beta
+**no puede empezar** mientras alguna fila del inventario siga en C, P o M. 1.0 no se declara por
+porcentajes de cobertura unitaria: exige evidencia de comportamiento por fila (unitaria, Forms,
+E2E en tres motores, axe, AOT desde tarballs). El número final de minors es consecuencia del
+inventario, no un objetivo; si el inventario cambia (p. ej. un nuevo commit de referencia de Volt),
+se reabre aquí.
 
 Las versiones son objetivos, no fechas comprometidas. No publicar una minor para cumplir
 calendario si su puerta de salida sigue abierta. Los defectos de una familia se corrigen allí;
@@ -110,7 +147,7 @@ no se trasladan automáticamente al siguiente hito.
 - **CORE-04:** especificar recuperación de Collection cuando desaparece o se deshabilita el
   elemento activo, orden DOM, selección, typeahead, orientación y cambios de RTL en ejecución.
 - **CORE-05:** verificar Viewport y Directionality con distintas instancias/documentos y
-  limpieza de listeners. Definir el primer render SSR; la hidratación real se prueba en 0.10.
+  limpieza de listeners. Definir el primer render SSR; la hidratación real se prueba en 0.17.
 - Si Splitter, Drag & Drop o Virtual Scroll entran: asignar contratos y pruebas de interacción,
   cancelación, límites y destrucción aquí. DnD no puede prometer operación completa por teclado
   mientras solo ofrece el modelo nativo de arrastre. Si no caben, resolver alcance, no bajar el listón.
@@ -144,6 +181,8 @@ sin foco, scroll bloqueado ni timers residuales tras abandonar la ruta.
 
 ### 0.9.0 — Selección, controles y navegación
 
+**Estado: implementada** (acta en [0.9 acceptance](docs/releases/0.9-acceptance.md)): Listbox, Select, Checkbox, Switch, RadioGroup, Tabs y Accordion consolidados; adaptadores Forms en la entrada opcional `@quartz-headless/primitives/forms`; inventario de paridad Volt. Combobox/Slider/Toggle/ToggleGroup/Sidebar **no** se tocaron salvo regresiones: pasan a hitos propios (abajo).
+
 **Scopes:** `primitives/selection`, `primitives/controls`, `primitives/disclosure`.
 
 - **SELECT-01:** Listbox/Select: identidad de objetos, selección inicial, valor no presente,
@@ -164,9 +203,26 @@ sin foco, scroll bloqueado ni timers residuales tras abandonar la ruta.
 teclado y RTL verificados en browser; cada cambio externo/interno tiene la emisión definida;
 cada área opcional incluida tiene responsable y evidencia equivalente.
 
-### 0.10.0 — Compatibilidad y consumo fuera del repositorio
+### 0.10.0 – 0.16.0 — Familias de paridad Volt
 
-**Scopes:** `compat`, `testing`, `cli`.
+Una familia coherente por minor; detalle de tareas y aceptación en `docs/roadmap/0.1x-*.md`. Cada
+gate exige, por fila del inventario: contrato observable, pruebas unitarias, Forms cuando Volt
+expone CVA, E2E en Chromium/Firefox/WebKit, escaneo axe, AOT estricto desde tarball y actualización
+de la clasificación en `docs/api/volt-parity.md` solo con evidencia.
+
+| Minor  | Familia                                                                 | Ficha                                           |
+| ------ | ----------------------------------------------------------------------- | ----------------------------------------------- |
+| `0.10` | Selección avanzada: Combobox, Select múltiple/grupos, Listbox secciones | [0.10](docs/roadmap/0.10-advanced-selection.md) |
+| `0.11` | Rango y alternancia: Slider, RangeSlider, Toggle, ToggleGroup           | [0.11](docs/roadmap/0.11-range-controls.md)     |
+| `0.12` | Fecha y rango de fechas                                                 | [0.12](docs/roadmap/0.12-date-range.md)         |
+| `0.13` | Navegación: NavigationMenu, Toolbar, Pagination, Accordion/Sidebar      | [0.13](docs/roadmap/0.13-navigation.md)         |
+| `0.14` | Texto/archivos: InputOTP, Autofill, FileUpload, FormField               | [0.14](docs/roadmap/0.14-text-file-input.md)    |
+| `0.15` | Feedback: Progress, Meter, Avatar, Toast (contenido)                    | [0.15](docs/roadmap/0.15-feedback.md)           |
+| `0.16` | Drawer, Resizable, flechas Tooltip/Popover, grupos de Menu              | [0.16](docs/roadmap/0.16-drawer-resizable.md)   |
+
+### 0.17.0 — Compatibilidad y consumo fuera del repositorio (antes 0.10)
+
+**Scopes:** `compat`, `testing`, `cli`. Entrada: **todas** las familias de paridad (0.9–0.16) cerradas.
 
 - **COMPAT-01:** evolucionar el smoke de tarballs a una app Angular externa: AOT con
   `strictTemplates`, build de producción y ejecución E2E. Solo imports públicos, sin aliases
@@ -176,7 +232,9 @@ cada área opcional incluida tiene responsable y evidencia equivalente.
   DOM e interacción después de hidratar. Un mock con `defaultView: null` no sustituye esto.
 - **COMPAT-03:** fijar versiones exactas de CI para el mínimo y el extremo superior del rango
   Angular declarado, Node y TypeScript compatibles. Hoy los peers son `^21.0.0`: no anunciar
-  Angular 22+ sin ampliar y verificar esa matriz. Ajustar `engines` a lo que realmente se soporta.
+  Angular 22+ sin ampliar y verificar esa matriz. **Volt exige `^21.2.0 \|\| ^22.0.0`**: la
+  fixture de Angular 22 real es una puerta de paridad obligatoria antes de la beta. Ajustar
+  `engines` a lo que realmente se soporta.
 - **COMPAT-04:** controlar tree shaking con builds de consumidores representativos y presupuestos
   de incremento frente a una app vacía equivalente. Comprobar que no se duplica Core ni se
   arrastran dependencias visuales de la demo. Medir antes de fijar límites numéricos.
@@ -189,7 +247,7 @@ cada área opcional incluida tiene responsable y evidencia equivalente.
 SSR→hidratación→interacción en verde y pruebas CLI de conservación de archivos existentes.
 No confundir «E2E de la documentación» con «E2E del producto empaquetado».
 
-### 0.11.0 — Release reproducible, documentación y congelación
+### 0.18.0 — Release reproducible, documentación y congelación (antes 0.11)
 
 **Scopes:** `release`, `docs`, `api`.
 
@@ -215,7 +273,7 @@ documentación sincronizada y migración probada. Ninguna pregunta sobre contrat
 
 ### Beta, RC y 1.0
 
-**Beta:** integrar paquetes instalados desde el canal de pruebas en dos proyectos fuera del
+**Beta:** _no empieza_ mientras el inventario `docs/api/volt-parity.md` tenga filas en C, P o M. Integrar paquetes instalados desde el canal de pruebas en dos proyectos fuera del
 workspace: al menos una app de formularios/CRUD y una integración con SSR/hidratación.
 Pueden pertenecer al mismo equipo, pero no depender de aliases ni de dependencias de la demo.
 Registrar feedback, versión exacta, escenarios y resolución. Proponer un mínimo de dos semanas
@@ -230,6 +288,8 @@ además de revisar el historial de CI. Guardar trazas y resultados; los retries 
 en la promoción final:
 
 - [ ] Todos los exports incluidos figuran en el contrato y están documentados.
+- [ ] Cada fila del inventario Volt está en V o N con evidencia de comportamiento (no solo cobertura unitaria).
+- [ ] Angular 21.2 y 22 verificados con tarballs instalados; SSR con hidratación real por fila interactiva.
 - [ ] Cero defectos abiertos que rompan contratos de la API estable; cero P0/P1 pendientes.
 - [ ] El 100 % de los requisitos aplicables tiene evidencia unitaria, de integración o E2E.
 - [ ] Todas las áreas interactivas tienen E2E de sus flujos críticos, incluidas composiciones.
@@ -320,8 +380,15 @@ resuelto, archivos permitidos y aceptación concreta. Los encargos se detallan a
 | [0.7 — Core](docs/roadmap/0.7-core.md)                                 | `07-01` a `07-08`                                       |
 | [0.8 — Flotantes y feedback](docs/roadmap/0.8-floating.md)             | `08-01` a `08-07`                                       |
 | [0.9 — Selección y controles](docs/roadmap/0.9-controls.md)            | `09-01` a `09-08`                                       |
-| [0.10 — Consumidores y compatibilidad](docs/roadmap/0.10-consumers.md) | `10-01` a `10-08`                                       |
-| [0.11 — Release y congelación](docs/roadmap/0.11-release.md)           | `11-01` a `11-07`                                       |
+| [0.10 — Selección avanzada](docs/roadmap/0.10-advanced-selection.md)   | `10-01` a `10-05`                                       |
+| [0.11 — Controles de rango](docs/roadmap/0.11-range-controls.md)       | `11-01` a `11-04`                                       |
+| [0.12 — Fecha y rango](docs/roadmap/0.12-date-range.md)                | `12-01` a `12-05`                                       |
+| [0.13 — Navegación](docs/roadmap/0.13-navigation.md)                   | `13-01` a `13-05`                                       |
+| [0.14 — Texto y archivos](docs/roadmap/0.14-text-file-input.md)        | `14-01` a `14-06`                                       |
+| [0.15 — Feedback](docs/roadmap/0.15-feedback.md)                       | `15-01` a `15-04`                                       |
+| [0.16 — Drawer y resizable](docs/roadmap/0.16-drawer-resizable.md)     | `16-01` a `16-05`                                       |
+| [0.17 — Consumidores y compatibilidad](docs/roadmap/0.17-consumers.md) | `17-01` a `17-09` (antes `10-xx`)                       |
+| [0.18 — Release y congelación](docs/roadmap/0.18-release.md)           | `18-01` a `18-07` (antes `11-xx`)                       |
 | [Beta → RC → 1.0](docs/roadmap/1.0-validation.md)                      | `V1-REL-01` a `V1-REL-05`                               |
 
 Los números de tarea identifican encargos; no indican que ya estén implementados o aprobados.

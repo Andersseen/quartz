@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "ng build quartz-core && tsc --noEmit -p packages/core/tsconfig.lib.json && tsc --noEmit -p packages/primitives/tsconfig.lib.json && tsc --noEmit -p tsconfig.app.json",
+    "typecheck": "ng build quartz-core && tsc --noEmit -p packages/core/tsconfig.lib.json && tsc --noEmit -p packages/primitives/tsconfig.lib.json && tsc --noEmit -p packages/primitives/forms/tsconfig.lib.json && tsc --noEmit -p tsconfig.app.json",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "lint": "eslint \"{packages/core,packages/primitives,src}/**/*.{ts,html}\"",

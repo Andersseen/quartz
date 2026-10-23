@@ -40,7 +40,7 @@ export class RadioDirective<T> implements OnInit, OnDestroy {
   readonly id = `qz-radio-${++radioId}`;
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
-  readonly radioDisabled = computed(() => this.disabled() || this.group.disabled());
+  readonly radioDisabled = computed(() => this.disabled() || this.group.isDisabled());
   readonly selected = computed(() => this.group.isSelected(this));
   readonly tabIndex = computed(() =>
     this.radioDisabled() ? -1 : this.group.activeTabIndex(this.id),

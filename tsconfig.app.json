@@ -5,6 +5,7 @@
     "types": ["node"],
     "paths": {
       "@quartz-headless/core": ["./packages/core/src/public-api.ts"],
+      "@quartz-headless/primitives/forms": ["./packages/primitives/forms/src/public-api.ts"],
       "@quartz-headless/primitives": ["./packages/primitives/src/public-api.ts"]
     }
   },

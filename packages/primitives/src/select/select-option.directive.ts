@@ -39,10 +39,13 @@ export class SelectOptionDirective<T> implements OnInit, OnDestroy {
     alias: 'qzSelectOptionDisabled',
     transform: booleanAttribute,
   });
-  readonly label = input<string | null>(null, { alias: 'qzSelectOptionLabel' });
+  /** Explicit typeahead label; defaults to the option's text content. */
+  readonly qzSelectOptionLabel = input<string | null>(null);
 
   readonly id = `qz-select-option-${++selectOptionId}`;
   readonly element = () => this.elementRef.nativeElement;
+  readonly label = () =>
+    this.qzSelectOptionLabel() ?? this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly optionDisabled = computed(() => this.disabled());
   readonly selected = computed(() => this.select.isSelected(this));
   readonly highlighted = computed(() => this.select.activeId() === this.id);
