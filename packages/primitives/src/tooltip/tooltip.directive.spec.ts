@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { render, screen } from '@testing-library/angular';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
@@ -224,5 +225,191 @@ describe('TooltipDirective', () => {
     // still leave the tooltip gone, but let's also make sure nothing throws when a second
     // scroll fires against an already-closed tooltip.
     expect(() => document.dispatchEvent(new Event('scroll'))).not.toThrow();
+  });
+
+  describe('aria-describedby preservation', () => {
+    @Component({
+      standalone: true,
+      imports: [TooltipDirective],
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      template: `
+        <p id="help">Help</p>
+        <button qzTooltip="Tip" aria-describedby="help">Hover me</button>
+      `,
+    })
+    class DescribedHost {}
+
+    it('keeps the consumer description before, during and after the tooltip', async () => {
+      await render(DescribedHost);
+      const button = screen.getByText('Hover me');
+      expect(button.getAttribute('aria-describedby')).toBe('help');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      const id = document.querySelector('.qz-tooltip')?.id;
+      expect(button.getAttribute('aria-describedby')).toBe(`help ${id}`);
+
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      vi.advanceTimersByTime(200);
+      expect(button.getAttribute('aria-describedby')).toBe('help');
+    });
+
+    it('does not add an aria-describedby attribute while hidden and removes it afterwards', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+      expect(button.hasAttribute('aria-describedby')).toBe(false);
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      expect(button.hasAttribute('aria-describedby')).toBe(true);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(button.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('restores the description when the directive is destroyed while visible', async () => {
+      const { fixture } = await render(DescribedHost);
+      const button = screen.getByText('Hover me');
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+
+      fixture.destroy();
+      expect(document.querySelector('.qz-tooltip')).toBeNull();
+      expect(button.getAttribute('aria-describedby')).toBe('help');
+    });
+  });
+
+  describe('overlapping interaction sources', () => {
+    it('stays visible while focus remains after the pointer leaves', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      button.dispatchEvent(new FocusEvent('focus'));
+      vi.advanceTimersByTime(400);
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      vi.advanceTimersByTime(500);
+      expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+
+      button.dispatchEvent(new FocusEvent('blur'));
+      vi.advanceTimersByTime(200);
+      expect(document.querySelector('.qz-tooltip')).toBeNull();
+    });
+
+    it('stays visible while the pointer remains after focus leaves', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new FocusEvent('focus'));
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      button.dispatchEvent(new FocusEvent('blur'));
+      vi.advanceTimersByTime(500);
+      expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      vi.advanceTimersByTime(200);
+      expect(document.querySelector('.qz-tooltip')).toBeNull();
+    });
+
+    it('re-entering during the hide delay cancels the pending hide', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      vi.advanceTimersByTime(50);
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(500);
+      expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+    });
+
+    it('overlapping hide requests leave no orphaned timer behind', async () => {
+      const { fixture } = await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      const directive = fixture.debugElement
+        .query(By.directive(TooltipDirective))
+        .injector.get(TooltipDirective);
+      directive.hide();
+      directive.hide();
+      directive.show();
+      vi.advanceTimersByTime(500);
+      expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+    });
+  });
+
+  describe('lifecycle', () => {
+    it('does not render when the host is destroyed before the show delay elapses', async () => {
+      const { fixture } = await render(TestHost);
+      screen.getByText('Hover me').dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(100);
+
+      fixture.destroy();
+      vi.advanceTimersByTime(1000);
+      expect(document.querySelector('.qz-tooltip')).toBeNull();
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it('cancels the pending positioning frame when torn down before it runs', async () => {
+      const cancel = vi.spyOn(window, 'cancelAnimationFrame');
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(300);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(cancel).toHaveBeenCalled();
+      cancel.mockRestore();
+    });
+
+    it('updates the text of a visible tooltip when the content changes', async () => {
+      @Component({
+        standalone: true,
+        imports: [TooltipDirective],
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        template: `<button [qzTooltip]="text()">Hover me</button>`,
+      })
+      class DynamicHost {
+        readonly text = signal('One');
+      }
+      const { fixture } = await render(DynamicHost);
+      const button = screen.getByText('Hover me');
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      expect(document.querySelector('.qz-tooltip')?.textContent).toBe('One');
+
+      fixture.componentInstance.text.set('Two');
+      fixture.detectChanges();
+      expect(document.querySelectorAll('.qz-tooltip')).toHaveLength(1);
+      expect(document.querySelector('.qz-tooltip')?.textContent).toBe('Two');
+
+      fixture.componentInstance.text.set('');
+      fixture.detectChanges();
+      expect(document.querySelector('.qz-tooltip')).toBeNull();
+      expect(button.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('a template tooltip keeps a consumer-provided id and role', async () => {
+      @Component({
+        standalone: true,
+        imports: [TooltipDirective],
+        changeDetection: ChangeDetectionStrategy.OnPush,
+        template: `
+          <button [qzTooltip]="tpl">Hover me</button>
+          <ng-template #tpl><div id="mine" class="rich">Rich</div></ng-template>
+        `,
+      })
+      class IdHost {}
+      await render(IdHost);
+      const button = screen.getByText('Hover me');
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      expect(document.querySelector('.rich')?.id).toBe('mine');
+      expect(button.getAttribute('aria-describedby')).toBe('mine');
+    });
   });
 });

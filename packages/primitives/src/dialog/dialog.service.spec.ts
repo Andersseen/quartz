@@ -224,7 +224,12 @@ describe('DialogService', () => {
     ref.close();
   });
 
-  it('should apply custom aria-labelledby and aria-describedby', () => {
+  it('should apply custom aria-labelledby and aria-describedby that exist in the document', () => {
+    const title = document.createElement('h2');
+    title.id = 'my-title';
+    const desc = document.createElement('p');
+    desc.id = 'my-desc';
+    document.body.append(title, desc);
     const panel = document.createElement('div');
     const { templateRef, viewContainerRef } = createTemplateMocks(panel);
 
@@ -238,6 +243,88 @@ describe('DialogService', () => {
     expect(panelEl?.getAttribute('aria-describedby')).toBe('my-desc');
 
     ref.close();
+    title.remove();
+    desc.remove();
+  });
+
+  it('never writes an aria reference whose target does not exist', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef, {
+      ariaLabelledBy: 'missing-title',
+      ariaDescribedBy: 'missing-desc',
+    });
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.hasAttribute('aria-labelledby')).toBe(false);
+    expect(panelEl?.hasAttribute('aria-describedby')).toBe(false);
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    ref.close();
+    warn.mockRestore();
+  });
+
+  it('uses ariaLabel as the accessible name when there is no title element', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef, { ariaLabel: 'Settings' });
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.getAttribute('aria-label')).toBe('Settings');
+    expect(warn).not.toHaveBeenCalled();
+
+    ref.close();
+    warn.mockRestore();
+  });
+
+  it('prefers a resolved aria-labelledby over ariaLabel', () => {
+    const panel = document.createElement('div');
+    const title = document.createElement('h2');
+    title.id = 'qz-title-wins';
+    panel.appendChild(title);
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef, {
+      ariaLabelledBy: 'qz-title-wins',
+      ariaLabel: 'Ignored',
+    });
+
+    const panelEl = document.querySelector('[role="dialog"]');
+    expect(panelEl?.getAttribute('aria-labelledby')).toBe('qz-title-wins');
+    expect(panelEl?.hasAttribute('aria-label')).toBe(false);
+
+    ref.close();
+  });
+
+  it('isolates the background while open and restores it on close', () => {
+    const app = document.createElement('main');
+    document.body.appendChild(app);
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+
+    const ref = service.open(templateRef, viewContainerRef, { ariaLabel: 'x' });
+    expect(app.hasAttribute('inert') || app.getAttribute('aria-hidden') === 'true').toBe(true);
+    expect(document.querySelector('[data-qz-dialog-wrapper]')?.hasAttribute('inert')).toBe(false);
+
+    ref.close();
+    expect(app.hasAttribute('inert')).toBe(false);
+    expect(app.hasAttribute('aria-hidden')).toBe(false);
+    app.remove();
+  });
+
+  it('emits closed$ once even if teardown throws', () => {
+    const panel = document.createElement('div');
+    const { templateRef, viewContainerRef } = createTemplateMocks(panel);
+    const ref = service.open(templateRef, viewContainerRef, { ariaLabel: 'x' });
+    const closed = vi.fn();
+    ref.closed$.subscribe(closed);
+    ref.close();
+    ref.close();
+    expect(closed).toHaveBeenCalledTimes(1);
   });
 
   it('should trap focus including contenteditable elements', () => {

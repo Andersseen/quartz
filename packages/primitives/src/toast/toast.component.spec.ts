@@ -70,4 +70,36 @@ describe('ToastComponent', () => {
     toastElement.dispatchEvent(new MouseEvent('mouseleave'));
     expect(resumeSpy).toHaveBeenCalled();
   });
+
+  it.each([
+    ['error', 'alert'],
+    ['warning', 'status'],
+    ['info', 'status'],
+    ['success', 'status'],
+  ] as const)('announces %s toasts with role=%s', async (type, role) => {
+    await render(ToastComponent, { inputs: { toast: { ...mockToast, type }, progress: 100 } });
+    expect(screen.getByRole(role)).toBeInTheDocument();
+  });
+
+  it('keeps the progress bar out of the accessibility tree so progress never re-announces', async () => {
+    const { fixture } = await render(ToastComponent, {
+      inputs: { toast: mockToast, progress: 40 },
+    });
+    expect(fixture.nativeElement.querySelector('.qz-toast__progress')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+    fixture.componentRef.setInput('progress', 20);
+    fixture.detectChanges();
+    expect(screen.getByRole('status')).toHaveTextContent('Test Message');
+  });
+
+  it('exposes an accessibly named close button only when closable', async () => {
+    const { rerender } = await render(ToastComponent, {
+      inputs: { toast: mockToast, progress: 100 },
+    });
+    expect(screen.getByRole('button', { name: 'Close notification' })).toBeInTheDocument();
+    await rerender({ inputs: { toast: { ...mockToast, closable: false }, progress: 100 } });
+    expect(screen.queryByRole('button')).toBeNull();
+  });
 });

@@ -11,11 +11,12 @@ import { Toast } from './toast.types';
       [class]="'qz-toast--' + toast().type"
       [attr.data-qz-type]="toast().type"
       [attr.role]="toast().type === 'error' ? 'alert' : 'status'"
+      aria-atomic="true"
       (mouseenter)="onMouseEnter()"
       (mouseleave)="onMouseLeave()"
     >
       @if (toast().showProgress && toast().duration > 0) {
-        <div class="qz-toast__progress">
+        <div class="qz-toast__progress" aria-hidden="true">
           <div class="qz-toast__progress-bar" [style.width.%]="progress()"></div>
         </div>
       }

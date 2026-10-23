@@ -62,6 +62,7 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
   private childMenuService: MenuService | null = null;
   private focusRestorer: FocusRestorer | null = null;
   private openTimer: number | null = null;
+  private cancelFocusFrame: (() => void) | null = null;
 
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly submenu = input<TemplateRef<unknown> | null>(null);
@@ -116,6 +117,8 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
 
   closeSubmenu(restoreFocus = true): void {
     this.clearOpenTimer();
+    this.cancelFocusFrame?.();
+    this.cancelFocusFrame = null;
     if (!this.isSubmenuOpen() && !this.overlayRef) return;
     const overlay = this.overlayRef;
     const panel = overlay
@@ -133,7 +136,10 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
     this.#isSubmenuOpen.set(false);
     this.#submenuPanelId.set(null);
     overlay?.destroy();
-    if (restoreFocus) this.focusRestorer?.restore() ?? focusSafely(this.elementRef.nativeElement);
+    if (restoreFocus) {
+      if (this.focusRestorer) this.focusRestorer.restore();
+      else focusSafely(this.elementRef.nativeElement);
+    }
     this.focusRestorer = null;
   }
 
@@ -149,15 +155,31 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
   }
 
   onPointerEnter(): void {
-    if (!this.hasSubmenu() || this.disabled()) return;
-    this.menuService.setActive(this.id);
+    if (this.disabled()) return;
     this.clearOpenTimer();
     const view = this.document.defaultView;
+    const delay =
+      this.menuService.config().submenuOpenDelayMs ?? DEFAULT_MENU_CONFIG.submenuOpenDelayMs;
+    if (!this.hasSubmenu()) {
+      // Moving onto a plain sibling dismisses the sibling submenu that is still open. Same
+      // delay as opening, so a diagonal move toward the submenu is not cut short.
+      this.menuService.setActive(this.id);
+      if (view && this.menuService.openSubmenuId()) {
+        this.openTimer = view.setTimeout(() => {
+          this.openTimer = null;
+          this.menuService.closeOpenSubmenu();
+          // Focus may have been inside the submenu that just went away.
+          this.menuService.setActive(this.id, { focus: true });
+        }, delay);
+      }
+      return;
+    }
+    this.menuService.setActive(this.id);
     if (!view) return;
     this.openTimer = view.setTimeout(() => {
       this.openTimer = null;
       this.openSubmenu({ focusFirst: false });
-    }, this.menuService.config().submenuOpenDelayMs ?? DEFAULT_MENU_CONFIG.submenuOpenDelayMs);
+    }, delay);
   }
 
   onPointerLeave(): void {
@@ -199,7 +221,10 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
       this.menuService.registerPanel(panel);
       if (options.focusFirst) {
         this.childMenuService?.focusFirst();
-        queueFrame(this.document, () => this.childMenuService?.focusFirst());
+        this.cancelFocusFrame = queueFrame(this.document, () => {
+          this.cancelFocusFrame = null;
+          this.childMenuService?.focusFirst();
+        });
       }
     });
     this.closedSubscription = this.overlayRef.closed$.subscribe(() => this.closeSubmenu(false));
@@ -225,8 +250,13 @@ function getMenuService(panel: HTMLElement): MenuService | null {
   );
 }
 
-function queueFrame(document: Document, callback: () => void): void {
+/** Schedules `callback` for the next frame and returns a function that cancels it. */
+function queueFrame(document: Document, callback: () => void): () => void {
   const view = document.defaultView;
-  if (view?.requestAnimationFrame) view.requestAnimationFrame(callback);
-  else callback();
+  if (view?.requestAnimationFrame) {
+    const id = view.requestAnimationFrame(callback);
+    return () => view.cancelAnimationFrame(id);
+  }
+  callback();
+  return () => undefined;
 }

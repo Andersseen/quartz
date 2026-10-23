@@ -88,7 +88,7 @@ export class OverlayRef {
     // If the host view container is destroyed while open (e.g. route change), Angular tears
     // down our view without calling close(); release the wrapper and listeners here.
     this.viewRef.onDestroy(() => {
-      if (this.#session === session) this.close();
+      if (this.#session === session) this.#close(true);
     });
 
     for (const node of this.viewRef.rootNodes) {
@@ -119,6 +119,16 @@ export class OverlayRef {
   }
 
   close(): void {
+    this.#close(false);
+  }
+
+  /**
+   * `viewDestroying`: Angular is already tearing the embedded view down (host destroyed). The
+   * view must NOT be destroyed again from here — doing so re-entrantly detaches it from its
+   * container while Angular is walking the view tree, which makes Angular skip the cleanup of
+   * every ancestor view (a Dialog hosting this overlay would never close).
+   */
+  #close(viewDestroying: boolean): void {
     if (!this.isOpen) return;
     this.#session++;
     this.#cancelFrame?.();
@@ -133,7 +143,7 @@ export class OverlayRef {
     const wrapperEl = this.wrapperEl;
     this.viewRef = null;
     this.wrapperEl = null;
-    viewRef?.destroy();
+    if (!viewDestroying) viewRef?.destroy();
     wrapperEl?.remove();
 
     this.#closed$.next();

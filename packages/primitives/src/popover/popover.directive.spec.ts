@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PopoverDirective } from './popover.directive';
 import { PopoverTriggerDirective } from './popover-trigger.directive';
 
@@ -14,6 +14,8 @@ import { PopoverTriggerDirective } from './popover-trigger.directive';
       [popover]="popover"
       [(open)]="open"
       [autoFocus]="autoFocus()"
+      [disabled]="disabled()"
+      (opened)="openedCount = openedCount + 1"
       (closed)="closedCount = closedCount + 1"
     >
       Details
@@ -28,7 +30,9 @@ import { PopoverTriggerDirective } from './popover-trigger.directive';
 class PopoverHost {
   readonly open = signal(false);
   readonly autoFocus = signal(false);
+  readonly disabled = signal(false);
   closedCount = 0;
+  openedCount = 0;
 }
 
 describe('Popover', () => {
@@ -106,5 +110,79 @@ describe('Popover', () => {
 
     fixture.destroy();
     expect(fixture.componentInstance.closedCount).toBe(1);
+  });
+
+  it('opens and closes programmatically with matching model, DOM and events', async () => {
+    const { fixture } = await render(PopoverHost);
+    const trigger = screen.getByText('Details');
+    fixture.componentInstance.open.set(true);
+    fixture.detectChanges();
+    await screen.findByText('Inside');
+    expect(fixture.componentInstance.openedCount).toBe(1);
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    fixture.componentInstance.open.set(false);
+    fixture.detectChanges();
+    await waitFor(() => expect(screen.queryByText('Inside')).toBeNull());
+    expect(fixture.componentInstance.closedCount).toBe(1);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger.hasAttribute('aria-controls')).toBe(false);
+  });
+
+  it('never leaves the model open while a disabled trigger refuses to open', async () => {
+    const { fixture } = await render(PopoverHost);
+    fixture.componentInstance.disabled.set(true);
+    fixture.componentInstance.open.set(true);
+    fixture.detectChanges();
+    await waitFor(() => expect(fixture.componentInstance.open()).toBe(false));
+    expect(screen.queryByText('Inside')).toBeNull();
+    expect(fixture.componentInstance.openedCount).toBe(0);
+    expect(fixture.componentInstance.closedCount).toBe(0);
+  });
+
+  it('closes an open popover when the trigger becomes disabled', async () => {
+    const { fixture } = await render(PopoverHost);
+    fireEvent.click(screen.getByText('Details'));
+    await screen.findByText('Inside');
+
+    fixture.componentInstance.disabled.set(true);
+    fixture.detectChanges();
+    await waitFor(() => expect(screen.queryByText('Inside')).toBeNull());
+    expect(fixture.componentInstance.closedCount).toBe(1);
+    expect(fixture.componentInstance.open()).toBe(false);
+  });
+
+  it('rapid open/close/open emits one event per real transition', async () => {
+    const { fixture } = await render(PopoverHost);
+    const trigger = screen.getByText('Details');
+    fireEvent.click(trigger);
+    fireEvent.click(trigger);
+    fireEvent.click(trigger);
+    await screen.findByText('Inside');
+    expect(fixture.componentInstance.openedCount).toBe(2);
+    expect(fixture.componentInstance.closedCount).toBe(1);
+    expect(document.querySelectorAll('[data-qz-overlay-container] > *')).toHaveLength(1);
+  });
+
+  it('a popover closed before the autofocus frame runs never receives focus', async () => {
+    const frames: FrameRequestCallback[] = [];
+    const raf = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((cb: FrameRequestCallback) => frames.push(cb));
+    const cancel = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+      frames[id - 1] = () => undefined;
+    });
+    const { fixture } = await render(PopoverHost);
+    fixture.componentInstance.autoFocus.set(true);
+    fixture.detectChanges();
+    const trigger = screen.getByText('Details');
+    fireEvent.click(trigger);
+    fireEvent.click(trigger);
+    frames.forEach((cb) => cb(0));
+
+    expect(document.activeElement).toBe(trigger);
+    expect(cancel).toHaveBeenCalled();
+    raf.mockRestore();
+    cancel.mockRestore();
   });
 });

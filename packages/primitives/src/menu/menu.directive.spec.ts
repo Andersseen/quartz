@@ -199,4 +199,107 @@ describe('Menu', () => {
     expect(screen.getAllByRole('menu')).toHaveLength(2);
     vi.useRealTimers();
   });
+
+  it('hovering a plain sibling closes the open submenu after the hover delay', async () => {
+    @Component({
+      standalone: true,
+      imports: MENU_IMPORTS,
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      template: `
+        <button qzMenuTrigger [menu]="menu">Actions</button>
+        <ng-template #menu>
+          <div qzMenu>
+            <button qzMenuItem [submenu]="submenu">Share</button>
+            <button qzMenuItem>Plain</button>
+            <ng-template #submenu>
+              <div qzMenu><button qzMenuItem>Copy link</button></div>
+            </ng-template>
+          </div>
+        </ng-template>
+      `,
+    })
+    class SiblingHost {}
+
+    vi.useFakeTimers();
+    await render(SiblingHost);
+    fireEvent.click(screen.getByText('Actions'));
+    const share = await screen.findByText('Share');
+    fireEvent.pointerEnter(share);
+    vi.advanceTimersByTime(120);
+    expect(screen.getAllByRole('menu')).toHaveLength(2);
+
+    const plain = screen.getByText('Plain');
+    fireEvent.pointerEnter(plain);
+    vi.advanceTimersByTime(50);
+    expect(screen.getAllByRole('menu')).toHaveLength(2);
+    vi.advanceTimersByTime(100);
+    expect(screen.getAllByRole('menu')).toHaveLength(1);
+    expect(document.activeElement).toBe(plain);
+    vi.useRealTimers();
+  });
+
+  it('leaving a hovered submenu item before the delay never opens it', async () => {
+    vi.useFakeTimers();
+    await render(SubmenuHost);
+    fireEvent.click(screen.getByText('Actions'));
+    const share = await screen.findByText('Share');
+    fireEvent.pointerEnter(share);
+    vi.advanceTimersByTime(50);
+    fireEvent.pointerLeave(share);
+    vi.advanceTimersByTime(500);
+    expect(screen.getAllByRole('menu')).toHaveLength(1);
+    vi.useRealTimers();
+  });
+
+  it('removing the host with a pending hover timer and an open submenu leaves nothing behind', async () => {
+    @Component({
+      standalone: true,
+      imports: MENU_IMPORTS,
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      template: `
+        @if (show()) {
+          <button qzMenuTrigger [menu]="menu">Actions</button>
+          <ng-template #menu>
+            <div qzMenu>
+              <button qzMenuItem>Alpha</button>
+              <button qzMenuItem [submenu]="submenu">Share</button>
+              <ng-template #submenu>
+                <div qzMenu><button qzMenuItem>Copy link</button></div>
+              </ng-template>
+            </div>
+          </ng-template>
+        }
+      `,
+    })
+    class RemovableHost {
+      readonly show = signal(true);
+    }
+
+    const { fixture } = await render(RemovableHost);
+    fireEvent.click(screen.getByText('Actions'));
+    const share = await screen.findByText('Share');
+    fireEvent.pointerEnter(share);
+    await waitFor(() => expect(screen.getAllByRole('menu')).toHaveLength(2));
+    // A second hover timer is still pending when the host goes away.
+    fireEvent.pointerEnter(screen.getByText('Alpha'));
+
+    fixture.componentInstance.show.set(false);
+    fixture.detectChanges();
+    await new Promise((resolve) => document.defaultView?.setTimeout(resolve, 200));
+    expect(screen.queryAllByRole('menu')).toHaveLength(0);
+    expect(document.querySelectorAll('[data-qz-overlay-container] > *')).toHaveLength(0);
+  });
+
+  it('Escape in a submenu closes only that level and returns focus to its parent item', async () => {
+    await render(SubmenuHost);
+    fireEvent.click(screen.getByText('Actions'));
+    const root = await screen.findByRole('menu');
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    fireEvent.keyDown(root, { key: 'ArrowRight' });
+    await waitFor(() => expect(screen.getAllByRole('menu')).toHaveLength(2));
+
+    fireEvent.keyDown(screen.getAllByRole('menu')[1], { key: 'Escape' });
+    await waitFor(() => expect(screen.getAllByRole('menu')).toHaveLength(1));
+    expect(document.activeElement).toBe(screen.getByText('Share'));
+  });
 });

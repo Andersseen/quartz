@@ -44,7 +44,7 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
         right: 0;
         bottom: 0;
         pointer-events: none;
-        z-index: 9999;
+        z-index: var(--qz-toast-z-index, 9999);
       }
 
       /*
@@ -57,9 +57,9 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
         position: fixed;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        padding: 16px;
-        max-width: 400px;
+        gap: var(--qz-toast-gap, 8px);
+        padding: var(--qz-toast-inset, 16px);
+        max-width: var(--qz-toast-max-width, 400px);
         pointer-events: none;
       }
 
