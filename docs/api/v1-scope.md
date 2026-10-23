@@ -1,6 +1,6 @@
 # Quartz v1 scope decisions
 
-Status: phase 0.6 working decision record. These decisions translate the roadmap proposal into an
+Status: phase 0.6 working decision record, revised in 0.9 for the Volt UI parity requirement. These decisions translate the roadmap proposal into an
 initial v1 catalogue. A future removal still needs its own compatibility change and migration note;
 this file does not remove exports.
 
@@ -23,26 +23,43 @@ this file does not remove exports.
 | Primitives | Select         | High-value composed control.                                       | Forms adapter in 0.9 and external consumer fixture.                                                                                       |
 | Primitives | Tabs           | Common navigation/disclosure primitive.                            | Dynamic tabs and activation mode tests.                                                                                                   |
 | Primitives | Accordion      | Common disclosure primitive.                                       | Single/multiple/collapsible contract.                                                                                                     |
-| Primitives | Checkbox       | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
-| Primitives | Switch         | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
-| Primitives | RadioGroup     | Form control.                                                      | Forms adapter in 0.9.                                                                                                                     |
+| Primitives | Checkbox       | Form control.                                                      | Done in 0.9 (`@quartz-headless/primitives/forms`).                                                                                        |
+| Primitives | Switch         | Form control.                                                      | Done in 0.9 (`@quartz-headless/primitives/forms`).                                                                                        |
+| Primitives | RadioGroup     | Form control.                                                      | Done in 0.9 (`@quartz-headless/primitives/forms`).                                                                                        |
 | Primitives | Toast          | Feedback primitive.                                                | Announcement/timer contract and route cleanup.                                                                                            |
 
-## Conditional before v1
+## Volt-required (mandatory for 1.0)
 
-| Package    | Area           | Default decision                                                                     | Promotion condition                                                                   |
-| ---------- | -------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| Core       | Splitter       | Keep exported during 0.x; 0.7 review: still conditional (needs browser pointer E2E). | Full pointer, keyboard, constraints and cleanup tests.                                |
-| Core       | Drag and drop  | Keep exported during 0.x; 0.7 review: pointer-only, not keyboard accessible.         | Product accepts native pointer DnD as the contract or scopes keyboard DnD separately. |
-| Core       | Virtual scroll | Keep exported during 0.x; 0.7 review: fixed-size only, no browser contract yet.      | Browser resize/scroll contract and consumer fixture.                                  |
-| Primitives | Combobox       | Conditional, likely split into a later minor if kept.                                | IME, async stale result, freeform and Forms contract accepted.                        |
-| Primitives | Tree           | Conditional, likely split into a later minor if kept.                                | Lazy load, error/retry, template context and selection state all covered.             |
-| Primitives | Slider         | Conditional.                                                                         | Browser pointer capture, keyboard, decimal step and Forms adapter complete.           |
-| Primitives | Toggle         | Conditional.                                                                         | Include if product wants it as a basic control beside Switch/Checkbox.                |
-| Primitives | ToggleGroup    | Conditional.                                                                         | Include only with Toggle, with single/multiple semantics documented.                  |
-| Primitives | Sidebar        | Conditional layout primitive.                                                        | Responsive, focus and scroll-lock behavior proven in real browser.                    |
-| Primitives | Navbar         | Conditional layout primitive.                                                        | Scroll-state and responsive menu contract proven.                                     |
-| Primitives | Stepper        | Conditional flow primitive.                                                          | Linear mode, validation handoff and dynamic step recovery contract accepted.          |
+Quartz 1.0 must provide the headless behaviour of every public Volt UI component at the pinned
+reference revision (`docs/api/volt-parity.md`, Volt `7c76ef3`). Anything Volt exports is therefore
+**not** a free-floating “conditional”: it has an owning milestone and acceptance criteria. Volt-required
+areas that already exist in Quartz were conditional before 0.9 and are now mandatory:
+
+| Package    | Area                     | Volt row(s)              | Owning milestone | Gap summary (see inventory)                                         |
+| ---------- | ------------------------ | ------------------------ | ---------------- | ------------------------------------------------------------------- |
+| Primitives | Combobox                 | `combobox`               | 0.10             | multiple, IME, stale async, Forms, browser E2E                      |
+| Primitives | Select (multiple/groups) | `select`                 | 0.10             | multiple, groups/labels/separators, placeholder identity            |
+| Primitives | Slider                   | `slider`, `range-slider` | 0.11             | browser pointer capture, decimal step, Forms, RangeSlider           |
+| Primitives | Toggle / ToggleGroup     | `toggle`, `toggle-group` | 0.11             | Forms, deselection semantics, RTL                                   |
+| Primitives | Sidebar                  | `sidebar`                | 0.13             | responsive/focus/scroll-lock proof in a browser, collapsed contract |
+| Core       | Splitter                 | `resizable`              | 0.16             | pointer E2E, ARIA values, maxSize, resizing state                   |
+
+Families Volt needs that Quartz does not have yet (new work, no “conditional” escape hatch):
+Date/DateRange (0.12), NavigationMenu/Toolbar/Pagination (0.13), InputOTP/Autofill/FileUpload/FormField
+(0.14), Progress/Meter/Avatar and Toast content API (0.15), Drawer and Tooltip/Popover arrows (0.16).
+
+## Explicit scope decisions still open (not required by Volt)
+
+| Package    | Area           | Default decision                                                                   | Decision needed by       |
+| ---------- | -------------- | ---------------------------------------------------------------------------------- | ------------------------ |
+| Core       | Drag and drop  | Keep exported during 0.x; pointer-only, not keyboard accessible.                   | Before 0.18 (API freeze) |
+| Core       | Virtual scroll | Keep exported during 0.x; fixed-size only, no browser contract yet.                | Before 0.18 (API freeze) |
+| Primitives | Tree           | Not in Volt. Lazy load, error/retry, template context and selection state needed.  | Before 0.18 (API freeze) |
+| Primitives | Navbar         | Not in Volt. Scroll-state and responsive menu contract needed to stay in the root. | Before 0.18 (API freeze) |
+| Primitives | Stepper        | Not in Volt. Linear mode, validation handoff and dynamic step recovery contract.   | Before 0.18 (API freeze) |
+
+An area in this table that is kept must meet the same bar as included areas; one that is dropped
+needs a pre-1.0 breaking minor with migration guidance.
 
 ## Migration stance
 

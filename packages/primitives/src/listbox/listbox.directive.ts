@@ -7,6 +7,8 @@ import {
   computed,
   inject,
   OnDestroy,
+  output,
+  signal,
 } from '@angular/core';
 import { inlineEndKey, inlineStartKey, resolveDirection } from '@quartz-headless/core';
 import { ListboxService } from './listbox.service';
@@ -24,8 +26,8 @@ import type { ListboxOptionDirective } from './listbox-option.directive';
   providers: [ListboxService],
   host: {
     '[attr.role]': '"listbox"',
-    '[attr.tabindex]': 'disabled() ? -1 : 0',
-    '[attr.aria-disabled]': 'disabled() || null',
+    '[attr.tabindex]': 'isDisabled() ? -1 : 0',
+    '[attr.aria-disabled]': 'isDisabled() || null',
     '[attr.aria-multiselectable]': 'multiple() ? true : null',
     '[attr.aria-orientation]': 'orientation()',
     '[attr.aria-activedescendant]': 'activeId()',
@@ -44,6 +46,13 @@ export class ListboxDirective<T> implements OnDestroy {
   readonly config = input<Partial<ListboxConfig>>({});
   /** Equality function for object values. Defaults to Object.is. */
   readonly compareWith = input<(a: T, b: T) => boolean>(Object.is);
+
+  /** Fires once per user selection change; never for programmatic writes. */
+  readonly valueChangeCommitted = output<T | T[] | null>();
+
+  readonly #formDisabled = signal(false);
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly activeId = this.service.activeId;
   readonly activeOption = computed(
@@ -71,12 +80,21 @@ export class ListboxDirective<T> implements OnDestroy {
     return !Array.isArray(value) && value !== null && this.compareWith()(value, option.value());
   }
 
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
+  }
+
   select(option: ListboxOptionDirective<T>): void {
-    if (this.disabled() || option.optionDisabled()) return;
+    if (this.isDisabled() || option.optionDisabled()) return;
     this.setActive(option);
     const optionValue = option.value();
     if (!this.multiple()) {
+      const previous = this.value();
       this.value.set(optionValue);
+      const changed =
+        Array.isArray(previous) || previous === null || !this.compareWith()(previous, optionValue);
+      if (changed) this.valueChangeCommitted.emit(optionValue);
       return;
     }
     const selected = this.value();
@@ -85,10 +103,11 @@ export class ListboxDirective<T> implements OnDestroy {
     if (index === -1) current.push(optionValue);
     else current.splice(index, 1);
     this.value.set(current);
+    this.valueChangeCommitted.emit(current);
   }
 
   onKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.configureCollection();
     const horizontal = this.orientation() === 'horizontal';
     // Horizontal navigation follows reading direction (RTL: ArrowRight = previous, ArrowLeft

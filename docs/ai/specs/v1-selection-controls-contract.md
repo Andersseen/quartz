@@ -1,8 +1,8 @@
 # Spec: v1 selection and controls contract
 
-- **Status:** Draft
-- **Branch:** v1-roadmap
-- **Date:** 2026-09-06
+- **Status:** Accepted — implemented in 0.9.0 for Listbox, Select, Checkbox, Switch, RadioGroup, Tabs, Accordion
+- **Branch:** feat/quartz-0.9-selection-forms-parity
+- **Date:** 2026-10-23 (draft 2026-09-06)
 - **Related:** `docs/api/public-surface.md`, `docs/api/v1-scope.md`, `docs/ai/specs/v1-forms.md`
 
 ## 1. Problem
@@ -14,8 +14,7 @@ that tells implementers exactly what emits and what stays silent.
 ## 2. Goal / non-goals
 
 - Goal: define Listbox, Select, Checkbox, Switch, RadioGroup, Tabs and Accordion contracts for v1.
-- Non-goals: do not implement Forms adapters in this spec; Forms is designed in 0.6 and delivered
-  in 0.9.
+- Non-goals: Forms adapters (see `v1-forms.md`, delivered in 0.9).
 
 ## 3. Public API
 
@@ -38,8 +37,22 @@ primary API. `*ChangeCommitted` outputs are user-commit signals, not mirrors of 
 8. Empty state is explicit: no option/item means no active descendant and no thrown error.
 9. Tabs and Accordion maintain stable trigger/panel relationships and update IDs when dynamic
    content changes.
-10. Conditional controls such as Slider, Toggle and ToggleGroup must meet the same model/commit
-    rules before being promoted to v1.
+10. Slider, Toggle, ToggleGroup and Combobox are **mandatory for 1.0** (Volt parity) and must meet the
+    same model/commit rules in 0.10/0.11; see `docs/api/volt-parity.md`.
+11. Teardown never rewrites a consumer-bound value: destroying a RadioGroup, Tabs or Accordion
+    (route change, `@if`) leaves `value` untouched. Removing the _checked radio_ leaves the value
+    unchanged (nothing displayed as checked). Removing the selected Tab or open Accordion item
+    recovers to a valid item only after the removal settles (microtask), so a re-created item with the
+    same value (`@for`) counts as never removed.
+12. `valueChangeCommitted` (RadioGroup, Select, Listbox) fires once per user change; re-selecting the
+    current value, programmatic writes and Forms `writeValue` never fire it. Checkbox/Switch keep
+    `checkedChangeCommitted`, Toggle keeps `pressedChangeCommitted`.
+13. Select accessible naming: the popup listbox is named by (1) its own `aria-label`/`aria-labelledby`,
+    else (2) the trigger's `aria-label`, else (3) the trigger's `aria-labelledby`, else (4) a reference
+    to the trigger element (an id is generated when missing). No dangling references: `aria-controls`
+    exists only while the popup exists. Tab from the popup returns focus to the trigger first, so
+    focus continues from the trigger's position in the page.
+14. Tab `aria-controls` is omitted when no panel is rendered for that tab (no generated phantom id).
 
 ## 5. Files to create / modify
 
@@ -58,11 +71,11 @@ primary API. `*ChangeCommitted` outputs are user-commit signals, not mirrors of 
 
 ## 7. Definition of done
 
-- [ ] Included selection/control primitives have observable requirement IDs.
-- [ ] Conditional controls are promoted or excluded before API freeze.
-- [ ] Forms adapter implementation can proceed without deciding event semantics.
+- [x] Included selection/control primitives have observable requirements (§4, 1–14) with tests.
+- [x] Conditional controls Volt needs are promoted to mandatory with owning milestones.
+- [x] Forms adapters implemented on these semantics (`v1-forms.md`).
 
 ## 8. Open questions
 
-1. Should Toggle and ToggleGroup be part of the first stable catalogue?
-2. Should Slider be included in 1.0 or delayed until a stronger browser fixture exists?
+1. ~~Should Toggle and ToggleGroup be part of the first stable catalogue?~~ **Yes** — Volt exports both; owner milestone 0.11.
+2. ~~Should Slider be included in 1.0?~~ **Yes** — Volt exports Slider and RangeSlider; owner milestone 0.11 (browser pointer fixture required).

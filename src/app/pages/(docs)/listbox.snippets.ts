@@ -15,3 +15,11 @@ export const MULTI_SNIPPET = `<div qzListbox [multiple]="true" [value]="tags()" 
   <button qzListboxOption="signals">Signals</button>
   <button qzListboxOption="ssr" [qzListboxOptionDisabled]="true">SSR (unavailable)</button>
 </div>`;
+
+export const FORMS_SNIPPET = `import { ListboxDirective, ListboxOptionDirective } from '@quartz-headless/primitives';
+import { ListboxControlDirective } from '@quartz-headless/primitives/forms';
+
+// <div qzListbox [multiple]="true" formControlName="tags" aria-label="Tags">
+//   <div qzListboxOption="alpha">Alpha</div> ...
+// </div>
+// value: T (single) | T[] (multiple); reset() writes null = nothing selected.`;

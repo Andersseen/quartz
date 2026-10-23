@@ -1,71 +1,101 @@
 # Spec: v1 Angular Forms adapters
 
-- **Status:** Draft
-- **Branch:** v1-roadmap
-- **Date:** 2026-09-06
-- **Related:** `docs/api/v1-scope.md`, `docs/ai/specs/v1-selection-controls-contract.md`
+- **Status:** Accepted — implemented in 0.9.0
+- **Branch:** feat/quartz-0.9-selection-forms-parity
+- **Date:** 2026-10-23 (draft 2026-09-06)
+- **Related:** `docs/api/v1-scope.md`, `docs/ai/specs/v1-selection-controls-contract.md`, `docs/api/volt-parity.md` §6
 
 ## 1. Problem
 
 Quartz controls expose signal models, but Angular applications commonly integrate controls through
-Reactive Forms. If v1 claims form-control usefulness, adapters must define disabled, touched,
-reset and programmatic writes without introducing duplicate emissions.
+Reactive or template-driven Forms. A form-control claim needs defined behaviour for programmatic
+writes, user changes, touched, disabled and reset without duplicate emissions.
 
 ## 2. Goal / non-goals
 
-- Goal: design optional Forms integration for included form-like primitives before implementation.
-- Non-goals: no Forms dependency in Core, no required Forms usage for signal consumers and no new
-  package unless implementation proves the current packages cannot host optional providers.
+- Goal: optional Forms integration for the form-like primitives, with no cost for consumers that
+  do not use Forms.
+- Non-goals: no Forms dependency in Core; no required Forms usage for signal consumers; no new npm
+  package; no validators; no generic CVA framework.
 
-## 3. Public API
+## 3. Decisions (resolving the draft's open questions)
 
-Proposed adapter coverage for v1:
+| Question                                          | Decision                                                                                                                                          | Why                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Automatic on the directives or opt-in companions? | **Opt-in companions** in a **secondary entry point** `@quartz-headless/primitives/forms`                                                          | `NG_VALUE_ACCESSOR` lives in `@angular/forms`. A static import in the main entry would make `@angular/forms` a hard requirement for every consumer (an ES import is resolved by the bundler even when unused). A separate entry point keeps the main bundle free of it; `verify:build` fails if the main entry ever imports `@angular/forms`. |
+| New npm package?                                  | **No.** One extra entry point of the existing package                                                                                             | “Do not create an unnecessary package”; shipped by the existing publish pipeline.                                                                                                                                                                                                                                                             |
+| Peer dependency                                   | `@angular/forms` `^21.0.0` as an **optional** peer (`peerDependenciesMeta`)                                                                       | npm warns nobody who never imports `/forms`; a consumer that does gets a normal peer check.                                                                                                                                                                                                                                                   |
+| Selector style                                    | `<primitive>[formControl]`, `[formControlName]`, `[ngModel]`                                                                                      | The adapter only attaches where Angular Forms is actually bound, so existing signal usage is untouched and nothing changes on upgrade.                                                                                                                                                                                                        |
+| Checkbox `'indeterminate'` via Forms              | **Writable.** `writeValue('indeterminate')` shows `aria-checked="mixed"`; user activation resolves it to `true`; `null`/`undefined` write `false` | Matches the model type `boolean \| 'indeterminate'`.                                                                                                                                                                                                                                                                                          |
+| Shared base class                                 | A 25-line `ControlAdapter` holds only `registerOnChange/OnTouched` plumbing                                                                       | Five adapters repeat it identically; everything else (value mapping, touched trigger) stays per control.                                                                                                                                                                                                                                      |
+| Disabled                                          | Each primitive exposes `isDisabled = disabled() \|\| formDisabled()` and a `setFormDisabled()` hook; the `disabled` input is never overwritten    | Forms and the input can both be used without one erasing the other.                                                                                                                                                                                                                                                                           |
 
-- Checkbox: `button[qzCheckbox]`
-- Switch: `button[qzSwitch]`
-- RadioGroup: `[qzRadioGroup]`
-- Select: `[qzSelect]`
-- Optional if promoted: Slider, Toggle, ToggleGroup and Combobox
+## 4. Public API
 
-Adapters provide `ControlValueAccessor` behavior through Angular Forms providers while preserving
-existing signal APIs. `@angular/forms` must be an explicit peer/dependency decision before code is
-added.
+Entry point `@quartz-headless/primitives/forms` exports:
 
-## 4. Behaviour
+| Symbol                       | Attaches to                  | Value                                                               |
+| ---------------------------- | ---------------------------- | ------------------------------------------------------------------- |
+| `CheckboxControlDirective`   | `button[qzCheckbox]` + Forms | `true \| false \| 'indeterminate'`                                  |
+| `SwitchControlDirective`     | `button[qzSwitch]` + Forms   | `boolean`                                                           |
+| `RadioGroupControlDirective` | `[qzRadioGroup]` + Forms     | checked radio's value, `null` when none                             |
+| `SelectControlDirective`     | `[qzSelect]` + Forms         | selected option value, `null` when none (unmatched values are kept) |
+| `ListboxControlDirective`    | `[qzListbox]` + Forms        | value (single) or array (`multiple`); `null` = none                 |
+| `QUARTZ_FORMS`               | —                            | tuple of the five, for `imports: [...QUARTZ_FORMS]`                 |
 
-1. `writeValue` updates the Quartz model and DOM state without emitting committed user events.
-2. User commit calls registered `onChange` exactly once with the public value.
-3. Blur or equivalent focus loss calls `onTouched` once per touched cycle.
-4. `setDisabledState` maps to the public disabled state and blocks user interaction.
-5. Form reset maps to the documented empty value: `false` for switch, `false` or
-   `'indeterminate'` only when explicit for checkbox, `null` for single selection controls.
-6. External signal binding and Forms binding precedence is documented; using both at the same time
-   must either be supported deterministically or warned against in docs.
-7. Validation stays consumer-owned; Quartz does not add validators.
-8. Adapters are SSR-safe and do not touch DOM at import time.
+Supporting additions in the **main** entry (no Forms import): `valueChangeCommitted` output on
+`RadioGroupDirective`, `SelectDirective`, `ListboxDirective`; `touched` output on `SelectDirective`;
+`isDisabled` and `setFormDisabled()` on the five primitives; `SelectDirective.nameListbox()`.
 
-## 5. Files to create / modify
+## 5. Behaviour
 
-| File                                    | Action       | Purpose                               |
-| --------------------------------------- | ------------ | ------------------------------------- |
-| `packages/primitives/src/**/forms*.ts`  | create later | Adapter implementation if approved    |
-| `packages/primitives/src/public-api.ts` | edit later   | Export adapter symbols only if public |
-| `packages/primitives/package.json`      | edit later   | Declare Forms relationship            |
-| `scripts/consumer-smoke/fixture/`       | edit later   | Real form consumer fixture            |
+1. `writeValue` updates the Quartz model and DOM without any committed/user event.
+2. A user action calls the registered `onChange` **exactly once** with the public value. Re-selecting
+   the current value (radio, select, single listbox) is not a change and does not notify.
+3. `onTouched` fires on real focus loss, as defined per control:
+   Checkbox/Switch — `blur`; RadioGroup/Listbox — focus leaves the widget (moving between inner
+   items does not touch); Select — trigger blur while closed, or a popup close that does not return
+   focus to the trigger (outside pointer, focus-outside, scroll). Escape, selection and Tab hand focus
+   back to the trigger first, so they do not touch until focus actually leaves.
+4. `setDisabledState` maps to `isDisabled`: interaction is blocked, an open Select popup closes, and
+   the form value is preserved. Re-enabling restores interaction.
+5. `reset()` writes the empty value: Checkbox/Switch `false`; RadioGroup/Select/Listbox `null`
+   (nothing selected). A non-nullable control resets to its own initial value, as in any Angular form.
+6. Forms and signal bindings together: both write the same model. They are deterministic (the last
+   write wins and `valueChange` is not re-fed into Forms) but **not recommended**; use one source of truth.
+   Template-driven forms need `name` inside `<form>` or `[ngModelOptions]="{standalone: true}"`, as
+   with any control.
+7. Validation is consumer-owned; Quartz adds no validators and sets no `aria-invalid`.
+8. SSR/zoneless: no DOM at import time, no `NgZone`; the adapters are plain directives.
 
-## 6. Test plan
+## 6. Files
 
-- Unit: one CVA harness per included control.
-- Consumer: Reactive Forms app with `strictTemplates`, disabled state, reset and value changes.
-- E2E: one user path submits values from at least Checkbox/Switch/RadioGroup/Select.
+| File                                                               | Purpose                                                                                |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `packages/primitives/forms/ng-package.json`, `forms/src/*.ts`      | Entry point and adapters                                                               |
+| `packages/primitives/forms/tsconfig.lib.json`                      | Type check (`pnpm typecheck`) with a path to the sibling entry                         |
+| `packages/primitives/package.json`                                 | Optional `@angular/forms` peer                                                         |
+| `scripts/api-guard.js`, `docs/api/snapshots/primitives-forms.json` | API snapshot for the new entry                                                         |
+| `scripts/verify-build.js`                                          | Forms entry present, optional peer, main entry free of `@angular/forms`                |
+| `scripts/consumer-smoke/fixture/`                                  | Installed-tarball AOT `strictTemplates` fixture with `ReactiveFormsModule` + `ngModel` |
 
-## 7. Definition of done
+## 7. Test plan (all implemented)
 
-- [ ] Forms dependency strategy approved before implementation.
-- [ ] Every included form-like primitive either has an adapter or explicit non-support note.
-- [ ] Signal-only usage remains unchanged.
+- Unit (real Angular Forms): `forms/src/forms.spec.ts` — writeValue silence, one onChange, unmatched
+  select value, touched rules, disabled (incl. closing an open popup), reset, `ngModel`.
+- Primitive contracts: `controls.contract.spec.ts`, `select/select.contract.spec.ts`.
+- E2E: `e2e/forms.spec.ts` on `/e2e-forms` in Chromium, Firefox and WebKit — values, validation,
+  touched, submit, reset, disabled, keyboard-only, Select in Dialog, RTL, repeated cycles, axe.
+- Consumer: `pnpm verify:consumer` AOT-compiles reactive and template-driven bindings from tarballs.
 
-## 8. Open questions
+## 8. Not in 0.9 (Forms requirements recorded for later milestones)
 
-1. Should adapters be automatic on the existing directives or opt-in companion directives?
-2. Should Checkbox support `'indeterminate'` through Forms writes or treat it as presentation state?
+Combobox (0.10), Toggle/ToggleGroup/Slider/RangeSlider (0.11), DatePicker/DateRangePicker (0.12),
+InputOTP and FileUpload (0.14). Value contracts are in `docs/api/volt-parity.md` §6.
+
+## 9. Definition of done
+
+- [x] Forms dependency strategy decided and verified (`verify:build` guards it).
+- [x] Every included form-like primitive has an adapter or an explicit non-support note (Toggle,
+      ToggleGroup, Slider, Combobox: scheduled, see §8).
+- [x] Signal-only usage unchanged; Core imports no Forms.

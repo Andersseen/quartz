@@ -8,7 +8,7 @@ import {
 } from '@quartz-headless/primitives';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
-import { BASIC_SNIPPET, OBJECT_SNIPPET } from './select.snippets';
+import { BASIC_SNIPPET, OBJECT_SNIPPET, FORMS_SNIPPET } from './select.snippets';
 
 interface Country {
   code: string;
@@ -30,6 +30,7 @@ interface Country {
   templateUrl: './select.page.html',
 })
 export default class SelectPage {
+  readonly formsCode = FORMS_SNIPPET;
   readonly country = signal<string | null>('es');
   readonly rtlCountry = signal<string | null>(null);
   readonly objectCountry = signal<Country | null>({ code: 'fr', name: 'France' });

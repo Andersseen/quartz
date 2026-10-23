@@ -22,6 +22,10 @@ export default defineConfig(() => ({
   resolve: {
     alias: {
       '@quartz-headless/core': resolve(__dirname, 'packages/core/src/public-api.ts'),
+      '@quartz-headless/primitives/forms': resolve(
+        __dirname,
+        'packages/primitives/forms/src/public-api.ts',
+      ),
       '@quartz-headless/primitives': resolve(__dirname, 'packages/primitives/src/public-api.ts'),
     },
   },

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, inject } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, afterNextRender, inject } from '@angular/core';
 import { SelectDirective } from './select.directive';
 
 @Directive({
@@ -18,6 +18,9 @@ export class SelectListboxDirective implements OnDestroy {
 
   constructor() {
     this.select.setListboxElement(this.elementRef.nativeElement);
+    // Runs after the consumer's own attribute bindings were applied, so an explicit
+    // `aria-label` / `aria-labelledby` on the listbox always wins over the trigger's name.
+    afterNextRender(() => this.select.nameListbox(this.elementRef.nativeElement));
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,20 @@
+{
+  "CheckboxControlDirective": {
+    "kind": "class"
+  },
+  "ListboxControlDirective": {
+    "kind": "class"
+  },
+  "QUARTZ_FORMS": {
+    "kind": "const"
+  },
+  "RadioGroupControlDirective": {
+    "kind": "class"
+  },
+  "SelectControlDirective": {
+    "kind": "class"
+  },
+  "SwitchControlDirective": {
+    "kind": "class"
+  }
+}

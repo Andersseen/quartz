@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ListboxDirective, ListboxOptionDirective } from '@quartz-headless/primitives';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
-import { BASIC_SNIPPET, MULTI_SNIPPET } from './listbox.snippets';
+import { BASIC_SNIPPET, MULTI_SNIPPET, FORMS_SNIPPET } from './listbox.snippets';
 
 @Component({
   selector: 'app-listbox-page',
@@ -11,6 +11,7 @@ import { BASIC_SNIPPET, MULTI_SNIPPET } from './listbox.snippets';
   templateUrl: './listbox.page.html',
 })
 export default class ListboxPage {
+  readonly formsCode = FORMS_SNIPPET;
   readonly selectedPlan = signal<string | null>('pro');
   readonly selectedTags = signal<string[]>(['angular']);
   readonly basicCode = BASIC_SNIPPET;

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CheckboxDirective, type CheckboxState } from '@quartz-headless/primitives';
 import { CodeBlockComponent } from '../../components/code-block/code-block.component';
 import { DemoPageComponent } from '../../components/demo-page/demo-page.component';
-import { BASIC_SNIPPET, INDETERMINATE_SNIPPET } from './checkbox.snippets';
+import { BASIC_SNIPPET, INDETERMINATE_SNIPPET, FORMS_SNIPPET } from './checkbox.snippets';
 
 @Component({
   selector: 'app-checkbox-page',
@@ -11,6 +11,7 @@ import { BASIC_SNIPPET, INDETERMINATE_SNIPPET } from './checkbox.snippets';
   templateUrl: './checkbox.page.html',
 })
 export default class CheckboxPage {
+  readonly formsCode = FORMS_SNIPPET;
   readonly accepted = signal(false);
   readonly selectAll = signal<CheckboxState>('indeterminate');
   readonly basicCode = BASIC_SNIPPET;

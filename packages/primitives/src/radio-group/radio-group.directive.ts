@@ -8,6 +8,8 @@ import {
   inject,
   input,
   model,
+  output,
+  signal,
 } from '@angular/core';
 import { CollectionStore, resolveDirection, type CollectionItem } from '@quartz-headless/core';
 import type { RadioDirective } from './radio.directive';
@@ -20,9 +22,9 @@ import { DEFAULT_RADIO_GROUP_CONFIG, type RadioGroupOrientation } from './radio-
   host: {
     '[attr.role]': '"radiogroup"',
     '[attr.aria-orientation]': 'orientation()',
-    '[attr.aria-disabled]': 'disabled() || null',
+    '[attr.aria-disabled]': 'isDisabled() || null',
     '[attr.data-qz-orientation]': 'orientation()',
-    '[attr.data-qz-disabled]': 'disabled() ? "" : null',
+    '[attr.data-qz-disabled]': 'isDisabled() ? "" : null',
     '(keydown)': 'onKeydown($event)',
   },
 })
@@ -42,6 +44,13 @@ export class RadioGroupDirective<T> implements OnDestroy {
     DEFAULT_RADIO_GROUP_CONFIG.compareWith as (a: T, b: T) => boolean,
   );
 
+  /** Fires once per user interaction that changed the value; never for programmatic writes. */
+  readonly valueChangeCommitted = output<T | null>();
+
+  readonly #formDisabled = signal(false);
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+
   readonly activeId = this.collection.activeId;
   readonly activeRadio = computed(() => this.collection.activeItem());
 
@@ -51,20 +60,26 @@ export class RadioGroupDirective<T> implements OnDestroy {
     if (this.isSelected(radio)) this.collection.setActive(radio.id);
   }
 
+  // The value is owned by the consumer (model/Forms): removing the checked radio leaves the
+  // value untouched, exactly like removing a Select option. Clearing it here also wiped
+  // two-way bindings whenever the whole group was torn down (`@if`, route change).
   unregister(radio: RadioDirective<T>): void {
-    const selected = this.isSelected(radio);
     this.collection.unregister(radio as RadioDirective<T> & CollectionItem);
-    if (selected) this.value.set(null);
   }
 
   select(radio: RadioDirective<T>, options: { focus?: boolean } = {}): void {
-    if (this.disabled() || radio.radioDisabled()) return;
+    if (this.isDisabled() || radio.radioDisabled()) return;
     this.collection.setActive(radio.id, options);
-    this.value.set(radio.value());
+    this.commit(radio.value());
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
   }
 
   setActive(radio: RadioDirective<T>, options: { focus?: boolean } = {}): void {
-    if (this.disabled() || radio.radioDisabled()) return;
+    if (this.isDisabled() || radio.radioDisabled()) return;
     this.collection.setActive(radio.id, options);
   }
 
@@ -80,7 +95,7 @@ export class RadioGroupDirective<T> implements OnDestroy {
   }
 
   onKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.configureCollection();
     if (event.key === ' ') {
       const active = this.collection.activeItem();
@@ -92,11 +107,18 @@ export class RadioGroupDirective<T> implements OnDestroy {
     }
     const handled = this.collection.handleKeydown(event, { focus: true });
     const active = this.collection.activeItem();
-    if (handled && active) this.value.set(active.value());
+    if (handled && active) this.commit(active.value());
   }
 
   ngOnDestroy(): void {
     this.collection.destroy();
+  }
+
+  private commit(next: T): void {
+    const current = this.value();
+    if (current !== null && this.compareWith()(current, next)) return;
+    this.value.set(next);
+    this.valueChangeCommitted.emit(next);
   }
 
   private configureCollection(): void {

@@ -58,6 +58,28 @@ will remain stable.
 | Toggle group | `ToggleGroupDirective`, `ToggleItemDirective`, `DEFAULT_TOGGLE_GROUP_CONFIG`, toggle group config/types                                                            | `[qzToggleGroup]`, `button[qzToggleItem]`                                                   | Conditional. Include if Toggle remains.                                                                      |
 | Slider       | `SliderDirective`, `SliderThumbDirective`, `SliderTrackDirective`, `SliderRangeDirective`, `DEFAULT_SLIDER_CONFIG`, `SliderConfig`, `SliderOrientation`            | `[qzSlider]`, track/range/thumb selectors                                                   | Conditional. Needs full pointer/keyboard/browser contract.                                                   |
 
+## Forms entry point (0.9): `@quartz-headless/primitives/forms`
+
+Secondary entry point of the primitives package; `@angular/forms` is an **optional** peer. Snapshot:
+`docs/api/snapshots/primitives-forms.json`. Spec: `docs/ai/specs/v1-forms.md`.
+
+| Symbol                       | Attaches to                                                             |
+| ---------------------------- | ----------------------------------------------------------------------- |
+| `CheckboxControlDirective`   | `button[qzCheckbox]` with `formControl` / `formControlName` / `ngModel` |
+| `SwitchControlDirective`     | `button[qzSwitch]` with Forms                                           |
+| `RadioGroupControlDirective` | `[qzRadioGroup]` with Forms                                             |
+| `SelectControlDirective`     | `[qzSelect]` with Forms                                                 |
+| `ListboxControlDirective`    | `[qzListbox]` with Forms                                                |
+| `QUARTZ_FORMS`               | tuple of the five directives                                            |
+
+## 0.9 additions to the main entry (members, not new exports)
+
+`valueChangeCommitted` output on `RadioGroupDirective`, `SelectDirective`, `ListboxDirective`;
+`touched` output on `SelectDirective`; `isDisabled` + `setFormDisabled()` on Checkbox, Switch,
+RadioGroup, Select, Listbox; `SelectDirective.nameListbox()`. `SelectOptionDirective.label` is now a
+function (`() => string`, defaulting to the option text) and its input property is `qzSelectOptionLabel`
+(template syntax `[qzSelectOptionLabel]` is unchanged).
+
 ## Primitive binding highlights
 
 | Family                 | Models                                         | Inputs                                                                                                         | Outputs                                                                            |
@@ -66,13 +88,13 @@ will remain stable.
 | Tooltip                | none                                           | `qzTooltip`, placement/delay/disabled config through directive and service                                     | none                                                                               |
 | Popover                | `open`                                         | `popover`, placement, offset, flip, match width, disabled, close options, `autoFocus`                          | `opened`, `closed`                                                                 |
 | Menu                   | checkbox item `checked`, radio group `value`   | trigger template/config, item disabled/submenu/closeOnSelect, menu config                                      | trigger `opened`/`closed`, item `selected`                                         |
-| Listbox                | `value`                                        | `multiple`, `orientation`, `disabled`, `config`, `compareWith`, option value/disabled                          | model change only                                                                  |
-| Select                 | `value`, `open`                                | content, disabled, placement, close options, `displayWith`, `compareWith`, config, option value/disabled/label | `opened`, `closed`, `selected`                                                     |
+| Listbox                | `value`                                        | `multiple`, `orientation`, `disabled`, `config`, `compareWith`, option value/disabled                          | `valueChangeCommitted`                                                             |
+| Select                 | `value`, `open`                                | content, disabled, placement, close options, `displayWith`, `compareWith`, config, option value/disabled/label | `opened`, `closed`, `selected`, `valueChangeCommitted`, `touched`                  |
 | Combobox               | `value`, `inputValue`, `open`                  | content/options/disabled/loading/placement/close options/autocomplete/filter/display/compare                   | `opened`, `closed`, `selected`, `inputValueChangeCommitted`                        |
 | Tabs                   | `value`                                        | orientation, activation mode, loop, disabled, compare/config                                                   | model change only                                                                  |
 | Accordion              | `value`                                        | type, collapsible, region, compare/config, item value/disabled                                                 | model change only                                                                  |
 | Checkbox/Switch/Toggle | `checked` or `pressed`                         | `disabled`                                                                                                     | `checkedChangeCommitted` or `pressedChangeCommitted`                               |
-| Radio group            | `value`                                        | disabled, orientation, loop, compare; radio value/disabled                                                     | model change only                                                                  |
+| Radio group            | `value`                                        | disabled, orientation, loop, compare; radio value/disabled                                                     | `valueChangeCommitted`                                                             |
 | Toggle group           | `value`                                        | type, orientation, loop, disabled, compare; item disabled                                                      | model change only                                                                  |
 | Slider                 | `value`, `dragging`                            | min, max, step, disabled, orientation, valueText                                                               | model change only                                                                  |
 | Sidebar/Navbar/Stepper | several state models                           | responsive/layout/navigation config                                                                            | model change only                                                                  |

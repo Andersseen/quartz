@@ -31,3 +31,16 @@ export const OBJECT_SNIPPET = `<div qzSelect [(value)]="country" [displayWith]="
     </div>
   </ng-template>
 </div>`;
+
+export const FORMS_SNIPPET = `import {
+  SelectDirective, SelectTriggerDirective, SelectContentDirective,
+  SelectListboxDirective, SelectOptionDirective,
+} from '@quartz-headless/primitives';
+import { SelectControlDirective } from '@quartz-headless/primitives/forms';
+
+// <div qzSelect formControlName="country" #s="qzSelect">
+//   <button qzSelectTrigger aria-label="Country">{{ s.selectedLabel() || 'Choose' }}</button>
+//   <ng-template qzSelectContent>
+//     <div qzSelectListbox> ...options... </div>   <!-- named after the trigger automatically -->
+//   </ng-template>
+// </div>`;

@@ -166,6 +166,49 @@ function checkPrimitivesDependsOnCoreAsPackage(distDir, flatModuleName) {
   }
 }
 
+function checkFormsEntryPoint(distDir) {
+  for (const relPath of [
+    'fesm2022/quartz-headless-primitives-forms.mjs',
+    'types/quartz-headless-primitives-forms.d.ts',
+  ]) {
+    checkFile(distDir, relPath);
+  }
+  checkExports(distDir, 'quartz-headless-primitives-forms', [
+    'CheckboxControlDirective',
+    'SwitchControlDirective',
+    'RadioGroupControlDirective',
+    'SelectControlDirective',
+    'ListboxControlDirective',
+    'QUARTZ_FORMS',
+  ]);
+  const pkg = JSON.parse(fs.readFileSync(path.join(distDir, 'package.json'), 'utf8'));
+  if (!pkg.exports || !pkg.exports['./forms']) {
+    throw new Error('@quartz-headless/primitives must export the ./forms entry point');
+  }
+  // Forms must stay opt-in: the peer is declared but optional, and the main entry point must
+  // never import @angular/forms (consumers that do not use Forms would otherwise need it).
+  if (
+    !pkg.peerDependencies?.['@angular/forms'] ||
+    !pkg.peerDependenciesMeta?.['@angular/forms']?.optional
+  ) {
+    throw new Error('@angular/forms must be an optional peer dependency of primitives');
+  }
+  const main = fs.readFileSync(
+    path.join(distDir, 'fesm2022/quartz-headless-primitives.mjs'),
+    'utf8',
+  );
+  if (main.includes('@angular/forms')) {
+    throw new Error('Main primitives entry point must not import @angular/forms');
+  }
+  const forms = fs.readFileSync(
+    path.join(distDir, 'fesm2022/quartz-headless-primitives-forms.mjs'),
+    'utf8',
+  );
+  if (!forms.includes("from '@quartz-headless/primitives'")) {
+    throw new Error('Forms entry point must import the main entry point as an external package');
+  }
+}
+
 function verifyPackage(name, { dir, npmName, flatModuleName, expectedExports }) {
   if (!fs.existsSync(dir)) {
     throw new Error(`Build output directory does not exist: ${dir}\nRun pnpm build:lib first.`);
@@ -186,6 +229,7 @@ function verifyPackage(name, { dir, npmName, flatModuleName, expectedExports }) 
 
   if (name === 'primitives') {
     checkPrimitivesDependsOnCoreAsPackage(dir, flatModuleName);
+    checkFormsEntryPoint(dir);
   }
 }
 

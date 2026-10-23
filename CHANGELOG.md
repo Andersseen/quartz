@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] — 2026-10-23
+
+Release target: `@quartz-headless/core@0.9.0` and `@quartz-headless/primitives@0.9.0`.
+Selection, controls and Angular Forms consolidation plus the Volt UI parity contract. Details and
+evidence: `docs/releases/0.9-acceptance.md`; inventory: `docs/api/volt-parity.md`.
+
+### Added
+
+- **Angular Forms:** optional entry point `@quartz-headless/primitives/forms` with
+  `CheckboxControlDirective`, `SwitchControlDirective`, `RadioGroupControlDirective`,
+  `SelectControlDirective`, `ListboxControlDirective` and `QUARTZ_FORMS`. `@angular/forms` is an
+  **optional** peer dependency; the main entry never imports it.
+- `valueChangeCommitted` output on RadioGroup, Select and Listbox; `touched` output on Select;
+  `isDisabled` / `setFormDisabled()` on Checkbox, Switch, RadioGroup, Select and Listbox.
+- Select: the popup listbox is named from the trigger (`aria-label`, `aria-labelledby`, or the trigger
+  itself) unless labelled explicitly.
+- `docs/api/volt-parity.md` (46-row Volt headless parity matrix), `/e2e-forms` fixture and
+  `e2e/forms.spec.ts` (Chromium, Firefox, WebKit, RTL, axe), Forms and contract specs, Forms AOT
+  coverage in the installed-tarball consumer fixture.
+
+### Changed
+
+- Roadmap: Volt UI parity is mandatory for 1.0; seven parity minors (0.10–0.16) now precede consumer
+  compatibility (0.17, formerly 0.10) and the release freeze (0.18, formerly 0.11).
+- `SelectOptionDirective.label` is now `() => string` (default: the option text); the template
+  syntax `[qzSelectOptionLabel]` is unchanged.
+- Primitives peer on `@quartz-headless/core@^0.9.0`.
+
+### Fixed
+
+- Select typeahead threw for options without an explicit label.
+- Select Tab left focus in the portal; it now returns focus to the trigger first.
+- RadioGroup cleared the bound value when the checked radio (or the whole group) was destroyed.
+- Tabs and Accordion rewrote the bound value during teardown; Tabs emitted `aria-controls` for panels
+  that did not exist.
+
 ## [0.8.0] — 2026-10-23
 
 Release target: `@quartz-headless/core@0.8.0` and `@quartz-headless/primitives@0.8.0`.

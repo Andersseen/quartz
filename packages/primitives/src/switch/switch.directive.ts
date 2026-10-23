@@ -1,4 +1,4 @@
-import { Directive, booleanAttribute, input, model, output } from '@angular/core';
+import { Directive, booleanAttribute, computed, input, model, output, signal } from '@angular/core';
 
 @Directive({
   // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
@@ -11,10 +11,10 @@ import { Directive, booleanAttribute, input, model, output } from '@angular/core
     type: 'button',
     '[attr.role]': '"switch"',
     '[attr.aria-checked]': 'checked()',
-    '[attr.aria-disabled]': 'disabled() || null',
-    '[attr.disabled]': 'disabled() ? "" : null',
+    '[attr.aria-disabled]': 'isDisabled() || null',
+    '[attr.disabled]': 'isDisabled() ? "" : null',
     '[attr.data-qz-state]': 'checked() ? "checked" : "unchecked"',
-    '[attr.data-qz-disabled]': 'disabled() ? "" : null',
+    '[attr.data-qz-disabled]': 'isDisabled() ? "" : null',
     '(click)': 'toggle($event)',
     '(keydown)': 'onKeydown($event)',
   },
@@ -26,12 +26,21 @@ export class SwitchDirective {
   // (checkedChangeCommitted) and Toggle (pressedChangeCommitted) — was `toggled`.
   readonly checkedChangeCommitted = output<boolean>();
 
+  readonly #formDisabled = signal(false);
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+
   toggle(event?: Event): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     event?.preventDefault();
     const next = !this.checked();
     this.checked.set(next);
     this.checkedChangeCommitted.emit(next);
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
   }
 
   onKeydown(event: KeyboardEvent): void {

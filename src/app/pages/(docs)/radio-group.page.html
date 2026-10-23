@@ -81,4 +81,19 @@
       group expectations.
     </p>
   </section>
+
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6 mt-6">
+    <h2 class="text-lg font-semibold text-gray-200 mb-2">Angular Forms</h2>
+    <app-code-block [code]="formsCode">
+      <p preview class="text-sm text-gray-400">
+        Opt in with the <code>@quartz-headless/primitives/forms</code> entry point; consumers that
+        do not use Forms never load <code>@angular/forms</code>.
+      </p>
+    </app-code-block>
+    <p class="mt-4 text-sm text-gray-500">
+      The control value is the checked radio's <code>qzRadio</code> value, or <code>null</code> when
+      none is checked (also what <code>reset()</code> writes). Touched fires when focus leaves the
+      group, not between radios.
+    </p>
+  </section>
 </app-demo-page>

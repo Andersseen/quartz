@@ -1,5 +1,22 @@
 # STATE — Current Project Status
 
+## 0.9.0 Selection, controls, Angular Forms & Volt parity contract — 2026-10-23
+
+Branch `feat/quartz-0.9-selection-forms-parity` (baseline `main` @ `6c64097`, 0.8.0). Delivers
+Listbox/Select/Checkbox/Switch/RadioGroup/Tabs/Accordion consolidation, the optional Forms entry point
+`@quartz-headless/primitives/forms` (Checkbox, Switch, RadioGroup, Select, Listbox; `@angular/forms` is an
+optional peer), the Select accessible-naming contract, and the **Volt UI parity inventory**
+([`docs/api/volt-parity.md`](../api/volt-parity.md), Volt `7c76ef3`: 46 rows — V 5, C 2, P 12, M 13, N 14).
+Product requirement now in force: Quartz 1.0 must provide the headless behaviour of every public Volt
+component; roadmap = 0.10–0.16 parity families, then 0.17 consumers (Angular 21.2 **and 22**, real
+SSR/hydration), 0.18 freeze (the old 0.10/0.11), then beta/RC/1.0. Evidence and decisions:
+[0.9 acceptance](../releases/0.9-acceptance.md), [forms spec](specs/v1-forms.md),
+[selection contract](specs/v1-selection-controls-contract.md). Local chain: 542 unit tests, 393
+Playwright executions (3 engines), AOT tarball smoke with `ReactiveFormsModule`. Packages are `0.9.0`.
+
+Open follow-ups: all non-V Volt rows (owning milestones in the inventory); Angular 22 fixture; real
+SSR/hydration; manual screen-reader review; Forms entry not distributed by the CLI.
+
 ## 0.8.0 Floating & feedback consolidation — 2026-10-23
 
 Branch `feat/quartz-0.8-floating-feedback` (baseline `main` @ `c0fe057`, 0.7.0). Delivers
@@ -13,9 +30,9 @@ identical); additive `DialogConfig.ariaLabel`. One narrow Core fix (`OverlayRef`
 re-destroys a view Angular is destroying). Packages are `0.8.0`; Primitives peers on
 `@quartz-headless/core@^0.8.0`.
 
-Open follow-ups: Select listbox has no default accessible name (0.9 Select/Forms); manual
+Open follow-ups: ~~Select listbox has no default accessible name~~ (fixed in 0.9); manual
 screen-reader validation of Toast/Dialog pending; consumer-owned `<body>` portals during a modal
-are background (no opt-in hook); real SSR/hydration matrix (0.10).
+are background (no opt-in hook); real SSR/hydration matrix (now 0.17).
 
 ## 0.7.0 Core consolidation — 2026-10-22
 
