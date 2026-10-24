@@ -47,6 +47,12 @@
   "ComboboxFilter": {
     "kind": "type"
   },
+  "ComboboxGroupDirective": {
+    "kind": "class"
+  },
+  "ComboboxGroupLabelDirective": {
+    "kind": "class"
+  },
   "ComboboxInputDirective": {
     "kind": "class"
   },
@@ -59,8 +65,15 @@
   "ComboboxOptionDirective": {
     "kind": "class"
   },
+  "ComboboxSeparatorDirective": {
+    "kind": "class"
+  },
   "ComboboxTriggerDirective": {
     "kind": "class"
+  },
+  "createLatestRequest": {
+    "kind": "function",
+    "signatures": ["(): LatestRequest"]
   },
   "DEFAULT_ACCORDION_CONFIG": {
     "kind": "const"
@@ -125,10 +138,19 @@
   "DialogService": {
     "kind": "class"
   },
+  "LatestRequest": {
+    "kind": "interface"
+  },
   "ListboxConfig": {
     "kind": "interface"
   },
   "ListboxDirective": {
+    "kind": "class"
+  },
+  "ListboxGroupDirective": {
+    "kind": "class"
+  },
+  "ListboxGroupLabelDirective": {
     "kind": "class"
   },
   "ListboxOptionDirective": {
@@ -136,6 +158,9 @@
   },
   "ListboxOrientation": {
     "kind": "type"
+  },
+  "ListboxSeparatorDirective": {
+    "kind": "class"
   },
   "ListboxService": {
     "kind": "class"
@@ -224,6 +249,12 @@
   "SelectDirective": {
     "kind": "class"
   },
+  "SelectGroupDirective": {
+    "kind": "class"
+  },
+  "SelectGroupLabelDirective": {
+    "kind": "class"
+  },
   "SelectListboxDirective": {
     "kind": "class"
   },
@@ -231,6 +262,9 @@
     "kind": "type"
   },
   "SelectOptionDirective": {
+    "kind": "class"
+  },
+  "SelectSeparatorDirective": {
     "kind": "class"
   },
   "SelectTriggerDirective": {

@@ -39,6 +39,9 @@ export type {
 export {
   ListboxDirective,
   ListboxOptionDirective,
+  ListboxGroupDirective,
+  ListboxGroupLabelDirective,
+  ListboxSeparatorDirective,
   ListboxService,
   DEFAULT_LISTBOX_CONFIG,
 } from './listbox';
@@ -69,6 +72,9 @@ export {
   ComboboxContentDirective,
   ComboboxListboxDirective,
   ComboboxOptionDirective,
+  ComboboxGroupDirective,
+  ComboboxGroupLabelDirective,
+  ComboboxSeparatorDirective,
   ComboboxTriggerDirective,
   DEFAULT_COMBOBOX_CONFIG,
 } from './combobox';
@@ -82,6 +88,9 @@ export type {
   ComboboxConfig,
 } from './combobox';
 
+export { createLatestRequest } from './combobox';
+export type { LatestRequest } from './combobox';
+
 // Select
 export {
   SelectDirective,
@@ -89,6 +98,9 @@ export {
   SelectContentDirective,
   SelectListboxDirective,
   SelectOptionDirective,
+  SelectGroupDirective,
+  SelectGroupLabelDirective,
+  SelectSeparatorDirective,
   DEFAULT_SELECT_CONFIG,
 } from './select';
 export type { SelectCloseReason, SelectConfig, SelectOpenReason } from './select';

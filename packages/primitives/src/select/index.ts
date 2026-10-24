@@ -5,3 +5,8 @@ export { SelectListboxDirective } from './select-listbox.directive';
 export { SelectOptionDirective } from './select-option.directive';
 export { DEFAULT_SELECT_CONFIG } from './select.types';
 export type { SelectCloseReason, SelectConfig, SelectOpenReason } from './select.types';
+export {
+  SelectGroupDirective,
+  SelectGroupLabelDirective,
+  SelectSeparatorDirective,
+} from './select-group.directive';

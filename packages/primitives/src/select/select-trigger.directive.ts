@@ -14,6 +14,7 @@ let selectTriggerId = 0;
     '[attr.aria-controls]': 'select.panelId()',
     '[attr.aria-disabled]': 'select.isDisabled() || null',
     '[attr.data-qz-open]': 'select.isOpen() ? "" : null',
+    '[attr.data-qz-placeholder]': 'select.isEmpty() ? "" : null',
     '[attr.data-qz-disabled]': 'select.isDisabled() ? "" : null',
     '(click)': 'onClick($event)',
     '(keydown)': 'select.handleTriggerKeydown($event)',

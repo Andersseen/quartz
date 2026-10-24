@@ -11,11 +11,13 @@ import { ComboboxDirective } from './combobox.directive';
     '[attr.aria-controls]': 'combobox.panelId()',
     '[attr.aria-activedescendant]': 'combobox.activeId()',
     '[attr.aria-autocomplete]': 'combobox.autocomplete()',
-    '[attr.aria-disabled]': 'combobox.disabled() || null',
+    '[attr.aria-disabled]': 'combobox.isDisabled() || null',
+    '[attr.disabled]': 'combobox.isDisabled() ? "" : null',
     '[attr.data-qz-open]': 'combobox.isOpen() ? "" : null',
-    '[attr.data-qz-disabled]': 'combobox.disabled() ? "" : null',
+    '[attr.data-qz-disabled]': 'combobox.isDisabled() ? "" : null',
     '(input)': 'onInput($event)',
     '(focus)': 'onFocus()',
+    '(blur)': 'combobox.onInputBlur()',
     '(keydown)': 'onKeydown($event)',
     '(compositionstart)': 'onCompositionStart()',
     '(compositionend)': 'onCompositionEnd($event)',
@@ -36,7 +38,10 @@ export class ComboboxInputDirective implements OnDestroy {
   }
 
   onInput(event: Event): void {
-    this.combobox.handleInput((event.target as HTMLInputElement).value);
+    this.combobox.handleInput(
+      (event.target as HTMLInputElement).value,
+      (event as InputEvent).isComposing === true,
+    );
   }
 
   onFocus(): void {

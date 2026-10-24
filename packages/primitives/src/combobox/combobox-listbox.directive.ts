@@ -8,9 +8,11 @@ import { ComboboxDirective } from './combobox.directive';
   host: {
     '[attr.id]': 'combobox.panelId()',
     '[attr.role]': '"listbox"',
+    '[attr.aria-multiselectable]': 'combobox.multiple() ? true : null',
     '[attr.aria-busy]': 'combobox.loading() || null',
     '[attr.data-qz-combobox-listbox]': '""',
     '[attr.data-qz-open]': 'combobox.isOpen() ? "" : null',
+    '[attr.data-qz-empty]': 'combobox.status() === "empty" ? "" : null',
     '[attr.data-qz-loading]': 'combobox.loading() ? "" : null',
   },
 })

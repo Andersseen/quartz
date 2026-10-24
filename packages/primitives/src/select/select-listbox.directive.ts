@@ -8,6 +8,7 @@ import { SelectDirective } from './select.directive';
   host: {
     '[attr.role]': '"listbox"',
     '[attr.id]': 'select.panelId()',
+    '[attr.aria-multiselectable]': 'select.multiple() ? true : null',
     '[attr.tabindex]': '-1',
     '(keydown)': 'select.handleListboxKeydown($event)',
   },

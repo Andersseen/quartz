@@ -20,7 +20,7 @@ let optionId = 0;
   host: {
     '[attr.id]': 'id',
     '[attr.role]': '"option"',
-    '[attr.aria-selected]': 'active()',
+    '[attr.aria-selected]': 'ariaSelected()',
     '[attr.aria-disabled]': 'optionDisabled() || null',
     '[attr.data-qz-active]': 'active() ? "" : null',
     '[attr.data-qz-selected]': 'selected() ? "" : null',
@@ -41,6 +41,10 @@ export class ComboboxOptionDirective<T> implements OnInit, OnDestroy, Collection
   readonly optionDisabled = this.qzComboboxOptionDisabled;
   readonly active = computed(() => this.combobox.activeId() === this.id);
   readonly selected = computed(() => this.combobox.isSelected(this));
+  /** Multiple: the selection. Single: the highlighted option (APG active-descendant pattern). */
+  readonly ariaSelected = computed(() =>
+    this.combobox.multiple() ? this.selected() : this.active(),
+  );
   readonly label = computed(
     () =>
       this.qzComboboxOptionLabel() ??

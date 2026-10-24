@@ -19,6 +19,20 @@ import {
 } from '@quartz-headless/core';
 import {
   CheckboxDirective,
+  ComboboxContentDirective,
+  ComboboxDirective,
+  ComboboxGroupDirective,
+  ComboboxGroupLabelDirective,
+  ComboboxInputDirective,
+  ComboboxListboxDirective,
+  ComboboxOptionDirective,
+  ListboxGroupDirective,
+  ListboxGroupLabelDirective,
+  ListboxSeparatorDirective,
+  SelectGroupDirective,
+  SelectGroupLabelDirective,
+  SelectSeparatorDirective,
+  createLatestRequest,
   DialogRef,
   DialogService,
   MenuDirective,
@@ -258,3 +272,128 @@ class FormsComponent {
 }
 
 void FormsComponent;
+
+// Quartz 0.10 advanced selection: multiple Select, grouped Select/Listbox, Combobox (single,
+// multiple, async guard) and their Forms adapters, strict-template compiled.
+interface Tag {
+  id: number;
+  name: string;
+}
+
+@Component({
+  selector: 'app-advanced-selection',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    SelectDirective,
+    SelectTriggerDirective,
+    SelectContentDirective,
+    SelectListboxDirective,
+    SelectOptionDirective,
+    SelectGroupDirective,
+    SelectGroupLabelDirective,
+    SelectSeparatorDirective,
+    ListboxDirective,
+    ListboxOptionDirective,
+    ListboxGroupDirective,
+    ListboxGroupLabelDirective,
+    ListboxSeparatorDirective,
+    ComboboxDirective,
+    ComboboxInputDirective,
+    ComboboxContentDirective,
+    ComboboxListboxDirective,
+    ComboboxOptionDirective,
+    ComboboxGroupDirective,
+    ComboboxGroupLabelDirective,
+    ...QUARTZ_FORMS,
+  ],
+  template: `
+    <div
+      qzSelect
+      multiple
+      #tags="qzSelect"
+      [(values)]="selected"
+      [closeOnSelect]="false"
+      [compareWith]="same"
+      [displayWith]="label"
+      (valuesChangeCommitted)="committed = $event"
+    >
+      <button qzSelectTrigger aria-label="Tags">{{ tags.selectedLabel() }}</button>
+      <ng-template qzSelectContent>
+        <div qzSelectListbox>
+          <div qzSelectGroup>
+            <div qzSelectGroupLabel>Group</div>
+            <div [qzSelectOption]="tag">{{ tag.name }}</div>
+          </div>
+          <div qzSelectSeparator></div>
+        </div>
+      </ng-template>
+    </div>
+
+    <div qzListbox aria-label="Sections" [(value)]="section">
+      <div qzListboxGroup>
+        <div qzListboxGroupLabel>Section</div>
+        <div qzListboxOption="a">A</div>
+      </div>
+      <div qzListboxSeparator></div>
+    </div>
+
+    <form [formGroup]="form">
+      <div qzSelect multiple formControlName="tags"></div>
+      <div
+        qzCombobox
+        #city="qzCombobox"
+        formControlName="city"
+        [options]="cities"
+        [allowDeselect]="true"
+        [loading]="loading"
+        (queryChanged)="search($event)"
+        (valueChangeCommitted)="picked = $event"
+      >
+        <input aria-label="City" qzComboboxInput />
+        <ng-template qzComboboxContent>
+          <ul qzComboboxListbox>
+            <li qzComboboxGroup>
+              <span qzComboboxGroupLabel>Cities</span>
+              @for (c of city.filteredOptions(); track c) {
+                <div [qzComboboxOption]="c">{{ c }}</div>
+              }
+            </li>
+          </ul>
+        </ng-template>
+      </div>
+      <div qzCombobox multiple formControlName="langs" [options]="cities">
+        <input aria-label="Languages" qzComboboxInput />
+      </div>
+    </form>
+  `,
+})
+class AdvancedSelectionComponent {
+  readonly tag: Tag = { id: 1, name: 'Angular' };
+  selected: readonly Tag[] = [];
+  committed: readonly Tag[] = [];
+  section: string | string[] | null = null;
+  cities = ['Madrid', 'Paris'];
+  loading = false;
+  picked: string | null = null;
+  readonly same = (a: Tag, b: Tag) => a.id === b.id;
+  readonly label = (t: Tag) => t.name;
+  private readonly latest = createLatestRequest();
+  readonly form = new FormGroup({
+    tags: new FormControl<Tag[] | null>(null),
+    city: new FormControl<string | null>(null),
+    langs: new FormControl<string[] | null>([]),
+  });
+
+  async search(query: string): Promise<void> {
+    this.loading = true;
+    const result = await this.latest.run(async (signal) => {
+      const response = await fetch(`/api?q=${query}`, { signal });
+      return (await response.json()) as string[];
+    });
+    if (result) this.cities = result;
+    this.loading = false;
+  }
+}
+
+void AdvancedSelectionComponent;

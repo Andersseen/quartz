@@ -2,6 +2,9 @@
   "CheckboxControlDirective": {
     "kind": "class"
   },
+  "ComboboxControlDirective": {
+    "kind": "class"
+  },
   "ListboxControlDirective": {
     "kind": "class"
   },

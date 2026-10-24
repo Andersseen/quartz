@@ -3,3 +3,8 @@ export { ListboxOptionDirective } from './listbox-option.directive';
 export { ListboxService } from './listbox.service';
 export { DEFAULT_LISTBOX_CONFIG } from './listbox.types';
 export type { ListboxConfig, ListboxOrientation } from './listbox.types';
+export {
+  ListboxGroupDirective,
+  ListboxGroupLabelDirective,
+  ListboxSeparatorDirective,
+} from './listbox-group.directive';
