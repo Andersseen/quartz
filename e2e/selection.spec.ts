@@ -358,6 +358,8 @@ test.describe('composition', () => {
     await page.locator('#tags').focus();
     await page.keyboard.press('Enter');
     await expect(tagsList(page)).toBeVisible();
+    // Wait for the active option: Space on a slow runner could otherwise beat its activation.
+    await expect.poll(() => activeText(page)).toBe('Angular');
     await page.keyboard.press('Space');
     await page.keyboard.press('Tab'); // hands focus back to the trigger before moving on
     await expect(tagsList(page)).toBeHidden();
