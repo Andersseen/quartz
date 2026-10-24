@@ -3,7 +3,7 @@
 title: QUARTZ_FORMS
 description: "Import this in a standalone component's imports to enable Forms on every Quartz control."
 group: "API: Forms"
-order: 1507
+order: 1511
 generated: doq-api
 category: constant
 ---
@@ -13,12 +13,12 @@ category: constant
 Import this in a standalone component's `imports` to enable Forms on every Quartz control.
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/forms/src/public-api.ts:16](https://github.com/Andersseen/quartz/blob/main/packages/primitives/forms/src/public-api.ts#L16)
+- **Source:** [packages/primitives/forms/src/public-api.ts:24](https://github.com/Andersseen/quartz/blob/main/packages/primitives/forms/src/public-api.ts#L24)
 
 ## Type
 
 ```ts
-const QUARTZ_FORMS: readonly [typeof CheckboxControlDirective, typeof SwitchControlDirective, typeof RadioGroupControlDirective, typeof SelectControlDirective, typeof ListboxControlDirective, typeof ComboboxControlDirective]
+const QUARTZ_FORMS: readonly [typeof CheckboxControlDirective, typeof SwitchControlDirective, typeof RadioGroupControlDirective, typeof SelectControlDirective, typeof ListboxControlDirective, typeof ComboboxControlDirective, typeof SliderControlDirective, typeof RangeSliderControlDirective …
 ```
 
 ## Related types
@@ -27,5 +27,7 @@ const QUARTZ_FORMS: readonly [typeof CheckboxControlDirective, typeof SwitchCont
 - [`ComboboxControlDirective`](/docs/reference/api/forms/combobox-control-directive)
 - [`ListboxControlDirective`](/docs/reference/api/forms/listbox-control-directive)
 - [`RadioGroupControlDirective`](/docs/reference/api/forms/radio-group-control-directive)
+- [`RangeSliderControlDirective`](/docs/reference/api/forms/range-slider-control-directive)
 - [`SelectControlDirective`](/docs/reference/api/forms/select-control-directive)
+- [`SliderControlDirective`](/docs/reference/api/forms/slider-control-directive)
 - [`SwitchControlDirective`](/docs/reference/api/forms/switch-control-directive)

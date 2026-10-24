@@ -33,6 +33,7 @@ export default defineConfig(() => ({
           '/e2e-floating',
           '/e2e-layers',
           '/e2e-selection',
+          '/e2e-range',
           ...doqPrerenderRoutes(doqPaths),
         ],
       },

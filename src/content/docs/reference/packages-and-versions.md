@@ -11,7 +11,7 @@ order: 900
 | `@quartz-headless/primitives`       | `@quartz-headless/primitives` | Peers on `@quartz-headless/core@^<same minor>`         |
 | `@quartz-headless/primitives/forms` | `@quartz-headless/primitives` | Optional `@angular/forms` peer; Angular Forms adapters |
 
-Both packages release together (`0.10.0` today). Public exports are guarded by declaration snapshots in the repository (`docs/api/snapshots/`): any addition, removal or signature change must be acknowledged in a pull request.
+Both packages release together (`0.11.0` today). Public exports are guarded by declaration snapshots in the repository (`docs/api/snapshots/`): any addition, removal or signature change must be acknowledged in a pull request.
 
 ## API reference
 

@@ -12,7 +12,7 @@ Quartz ships as two npm packages and, optionally, as copy-the-source files. Pick
 | Requirement                                             | Version                                                  |
 | ------------------------------------------------------- | -------------------------------------------------------- |
 | Angular                                                 | `^21.0.0` (zoneless, standalone)                         |
-| `@quartz-headless/primitives` → `@quartz-headless/core` | same minor (`primitives@0.10.x` peers on `core@^0.10.0`) |
+| `@quartz-headless/primitives` → `@quartz-headless/core` | same minor (`primitives@0.11.x` peers on `core@^0.11.0`) |
 | `@angular/forms`                                        | optional, only for `@quartz-headless/primitives/forms`   |
 
 ## npm package mode

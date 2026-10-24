@@ -1,8 +1,20 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  linkedSignal,
+  output,
+  signal,
+} from '@angular/core';
 import {
   CheckboxDirective,
   RadioDirective,
   RadioGroupDirective,
+  RangeSliderDirective,
+  RangeSliderRangeDirective,
+  RangeSliderThumbDirective,
+  RangeSliderTrackDirective,
+  type RangeSliderValue,
   SliderDirective,
   SliderRangeDirective,
   SliderThumbDirective,
@@ -12,6 +24,7 @@ import {
   TabListDirective,
   TabPanelDirective,
   TabsDirective,
+  ToggleDirective,
   ToggleGroupDirective,
   ToggleItemDirective,
 } from '@quartz-headless/primitives';
@@ -140,6 +153,31 @@ export class TabsPlaygroundComponent {
 }
 
 @Component({
+  selector: 'app-toggle-playground',
+  imports: [ToggleDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <button
+      qzToggle
+      [(pressed)]="current"
+      [disabled]="disabled()"
+      (pressedChangeCommitted)="committed.emit(String($event))"
+      class="${BTN} data-[qz-state=on]:bg-fuchsia-500/20"
+    >
+      Bold: {{ current() ? 'on' : 'off' }}
+    </button>
+  `,
+})
+export class TogglePlaygroundComponent {
+  readonly pressed = input(false);
+  readonly disabled = input(false);
+  readonly committed = output<string>();
+  protected readonly String = String;
+  /** Follows the `pressed` control; the user's clicks override it until the control changes again. */
+  protected readonly current = linkedSignal(() => this.pressed());
+}
+
+@Component({
   selector: 'app-toggle-group-playground',
   imports: [ToggleGroupDirective, ToggleItemDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -149,9 +187,13 @@ export class TabsPlaygroundComponent {
       aria-label="Formatting"
       [type]="type()"
       [disabled]="disabled()"
+      [allowDeselection]="allowDeselection()"
       [orientation]="orientation()"
       [(value)]="value"
+      (valueChangeCommitted)="committed.emit($event)"
       class="flex gap-2"
+      [class.flex-col]="orientation() === 'vertical'"
+      [class.w-fit]="orientation() === 'vertical'"
     >
       @for (item of items; track item) {
         <button
@@ -167,10 +209,18 @@ export class TabsPlaygroundComponent {
 })
 export class ToggleGroupPlaygroundComponent {
   readonly type = input<'single' | 'multiple'>('single');
+  readonly allowDeselection = input(true);
   readonly disabled = input(false);
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
+  readonly committed = output<string | readonly string[] | null>();
   protected readonly items = ['bold', 'italic', 'underline'];
-  protected readonly value = signal<string | readonly string[] | null>(null);
+  // Switching between single and multiple changes the value's shape, so it resets with `type`.
+  protected readonly value = linkedSignal<'single' | 'multiple', string | readonly string[] | null>(
+    {
+      source: this.type,
+      computation: (type) => (type === 'multiple' ? [] : null),
+    },
+  );
 }
 
 @Component({
@@ -181,35 +231,167 @@ export class ToggleGroupPlaygroundComponent {
     <div class="flex max-w-md flex-col gap-2">
       <div
         qzSlider
-        [(value)]="value"
+        #slider="qzSlider"
+        [(value)]="current"
         [min]="min()"
         [max]="max()"
         [step]="step()"
         [disabled]="disabled()"
-        class="relative h-8 w-full touch-none"
+        [orientation]="orientation()"
+        (valueChangeCommitted)="committed.emit(String($event))"
+        class="relative touch-none"
+        [class.h-8]="orientation() === 'horizontal'"
+        [class.w-full]="orientation() === 'horizontal'"
+        [class.h-40]="orientation() === 'vertical'"
+        [class.w-8]="orientation() === 'vertical'"
       >
-        <div qzSliderTrack class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10">
+        @if (orientation() === 'horizontal') {
           <div
-            qzSliderRange
-            class="h-full bg-cyan-400"
-            [style.width]="'var(--qz-slider-percent)'"
-          ></div>
-          <button
-            qzSliderThumb
-            aria-label="Volume"
-            class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
-            [style.left]="'calc(var(--qz-slider-percent) - 10px)'"
-          ></button>
-        </div>
+            qzSliderTrack
+            class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+          >
+            <div
+              qzSliderRange
+              class="h-full bg-cyan-400"
+              [style.width]="'var(--qz-slider-percent)'"
+            ></div>
+            <button
+              qzSliderThumb
+              aria-label="Volume"
+              class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+              [style.left]="'calc(var(--qz-slider-percent) - 10px)'"
+            ></button>
+          </div>
+        } @else {
+          <div
+            qzSliderTrack
+            class="absolute bottom-0 left-1/2 top-0 w-2 -translate-x-1/2 bg-white/10"
+          >
+            <div
+              qzSliderRange
+              class="absolute bottom-0 w-full bg-cyan-400"
+              [style.height]="'var(--qz-slider-percent)'"
+            ></div>
+            <button
+              qzSliderThumb
+              aria-label="Volume"
+              class="absolute left-1/2 h-5 w-5 -translate-x-1/2 border border-white bg-[#151923]"
+              [style.bottom]="'calc(var(--qz-slider-percent) - 10px)'"
+            ></button>
+          </div>
+        }
       </div>
-      <p class="text-sm text-gray-400">Value: {{ value() }}</p>
+      <p class="text-sm text-gray-400">Value: {{ slider.currentValue() }}</p>
     </div>
   `,
 })
 export class SliderPlaygroundComponent {
+  readonly value = input(40);
   readonly min = input(0);
   readonly max = input(100);
   readonly step = input(5);
   readonly disabled = input(false);
-  protected readonly value = signal(40);
+  readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
+  readonly committed = output<string>();
+  protected readonly String = String;
+  /** Follows the `value` control; dragging or keys override it until the control changes again. */
+  protected readonly current = linkedSignal(() => this.value());
+}
+
+@Component({
+  selector: 'app-range-slider-playground',
+  imports: [
+    RangeSliderDirective,
+    RangeSliderTrackDirective,
+    RangeSliderRangeDirective,
+    RangeSliderThumbDirective,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="flex max-w-md flex-col gap-2">
+      <div
+        qzRangeSlider
+        #range="qzRangeSlider"
+        [(low)]="currentLow"
+        [(high)]="currentHigh"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [minDistance]="minDistance()"
+        [disabled]="disabled()"
+        [orientation]="orientation()"
+        (valueChangeCommitted)="committed.emit($event)"
+        class="relative touch-none"
+        [class.h-8]="orientation() === 'horizontal'"
+        [class.w-full]="orientation() === 'horizontal'"
+        [class.h-40]="orientation() === 'vertical'"
+        [class.w-8]="orientation() === 'vertical'"
+      >
+        @if (orientation() === 'horizontal') {
+          <div
+            qzRangeSliderTrack
+            class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 bg-white/10"
+          >
+            <div
+              qzRangeSliderRange
+              class="absolute h-full bg-cyan-400"
+              [style.left]="'var(--qz-range-low-percent)'"
+              [style.width]="'var(--qz-range-size-percent)'"
+            ></div>
+          </div>
+          <button
+            qzRangeSliderThumb="low"
+            aria-label="Minimum"
+            class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+            [style.left]="'calc(var(--qz-range-thumb-percent) - 10px)'"
+          ></button>
+          <button
+            qzRangeSliderThumb="high"
+            aria-label="Maximum"
+            class="absolute top-1/2 h-5 w-5 -translate-y-1/2 border border-white bg-[#151923]"
+            [style.left]="'calc(var(--qz-range-thumb-percent) - 10px)'"
+          ></button>
+        } @else {
+          <div
+            qzRangeSliderTrack
+            class="absolute bottom-0 left-1/2 top-0 w-2 -translate-x-1/2 bg-white/10"
+          >
+            <div
+              qzRangeSliderRange
+              class="absolute w-full bg-cyan-400"
+              [style.bottom]="'var(--qz-range-low-percent)'"
+              [style.height]="'var(--qz-range-size-percent)'"
+            ></div>
+          </div>
+          <button
+            qzRangeSliderThumb="low"
+            aria-label="Minimum"
+            class="absolute left-1/2 h-5 w-5 -translate-x-1/2 border border-white bg-[#151923]"
+            [style.bottom]="'calc(var(--qz-range-thumb-percent) - 10px)'"
+          ></button>
+          <button
+            qzRangeSliderThumb="high"
+            aria-label="Maximum"
+            class="absolute left-1/2 h-5 w-5 -translate-x-1/2 border border-white bg-[#151923]"
+            [style.bottom]="'calc(var(--qz-range-thumb-percent) - 10px)'"
+          ></button>
+        }
+      </div>
+      <p class="text-sm text-gray-400">Range: {{ range.range().low }} – {{ range.range().high }}</p>
+    </div>
+  `,
+})
+export class RangeSliderPlaygroundComponent {
+  readonly low = input(20);
+  readonly high = input(70);
+  readonly min = input(0);
+  readonly max = input(100);
+  readonly step = input(5);
+  readonly minDistance = input(0);
+  readonly disabled = input(false);
+  readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
+  readonly committed = output<RangeSliderValue>();
+  /** Follow the `low` / `high` controls; user gestures override them until a control changes again. */
+  protected readonly currentLow = linkedSignal(() => this.low());
+  protected readonly currentHigh = linkedSignal(() => this.high());
 }

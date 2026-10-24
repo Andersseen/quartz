@@ -99,6 +99,9 @@
   "DEFAULT_RADIO_GROUP_CONFIG": {
     "kind": "const"
   },
+  "DEFAULT_RANGE_SLIDER_CONFIG": {
+    "kind": "const"
+  },
   "DEFAULT_SELECT_CONFIG": {
     "kind": "const"
   },
@@ -236,6 +239,30 @@
   },
   "RadioGroupOrientation": {
     "kind": "type"
+  },
+  "RangeSliderConfig": {
+    "kind": "interface"
+  },
+  "RangeSliderDirective": {
+    "kind": "class"
+  },
+  "RangeSliderOrientation": {
+    "kind": "type"
+  },
+  "RangeSliderRangeDirective": {
+    "kind": "class"
+  },
+  "RangeSliderThumbDirective": {
+    "kind": "class"
+  },
+  "RangeSliderThumbName": {
+    "kind": "type"
+  },
+  "RangeSliderTrackDirective": {
+    "kind": "class"
+  },
+  "RangeSliderValue": {
+    "kind": "interface"
   },
   "SelectCloseReason": {
     "kind": "type"

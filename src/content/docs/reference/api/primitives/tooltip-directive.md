@@ -3,7 +3,7 @@
 title: TooltipDirective
 description: Headless tooltip directive.
 group: "API: Primitives"
-order: 1168
+order: 1172
 generated: doq-api
 category: directive
 ---

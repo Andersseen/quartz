@@ -3,7 +3,7 @@
 title: SidebarSide
 description: Type alias reference for SidebarSide.
 group: "API: Primitives"
-order: 1218
+order: 1226
 generated: doq-api
 category: type
 ---

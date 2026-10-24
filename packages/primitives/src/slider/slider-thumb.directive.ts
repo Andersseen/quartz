@@ -1,6 +1,8 @@
-import { Directive, ElementRef, inject } from '@angular/core';
+import { Directive, ElementRef, afterNextRender, inject } from '@angular/core';
 import { resolveDirection } from '@quartz-headless/core';
 import { SliderDirective } from './slider.directive';
+import { sliderKeyAction, warnUnnamedThumb } from './slider-interaction';
+import { sliderPageStep } from './slider-value';
 
 @Directive({
   selector: '[qzSliderThumb]',
@@ -9,15 +11,15 @@ import { SliderDirective } from './slider.directive';
   host: {
     type: 'button',
     '[attr.role]': '"slider"',
-    '[attr.tabindex]': 'slider.disabled() ? -1 : 0',
-    '[attr.aria-valuemin]': 'slider.min()',
-    '[attr.aria-valuemax]': 'slider.max()',
+    '[attr.tabindex]': 'slider.isDisabled() ? -1 : 0',
+    '[attr.aria-valuemin]': 'slider.bounds().min',
+    '[attr.aria-valuemax]': 'slider.bounds().max',
     '[attr.aria-valuenow]': 'slider.currentValue()',
     '[attr.aria-valuetext]': 'slider.ariaValueText()',
     '[attr.aria-orientation]': 'slider.orientation()',
-    '[attr.aria-disabled]': 'slider.disabled() || null',
-    '[attr.disabled]': 'slider.disabled() ? "" : null',
-    '[attr.data-qz-disabled]': 'slider.disabled() ? "" : null',
+    '[attr.aria-disabled]': 'slider.isDisabled() || null',
+    '[attr.disabled]': 'slider.isDisabled() ? "" : null',
+    '[attr.data-qz-disabled]': 'slider.isDisabled() ? "" : null',
     '[attr.data-qz-orientation]': 'slider.orientation()',
     '(keydown)': 'onKeydown($event)',
     '(click)': '$event.preventDefault()',
@@ -27,42 +29,40 @@ export class SliderThumbDirective {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly slider = inject(SliderDirective);
 
-  onKeydown(event: KeyboardEvent): void {
-    if (this.slider.disabled()) return;
-    const page = Math.max(this.slider.step(), (this.slider.max() - this.slider.min()) / 10);
-    const horizontal = this.slider.orientation() === 'horizontal';
-    const rtl = resolveDirection(this.elementRef.nativeElement) === 'rtl';
-    let handled = true;
+  constructor() {
+    afterNextRender(() => warnUnnamedThumb(this.elementRef.nativeElement, 'qzSliderThumb'));
+  }
 
-    switch (event.key) {
-      case 'Home':
-        this.slider.setValue(this.slider.min());
+  onKeydown(event: KeyboardEvent): void {
+    if (this.slider.isDisabled()) return;
+    const action = sliderKeyAction(
+      event.key,
+      this.slider.orientation(),
+      resolveDirection(this.elementRef.nativeElement) === 'rtl',
+    );
+    if (!action) return;
+    const page = sliderPageStep(this.slider.min(), this.slider.max(), this.slider.step());
+
+    switch (action) {
+      case 'min':
+        this.slider.setValue(this.slider.bounds().min);
         break;
-      case 'End':
-        this.slider.setValue(this.slider.max());
+      case 'max':
+        this.slider.setValue(this.slider.bounds().max);
         break;
-      case 'PageUp':
+      case 'page-up':
         this.slider.setValue(this.slider.currentValue() + page);
         break;
-      case 'PageDown':
+      case 'page-down':
         this.slider.setValue(this.slider.currentValue() - page);
         break;
-      case 'ArrowUp':
+      case 'increment':
         this.slider.increment();
         break;
-      case 'ArrowDown':
+      case 'decrement':
         this.slider.decrement();
         break;
-      case 'ArrowRight':
-        horizontal && rtl ? this.slider.decrement() : this.slider.increment();
-        break;
-      case 'ArrowLeft':
-        horizontal && rtl ? this.slider.increment() : this.slider.decrement();
-        break;
-      default:
-        handled = false;
     }
-
-    if (handled) event.preventDefault();
+    event.preventDefault();
   }
 }

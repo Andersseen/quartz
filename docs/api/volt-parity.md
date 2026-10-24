@@ -57,15 +57,15 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
-| V    | Implemented and verified        |      8 |            8 |
-| C    | Implemented, missing coverage   |      2 |            2 |
-| P    | Partial behavioural equivalence |      9 |            9 |
-| M    | Missing                         |     13 |           12 |
+| V    | Implemented and verified        |     12 |           12 |
+| C    | Implemented, missing coverage   |      1 |            1 |
+| P    | Partial behavioural equivalence |      7 |            7 |
+| M    | Missing                         |     12 |           11 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **8 of 46** rows are verified-equivalent as of 0.10.0 (Checkbox, RadioGroup, Switch,
-Tabs, Dialog, Select, Listbox, Combobox). Quartz 0.10 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
+Reading the numbers: **12 of 46** rows are verified-equivalent as of 0.11.0 (Checkbox, RadioGroup, Switch,
+Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup). Quartz 0.11 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
 all have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
@@ -73,7 +73,7 @@ all have an owning milestone below.
 | Milestone                                                                                                       | Rows                                                                                   |
 | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                            |
-| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms)                             | `toggle` (C), `slider` (P), `range-slider` (M), `toggle-group` (P)                     |
+| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)                     |
 | 0.12 — Date and date-range interaction                                                                          | `date-picker` (M), `date-range-picker` (M)                                             |
 | 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
 | 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (M), `form-field` (M), `input-otp` (M), `file-upload` (M)                   |
@@ -225,19 +225,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.9 (done); hydration 0.17
 - **Acceptance tests needed:** `forms.spec.ts`, `controls.contract.spec.ts`, e2e.
 
-### `toggle` — Implemented, missing coverage (**C**)
+### `toggle` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-toggle` (CVA)
 - **Behavioural dependency:** ng-primitives `toggle`
 - **Observable headless contract required:** `aria-pressed`, click/Space/Enter, disabled, Forms boolean.
-- **Quartz equivalent:** `ToggleDirective` (`button[qzToggle]`, `pressed` model + `pressedChangeCommitted`).
-- **Current evidence:** Implemented, missing coverage.
-- **Accessibility:** Implemented (aria-pressed); no browser/axe evidence in 0.9.
-- **Forms:** No adapter yet. Requirement: boolean value, `null` → `false`, same contract as Switch.
-- **Angular / SSR:** Host bindings only.
-- **Remaining work:** Forms adapter; consolidate under the 0.9 model/commit rules; browser keyboard test.
-- **Owning milestone:** 0.11
-- **Acceptance tests needed:** Forms harness (writeValue/onChange/touched/disabled/reset); e2e keyboard Space/Enter; axe.
+- **Quartz equivalent:** `ToggleDirective` (`button[qzToggle]`, `pressed` model + `pressedChangeCommitted`) + `ToggleControlDirective`.
+- **Current evidence:** 0.11: unit (`toggle.directive.spec.ts`: one commit per activation, silent writes, disabled; `forms.range-toggle.spec.ts`: boolean value, `null` → `false`, touched on blur, disabled, template-driven); `e2e/range-toggle.spec.ts` (Chromium/Firefox/WebKit: Enter and Space each activate once, external writes silent, Forms commit/reset/disable/touched); axe on default and interacted states; AOT consumer smoke (strict templates, installed tarball).
+- **Accessibility:** Verified: `aria-pressed`, native button focus/activation, `type="button"` (no accidental submit); axe clean. Name is consumer-owned.
+- **Forms:** Verified: boolean, `null`/`undefined` → `false` (same as Switch), silent `writeValue`, one `onChange` per activation, touched on blur, `setDisabledState`.
+- **Angular / SSR:** Host bindings only; hydration proof 0.17.
+- **Remaining work:** None for the 0.11 contract. Differences from Volt: Volt exposes an `ariaLabel` input (Quartz: put `aria-label` on the button). Manual screen-reader review and the cross-cutting 0.17 gate remain.
+- **Owning milestone:** 0.11 (closed in 0.11.0)
+- **Acceptance tests needed:** Done (see evidence).
 
 ### `form-field` — Missing (**M**)
 
@@ -435,33 +435,33 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.15
 - **Acceptance tests needed:** Unit: clamping, null → indeterminate, percentage; axe.
 
-### `slider` — Partial behavioural equivalence (**P**)
+### `slider` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-slider` (CVA)
 - **Behavioural dependency:** ng-primitives `slider` + `common`
 - **Observable headless contract required:** `role=slider` thumb, min/max/step (decimal), Arrow/Page/Home/End, pointer drag with capture, orientation, disabled, Forms number.
-- **Quartz equivalent:** `SliderDirective` + thumb/track/range.
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Implemented; no axe/browser evidence.
-- **Forms:** No adapter. Requirement: number value, writeValue silent, one onChange at the end of an interaction decision (per step vs on release) to be specified, disabled, reset → `min`.
-- **Angular / SSR:** Host bindings only.
-- **Remaining work:** Pointer capture/cancel browser test, decimal step rounding, RTL/vertical, external write while dragging, Forms adapter.
-- **Owning milestone:** 0.11
-- **Acceptance tests needed:** E2E pointer drag/cancel in 3 engines; unit decimal step; Forms harness.
+- **Quartz equivalent:** `SliderDirective` + thumb/track/range + `SliderControlDirective`.
+- **Current evidence:** 0.11: unit (`slider-value.spec.ts`: decimal steps without drift, non-zero/negative ranges, uneven grid reaching `max`, invalid step/bounds, NaN/Infinity; `slider.directive.spec.ts`: committed contract, external write during drag, disable/lostpointercapture/destroy cleanup; `forms.range-toggle.spec.ts`); `e2e/range-toggle.spec.ts` (Chromium/Firefox/WebKit: keyboard incl. `preventDefault`, decimal, RTL, vertical, drag with capture outside the element, pointercancel, lostpointercapture, disable during drag, external write during drag, Forms); axe; AOT consumer smoke.
+- **Accessibility:** Verified: thumb `role=slider` with valuemin/max/now/text, orientation, disabled; consumer-owned name with a development warning; axe clean.
+- **Forms:** Verified: number, silent `writeValue`, `onChange` per user value change (key step / new value while dragging), touched on focus leaving, disabled, `null` → shown at `min`.
+- **Angular / SSR:** Pointer logic runs only in handlers; hydration proof 0.17.
+- **Remaining work:** None for the 0.11 contract. Differences from Volt: Volt renders its own track/thumb (Quartz is structural only) and takes `ariaLabel` (Quartz: `aria-label` on the thumb); `pointercancel` and `lostpointercapture` are exercised as dispatched events in the browser suites (a mouse cannot produce them). Manual screen-reader review and 0.17 remain.
+- **Owning milestone:** 0.11 (closed in 0.11.0)
+- **Acceptance tests needed:** Done (see evidence).
 
-### `range-slider` — Missing (**M**)
+### `range-slider` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-range-slider` (CVA, `low`/`high`)
 - **Behavioural dependency:** ng-primitives `slider` (range) + `common`
 - **Observable headless contract required:** Two thumbs with independent `aria-valuenow`, thumbs cannot cross, min gap, per-thumb labels, keyboard per thumb, Forms `[low, high]`.
-- **Quartz equivalent:** None. The single-thumb `SliderDirective` is not equivalent.
-- **Current evidence:** Missing.
-- **Accessibility:** Each thumb named (`ariaLabelLow/High`), `aria-valuemin/max` reflect the other thumb.
-- **Forms:** Value `{low, high}` (or tuple); writeValue silent; one onChange per interaction; disabled; reset.
-- **Angular / SSR:** Host bindings only.
-- **Remaining work:** Range slider on the Slider foundation.
-- **Owning milestone:** 0.11
-- **Acceptance tests needed:** Unit: non-crossing, minimum distance, active-thumb swap on pointer; e2e drag both thumbs; Forms harness.
+- **Quartz equivalent:** `RangeSliderDirective` + track/range/thumb (`qzRangeSliderThumb="low|high"`) + `RangeSliderControlDirective`.
+- **Current evidence:** 0.11: unit (`range-slider.directive.spec.ts`: non-crossing, minimum distance, invariant repair, nearest-thumb and tie rules, RTL/vertical geometry, decimal steps, dynamic constraints, disable/destroy cleanup, silent writes; `forms.range-toggle.spec.ts`); `e2e/range-toggle.spec.ts` (Chromium/Firefox/WebKit: both thumbs drag, non-crossing, minimum distance for pointer and keyboard, keyboard per thumb and tab order, RTL/vertical, destroy and route change mid-drag, Forms); axe; AOT consumer smoke with strict templates.
+- **Accessibility:** Verified: two named `role=slider` thumbs, `aria-valuemin/max` coordinated with the other thumb and `minDistance`, no extra tab stop; axe clean.
+- **Forms:** Verified: `{ low, high }`, silent `writeValue`, `onChange` per user change, touched when focus leaves the control (not between thumbs), disabled, `null` → full range.
+- **Angular / SSR:** As Slider.
+- **Remaining work:** None for the 0.11 contract. **Differences from Volt (recorded, not hidden):** the Forms value is the object `{ low, high }` where Volt's CVA value is the tuple `[low, high]` (a one-line mapping, documented); a `null` write resets to the full range where Volt ignores it; Volt's `lowChange`/`highChange` outputs correspond to the `[(low)]`/`[(high)]` models and `ariaLabelLow/High` to per-thumb `aria-label`. Manual screen-reader review and 0.17 remain.
+- **Owning milestone:** 0.11 (closed in 0.11.0)
+- **Acceptance tests needed:** Done (see evidence).
 
 ### `breadcrumbs` — Native / composition sufficient (**N**)
 
@@ -477,19 +477,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a
 - **Acceptance tests needed:** None.
 
-### `toggle-group` — Partial behavioural equivalence (**P**)
+### `toggle-group` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-toggle-group`, `-item` (CVA, `string[]`)
 - **Behavioural dependency:** ng-primitives `toggle-group`
 - **Observable headless contract required:** Single/multiple, `allowDeselection`, roving focus (orientation/RTL), disabled, Forms value.
-- **Quartz equivalent:** `ToggleGroupDirective` + `ToggleItemDirective` (`type`, `loop`, `orientation`).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Implemented; no browser evidence.
-- **Forms:** No adapter. Value shape: single → scalar or `null`, multiple → array; decide and document the Volt-compatible array form.
-- **Angular / SSR:** Host bindings only.
-- **Remaining work:** Deselection semantics for single mode, Forms adapter, browser RTL keyboard tests.
-- **Owning milestone:** 0.11
-- **Acceptance tests needed:** Unit: single deselect rule; Forms harness; e2e roving + RTL.
+- **Quartz equivalent:** `ToggleGroupDirective` + `ToggleItemDirective` (`type`, `allowDeselection`, `loop`, `orientation`, `valueChangeCommitted`) + `ToggleGroupControlDirective`.
+- **Current evidence:** 0.11: unit (`toggle-group.directive.spec.ts`: allowDeselection on/off, multiple membership, silent programmatic writes, focus never commits, disabled item/group, item removal keeps the value; `forms.range-toggle.spec.ts`); `e2e/range-toggle.spec.ts` (Chromium/Firefox/WebKit: single/multiple, allowDeselection, one tab stop with disabled skipped and wrapping, Home/End, Enter/Space, RTL and vertical arrows, Forms); axe; AOT consumer smoke.
+- **Accessibility:** Verified: `role=group` (consumer-named) with per-item `aria-pressed`; axe flagged `aria-orientation` on `role=group`, which was removed in 0.11 (use `data-qz-orientation`).
+- **Forms:** Verified: single → scalar/`null`, multiple → array; `null` shows nothing pressed; silent writes; one `onChange` per activation; touched when focus leaves the group; disabled.
+- **Angular / SSR:** Host bindings only; hydration proof 0.17.
+- **Remaining work:** None for the 0.11 contract. **Difference from Volt:** Volt's CVA value is always `string[]` (also for a single group); Quartz uses the scalar/`null` form in `type="single"` and the array form in `type="multiple"`, so a Volt-shaped adapter wraps/unwraps one element. Manual screen-reader review and 0.17 remain.
+- **Owning milestone:** 0.11 (closed in 0.11.0)
+- **Acceptance tests needed:** Done (see evidence).
 
 ### `meter` — Missing (**M**)
 
@@ -751,16 +751,16 @@ adapters or drops them in its own major.
 
 ## 5. Cross-cutting parity gates (apply to every row)
 
-| Gate                      | Requirement                                                                                                                       | Owner            | Status after 0.9                                                                         |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| Angular 21.2              | Installed-tarball AOT + strictTemplates + prod build on the Volt minimum (`^21.2.0`)                                              | 0.17             | Fixture compiles on the repository's Angular 21.2.x; the minimum is not pinned in CI yet |
-| **Angular 22**            | Same fixture on a real Angular 22 install. **No Angular 22 claim is made**: Quartz peers are `^21.0.0` and no 22 fixture has run. | 0.17             | **Open — mandatory pre-1.0 gate**                                                        |
-| SSR + hydration           | Real server render + hydration + interaction per interactive row; mocked `Document`s do not count                                 | 0.17             | Open (host-binding-only controls are SSR-safe by construction, unproven)                 |
-| RTL                       | Keyboard + placement per row that has inline direction                                                                            | each family      | Radio verified in 0.9; others per family                                                 |
-| Forms                     | Every Volt CVA row has an adapter with the §6 contract                                                                            | families         | 5 of 14 Volt CVA rows done (Checkbox, Switch, RadioGroup, Select, Listbox)               |
-| Cleanup / lifecycle       | Destroy while open, repeated open/close, no residue                                                                               | each family      | Select, Dialog verified                                                                  |
-| Typed consumer experience | AOT `strictTemplates` fixture covers each new surface                                                                             | each family      | Controls + Forms covered in 0.9                                                          |
-| Accessibility evidence    | axe scan of each interactive row in its open/active state + manual AT review before RC                                            | each family + RC | Select popup/form, Dialog, Menu verified                                                 |
+| Gate                      | Requirement                                                                                                                       | Owner            | Status after 0.9                                                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Angular 21.2              | Installed-tarball AOT + strictTemplates + prod build on the Volt minimum (`^21.2.0`)                                              | 0.17             | Fixture compiles on the repository's Angular 21.2.x; the minimum is not pinned in CI yet                                        |
+| **Angular 22**            | Same fixture on a real Angular 22 install. **No Angular 22 claim is made**: Quartz peers are `^21.0.0` and no 22 fixture has run. | 0.17             | **Open — mandatory pre-1.0 gate**                                                                                               |
+| SSR + hydration           | Real server render + hydration + interaction per interactive row; mocked `Document`s do not count                                 | 0.17             | Open (host-binding-only controls are SSR-safe by construction, unproven)                                                        |
+| RTL                       | Keyboard + placement per row that has inline direction                                                                            | each family      | Radio verified in 0.9; others per family                                                                                        |
+| Forms                     | Every Volt CVA row has an adapter with the §6 contract                                                                            | families         | 10 of 14 Volt CVA rows done (Checkbox, Switch, RadioGroup, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup) |
+| Cleanup / lifecycle       | Destroy while open, repeated open/close, no residue                                                                               | each family      | Select, Dialog verified                                                                                                         |
+| Typed consumer experience | AOT `strictTemplates` fixture covers each new surface                                                                             | each family      | Controls + Forms covered in 0.9                                                                                                 |
+| Accessibility evidence    | axe scan of each interactive row in its open/active state + manual AT review before RC                                            | each family + RC | Select popup/form, Dialog, Menu verified                                                                                        |
 
 ## 6. Volt Forms requirements (benchmark, not code to copy)
 
@@ -773,8 +773,8 @@ blocks interaction; reset restores the empty value; validators stay consumer-own
 | Row                                      | Quartz adapter                                        | Value contract to specify when built            |
 | ---------------------------------------- | ----------------------------------------------------- | ----------------------------------------------- |
 | checkbox, switch, radio, select, listbox | **Done in 0.9** (`@quartz-headless/primitives/forms`) | See `docs/ai/specs/v1-forms.md`                 |
-| toggle, toggle-group                     | 0.11                                                  | boolean; scalar-or-array by `type`              |
-| slider, range-slider                     | 0.11                                                  | `number`; `{low, high}`                         |
+| toggle, toggle-group                     | **Done in 0.11**                                      | boolean; scalar-or-array by `type`              |
+| slider, range-slider                     | **Done in 0.11**                                      | `number`; `{low, high}`                         |
 | combobox                                 | 0.10                                                  | selected value vs free text; multiple array     |
 | date-picker, date-range-picker           | 0.12                                                  | `Date \| null`; `{start, end}`                  |
 | input-otp                                | 0.14                                                  | `string`                                        |

@@ -195,4 +195,16 @@ describe('CLI smoke — quartz add', () => {
     expect(fs.existsSync(path.join(outDir, 'collection'))).toBe(false);
     expect(fs.existsSync(path.join(outDir, 'directionality'))).toBe(false);
   });
+
+  it('should copy range-slider with its slider dependency and no Forms entry', () => {
+    const outDir = runAdd(tmpDir, ['range-slider']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['range-slider', 'slider']);
+    expect(copied['range-slider']).toContain('range-slider.directive.ts');
+    expect(copied['range-slider']).toContain('range-slider-thumb.directive.ts');
+    expect(copied.slider).toContain('slider-value.ts');
+    expect(copied.slider).toContain('slider-interaction.ts');
+    expect(fs.existsSync(path.join(outDir, 'forms'))).toBe(false);
+  });
 });

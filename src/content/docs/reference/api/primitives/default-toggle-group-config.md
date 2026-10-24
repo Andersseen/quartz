@@ -3,7 +3,7 @@
 title: DEFAULT_TOGGLE_GROUP_CONFIG
 description: Constant reference for DEFAULT_TOGGLE_GROUP_CONFIG.
 group: "API: Primitives"
-order: 1247
+order: 1256
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/toggle-group/toggle-group.types.ts:11](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-group.types.ts#L11)
+- **Source:** [packages/primitives/src/toggle-group/toggle-group.types.ts:12](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-group.types.ts#L12)
 
 ## Type
 

@@ -3,7 +3,7 @@
 title: DialogPosition
 description: Type alias reference for DialogPosition.
 group: "API: Primitives"
-order: 1207
+order: 1213
 generated: doq-api
 category: type
 ---

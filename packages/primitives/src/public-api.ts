@@ -191,3 +191,16 @@ export {
   DEFAULT_SLIDER_CONFIG,
 } from './slider';
 export type { SliderConfig, SliderOrientation } from './slider';
+export {
+  RangeSliderDirective,
+  RangeSliderThumbDirective,
+  RangeSliderTrackDirective,
+  RangeSliderRangeDirective,
+  DEFAULT_RANGE_SLIDER_CONFIG,
+} from './range-slider';
+export type {
+  RangeSliderConfig,
+  RangeSliderOrientation,
+  RangeSliderThumbName,
+  RangeSliderValue,
+} from './range-slider';

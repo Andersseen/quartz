@@ -3,7 +3,7 @@
 title: StepperConfig
 description: Interface reference for StepperConfig.
 group: "API: Primitives"
-order: 1190
+order: 1196
 generated: doq-api
 category: interface
 ---

@@ -42,7 +42,7 @@ export class ToggleItemDirective<T> implements OnInit, OnDestroy {
   readonly id = `qz-toggle-item-${++toggleItemId}`;
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
-  readonly itemDisabled = computed(() => this.disabled() || this.group.disabled());
+  readonly itemDisabled = computed(() => this.disabled() || this.group.isDisabled());
   readonly pressed = computed(() => this.group.isPressed(this));
   readonly tabIndex = computed(() =>
     this.itemDisabled() ? -1 : this.group.activeTabIndex(this.id),

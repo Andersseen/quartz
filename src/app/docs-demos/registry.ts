@@ -25,6 +25,7 @@ import { RadioGroupDemoComponent } from './radio-group.demo';
 import { ToggleDemoComponent } from './toggle.demo';
 import { ToggleGroupDemoComponent } from './toggle-group.demo';
 import { SliderDemoComponent } from './slider.demo';
+import { RangeSliderDemoComponent } from './range-slider.demo';
 import { TreeDemoComponent } from './tree.demo';
 import { SidebarDemoComponent } from './sidebar.demo';
 import { NavbarDemoComponent } from './navbar.demo';
@@ -307,6 +308,18 @@ class ToggleGroupDemoLoader {}
 class SliderDemoLoader {}
 
 @Component({
+  selector: 'app-range-slider-demo-loader',
+  imports: [RangeSliderDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-range-slider-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class RangeSliderDemoLoader {}
+
+@Component({
   selector: 'app-tree-demo-loader',
   imports: [TreeDemoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -378,6 +391,7 @@ export const DOC_DEMOS = {
   toggle: ToggleDemoLoader,
   'toggle-group': ToggleGroupDemoLoader,
   slider: SliderDemoLoader,
+  'range-slider': RangeSliderDemoLoader,
   tree: TreeDemoLoader,
   sidebar: SidebarDemoLoader,
   navbar: NavbarDemoLoader,

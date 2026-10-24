@@ -3,7 +3,7 @@
 title: ToggleGroupConfig
 description: Interface reference for ToggleGroupConfig.
 group: "API: Primitives"
-order: 1194
+order: 1200
 generated: doq-api
 category: interface
 ---
@@ -26,6 +26,7 @@ interface ToggleGroupConfig<T>
 | `type` | [`ToggleGroupType`](/docs/reference/api/primitives/toggle-group-type) |  |
 | `orientation` | [`ToggleGroupOrientation`](/docs/reference/api/primitives/toggle-group-orientation) |  |
 | `loop` | `boolean` |  |
+| `allowDeselection` | `boolean` |  |
 | `compareWith` | `(a: T, b: T) => boolean` |  |
 
 ## Related types

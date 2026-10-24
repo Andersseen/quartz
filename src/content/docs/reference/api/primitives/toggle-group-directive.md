@@ -3,7 +3,7 @@
 title: ToggleGroupDirective
 description: "Directive reference for ToggleGroupDirective with the selector [qzToggleGroup]."
 group: "API: Primitives"
-order: 1166
+order: 1170
 generated: doq-api
 category: directive
 ---
@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzToggleGroup`
-- **Source:** [packages/primitives/src/toggle-group/toggle-group.directive.ts:33](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-group.directive.ts#L33)
+- **Source:** [packages/primitives/src/toggle-group/toggle-group.directive.ts:34](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-group.directive.ts#L34)
 
 ## Selector
 
@@ -28,6 +28,7 @@ category: directive
 | `disabled` | `unknown` | `false` |  | Transform `booleanAttribute`; reads as `boolean`. |
 | `orientation` | [`ToggleGroupOrientation`](/docs/reference/api/primitives/toggle-group-orientation) | `DEFAULT_TOGGLE_GROUP_CONFIG.orientation` |  |  |
 | `loop` | `unknown` | `DEFAULT_TOGGLE_GROUP_CONFIG.loop` |  | Transform `booleanAttribute`; reads as `boolean`. |
+| `allowDeselection` | `unknown` | `DEFAULT_TOGGLE_GROUP_CONFIG.allowDeselection` |  | Single mode only: whether pressing the pressed item clears the value (`null`). Default `true` (the pre-0.11 behaviour); `false` makes single mode behave like "one of" with no empty state. Transform `booleanAttribute`; reads as `boolean`. |
 | `compareWith` | `(a: T, b: T) => boolean` |  |  |  |
 
 ## Models
@@ -38,10 +39,17 @@ Two-way bindings: each model is an input and emits the matching change output.
 | --- | --- | --- | --- | --- | --- |
 | `value` | `T \| readonly T[] \| null` | `null` |  | `valueChange` |  |
 
+## Outputs
+
+| Output | Payload | Description |
+| --- | --- | --- |
+| `valueChangeCommitted` | `T \| readonly T[] \| null` | Emits the new value once per user activation: a `T \| null` in single mode, a `T[]` in multiple mode. Programmatic `value` writes and focus/roving navigation never emit. |
+
 ## Properties
 
 | Name | Type | Description |
 | --- | --- | --- |
+| `readonly isDisabled` | `Signal<boolean>` | Effective disabled state: the `disabled` input OR a disabled Angular Forms control. |
 | `readonly activeId` | `Signal<string>` |  |
 | `readonly activeItem` | `Signal<ToggleItemDirective<T> & CollectionItem>` |  |
 
@@ -77,6 +85,18 @@ toggle(item: ToggleItemDirective<T>, options?: { focus?: boolean; }): void
 | --- | --- | --- | --- |
 | `item` | `ToggleItemDirective<T>` |  |  |
 | `options` | `{ focus?: boolean }` | Yes |  |
+
+### setFormDisabled
+
+```ts
+setFormDisabled(disabled: boolean): void
+```
+
+Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`).
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  |
 
 ### setActive
 

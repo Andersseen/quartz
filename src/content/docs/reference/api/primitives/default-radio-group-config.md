@@ -3,7 +3,7 @@
 title: DEFAULT_RADIO_GROUP_CONFIG
 description: Constant reference for DEFAULT_RADIO_GROUP_CONFIG.
 group: "API: Primitives"
-order: 1240
+order: 1248
 generated: doq-api
 category: constant
 ---

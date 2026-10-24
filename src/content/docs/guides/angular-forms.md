@@ -1,6 +1,6 @@
 ---
 title: Angular Forms adapters
-description: Opt-in ControlValueAccessor directives for Checkbox, Switch, RadioGroup, Select, Listbox and Combobox.
+description: Opt-in ControlValueAccessor directives for Checkbox, Switch, RadioGroup, Select, Listbox, Combobox, Slider, RangeSlider, Toggle and ToggleGroup.
 group: Guides
 order: 13
 ---
@@ -29,16 +29,24 @@ Adapters attach only where a Forms directive (`formControl`, `formControlName`, 
 
 ## Values per control
 
-| Adapter    | Form value                                                  | `reset()` / `null`                     |
-| ---------- | ----------------------------------------------------------- | -------------------------------------- |
-| Checkbox   | `true`, `false`, `'indeterminate'`                          | `false`                                |
-| Switch     | `boolean`                                                   | `false`                                |
-| RadioGroup | checked radio value                                         | `null` (none)                          |
-| Select     | option value; with `multiple` an array (`[]` when emptied)  | `null` shown as empty                  |
-| Listbox    | value, or array with `multiple`                             | `null` = none                          |
-| Combobox   | committed selection (never the text); array with `multiple` | clears selection **and** text silently |
+| Adapter     | Form value                                                  | `reset()` / `null`                     |
+| ----------- | ----------------------------------------------------------- | -------------------------------------- |
+| Checkbox    | `true`, `false`, `'indeterminate'`                          | `false`                                |
+| Switch      | `boolean`                                                   | `false`                                |
+| RadioGroup  | checked radio value                                         | `null` (none)                          |
+| Select      | option value; with `multiple` an array (`[]` when emptied)  | `null` shown as empty                  |
+| Listbox     | value, or array with `multiple`                             | `null` = none                          |
+| Combobox    | committed selection (never the text); array with `multiple` | clears selection **and** text silently |
+| Slider      | `number`                                                    | shown at `min`; control keeps `null`   |
+| RangeSlider | `{ low: number; high: number }` (object, not a tuple)       | full `min..max` range shown            |
+| Toggle      | `boolean`                                                   | `false`                                |
+| ToggleGroup | single: item value or `null`; multiple: array               | nothing pressed; control keeps `null`  |
 
 For a multiple Select/Combobox, an emptied selection is `[]`; `reset()` writes `null`, which is displayed as empty and kept on the control until the user commits a change.
+
+## Sliders, Toggle and ToggleGroup
+
+Slider and RangeSlider commit **continuously**: `onChange` fires for every key step and every new value reached while dragging, never for a repeat of the same value. Toggle and ToggleGroup commit once per activation. Touched fires on blur (Toggle) or when focus leaves the control (Slider, RangeSlider, ToggleGroup — moving between a range slider's two thumbs does not touch it). Moving focus inside a ToggleGroup never commits. RangeSlider's value is `{ low, high }`; Volt's `[low, high]` tuple needs a one-line mapping (see [RangeSlider](/docs/primitives/range-slider)).
 
 ## Combobox: text versus value
 

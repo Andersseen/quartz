@@ -14,10 +14,22 @@
   "RadioGroupControlDirective": {
     "kind": "class"
   },
+  "RangeSliderControlDirective": {
+    "kind": "class"
+  },
   "SelectControlDirective": {
     "kind": "class"
   },
+  "SliderControlDirective": {
+    "kind": "class"
+  },
   "SwitchControlDirective": {
+    "kind": "class"
+  },
+  "ToggleControlDirective": {
+    "kind": "class"
+  },
+  "ToggleGroupControlDirective": {
     "kind": "class"
   }
 }

@@ -5,6 +5,7 @@ export interface ToggleGroupConfig<T> {
   type: ToggleGroupType;
   orientation: ToggleGroupOrientation;
   loop: boolean;
+  allowDeselection: boolean;
   compareWith: (a: T, b: T) => boolean;
 }
 
@@ -12,5 +13,6 @@ export const DEFAULT_TOGGLE_GROUP_CONFIG: ToggleGroupConfig<unknown> = {
   type: 'single',
   orientation: 'horizontal',
   loop: true,
+  allowDeselection: true,
   compareWith: Object.is,
 };

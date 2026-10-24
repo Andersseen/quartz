@@ -1,5 +1,16 @@
 # STATE — Current Project Status
 
+## 0.11.0 Range & toggle controls — 2026-10-24
+
+Branch `feat/quartz-0.11-range-toggle-controls` (baseline `main` @ `820bcf8`, 0.10.0). Delivers RangeSlider
+(`{ low, high }`, non-crossing, `minDistance`), the Slider numeric/gesture contract, Toggle/ToggleGroup
+`valueChangeCommitted` + `allowDeselection`, and the Forms adapters `SliderControlDirective`,
+`RangeSliderControlDirective`, `ToggleControlDirective`, `ToggleGroupControlDirective`. Volt rows `slider`,
+`range-slider`, `toggle`, `toggle-group` → V (12/46 V). Evidence, differences from Volt and limitations:
+[0.11 acceptance](../releases/0.11-acceptance.md). Packages are `0.11.0`.
+
+Open follow-ups: 0.12 date & date range; manual screen-reader review; real SSR/hydration matrix (0.17).
+
 ## 0.10.0 Advanced selection + Doqs documentation — 2026-10-24
 
 Branch `feat/quartz-0.10-selection-doqs` (baseline `main` @ `32c55ab`, 0.9.0). Delivers multiple Select, groups for

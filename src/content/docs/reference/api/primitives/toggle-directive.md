@@ -3,7 +3,7 @@
 title: ToggleDirective
 description: "Directive reference for ToggleDirective with the selector button[qzToggle]."
 group: "API: Primitives"
-order: 1165
+order: 1169
 generated: doq-api
 category: directive
 ---
@@ -38,7 +38,13 @@ Two-way bindings: each model is an input and emits the matching change output.
 
 | Output | Payload | Description |
 | --- | --- | --- |
-| `pressedChangeCommitted` | `boolean` |  |
+| `pressedChangeCommitted` | `boolean` | Emits once per user activation (click, Enter, Space). Programmatic `pressed` writes are silent. |
+
+## Properties
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `readonly isDisabled` | `Signal<boolean>` | Effective disabled state: the `disabled` input OR a disabled Angular Forms control. |
 
 ## Public methods
 
@@ -51,3 +57,15 @@ toggle(event?: Event): void
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `event` | `Event` | Yes |  |
+
+### setFormDisabled
+
+```ts
+setFormDisabled(disabled: boolean): void
+```
+
+Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`).
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  |

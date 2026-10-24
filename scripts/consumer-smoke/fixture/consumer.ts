@@ -40,7 +40,17 @@ import {
   MenuTriggerDirective,
   PopoverDirective,
   PopoverTriggerDirective,
+  RangeSliderDirective,
+  RangeSliderRangeDirective,
+  RangeSliderThumbDirective,
+  RangeSliderTrackDirective,
+  type RangeSliderValue,
   SliderDirective,
+  SliderThumbDirective,
+  SliderTrackDirective,
+  ToggleDirective,
+  ToggleGroupDirective,
+  ToggleItemDirective,
   ToastContainerComponent,
   ToastService,
   TooltipDirective,
@@ -397,3 +407,75 @@ class AdvancedSelectionComponent {
 }
 
 void AdvancedSelectionComponent;
+
+// Quartz 0.11 range & toggle controls: Slider, RangeSlider, Toggle and ToggleGroup with their
+// Forms adapters, strict-template compiled against the installed tarball. RangeSlider's Forms
+// value is the `{ low, high }` object (not a tuple).
+@Component({
+  selector: 'app-consumer-smoke-range-toggle',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    SliderDirective,
+    SliderTrackDirective,
+    SliderThumbDirective,
+    RangeSliderDirective,
+    RangeSliderTrackDirective,
+    RangeSliderRangeDirective,
+    RangeSliderThumbDirective,
+    ToggleDirective,
+    ToggleGroupDirective,
+    ToggleItemDirective,
+    ...QUARTZ_FORMS,
+  ],
+  template: `
+    <form [formGroup]="form">
+      <div qzSlider formControlName="volume" [min]="0" [max]="1" [step]="0.1" #v="qzSlider">
+        <div qzSliderTrack><button qzSliderThumb aria-label="Volume"></button></div>
+      </div>
+      <div
+        qzRangeSlider
+        formControlName="price"
+        [min]="0"
+        [max]="500"
+        [minDistance]="10"
+        [valueText]="priceText"
+        (valueChangeCommitted)="last = $event"
+      >
+        <div qzRangeSliderTrack>
+          <div qzRangeSliderRange></div>
+          <button qzRangeSliderThumb="low" aria-label="Minimum price"></button>
+          <button qzRangeSliderThumb="high" aria-label="Maximum price"></button>
+        </div>
+      </div>
+      <button
+        qzToggle
+        formControlName="bold"
+        (pressedChangeCommitted)="boldCommits = boldCommits + 1"
+      >
+        Bold
+      </button>
+      <div qzToggleGroup formControlName="align" [allowDeselection]="false" aria-label="Alignment">
+        <button qzToggleItem="left">Left</button>
+        <button qzToggleItem="right">Right</button>
+      </div>
+      <div qzToggleGroup type="multiple" formControlName="marks" aria-label="Marks">
+        <button qzToggleItem="b">B</button>
+      </div>
+    </form>
+  `,
+})
+class RangeToggleComponent {
+  last: RangeSliderValue | null = null;
+  boldCommits = 0;
+  readonly priceText = (value: number, thumb: 'low' | 'high') => `${thumb}: ${value}`;
+  readonly form = new FormGroup({
+    volume: new FormControl<number | null>(0.5),
+    price: new FormControl<RangeSliderValue | null>({ low: 100, high: 300 }),
+    bold: new FormControl(false),
+    align: new FormControl<string | null>('left'),
+    marks: new FormControl<string[] | null>([]),
+  });
+}
+
+void RangeToggleComponent;

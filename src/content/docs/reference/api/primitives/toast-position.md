@@ -3,7 +3,7 @@
 title: ToastPosition
 description: Type alias reference for ToastPosition.
 group: "API: Primitives"
-order: 1226
+order: 1234
 generated: doq-api
 category: type
 ---

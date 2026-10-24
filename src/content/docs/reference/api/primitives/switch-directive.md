@@ -3,7 +3,7 @@
 title: SwitchDirective
 description: "Directive reference for SwitchDirective with the selector button[qzSwitch]."
 group: "API: Primitives"
-order: 1160
+order: 1164
 generated: doq-api
 category: directive
 ---
