@@ -141,7 +141,8 @@ describe('Select — multiple values and groups', () => {
     );
     expect(screen.getByRole('group', { name: 'Frontend' })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Backend' })).toBeTruthy();
-    expect(screen.getByRole('separator')).toBeTruthy();
+    expect(screen.queryByRole('separator')).toBeNull();
+    expect(document.querySelector('[qzSelectSeparator]')).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getAllByRole('option')).toHaveLength(4);
   });
 
@@ -163,5 +164,16 @@ describe('Select — multiple values and groups', () => {
       'aria-selected',
       'true',
     );
+  });
+
+  it('ignores a scroll already in flight when the popup opens, then closes on later scrolls', async () => {
+    await render(MultiHost);
+    fireEvent.click(screen.getByRole('button', { name: 'Tags' }));
+    await screen.findByRole('listbox');
+    fireEvent.scroll(document); // e.g. the browser scrolled the trigger into view just before
+    expect(screen.getByRole('listbox')).toBeTruthy();
+    await new Promise((resolve) => setTimeout(resolve, 100)); // two animation frames
+    fireEvent.scroll(document);
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
   });
 });

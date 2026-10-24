@@ -27,11 +27,14 @@ export class ListboxGroupLabelDirective {
   protected readonly group = inject(ListboxGroupDirective);
 }
 
-/** Visual separator between options or groups; excluded from navigation. */
+/**
+ * Decorative separator between options or groups; excluded from navigation. ARIA does not allow
+ * `separator` inside a listbox, so it is hidden from assistive technology (`aria-hidden`).
+ */
 @Directive({
   selector: '[qzListboxSeparator]',
   exportAs: 'qzListboxSeparator',
   standalone: true,
-  host: { '[attr.role]': '"separator"' },
+  host: { '[attr.role]': '"presentation"', '[attr.aria-hidden]': '"true"' },
 })
 export class ListboxSeparatorDirective {}

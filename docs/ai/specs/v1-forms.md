@@ -99,3 +99,7 @@ InputOTP and FileUpload (0.14). Value contracts are in `docs/api/volt-parity.md`
 - [x] Every included form-like primitive has an adapter or an explicit non-support note (Toggle,
       ToggleGroup, Slider, Combobox: scheduled, see §8).
 - [x] Signal-only usage unchanged; Core imports no Forms.
+
+## 10. 0.10 amendment
+
+`SelectControlDirective` supports `multiple` (array value; `[]` once emptied; `writeValue(null)`/`reset()` shown as empty). New `ComboboxControlDirective`: the form value is the committed selection (never the text); typing does not notify; `writeValue` is silent and also syncs the text; `reset()` clears selection and text; touched on blur or on an outside close; `setDisabledState` disables the input. Both are in `QUARTZ_FORMS`.

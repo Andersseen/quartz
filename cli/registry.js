@@ -18,27 +18,27 @@ const REGISTRY = {
     internal: true,
     files: ['collection/collection.ts', 'collection/collection.types.ts', 'collection/index.ts'],
     deps: ['directionality'],
-    docs: 'https://quartz-headless.pages.dev/docs',
+    docs: 'https://quartz-headless.pages.dev/docs/core/collection',
   },
   focus: {
     description: 'Focus management foundation',
     layer: 'core',
     internal: true,
     files: ['focus/focus.ts', 'focus/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/docs',
+    docs: 'https://quartz-headless.pages.dev/docs/core/focus',
   },
   dismiss: {
     description: 'Dismissal foundation',
     layer: 'core',
     internal: true,
     files: ['dismiss/dismiss.ts', 'dismiss/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/docs',
+    docs: 'https://quartz-headless.pages.dev/docs/core/dismiss',
   },
   'scroll-lock': {
     description: 'Document-scoped body scroll locking for overlays and modal surfaces',
     layer: 'core',
     files: ['scroll-lock/scroll-lock.ts', 'scroll-lock/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/scroll-lock',
+    docs: 'https://quartz-headless.pages.dev/docs/core/scroll-lock',
   },
   directionality: {
     description: 'LTR/RTL direction resolution and logical (inline-start/end) helpers',
@@ -50,7 +50,7 @@ const REGISTRY = {
       'directionality/directionality.types.ts',
       'directionality/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/directionality',
+    docs: 'https://quartz-headless.pages.dev/docs/core/directionality',
   },
   overlay: {
     description: 'Portal-based positioning system for dropdowns, menus, and popovers',
@@ -64,7 +64,7 @@ const REGISTRY = {
       'overlay/index.ts',
     ],
     deps: ['dismiss', 'directionality'],
-    docs: 'https://quartz-headless.pages.dev/overlay',
+    docs: 'https://quartz-headless.pages.dev/docs/core/overlay',
   },
   splitter: {
     description: 'Resizable panel system with keyboard navigation and touch support',
@@ -77,7 +77,7 @@ const REGISTRY = {
       'splitter/splitter.types.ts',
       'splitter/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/splitter',
+    docs: 'https://quartz-headless.pages.dev/docs/core/splitter',
   },
   'drag-drop': {
     description: 'Native HTML drag and drop with sortable drop zones',
@@ -89,7 +89,7 @@ const REGISTRY = {
       'drag-drop/drag-drop.types.ts',
       'drag-drop/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/drag-drop',
+    docs: 'https://quartz-headless.pages.dev/docs/core/drag-drop',
   },
   'virtual-scroll': {
     description: 'Windowed rendering for long lists',
@@ -99,7 +99,7 @@ const REGISTRY = {
       'virtual-scroll/virtual-scroll.types.ts',
       'virtual-scroll/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/virtual-scroll',
+    docs: 'https://quartz-headless.pages.dev/docs/core/virtual-scroll',
   },
   viewport: {
     description: 'Reactive breakpoint service with viewport match directive',
@@ -110,7 +110,7 @@ const REGISTRY = {
       'viewport/viewport.types.ts',
       'viewport/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/viewport',
+    docs: 'https://quartz-headless.pages.dev/docs/core/viewport',
   },
   dialog: {
     description: 'Service-driven dialog and drawer with portal rendering',
@@ -122,7 +122,7 @@ const REGISTRY = {
       'dialog/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/dialog',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/dialog',
   },
   toast: {
     description: 'Lightweight toast notification system',
@@ -134,7 +134,7 @@ const REGISTRY = {
       'toast/toast.types.ts',
       'toast/index.ts',
     ],
-    docs: 'https://quartz-headless.pages.dev/toast',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/toast',
   },
   tooltip: {
     description: 'Accessible tooltip with configurable placement',
@@ -146,7 +146,7 @@ const REGISTRY = {
       'tooltip/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/tooltip',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/tooltip',
   },
   tree: {
     description: 'Collapsible tree with keyboard navigation and selection',
@@ -159,7 +159,7 @@ const REGISTRY = {
       'tree/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/tree',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/tree',
   },
   listbox: {
     description: 'Accessible single and multi-select listbox with keyboard navigation',
@@ -172,7 +172,7 @@ const REGISTRY = {
       'listbox/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/listbox',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/listbox',
   },
   menu: {
     description: 'Dropdown menu with keyboard navigation, submenus, checkbox and radio items',
@@ -190,7 +190,7 @@ const REGISTRY = {
       'menu/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/menu',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/menu',
   },
   popover: {
     description: 'Non-modal interactive floating surface built on Overlay',
@@ -202,7 +202,7 @@ const REGISTRY = {
       'popover/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/popover',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/popover',
   },
   combobox: {
     description: 'Editable suggestions combobox with active-descendant navigation',
@@ -218,7 +218,7 @@ const REGISTRY = {
       'combobox/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/combobox',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/combobox',
   },
   select: {
     description: 'Button-triggered single select with listbox popup and keyboard navigation',
@@ -233,7 +233,7 @@ const REGISTRY = {
       'select/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/select',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/select',
   },
   tabs: {
     description: 'Accessible tablist, tabs, and tab panels with roving focus',
@@ -247,7 +247,7 @@ const REGISTRY = {
       'tabs/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/tabs',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/tabs',
   },
   accordion: {
     description: 'Single or multiple disclosure sections with accessible triggers and panels',
@@ -261,7 +261,7 @@ const REGISTRY = {
       'accordion/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/accordion',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/accordion',
   },
   sidebar: {
     description: 'Application navigation sidebar with push/overlay, collapse and responsive state',
@@ -275,7 +275,7 @@ const REGISTRY = {
       'sidebar/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/sidebar',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/sidebar',
   },
   navbar: {
     description: 'Headless navbar with sticky, scroll state, reveal state and mobile menu behavior',
@@ -288,7 +288,7 @@ const REGISTRY = {
       'navbar/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/navbar',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/navbar',
   },
   stepper: {
     description:
@@ -305,19 +305,19 @@ const REGISTRY = {
       'stepper/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/stepper',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/stepper',
   },
   switch: {
     description: 'Button-based ARIA switch with controlled checked state',
     layer: 'primitives',
     files: ['switch/switch.directive.ts', 'switch/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/switch',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/switch',
   },
   checkbox: {
     description: 'Button-based ARIA checkbox with checked, unchecked and indeterminate state',
     layer: 'primitives',
     files: ['checkbox/checkbox.directive.ts', 'checkbox/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/checkbox',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/checkbox',
   },
   'radio-group': {
     description: 'Standalone radio group with roving focus and RTL-aware keyboard navigation',
@@ -329,13 +329,13 @@ const REGISTRY = {
       'radio-group/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/radio-group',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/radio-group',
   },
   toggle: {
     description: 'Button-based ARIA toggle with controlled pressed state',
     layer: 'primitives',
     files: ['toggle/toggle.directive.ts', 'toggle/index.ts'],
-    docs: 'https://quartz-headless.pages.dev/toggle',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/toggle',
   },
   'toggle-group': {
     description: 'Single or multiple toggle button group with roving focus',
@@ -347,7 +347,7 @@ const REGISTRY = {
       'toggle-group/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/toggle-group',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/toggle-group',
   },
   slider: {
     description: 'Single-thumb ARIA slider with keyboard, pointer and RTL support',
@@ -362,7 +362,7 @@ const REGISTRY = {
       'slider/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
-    docs: 'https://quartz-headless.pages.dev/slider',
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/slider',
   },
 };
 

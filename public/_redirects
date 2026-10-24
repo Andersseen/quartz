@@ -1,1 +1,31 @@
-/* /index.html 200
+# Legacy root-level documentation URLs -> canonical Doqs URLs (permanent).
+# Cloudflare Pages serves these before any asset lookup; there is no SPA catch-all because every
+# route is prerendered (a 404 stays a 404).
+/overlay /docs/core/overlay 301
+/directionality /docs/core/directionality 301
+/scroll-lock /docs/core/scroll-lock 301
+/splitter /docs/core/splitter 301
+/drag-drop /docs/core/drag-drop 301
+/virtual-scroll /docs/core/virtual-scroll 301
+/viewport /docs/core/viewport 301
+/dialog /docs/primitives/dialog 301
+/tooltip /docs/primitives/tooltip 301
+/toast /docs/primitives/toast 301
+/popover /docs/primitives/popover 301
+/menu /docs/primitives/menu 301
+/select /docs/primitives/select 301
+/listbox /docs/primitives/listbox 301
+/combobox /docs/primitives/combobox 301
+/tabs /docs/primitives/tabs 301
+/accordion /docs/primitives/accordion 301
+/switch /docs/primitives/switch 301
+/checkbox /docs/primitives/checkbox 301
+/radio-group /docs/primitives/radio-group 301
+/toggle /docs/primitives/toggle 301
+/toggle-group /docs/primitives/toggle-group 301
+/slider /docs/primitives/slider 301
+/tree /docs/primitives/tree 301
+/sidebar /docs/primitives/sidebar 301
+/navbar /docs/primitives/navbar 301
+/stepper /docs/primitives/stepper 301
+/docs/index /docs 301

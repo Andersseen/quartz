@@ -1,0 +1,156 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Live Dimensions</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Resize your browser window — these values update instantly through signals.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <div class="flex gap-8 justify-center">
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Width</span>
+            <span
+              class="text-2xl font-bold text-[var(--text-primary)] [font-variant-numeric:tabular-nums]"
+              >{{ viewport.width() }}px</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Height</span>
+            <span
+              class="text-2xl font-bold text-[var(--text-primary)] [font-variant-numeric:tabular-nums]"
+              >{{ viewport.height() }}px</span
+            >
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Aspect</span>
+            <span
+              class="text-2xl font-bold text-[var(--text-primary)] [font-variant-numeric:tabular-nums]"
+              >{{ viewport.aspectRatio() | number: '1.2-2' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Breakpoint Matching</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Predefined breakpoints and custom queries via <code>observe()</code>.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <div class="flex gap-2 justify-center flex-wrap">
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.match().xs ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.match().xs ? 'var(--primary)' : null"
+            [style.border-color]="viewport.match().xs ? 'rgba(139,92,246,0.3)' : null"
+          >
+            xs
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.match().sm ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.match().sm ? 'var(--primary)' : null"
+            [style.border-color]="viewport.match().sm ? 'rgba(139,92,246,0.3)' : null"
+          >
+            sm
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.match().md ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.match().md ? 'var(--primary)' : null"
+            [style.border-color]="viewport.match().md ? 'rgba(139,92,246,0.3)' : null"
+          >
+            md
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.match().lg ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.match().lg ? 'var(--primary)' : null"
+            [style.border-color]="viewport.match().lg ? 'rgba(139,92,246,0.3)' : null"
+          >
+            lg
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.match().xl ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.match().xl ? 'var(--primary)' : null"
+            [style.border-color]="viewport.match().xl ? 'rgba(139,92,246,0.3)' : null"
+          >
+            xl
+          </div>
+        </div>
+
+        <div class="flex gap-2 justify-center flex-wrap mt-4 pt-4 border-t border-[var(--border)]">
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.isMobile() ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.isMobile() ? 'var(--primary)' : null"
+            [style.border-color]="viewport.isMobile() ? 'rgba(139,92,246,0.3)' : null"
+          >
+            Mobile
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.isTablet() ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.isTablet() ? 'var(--primary)' : null"
+            [style.border-color]="viewport.isTablet() ? 'rgba(139,92,246,0.3)' : null"
+          >
+            Tablet
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="viewport.isDesktop() ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="viewport.isDesktop() ? 'var(--primary)' : null"
+            [style.border-color]="viewport.isDesktop() ? 'rgba(139,92,246,0.3)' : null"
+          >
+            Desktop
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="customMin() ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="customMin() ? 'var(--primary)' : null"
+            [style.border-color]="customMin() ? 'rgba(139,92,246,0.3)' : null"
+          >
+            ≥ 900px
+          </div>
+          <div
+            class="py-1.5 px-3 rounded-full text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border)] transition-all duration-200"
+            [style.background-color]="customMax() ? 'rgba(139,92,246,0.15)' : null"
+            [style.color]="customMax() ? 'var(--primary)' : null"
+            [style.border-color]="customMax() ? 'rgba(139,92,246,0.3)' : null"
+          >
+            ≤ 600px
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Directive Usage</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Apply <code>qzViewportMatch</code> to any element to get responsive classes automatically.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <div
+          qzViewportMatch
+          class="bg-[var(--bg-secondary)] border border-[var(--border)] text-center transition-all duration-300"
+          [class]="viewport.isMobile() ? 'p-4 rounded-lg' : 'p-6 px-10 rounded-xl'"
+        >
+          <span class="font-semibold text-[var(--text-primary)]">
+            @if (viewport.isMobile()) {
+              📱 Mobile Layout
+            } @else if (viewport.isTablet()) {
+              📱 Tablet Layout
+            } @else {
+              🖥️ Desktop Layout
+            }
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

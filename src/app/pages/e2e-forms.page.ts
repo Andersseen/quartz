@@ -48,6 +48,8 @@ import { QUARTZ_FORMS } from '@quartz-headless/primitives/forms';
     ...QUARTZ_FORMS,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Behaviour fixture: rendered on the client only (it queries ViewContainerRefs on elements).
+  host: { ngSkipHydration: 'true' },
   template: `
     <main id="app" style="padding: 24px" [attr.dir]="dir">
       <h1>Forms</h1>

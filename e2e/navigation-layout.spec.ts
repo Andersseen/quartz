@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Navigation and layout primitives', () => {
   test('sidebar supports push collapse and overlay dismissal', async ({ page }) => {
-    await page.goto('/sidebar');
+    await page.goto('/docs/primitives/sidebar');
     await expect(page.getByRole('heading', { name: 'Sidebar', level: 1 })).toBeVisible();
 
     const push = page.locator('[data-qz-sidebar]').first();
@@ -20,10 +20,10 @@ test.describe('Navigation and layout primitives', () => {
   });
 
   test('navbar toggles menu and exposes scroll hooks', async ({ page }) => {
-    await page.goto('/navbar');
+    await page.goto('/docs/primitives/navbar');
     await expect(page.getByRole('heading', { name: 'Navbar', level: 1 })).toBeVisible();
 
-    const demo = page.locator('[preview]').first();
+    const demo = page.getByTestId('navbar-preview');
     const navbar = demo.locator('[data-qz-navbar]');
     await page.getByRole('button', { name: 'Menu' }).last().click();
     await expect(navbar).toHaveAttribute('data-qz-menu-open', '');
@@ -39,7 +39,7 @@ test.describe('Navigation and layout primitives', () => {
   });
 
   test('stepper blocks linear future steps until completion', async ({ page }) => {
-    await page.goto('/stepper');
+    await page.goto('/docs/primitives/stepper');
     await expect(page.getByRole('heading', { name: 'Stepper', level: 1 })).toBeVisible();
 
     const account = page.getByRole('button', { name: 'Account' }).last();

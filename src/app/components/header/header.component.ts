@@ -1,44 +1,8 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  effect,
-  inject,
-  computed,
-  signal,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, effect, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
-import { LayoutService } from '../../services/layout.service';
 import { LmnGithubIcon, LmnMenuIcon, LmnXIcon } from 'lumen-icons';
-
-const COMPONENT_ROUTES = [
-  '/components',
-  '/directionality',
-  '/overlay',
-  '/dialog',
-  '/splitter',
-  '/toast',
-  '/tooltip',
-  '/drag-drop',
-  '/tree',
-  '/listbox',
-  '/menu',
-  '/popover',
-  '/combobox',
-  '/scroll-lock',
-  '/select',
-  '/tabs',
-  '/accordion',
-  '/switch',
-  '/checkbox',
-  '/radio-group',
-  '/toggle',
-  '/toggle-group',
-  '/slider',
-  '/virtual-scroll',
-  '/viewport',
-];
 
 @Component({
   selector: 'app-header',
@@ -51,7 +15,6 @@ const COMPONENT_ROUTES = [
 })
 export class HeaderComponent {
   private readonly router = inject(Router);
-  readonly layout = inject(LayoutService);
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
@@ -62,15 +25,7 @@ export class HeaderComponent {
     { initialValue: this.router.url },
   );
 
-  readonly isComponentRoute = computed(() =>
-    COMPONENT_ROUTES.some((p) => this.currentUrl().startsWith(p)),
-  );
-
-  /**
-   * Standalone mobile menu for `/` and `/docs`, which have no sidebar to toggle (unlike
-   * component routes — see isComponentRoute()). Without this, the desktop `<nav>` links
-   * (Home/Components/Docs) are just hidden below `md` with no way to reach them.
-   */
+  /** Mobile menu for the site-level links; the documentation sidebar is owned by Doqs. */
   readonly mobileNavOpen = signal(false);
 
   constructor() {

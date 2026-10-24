@@ -89,4 +89,19 @@ describe('VirtualScrollDirective', () => {
     expect(items.length).toBeGreaterThan(0);
     expect(items[0].textContent?.trim()).toContain('Item');
   });
+
+  it('does not throw while measuring on a server DOM without layout (prerender)', async () => {
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    // jsdom has layout stubs; a server DOM (Domino) has no getBoundingClientRect at all.
+    (
+      HTMLElement.prototype as unknown as { getBoundingClientRect?: unknown }
+    ).getBoundingClientRect = undefined;
+    try {
+      const { fixture } = await render(TestHost);
+      await fixture.whenStable();
+      expect(fixture.componentInstance.vs().contentHeight()).toBe(100 * 50);
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+    }
+  });
 });

@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] — 2026-10-24
+
+Release target: `@quartz-headless/core@0.10.0` and `@quartz-headless/primitives@0.10.0`. Advanced
+selection plus the official documentation migrated to Doqs. Evidence: `docs/releases/0.10-acceptance.md`;
+Doqs integration findings: `docs/integrations/doqs-feedback.md`.
+
+### Added
+
+- **Select:** `multiple` with `[(values)]`, `closeOnSelect`, `valuesChangeCommitted`, `selectedValues`, `selectedLabels`, `isEmpty`, `data-qz-placeholder`, `aria-multiselectable`; `SelectGroupDirective`, `SelectGroupLabelDirective`, `SelectSeparatorDirective`.
+- **Listbox:** `ListboxGroupDirective`, `ListboxGroupLabelDirective`, `ListboxSeparatorDirective`.
+- **Combobox:** `multiple`/`values`, `allowDeselect`, `status`, `valueChangeCommitted`, `valuesChangeCommitted`, `queryChanged`, `touched`, group directives, `createLatestRequest()`.
+- **Forms:** `ComboboxControlDirective` (in `QUARTZ_FORMS`); `SelectControlDirective` handles `multiple`.
+- **Documentation:** Doqs (`@doqs/analog@0.10.0`) replaces the custom docs layout: prerendered Markdown, search, generated API reference, live demos and playgrounds of real primitives.
+
+### Changed
+
+- Combobox: input events during IME composition no longer filter or rewrite the query; editing a selected value reports `valueChangeCommitted(null)`; the input is natively `disabled` when disabled; `closeOnSelect` defaults to `true` (single) / `false` (multiple).
+- Select: a scroll already in flight when the popup opens no longer dismisses it.
+- Website: component pages moved to `/docs/core/*` and `/docs/primitives/*`; old root URLs redirect permanently. Cloudflare Pages now serves `dist/analog/public`.
+
+### Fixed
+
+- Virtual scroll no longer throws while prerendering on a server DOM without `getBoundingClientRect`.
+
 ## [0.9.0] — 2026-10-23
 
 Release target: `@quartz-headless/core@0.9.0` and `@quartz-headless/primitives@0.9.0`.

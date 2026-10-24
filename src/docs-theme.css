@@ -1,0 +1,31 @@
+/*
+ * Quartz brand mapped onto Doqs' documented host tokens. Doqs ships no theme of its own beyond
+ * these variables, so the documentation follows the site's dark palette without forked CSS.
+ */
+:root {
+  --host-docs-background: #0a0a0c;
+  --host-docs-foreground: #e6e6ee;
+  --host-docs-primary: #34d399;
+  --host-docs-secondary: #a1a1b5;
+  --host-docs-muted: #8b8ba0;
+  --host-docs-border: rgb(255 255 255 / 10%);
+  --host-docs-surface: #111116;
+  --host-docs-focus: #a78bfa;
+  --host-docs-code-background: #0f0f13;
+  --host-docs-code-foreground: #e6e6ee;
+  --host-docs-scroll-offset: 6rem;
+}
+
+/* Clears the fixed, floating site header. */
+.qz-docs-host {
+  min-height: 100vh;
+  padding-top: 5.5rem;
+  background: var(--host-docs-background);
+}
+
+.qz-demo-placeholder {
+  padding: 1rem;
+  border: 1px dashed var(--host-docs-border);
+  color: var(--host-docs-muted);
+  font-size: 0.875rem;
+}

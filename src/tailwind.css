@@ -1,2 +1,4 @@
 @import 'tailwindcss';
 @import '@voltui/components/themes/presets/dusk-sharp.css';
+@import '@doqs/analog/styles.css';
+@import './docs-theme.css';

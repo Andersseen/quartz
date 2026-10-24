@@ -56,7 +56,8 @@ describe('Listbox sections', () => {
     const { fixture } = await render(GroupedHost);
     expect(screen.getByRole('group', { name: 'Citrus' })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Berries' })).toBeTruthy();
-    expect(screen.getByRole('separator')).toBeTruthy();
+    expect(screen.queryByRole('separator')).toBeNull();
+    expect(document.querySelector('[qzListboxSeparator]')).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getAllByRole('option')).toHaveLength(4);
 
     const listbox = screen.getByRole('listbox');

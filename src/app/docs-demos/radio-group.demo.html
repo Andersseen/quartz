@@ -1,0 +1,79 @@
+<div class="qz-demo flex flex-col gap-8">
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-gray-200 mb-2">Vertical, horizontal, disabled and RTL</h3>
+    <div class="grid gap-5 text-sm">
+      <div qzRadioGroup [(value)]="plan" orientation="vertical" class="grid gap-2">
+        <button
+          qzRadio="free"
+          class="border border-white/15 px-3 py-2 text-left data-[qz-state=checked]:bg-cyan-500/20"
+        >
+          Free
+        </button>
+        <button
+          qzRadio="pro"
+          class="border border-white/15 px-3 py-2 text-left data-[qz-state=checked]:bg-cyan-500/20"
+        >
+          Pro
+        </button>
+        <button
+          qzRadio="team"
+          [qzRadioDisabled]="true"
+          class="border border-white/15 px-3 py-2 text-left text-gray-600"
+        >
+          Team
+        </button>
+      </div>
+      <div qzRadioGroup [(value)]="density" orientation="horizontal" class="flex gap-2">
+        <button
+          qzRadio="compact"
+          class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-emerald-500/20"
+        >
+          Compact
+        </button>
+        <button
+          qzRadio="cozy"
+          class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-emerald-500/20"
+        >
+          Cozy
+        </button>
+      </div>
+      <div qzRadioGroup [(value)]="rtlValue" orientation="horizontal" dir="rtl" class="flex gap-2">
+        <button
+          qzRadio="left"
+          class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+        >
+          Left
+        </button>
+        <button
+          qzRadio="center"
+          class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+        >
+          Center
+        </button>
+        <button
+          qzRadio="right"
+          class="border border-white/15 px-3 py-2 data-[qz-state=checked]:bg-amber-400/20"
+        >
+          Right
+        </button>
+      </div>
+    </div>
+    <p class="mt-4 text-sm text-gray-400">
+      Focus and selection intentionally move together for keyboard navigation, matching native radio
+      group expectations.
+    </p>
+  </section>
+
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6 mt-6">
+    <h3 class="text-lg font-semibold text-gray-200 mb-2">Angular Forms</h3>
+    <p preview class="text-sm text-gray-400">
+      Opt in with the <code>@quartz-headless/primitives/forms</code> entry point; consumers that do
+      not use Forms never load <code>@angular/forms</code>.
+    </p>
+    <p class="mt-4 text-sm text-gray-400">
+      The control value is the checked radio's <code>qzRadio</code> value, or <code>null</code> when
+      none is checked (also what <code>reset()</code> writes). Touched fires when focus leaves the
+      group, not between radios.
+    </p>
+  </section>
+</div>

@@ -57,22 +57,22 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
-| V    | Implemented and verified        |      5 |            5 |
+| V    | Implemented and verified        |      8 |            8 |
 | C    | Implemented, missing coverage   |      2 |            2 |
-| P    | Partial behavioural equivalence |     12 |           12 |
+| P    | Partial behavioural equivalence |      9 |            9 |
 | M    | Missing                         |     13 |           12 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: only **5 of 46** rows are verified-equivalent today (Checkbox, RadioGroup, Switch,
-Tabs, Dialog). Quartz 0.9 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
+Reading the numbers: **8 of 46** rows are verified-equivalent as of 0.10.0 (Checkbox, RadioGroup, Switch,
+Tabs, Dialog, Select, Listbox, Combobox). Quartz 0.10 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
 all have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
 
 | Milestone                                                                                                       | Rows                                                                                   |
 | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections)                                  | `select` (P), `combobox` (P), `listbox` (P)                                            |
+| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                            |
 | 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms)                             | `toggle` (C), `slider` (P), `range-slider` (M), `toggle-group` (P)                     |
 | 0.12 — Date and date-range interaction                                                                          | `date-picker` (M), `date-range-picker` (M)                                             |
 | 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
@@ -323,18 +323,18 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.9 (done); axe 0.13
 - **Acceptance tests needed:** `tabs.directive.spec.ts`, `controls.contract.spec.ts`; add axe scan.
 
-### `select` — Partial behavioural equivalence (**P**)
+### `select` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-select`, `-content`, `-item`, `-label`, `-separator`, `select[voltNativeSelect]`; re-exports `injectNativeSelectState`, `injectSelectConfig`, `injectSelectState`, `provideNativeSelectState`, `provideSelectConfig`, `provideSelectState`
 - **Behavioural dependency:** ng-primitives `select` + `portal`; Floating UI; native `<select>` for `voltNativeSelect`
 - **Observable headless contract required:** Single and **multiple** selection, placeholder, groups with label/separator, keyboard + typeahead, Escape/Tab, floating placement, CVA.
 - **Quartz equivalent:** `SelectDirective` family (single) + `SelectControlDirective`. `voltNativeSelect` is a native `<select>` (N).
-- **Current evidence:** Partial behavioural equivalence.
+- **Current evidence:** 0.10: Multiple `values`, groups/labels/separators, placeholder (`data-qz-placeholder`), `closeOnSelect`, unrendered-value labels via `displayWith`, scroll-in-flight guard. Evidence: `select.advanced.spec.ts`, `select.contract.spec.ts`, `forms.advanced.spec.ts` (unit); `e2e/selection.spec.ts` (Chromium/Firefox/WebKit incl. Select in Dialog, RTL, keyboard-only, cleanup); axe on open states; AOT consumer smoke with strict templates; Reactive Forms (array, `[]`, reset). `voltNativeSelect` stays N.
 - **Accessibility:** Verified (single): trigger/popup named (inherited from trigger — 0.9), no dangling `aria-controls`, Tab hands focus back, axe on open popup.
 - **Forms:** Verified (single value): silent writeValue, commit only on change, touched, disabled (also closes an open popup), reset → `null`. Multiple needs an array contract.
 - **Angular / SSR:** Popup is browser-only; hydration proof 0.17.
-- **Remaining work:** `multiple`; group label/separator; `placeholder` contract; Volt `allOptions`-style identity for unrendered options (selected label before options render is `displayWith`-only today).
-- **Owning milestone:** 0.10
+- **Remaining work:** None for the 0.10 contract. Cross-cutting gate (SSR/hydration matrix, Angular 22) stays in 0.17.
+- **Owning milestone:** 0.10 (closed in 0.10.0)
 - **Acceptance tests needed:** Unit + e2e: multiple toggling/array Forms value; grouped options keyboard skip of labels/separators; label for a value whose option is not rendered.
 
 ### `theme` — Native / composition sufficient (**N**)
@@ -561,18 +561,18 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** E2E with a real `DataTransfer` drop in 3 engines; unit accept filtering; keyboard picker path.
 
-### `combobox` — Partial behavioural equivalence (**P**)
+### `combobox` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-combobox`, `-input`, `-button`, `-dropdown`, `-option` (CVA); re-exports `NgpComboboxPortal`
 - **Behavioural dependency:** ng-primitives `combobox` + `portal`; Floating UI
 - **Observable headless contract required:** Filtering (`filterMode`), `multiple`, `allowDeselect`, async `loading` + `queryChange`, active-descendant, IME composition, selected-vs-typed text, open/close reasons, CVA.
 - **Quartz equivalent:** `ComboboxDirective` family: single value, `inputValue`, filter/autocomplete, `loading`, `allowFreeform`, `inputValueChangeCommitted`.
-- **Current evidence:** Partial behavioural equivalence.
+- **Current evidence:** 0.10: `multiple` + `values`, `allowDeselect`, `status`/loading, IME composition guard, `queryChanged`, `createLatestRequest()` stale-response guard (consumer-owned fetching), `valueChangeCommitted`/`valuesChangeCommitted`/`touched`, `ComboboxControlDirective`. Evidence: `combobox.advanced.spec.ts`, `forms.advanced.spec.ts` (unit); `e2e/selection.spec.ts` (local, async stale-response, IME composition, multiple, deselect, ARIA reference integrity, reset/disabled) in 3 engines; axe; AOT consumer smoke. Known limits: no chips/Backspace removal, no built-in fetching.
 - **Accessibility:** Implemented with a large spec; no IME, stale-async or browser evidence in 0.9; no axe.
 - **Forms:** No adapter. Needs value (and text) contract: selected value vs free text, null/reset, multiple array.
 - **Angular / SSR:** Browser popup; input renders on the server.
-- **Remaining work:** `multiple` + `allowDeselect`; stale async result handling; IME composition; Forms adapter; identity/`compareWith` verification; browser E2E.
-- **Owning milestone:** 0.10
+- **Remaining work:** None for the 0.10 contract. Cross-cutting gate (SSR/hydration matrix, Angular 22) stays in 0.17.
+- **Owning milestone:** 0.10 (closed in 0.10.0)
 - **Acceptance tests needed:** Unit: IME composition does not filter mid-composition; stale response ignored; e2e typing/selection in 3 engines; Forms harness; axe.
 
 ### `date-picker` — Missing (**M**)
@@ -603,18 +603,18 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.12
 - **Acceptance tests needed:** Unit: reversed selection, single-day range, preview; e2e keyboard range selection; Forms harness.
 
-### `listbox` — Partial behavioural equivalence (**P**)
+### `listbox` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-listbox`, `-trigger`, `-header`, `-section`, `-option` (CVA)
 - **Behavioural dependency:** ng-primitives `listbox` + `common`
 - **Observable headless contract required:** Single/multiple (`mode`), `T[]` value, active-descendant navigation, typeahead, sections with headers, disabled options, Forms.
 - **Quartz equivalent:** `ListboxDirective` + `ListboxOptionDirective` + `ListboxControlDirective`.
-- **Current evidence:** Partial behavioural equivalence.
+- **Current evidence:** 0.10: Sections (`qzListboxGroup`/`GroupLabel`/`Separator`), selection independent of the active item; scalar single mode kept (a Volt adapter translates to arrays). Evidence: `listbox.groups.spec.ts`, `listbox.directive.spec.ts`, forms specs (unit); `e2e/selection.spec.ts` grouped Listbox keyboard test in 3 engines; axe; AOT consumer smoke.
 - **Accessibility:** Verified: role, aria-multiselectable, active-descendant, disabled option, name via `aria-label` in the e2e form.
 - **Forms:** Verified: silent writeValue, commit per change (array for multiple), touched on focus leaving, disabled, reset → none selected. Volt always uses arrays; Quartz single mode uses a scalar (adapter concern).
 - **Angular / SSR:** Host bindings only.
-- **Remaining work:** Sections/headers (`role=group` + `aria-labelledby`); trigger composition; range selection (shift) is not in Volt.
-- **Owning milestone:** 0.10
+- **Remaining work:** None for the 0.10 contract. Cross-cutting gate (SSR/hydration matrix, Angular 22) stays in 0.17.
+- **Owning milestone:** 0.10 (closed in 0.10.0)
 - **Acceptance tests needed:** Unit: grouped options keep keyboard order and skip headers; e2e grouped keyboard.
 
 ### `toolbar` — Missing (**M**)

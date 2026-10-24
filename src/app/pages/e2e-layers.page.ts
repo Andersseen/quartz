@@ -26,6 +26,8 @@ import {
   selector: 'app-e2e-layers',
   imports: [OverlayTriggerDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Behaviour fixture: rendered on the client only (it queries ViewContainerRefs on elements).
+  host: { ngSkipHydration: 'true' },
   template: `
     <main style="padding: 24px; min-height: 2000px">
       <h1>Core layer contracts</h1>

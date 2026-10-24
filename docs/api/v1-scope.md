@@ -37,8 +37,8 @@ areas that already exist in Quartz were conditional before 0.9 and are now manda
 
 | Package    | Area                     | Volt row(s)              | Owning milestone | Gap summary (see inventory)                                         |
 | ---------- | ------------------------ | ------------------------ | ---------------- | ------------------------------------------------------------------- |
-| Primitives | Combobox                 | `combobox`               | 0.10             | multiple, IME, stale async, Forms, browser E2E                      |
-| Primitives | Select (multiple/groups) | `select`                 | 0.10             | multiple, groups/labels/separators, placeholder identity            |
+| Primitives | Combobox                 | `combobox`               | 0.10 (done)      | closed in 0.10.0: multiple, IME, stale async guard, Forms, E2E      |
+| Primitives | Select (multiple/groups) | `select`                 | 0.10 (done)      | closed in 0.10.0: multiple, groups/labels/separators, placeholder   |
 | Primitives | Slider                   | `slider`, `range-slider` | 0.11             | browser pointer capture, decimal step, Forms, RangeSlider           |
 | Primitives | Toggle / ToggleGroup     | `toggle`, `toggle-group` | 0.11             | Forms, deselection semantics, RTL                                   |
 | Primitives | Sidebar                  | `sidebar`                | 0.13             | responsive/focus/scroll-lock proof in a browser, collapsed contract |

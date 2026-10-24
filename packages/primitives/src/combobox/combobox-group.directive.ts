@@ -27,11 +27,14 @@ export class ComboboxGroupLabelDirective {
   protected readonly group = inject(ComboboxGroupDirective);
 }
 
-/** Visual separator between options or groups; excluded from navigation. */
+/**
+ * Decorative separator between options or groups; excluded from navigation. ARIA does not allow
+ * `separator` inside a listbox, so it is hidden from assistive technology (`aria-hidden`).
+ */
 @Directive({
   selector: '[qzComboboxSeparator]',
   exportAs: 'qzComboboxSeparator',
   standalone: true,
-  host: { '[attr.role]': '"separator"' },
+  host: { '[attr.role]': '"presentation"', '[attr.aria-hidden]': '"true"' },
 })
 export class ComboboxSeparatorDirective {}

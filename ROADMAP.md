@@ -210,15 +210,15 @@ gate exige, por fila del inventario: contrato observable, pruebas unitarias, For
 expone CVA, E2E en Chromium/Firefox/WebKit, escaneo axe, AOT estricto desde tarball y actualización
 de la clasificación en `docs/api/volt-parity.md` solo con evidencia.
 
-| Minor  | Familia                                                                 | Ficha                                           |
-| ------ | ----------------------------------------------------------------------- | ----------------------------------------------- |
-| `0.10` | Selección avanzada: Combobox, Select múltiple/grupos, Listbox secciones | [0.10](docs/roadmap/0.10-advanced-selection.md) |
-| `0.11` | Rango y alternancia: Slider, RangeSlider, Toggle, ToggleGroup           | [0.11](docs/roadmap/0.11-range-controls.md)     |
-| `0.12` | Fecha y rango de fechas                                                 | [0.12](docs/roadmap/0.12-date-range.md)         |
-| `0.13` | Navegación: NavigationMenu, Toolbar, Pagination, Accordion/Sidebar      | [0.13](docs/roadmap/0.13-navigation.md)         |
-| `0.14` | Texto/archivos: InputOTP, Autofill, FileUpload, FormField               | [0.14](docs/roadmap/0.14-text-file-input.md)    |
-| `0.15` | Feedback: Progress, Meter, Avatar, Toast (contenido)                    | [0.15](docs/roadmap/0.15-feedback.md)           |
-| `0.16` | Drawer, Resizable, flechas Tooltip/Popover, grupos de Menu              | [0.16](docs/roadmap/0.16-drawer-resizable.md)   |
+| Minor  | Familia                                                                                                                              | Ficha                                           |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| `0.10` | Selección avanzada: Combobox, Select múltiple/grupos, Listbox secciones (**implementada**, [acta](docs/releases/0.10-acceptance.md)) | [0.10](docs/roadmap/0.10-advanced-selection.md) |
+| `0.11` | Rango y alternancia: Slider, RangeSlider, Toggle, ToggleGroup                                                                        | [0.11](docs/roadmap/0.11-range-controls.md)     |
+| `0.12` | Fecha y rango de fechas                                                                                                              | [0.12](docs/roadmap/0.12-date-range.md)         |
+| `0.13` | Navegación: NavigationMenu, Toolbar, Pagination, Accordion/Sidebar                                                                   | [0.13](docs/roadmap/0.13-navigation.md)         |
+| `0.14` | Texto/archivos: InputOTP, Autofill, FileUpload, FormField                                                                            | [0.14](docs/roadmap/0.14-text-file-input.md)    |
+| `0.15` | Feedback: Progress, Meter, Avatar, Toast (contenido)                                                                                 | [0.15](docs/roadmap/0.15-feedback.md)           |
+| `0.16` | Drawer, Resizable, flechas Tooltip/Popover, grupos de Menu                                                                           | [0.16](docs/roadmap/0.16-drawer-resizable.md)   |
 
 ### 0.17.0 — Compatibilidad y consumo fuera del repositorio (antes 0.10)
 

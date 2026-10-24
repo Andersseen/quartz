@@ -65,6 +65,8 @@ export class SelectDirective<T> implements OnDestroy {
   private listboxElement: HTMLElement | null = null;
   private preferredActivation: 'selected' | 'first' | 'last' = 'selected';
   private destroyed = false;
+  /** Scroll dismissal is armed two frames after opening, so a scroll already in flight (e.g. the page scrolling the trigger into view) cannot close the popup it just opened. */
+  private scrollArmed = false;
   readonly #formDisabled = signal(false);
 
   /** Selected value in single mode. Ignored while `multiple` is set. */
@@ -357,6 +359,8 @@ export class SelectDirective<T> implements OnDestroy {
 
   private installDismiss(panel: HTMLElement): void {
     this.dismissController?.destroy();
+    this.scrollArmed = false;
+    this.queueFrame(() => this.queueFrame(() => (this.scrollArmed = true)));
     this.dismissController = createDismissController({
       document: this.document,
       escape: this.closeOnEscape(),
@@ -366,6 +370,7 @@ export class SelectDirective<T> implements OnDestroy {
       rootElements: () => [panel],
       excludeElements: () => (this.triggerElement ? [this.triggerElement] : []),
       onDismiss: (reason) => {
+        if (reason === 'scroll' && !this.scrollArmed) return;
         const closeReason =
           reason === 'outside-pointer'
             ? 'outside-pointer'

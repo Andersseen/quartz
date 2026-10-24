@@ -38,6 +38,14 @@ jobs:
       - name: Format Check
         run: pnpm format:check
 
+      # Generated documentation must match the sources: doq-api reference pages and
+      # doq content (source-backed pages), plus the Doqs integration diagnostics.
+      - name: Documentation Generated Files Check
+        run: |
+          pnpm docs:api:check
+          pnpm docs:content:check
+          pnpm docs:doctor
+
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -100,6 +108,11 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
+      - name: Build and verify documentation output
+        run: |
+          pnpm build:demo
+          pnpm docs:check
+
       - name: Run E2E Tests
         run: pnpm e2e
 
@@ -134,7 +147,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Demo
+      - name: Build Demo (prerendered documentation + search index)
         run: pnpm run pages:build
 
       # Create the Pages project if it does not exist yet. This is idempotent:
@@ -155,7 +168,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist/client --project-name quartz-headless --branch main --commit-dirty=true
+          command: pages deploy dist/analog/public --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
   # Publishes @quartz-headless/core and @quartz-headless/primitives (two independent

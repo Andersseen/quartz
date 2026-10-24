@@ -1,5 +1,24 @@
 # STATE — Current Project Status
 
+## 0.10.0 Advanced selection + Doqs documentation — 2026-10-24
+
+Branch `feat/quartz-0.10-selection-doqs` (baseline `main` @ `32c55ab`, 0.9.0). Delivers multiple Select, groups for
+Select/Listbox/Combobox, the Combobox query/value/IME/async contract (`createLatestRequest`), `ComboboxControlDirective`,
+and moves the official documentation to Doqs (`@doqs/analog@0.10.0`): prerendered static site in
+`dist/analog/public`, Markdown under `src/content/docs`, generated API reference (`pnpm docs:api`), source-backed
+page (`doq.content.json`), Pagefind search, legacy URL redirects (`public/_redirects`). Volt rows `select`, `listbox`,
+`combobox` → V (8/46 V). Evidence and limitations: [0.10 acceptance](../releases/0.10-acceptance.md); Doqs findings:
+[doqs-feedback](../integrations/doqs-feedback.md). Local chain: 567 unit tests, 522 Playwright executions (3 engines),
+AOT consumer smoke. Packages are `0.10.0`.
+
+Docs workflow: `pnpm docs:api` / `docs:content` regenerate; CI runs `docs:api:check`, `docs:content:check`,
+`docs:doctor`, then `build:demo` + `docs:check`. Add a primitive page under `src/content/docs/primitives`, a demo in
+`src/app/docs-demos` (registered in `registry.ts`) and/or a playground in `src/app/docs-playgrounds/registry.ts`;
+`src/docs-integrity.spec.ts` verifies the wiring.
+
+Open follow-ups: 0.11 range controls; Doqs issues in the feedback doc; manual screen-reader review; real
+SSR/hydration matrix (0.17).
+
 ## 0.9.0 Selection, controls, Angular Forms & Volt parity contract — 2026-10-23
 
 Branch `feat/quartz-0.9-selection-forms-parity` (baseline `main` @ `6c64097`, 0.8.0). Delivers

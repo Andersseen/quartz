@@ -166,6 +166,8 @@ export class VirtualScrollDirective<T> implements OnDestroy {
 
   #measure(): void {
     const host = this.elementRef.nativeElement;
+    // Server DOMs (prerender) have no layout: keep the default viewport height instead of throwing.
+    if (!this.isBrowser || typeof host.getBoundingClientRect !== 'function') return;
     const rect = host.getBoundingClientRect();
     // Fallback chain: border-box height → clientHeight → 320 (sensible default)
     const h = rect.height || host.clientHeight || 320;

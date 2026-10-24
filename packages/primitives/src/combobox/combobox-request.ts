@@ -17,6 +17,7 @@ export interface LatestRequest {
  * the latest request can ever resolve with a value. Must be called in an injection context; the
  * in-flight request is aborted on destroy.
  */
+// #region doqs:latest-request
 export function createLatestRequest(): LatestRequest {
   let current: AbortController | null = null;
   const cancel = (): void => {
@@ -42,3 +43,4 @@ export function createLatestRequest(): LatestRequest {
     },
   };
 }
+// #endregion doqs:latest-request

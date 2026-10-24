@@ -1,0 +1,112 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Direction service</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        <code>DirectionalityService</code> resolves direction once from
+        <code>document.documentElement</code> and exposes it as a signal. Everything below reacts to
+        the same toggle — no page reload, no re-resolving the DOM.
+      </p>
+
+      <div class="flex flex-col items-center gap-6">
+        <volt-button
+          variant="outline"
+          data-testid="directionality-toggle"
+          (click)="toggleDirection()"
+        >
+          Toggle direction — currently {{ direction() === 'ltr' ? 'LTR' : 'RTL' }}
+        </volt-button>
+
+        <div class="flex gap-8 text-center">
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]"
+              >inline-start</span
+            >
+            <span class="text-xl font-bold text-[var(--text-primary)]">{{ inlineStart() }}</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]"
+              >inline-end</span
+            >
+            <span class="text-xl font-bold text-[var(--text-primary)]">{{ inlineEnd() }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Keyboard helpers</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        <code>inlineStartKey()</code> / <code>inlineEndKey()</code> are the widget-agnostic
+        primitive behind direction-aware arrow-key handling — Core knows nothing about menus, tabs
+        or trees, only "which physical key means start/end right now".
+      </p>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Collection integration</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        <code>CollectionStore</code> (Core's horizontal/vertical navigation foundation) takes an
+        optional <code>direction</code> — default <code>'ltr'</code> reproduces the historical
+        behavior exactly. Focus this row and press the arrow keys after toggling direction above.
+      </p>
+
+      <div class="flex flex-col items-center gap-4">
+        <div
+          class="flex gap-3 outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-xl p-2"
+          [attr.dir]="direction()"
+          data-testid="directionality-collection"
+          tabindex="0"
+          (keydown)="onKeydown($event)"
+        >
+          @for (item of items; track item.id) {
+            <div
+              class="py-2 px-4 rounded-lg text-sm font-medium border transition-all duration-150"
+              [attr.data-active]="activeId() === item.id ? '' : null"
+              [style.background-color]="
+                activeId() === item.id ? 'rgba(139,92,246,0.15)' : 'var(--bg-secondary)'
+              "
+              [style.color]="activeId() === item.id ? 'var(--primary)' : 'var(--text-muted)'"
+              [style.border-color]="
+                activeId() === item.id ? 'rgba(139,92,246,0.3)' : 'var(--border)'
+              "
+            >
+              {{ item.label }}
+            </div>
+          }
+        </div>
+        <p class="text-xs text-[var(--text-muted)]">
+          {{ direction() === 'ltr' ? '← previous · next →' : '← next · previous →' }}
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Overlay integration</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        <code>placement="bottom-start"</code> resolves against the trigger's own direction. Toggle
+        direction above, then open the menu — the alignment mirrors from the anchor's left edge to
+        its right edge.
+      </p>
+
+      <div class="flex items-center justify-center" [attr.dir]="direction()">
+        <volt-button
+          variant="solid"
+          qzOverlayTrigger
+          [overlayTemplate]="menuTpl"
+          placement="bottom-start"
+        >
+          Open menu ({{ direction() === 'ltr' ? 'LTR' : 'RTL' }})
+        </volt-button>
+
+        <ng-template #menuTpl>
+          <div
+            class="min-w-40 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-1 shadow-lg"
+          >
+            <div class="px-3 py-2 text-sm text-[var(--text-primary)]">Aligned to bottom-start</div>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+</div>
