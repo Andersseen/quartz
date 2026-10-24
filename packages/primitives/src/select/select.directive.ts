@@ -65,10 +65,22 @@ export class SelectDirective<T> implements OnDestroy {
   private listboxElement: HTMLElement | null = null;
   private preferredActivation: 'selected' | 'first' | 'last' = 'selected';
   private destroyed = false;
+  /** Scroll dismissal is armed two frames after opening, so a scroll already in flight (e.g. the page scrolling the trigger into view) cannot close the popup it just opened. */
+  private scrollArmed = false;
   readonly #formDisabled = signal(false);
 
+  /** Selected value in single mode. Ignored while `multiple` is set. */
   readonly value = model<T | null>(null);
+  /** Selected values in `multiple` mode (controlled: write a new array to change the selection). */
+  readonly values = model<readonly T[]>([]);
   readonly open = model(false);
+  /** Enables multiple selection: `values` is used instead of `value` and toggles keep the popup open. */
+  readonly multiple = input(false, { transform: booleanAttribute });
+  /**
+   * Whether a user selection closes the popup. Defaults to `true` in single mode and `false` when
+   * `multiple` is set.
+   */
+  readonly closeOnSelect = input<boolean | undefined>(undefined);
 
   readonly content = input<TemplateRef<unknown> | null>(null);
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -97,9 +109,12 @@ export class SelectDirective<T> implements OnDestroy {
 
   readonly opened = output<void>();
   readonly closed = output<void>();
+  /** Fires with the option value on every user selection (in `multiple` mode: every toggle). */
   readonly selected = output<T>();
-  /** Fires once per user selection that changed the value; never for programmatic writes. */
+  /** Single mode: fires once per user selection that changed the value; never for programmatic writes. */
   readonly valueChangeCommitted = output<T>();
+  /** Multiple mode: fires once per user toggle with the new array; never for programmatic writes. */
+  readonly valuesChangeCommitted = output<readonly T[]>();
   /** Fires when focus leaves the control (trigger blur with the popup closed, or a close that does not return focus to the trigger). */
   readonly touched = output<void>();
 
@@ -110,13 +125,25 @@ export class SelectDirective<T> implements OnDestroy {
   readonly activeOption = computed(() => this.collection.activeItem());
   readonly isOpen = this.openState.asReadonly();
   readonly panelId = computed(() => (this.isOpen() ? this.generatedPanelId : null));
+  /** Currently selected values as an array in both modes (derived from `value` / `values`). */
+  readonly selectedValues = computed<readonly T[]>(() => {
+    if (this.multiple()) return this.values();
+    const value = this.value();
+    return value === null ? [] : [value];
+  });
+  /** True when nothing is selected: the trigger should show its placeholder. */
+  readonly isEmpty = computed(() => this.selectedValues().length === 0);
+  /** First registered (rendered) selected option, in DOM order. */
   readonly selectedOption = computed(
     () => this.collection.items().find((option) => this.isSelected(option)) ?? null,
   );
-  readonly selectedLabel = computed(() => {
-    const value = this.value();
-    return value === null ? '' : this.displayWith()(value);
-  });
+  /**
+   * Display labels of the selected values. Derived from the value through `displayWith`, never
+   * from registered options, so a value whose option is not rendered yet keeps its label.
+   */
+  readonly selectedLabels = computed(() => this.selectedValues().map((v) => this.displayWith()(v)));
+  /** `selectedLabels` joined with `, ` (empty string when nothing is selected). */
+  readonly selectedLabel = computed(() => this.selectedLabels().join(', '));
 
   constructor() {
     effect(() => {
@@ -130,6 +157,19 @@ export class SelectDirective<T> implements OnDestroy {
     effect(() => {
       if (this.isDisabled()) untracked(() => this.closePopup('programmatic'));
     });
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`writeValue`); silent, never emits. */
+  writeFormValue(value: unknown): void {
+    if (this.multiple()) {
+      this.values.set(Array.isArray(value) ? (value as T[]) : value == null ? [] : [value as T]);
+    } else {
+      this.value.set(
+        Array.isArray(value)
+          ? ((value[0] as T | undefined) ?? null)
+          : ((value ?? null) as T | null),
+      );
+    }
   }
 
   /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
@@ -183,8 +223,9 @@ export class SelectDirective<T> implements OnDestroy {
   }
 
   isSelected(option: SelectOptionDirective<T>): boolean {
-    const value = this.value();
-    return value !== null && this.compareWith()(value, option.value());
+    const compare = this.compareWith();
+    const target = option.value();
+    return this.selectedValues().some((value) => compare(value, target));
   }
 
   openPopup(
@@ -244,12 +285,25 @@ export class SelectDirective<T> implements OnDestroy {
 
   selectOption(option: SelectOptionDirective<T>): void {
     if (this.isDisabled() || option.optionDisabled()) return;
+    const optionValue = option.value();
+    if (this.multiple()) {
+      const compare = this.compareWith();
+      const current = [...this.values()];
+      const index = current.findIndex((item) => compare(item, optionValue));
+      if (index === -1) current.push(optionValue);
+      else current.splice(index, 1);
+      this.values.set(current);
+      this.selected.emit(optionValue);
+      this.valuesChangeCommitted.emit(current);
+      if (this.closeOnSelect() === true) this.closePopup('selection');
+      return;
+    }
     const previous = this.value();
-    const changed = previous === null || !this.compareWith()(previous, option.value());
-    this.value.set(option.value());
-    this.selected.emit(option.value());
-    if (changed) this.valueChangeCommitted.emit(option.value());
-    this.closePopup('selection');
+    const changed = previous === null || !this.compareWith()(previous, optionValue);
+    this.value.set(optionValue);
+    this.selected.emit(optionValue);
+    if (changed) this.valueChangeCommitted.emit(optionValue);
+    if (this.closeOnSelect() !== false) this.closePopup('selection');
   }
 
   handleTriggerKeydown(event: KeyboardEvent): void {
@@ -305,6 +359,8 @@ export class SelectDirective<T> implements OnDestroy {
 
   private installDismiss(panel: HTMLElement): void {
     this.dismissController?.destroy();
+    this.scrollArmed = false;
+    this.queueFrame(() => this.queueFrame(() => (this.scrollArmed = true)));
     this.dismissController = createDismissController({
       document: this.document,
       escape: this.closeOnEscape(),
@@ -314,6 +370,7 @@ export class SelectDirective<T> implements OnDestroy {
       rootElements: () => [panel],
       excludeElements: () => (this.triggerElement ? [this.triggerElement] : []),
       onDismiss: (reason) => {
+        if (reason === 'scroll' && !this.scrollArmed) return;
         const closeReason =
           reason === 'outside-pointer'
             ? 'outside-pointer'

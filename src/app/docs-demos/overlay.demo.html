@@ -1,0 +1,152 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Menu Dropdown</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Classic dropdown menu with keyboard navigation support. Click outside, press Escape, or
+        scroll to close.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <volt-button
+          variant="solid"
+          qzOverlayTrigger
+          [overlayTemplate]="dropdownTpl"
+          placement="bottom-start"
+        >
+          <span slot="leading" class="btn__chevron">▾</span>
+          Open menu
+        </volt-button>
+
+        <ng-template #dropdownTpl>
+          <div class="dropdown">
+            <div class="dropdown__label">Actions</div>
+            @for (item of menuItems; track item.label) {
+              <button class="dropdown__item" [class.dropdown__item--danger]="item.danger">
+                <span>{{ item.icon }}</span>
+                <span class="dropdown__item-text">{{ item.label }}</span>
+                @if (item.shortcut) {
+                  <kbd class="dropdown__shortcut">{{ item.shortcut }}</kbd>
+                }
+              </button>
+            }
+          </div>
+        </ng-template>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Auto-flip & Placements</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        The overlay automatically flips when near viewport edges. Try scrolling or resizing the
+        window.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div class="placements-grid">
+          @for (p of placements; track p) {
+            <volt-button
+              variant="ghost"
+              qzOverlayTrigger
+              [overlayTemplate]="popoverTpl"
+              [placement]="p"
+              [flip]="true"
+            >
+              {{ p }}
+            </volt-button>
+          }
+        </div>
+
+        <ng-template #popoverTpl>
+          <div class="popover">
+            <div class="popover__arrow"></div>
+            <strong>Popover</strong>
+            <p>Positioned with flip enabled</p>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Select / Combobox</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Match anchor width for select-like components. The overlay stretches to match the trigger
+        width.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <volt-button
+          variant="outline"
+          qzOverlayTrigger
+          [overlayTemplate]="selectTpl"
+          placement="bottom-start"
+          [matchAnchorWidth]="true"
+        >
+          <span slot="leading">{{ selectedOption() }}</span>
+          <span class="btn__chevron">▾</span>
+        </volt-button>
+
+        <ng-template #selectTpl>
+          <div class="select-list">
+            @for (opt of selectOptions; track opt) {
+              <button
+                class="select-list__item"
+                [class.select-list__item--active]="selectedOption() === opt"
+                (click)="selectedOption.set(opt)"
+              >
+                {{ opt }}
+              </button>
+            }
+          </div>
+        </ng-template>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Hover Tooltips</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        The same positioning engine powers hover-activated tooltips. Attach to icons, badges, or any
+        element — no click required. Automatically closes on scroll.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <div class="hint-bar">
+          <span class="hint-icon" qzTooltip="Save document" tooltipPlacement="top">💾</span>
+          <span class="hint-icon" qzTooltip="Share with team" tooltipPlacement="top">🔗</span>
+          <span class="hint-icon" qzTooltip="Print preview" tooltipPlacement="top">🖨️</span>
+          <span class="hint-divider"></span>
+          <span class="badge" qzTooltip="3 pending reviews" tooltipPlacement="top">3</span>
+          <span
+            class="badge badge--green"
+            qzTooltip="All systems operational"
+            tooltipPlacement="top"
+            >●</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Programmatic Usage</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Create overlays programmatically using OverlayService. Useful for dynamic content.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <volt-button variant="outline" #progAnchor (click)="toggleProgrammatic()">
+          {{ progRef?.isOpen ? 'Close overlay' : 'Open overlay' }}
+        </volt-button>
+
+        <ng-template #progTpl>
+          <div class="notification">
+            <span class="notification__icon">✦</span>
+            <div>
+              <strong>Programmatic overlay</strong>
+              <p>Created via OverlayService.create()</p>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+</div>

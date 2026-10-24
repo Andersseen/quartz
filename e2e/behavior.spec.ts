@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Dialog behavior', () => {
   test('should open modal and close with Escape', async ({ page }) => {
-    await page.goto('/dialog');
+    await page.goto('/docs/primitives/dialog');
 
     await page.getByRole('button', { name: 'Open Modal' }).click();
     const dialog = page.locator('[role="dialog"]');
@@ -22,7 +22,7 @@ test.describe('Dialog behavior', () => {
   });
 
   test('should close modal on backdrop click', async ({ page }) => {
-    await page.goto('/dialog');
+    await page.goto('/docs/primitives/dialog');
 
     await page.getByRole('button', { name: 'Open Modal' }).click();
     const dialog = page.locator('[role="dialog"]');
@@ -34,7 +34,7 @@ test.describe('Dialog behavior', () => {
   });
 
   test('should keep focus inside the dialog while open', async ({ page }) => {
-    await page.goto('/dialog');
+    await page.goto('/docs/primitives/dialog');
 
     const openButton = page.getByRole('button', { name: 'Open Modal' });
     await openButton.click();
@@ -57,7 +57,7 @@ test.describe('Dialog behavior', () => {
   });
 
   test('should restore focus to the opener after Escape', async ({ page }) => {
-    await page.goto('/dialog');
+    await page.goto('/docs/primitives/dialog');
 
     const openButton = page.getByRole('button', { name: 'Open Modal' });
     await openButton.focus();
@@ -72,7 +72,7 @@ test.describe('Dialog behavior', () => {
 
 test.describe('Tooltip behavior', () => {
   test('should show tooltip on hover and hide on mouseleave', async ({ page }) => {
-    await page.goto('/tooltip');
+    await page.goto('/docs/primitives/tooltip');
 
     const trigger = page.getByTestId('tooltip-basic-trigger');
     await trigger.hover();
@@ -85,7 +85,7 @@ test.describe('Tooltip behavior', () => {
   });
 
   test('should show tooltip on focus and hide on blur', async ({ page }) => {
-    await page.goto('/tooltip');
+    await page.goto('/docs/primitives/tooltip');
 
     const trigger = page.getByTestId('tooltip-basic-trigger');
     await trigger.focus();
@@ -97,7 +97,7 @@ test.describe('Tooltip behavior', () => {
   });
 
   test('should position tooltip on different placements', async ({ page }) => {
-    await page.goto('/tooltip');
+    await page.goto('/docs/primitives/tooltip');
 
     for (const label of ['Top', 'Bottom', 'Left', 'Right']) {
       const trigger = page.getByRole('button', { name: label });
@@ -111,7 +111,7 @@ test.describe('Tooltip behavior', () => {
   });
 
   test('should dismiss tooltip with Escape', async ({ page }) => {
-    await page.goto('/tooltip');
+    await page.goto('/docs/primitives/tooltip');
 
     const trigger = page.getByTestId('tooltip-basic-trigger');
     await trigger.focus();
@@ -126,9 +126,11 @@ test.describe('Tooltip behavior', () => {
 
 test.describe('Listbox behavior', () => {
   test('should navigate, typeahead, select and skip disabled options', async ({ page }) => {
-    await page.goto('/listbox');
+    await page.goto('/docs/primitives/listbox');
 
-    const single = page.getByRole('listbox').first();
+    const demo = page.locator('[data-doq-demo=\"listbox"]');
+
+    const single = demo.getByRole('listbox').first();
     const singleOptions = single.getByRole('option');
 
     await single.focus();
@@ -144,9 +146,9 @@ test.describe('Listbox behavior', () => {
     );
     await single.press('e');
     await single.press('Enter');
-    await expect(page.locator('text=Selected:').first()).toContainText('enterprise');
+    await expect(demo.locator('text=Selected:').first()).toContainText('enterprise');
 
-    const multi = page.getByRole('listbox').nth(1);
+    const multi = demo.getByRole('listbox').nth(1);
     const multiOptions = multi.getByRole('option');
     await multi.focus();
     await multi.press('ArrowDown');
@@ -166,7 +168,7 @@ test.describe('Listbox behavior', () => {
 
 test.describe('Menu behavior', () => {
   test('should open and restore focus on Escape', async ({ page }) => {
-    await page.goto('/menu');
+    await page.goto('/docs/primitives/menu');
 
     const trigger = page.getByRole('button', { name: 'File' });
     await expect(trigger).toBeVisible();
@@ -183,7 +185,7 @@ test.describe('Menu behavior', () => {
   });
 
   test('should open a submenu from an active item', async ({ page }) => {
-    await page.goto('/menu');
+    await page.goto('/docs/primitives/menu');
 
     const trigger = page.getByTestId('submenu-menu-trigger');
     await expect(trigger).toBeVisible();
@@ -209,7 +211,7 @@ test.describe('Menu behavior', () => {
 
 test.describe('Popover behavior', () => {
   test('should open interactive content and close with Escape', async ({ page }) => {
-    await page.goto('/popover');
+    await page.goto('/docs/primitives/popover');
 
     const trigger = page.getByRole('button', { name: 'Details' });
     await trigger.click();
@@ -223,7 +225,7 @@ test.describe('Popover behavior', () => {
   });
 
   test('should support controlled state and autofocus', async ({ page }) => {
-    await page.goto('/popover');
+    await page.goto('/docs/primitives/popover');
 
     await page.getByRole('button', { name: 'Settings' }).click();
     await expect(page.getByRole('checkbox', { name: 'Email updates' })).toBeFocused();
@@ -233,7 +235,7 @@ test.describe('Popover behavior', () => {
 
 test.describe('Combobox behavior', () => {
   test('should filter, keep focus on input, and select with keyboard', async ({ page }) => {
-    await page.goto('/combobox');
+    await page.goto('/docs/primitives/combobox');
 
     const input = page.getByRole('combobox', { name: 'Fruit' });
     await input.fill('ap');
@@ -259,7 +261,7 @@ test.describe('Combobox behavior', () => {
   });
 
   test('should close on Escape and Tab without committing the active option', async ({ page }) => {
-    await page.goto('/combobox');
+    await page.goto('/docs/primitives/combobox');
 
     const input = page.getByRole('combobox', { name: 'Fruit' });
     await input.fill('ora');
@@ -281,9 +283,11 @@ test.describe('Combobox behavior', () => {
 
 test.describe('Select behavior', () => {
   test('should open, expose disabled options, select and restore focus', async ({ page }) => {
-    await page.goto('/select');
+    await page.goto('/docs/primitives/select');
 
-    const trigger = page.getByTestId('select-basic-trigger');
+    const demo = page.locator('[data-doq-demo=\"select"]');
+
+    const trigger = demo.getByTestId('select-basic-trigger');
     await trigger.scrollIntoViewIfNeeded();
     await trigger.click();
 
@@ -295,29 +299,33 @@ test.describe('Select behavior', () => {
     await options.nth(2).dispatchEvent('click');
 
     await expect(listbox).not.toBeVisible();
-    await expect(page.locator('text=Value:').first()).toContainText('de');
+    await expect(demo.locator('text=Value:').first()).toContainText('de');
   });
 });
 
 test.describe('Tabs behavior', () => {
   test('should activate horizontal tabs and respect disabled tabs', async ({ page }) => {
-    await page.goto('/tabs');
+    await page.goto('/docs/primitives/tabs');
 
-    const account = page.locator('button[qztab="account"]').first();
-    const billing = page.locator('button[qztab="billing"]').first();
+    const demo = page.locator('[data-doq-demo=\"tabs"]');
+
+    const account = demo.locator('button[qztab="account"]').first();
+    const billing = demo.locator('button[qztab="billing"]').first();
     await account.focus();
     await page.keyboard.press('ArrowRight');
 
     await expect(billing).toBeFocused();
     await expect(billing).toHaveAttribute('aria-selected', 'true');
-    await expect(page.getByText('Billing panel')).toBeVisible();
+    await expect(demo.getByText('Billing panel')).toBeVisible();
   });
 
   test('should move focus without activation in manual vertical tabs', async ({ page }) => {
-    await page.goto('/tabs');
+    await page.goto('/docs/primitives/tabs');
 
-    const preview = page.locator('button[qztab="preview"]');
-    const settings = page.locator('button[qztab="settings"]');
+    const demo = page.locator('[data-doq-demo=\"tabs"]');
+
+    const preview = demo.locator('button[qztab="preview"]');
+    const settings = demo.locator('button[qztab="settings"]');
     await preview.focus();
     await page.keyboard.press('ArrowDown');
 
@@ -326,10 +334,12 @@ test.describe('Tabs behavior', () => {
   });
 
   test('should mirror horizontal navigation in RTL', async ({ page }) => {
-    await page.goto('/tabs');
+    await page.goto('/docs/primitives/tabs');
 
-    const one = page.locator('button[qztab="one"]');
-    const two = page.locator('button[qztab="two"]');
+    const demo = page.locator('[data-doq-demo=\"tabs"]');
+
+    const one = demo.locator('button[qztab="one"]');
+    const two = demo.locator('button[qztab="two"]');
     await one.focus();
     await page.keyboard.press('ArrowLeft');
 
@@ -340,7 +350,7 @@ test.describe('Tabs behavior', () => {
 
 test.describe('Accordion behavior', () => {
   test('should support single, collapsible and multiple state', async ({ page }) => {
-    await page.goto('/accordion');
+    await page.goto('/docs/primitives/accordion');
 
     const shipping = page.getByRole('button', { name: 'Shipping' });
     const returns = page.getByRole('button', { name: 'Returns' });
@@ -364,7 +374,7 @@ test.describe('Accordion behavior', () => {
 
 test.describe('Switch behavior', () => {
   test('should toggle checked state and keep disabled switches inert', async ({ page }) => {
-    await page.goto('/switch');
+    await page.goto('/docs/primitives/switch');
 
     const notifications = page.getByRole('switch', { name: /Notifications off/ });
     await expect(notifications).toHaveAttribute('aria-checked', 'false');
@@ -394,7 +404,7 @@ test.describe('Tree behavior', () => {
   // getByRole's accessible-name matching (`name`, `exact: true`) targets only that row's
   // own label instead of its full descendant text, so it disambiguates correctly.
   test('should expand and collapse with arrow keys', async ({ page }) => {
-    await page.goto('/tree');
+    await page.goto('/docs/primitives/tree');
 
     const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     await expect(root).toHaveAttribute('aria-expanded', 'false');
@@ -409,7 +419,7 @@ test.describe('Tree behavior', () => {
   });
 
   test('should navigate visible nodes with ArrowDown and ArrowUp', async ({ page }) => {
-    await page.goto('/tree');
+    await page.goto('/docs/primitives/tree');
 
     const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     // Focus rather than click: with `toggleOnClick` (default) a click would already
@@ -433,7 +443,7 @@ test.describe('Tree behavior', () => {
   });
 
   test('should select node with Enter', async ({ page }) => {
-    await page.goto('/tree');
+    await page.goto('/docs/primitives/tree');
 
     const root = basicTree(page).getByRole('treeitem', { name: 'quartz', exact: true });
     await root.evaluate((el: HTMLElement) => el.focus());
@@ -442,7 +452,7 @@ test.describe('Tree behavior', () => {
   });
 
   test('should use Home/End and skip disabled nodes during focus navigation', async ({ page }) => {
-    await page.goto('/tree');
+    await page.goto('/docs/primitives/tree');
 
     const tree = basicTree(page);
     const root = tree.getByRole('treeitem', { name: 'quartz', exact: true });
@@ -472,7 +482,7 @@ test.describe('Tree behavior', () => {
 
 test.describe('Directionality behavior', () => {
   test('mirrors horizontal arrow keys after toggling to rtl', async ({ page }) => {
-    await page.goto('/directionality');
+    await page.goto('/docs/core/directionality');
 
     const collection = page.getByTestId('directionality-collection');
     await collection.focus();
@@ -497,7 +507,7 @@ test.describe('Directionality behavior', () => {
 
 test.describe('Splitter behavior', () => {
   test('should resize horizontal panel with arrow keys', async ({ page }) => {
-    await page.goto('/splitter');
+    await page.goto('/docs/core/splitter');
 
     const handle = page.locator('[data-directive="qzSplitterHandle"]').first();
     await expect(handle).toBeVisible();
@@ -523,7 +533,7 @@ test.describe('Splitter behavior', () => {
 
 test.describe('Toast behavior', () => {
   test('should not block clicks in the page corners while no toast is shown', async ({ page }) => {
-    await page.goto('/toast');
+    await page.goto('/docs/primitives/toast');
 
     // The six aria-live regions are always in the DOM so announcements work. An empty
     // one must never sit on top of the page and swallow clicks.
@@ -548,7 +558,7 @@ test.describe('Toast behavior', () => {
   });
 
   test('should show a toast and let it be dismissed', async ({ page }) => {
-    await page.goto('/toast');
+    await page.goto('/docs/primitives/toast');
 
     await page.getByRole('button', { name: 'Show Toast with Title' }).click();
     const toast = page.locator('qz-toast').first();
@@ -563,9 +573,11 @@ test.describe('Controls behavior', () => {
   test('checkbox toggles with pointer and Space, including indeterminate state', async ({
     page,
   }) => {
-    await page.goto('/checkbox');
+    await page.goto('/docs/primitives/checkbox');
 
-    const accept = page.getByRole('checkbox', { name: 'Accept terms' });
+    const demo = page.locator('[data-doq-demo=\"checkbox"]');
+
+    const accept = demo.getByRole('checkbox', { name: 'Accept terms' });
     await accept.click();
     await expect(accept).toHaveAttribute('aria-checked', 'true');
 
@@ -573,7 +585,7 @@ test.describe('Controls behavior', () => {
     await page.keyboard.press('Space');
     await expect(accept).toHaveAttribute('aria-checked', 'false');
 
-    const mixed = page.getByRole('checkbox', { name: /Select all:/ });
+    const mixed = demo.getByRole('checkbox', { name: /Select all:/ });
     await expect(mixed).toHaveAttribute('aria-checked', 'mixed');
     await mixed.click();
     await expect(mixed).toHaveAttribute('aria-checked', 'true');
@@ -582,9 +594,11 @@ test.describe('Controls behavior', () => {
   test('radio group tabs into one stop, arrows select, RTL mirrors and disabled items are skipped', async ({
     page,
   }) => {
-    await page.goto('/radio-group');
+    await page.goto('/docs/primitives/radio-group');
 
-    const vertical = page.getByRole('radiogroup').first();
+    const demo = page.locator('[data-doq-demo=\"radio-group"]');
+
+    const vertical = demo.getByRole('radiogroup').first();
     await vertical.getByRole('radio', { name: 'Free' }).focus();
     await page.keyboard.press('ArrowDown');
     await expect(vertical.getByRole('radio', { name: 'Pro' })).toHaveAttribute(
@@ -597,7 +611,7 @@ test.describe('Controls behavior', () => {
       'true',
     );
 
-    const rtl = page.getByRole('radiogroup').nth(2);
+    const rtl = demo.getByRole('radiogroup').nth(2);
     await rtl.getByRole('radio', { name: 'Left' }).focus();
     await page.keyboard.press('ArrowLeft');
     await expect(rtl.getByRole('radio', { name: 'Center' })).toHaveAttribute(
@@ -609,9 +623,11 @@ test.describe('Controls behavior', () => {
   test('toggle group roves focus, supports single and multiple selection, and mirrors RTL', async ({
     page,
   }) => {
-    await page.goto('/toggle-group');
+    await page.goto('/docs/primitives/toggle-group');
 
-    const single = page.getByRole('group').first();
+    const demo = page.locator('[data-doq-demo=\"toggle-group"]');
+
+    const single = demo.getByRole('group').first();
     await single.getByRole('button', { name: 'Left' }).focus();
     await page.keyboard.press('ArrowRight');
     await expect(single.getByRole('button', { name: 'Center' })).toBeFocused();
@@ -621,7 +637,7 @@ test.describe('Controls behavior', () => {
       'true',
     );
 
-    const multiple = page.getByRole('group').nth(1);
+    const multiple = demo.getByRole('group').nth(1);
     await multiple.getByRole('button', { name: 'Italic' }).click();
     await expect(multiple.getByRole('button', { name: 'Bold' })).toHaveAttribute(
       'aria-pressed',
@@ -632,23 +648,25 @@ test.describe('Controls behavior', () => {
       'true',
     );
 
-    const rtl = page.getByRole('group').nth(2);
+    const rtl = demo.getByRole('group').nth(2);
     await rtl.getByRole('button', { name: 'Left' }).focus();
     await page.keyboard.press('ArrowLeft');
     await expect(rtl.getByRole('button', { name: 'Center' })).toBeFocused();
   });
 
   test('slider supports keyboard, pointer track/drag, RTL and disabled state', async ({ page }) => {
-    await page.goto('/slider');
+    await page.goto('/docs/primitives/slider');
 
-    const volume = page.getByRole('slider', { name: 'Volume' });
+    const demo = page.locator('[data-doq-demo=\"slider"]');
+
+    const volume = demo.getByRole('slider', { name: 'Volume' });
     await volume.focus();
     await page.keyboard.press('End');
     await expect(volume).toHaveAttribute('aria-valuenow', '100');
     await page.keyboard.press('Home');
     await expect(volume).toHaveAttribute('aria-valuenow', '0');
 
-    const root = page.locator('[qzslider]').first();
+    const root = demo.locator('[qzslider]').first();
     const box = await root.boundingBox();
     expect(box).not.toBeNull();
     await page.mouse.move(box!.x + box!.width * 0.25, box!.y + box!.height / 2);
@@ -657,12 +675,12 @@ test.describe('Controls behavior', () => {
     await page.mouse.up();
     await expect(volume).toHaveAttribute('aria-valuenow', '75');
 
-    const rtl = page.getByRole('slider', { name: 'RTL amount' });
+    const rtl = demo.getByRole('slider', { name: 'RTL amount' });
     await rtl.focus();
     await page.keyboard.press('ArrowLeft');
     await expect(rtl).toHaveAttribute('aria-valuenow', '26');
 
-    const disabled = page.getByRole('slider', { name: 'Disabled amount' });
+    const disabled = demo.getByRole('slider', { name: 'Disabled amount' });
     await expect(disabled).toHaveAttribute('aria-disabled', 'true');
   });
 });

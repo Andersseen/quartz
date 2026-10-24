@@ -1,0 +1,18 @@
+<div class="qz-demo flex flex-col gap-8">
+  <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-gray-200 mb-2">Single toggle</h3>
+    <div class="flex justify-center">
+      <button
+        qzToggle
+        [(pressed)]="bold"
+        class="border border-white/15 px-4 py-2 text-gray-200 data-[qz-state=on]:bg-fuchsia-500/20"
+      >
+        Bold {{ bold() ? 'on' : 'off' }}
+      </button>
+    </div>
+    <p class="mt-4 text-sm text-gray-400">
+      Hooks: <code>data-qz-state=&quot;on|off&quot;</code> and <code>data-qz-disabled</code>. SSR
+      and zoneless friendly.
+    </p>
+  </section>
+</div>

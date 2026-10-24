@@ -1,0 +1,22 @@
+{
+  "generator": "doq-api",
+  "files": {
+    "checkbox-control-directive.md": "c5cffbc4e23b3559255cae2d7f9cd3e7a08fafa57b18e9cb77591648bf1b0179",
+    "combobox-control-directive.md": "ce76ee65268212b713039d5eb39f1eebbe3a69b3c47e61b207e991293ad1254d",
+    "index.md": "5f569679870fad6bb60af76ad4fb34e83473059d615713041f691f9c5880db40",
+    "listbox-control-directive.md": "f046fcc31cb6b1c0de59def53103b31eb323614da0be9b1fe105ca1dd13b168a",
+    "quartz-forms.md": "03847db2d09bfea2dc06f7c02356a1f0d2f900625d30740ae090e5de33784417",
+    "radio-group-control-directive.md": "022d3cfe0a2f7dc8edc13c55a226248657ac25d2170823d9e7844fbb563a1033",
+    "select-control-directive.md": "6c326b903b35704af9c3aa1ab3e67d1075d37be2d0a6d75ecf52869c5b8aa868",
+    "switch-control-directive.md": "46feaeb438bd5ed688a8ab418ba6620817d259f36b134697c1953c05ff834201"
+  },
+  "symbols": {
+    "CheckboxControlDirective": "/docs/reference/api/forms/checkbox-control-directive",
+    "ComboboxControlDirective": "/docs/reference/api/forms/combobox-control-directive",
+    "ListboxControlDirective": "/docs/reference/api/forms/listbox-control-directive",
+    "QUARTZ_FORMS": "/docs/reference/api/forms/quartz-forms",
+    "RadioGroupControlDirective": "/docs/reference/api/forms/radio-group-control-directive",
+    "SelectControlDirective": "/docs/reference/api/forms/select-control-directive",
+    "SwitchControlDirective": "/docs/reference/api/forms/switch-control-directive"
+  }
+}

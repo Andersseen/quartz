@@ -1,6 +1,6 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado actual: **0.9 selección, controles y Forms implementado; siguiente minor activa: 0.10 selección avanzada**.
+> Estado actual: **0.10 selección avanzada y documentación Doqs implementadas; siguiente minor: 0.11 controles de rango**.
 > Fecha: 2026-10-23. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
 > ([inventario](../api/volt-parity.md)); por eso hay siete minors de paridad (0.10–0.16) antes de consumo (0.17) y congelación (0.18). Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).
@@ -150,7 +150,7 @@ cerrados no se reutilizan. Un fallo posterior abre regresión enlazada con su ta
 | 0.7             | Implementada | Ver `docs/releases/0.7-acceptance.md`                                           |
 | 0.8             | Implementada | Ver `docs/releases/0.8-acceptance.md`                                           |
 | 0.9             | Implementada | Ver `docs/releases/0.9-acceptance.md`                                           |
-| 0.10            | No iniciada  | 0.9 aceptada                                                                    |
+| 0.10            | Implementada | Ver `docs/releases/0.10-acceptance.md`                                          |
 | 0.11 – 0.16     | No iniciadas | Hito anterior de paridad aceptado (una familia por minor)                       |
 | 0.17            | No iniciada  | Todas las familias de paridad (0.9–0.16) aceptadas                              |
 | 0.18            | No iniciada  | Matriz de consumo/compatibilidad (0.17) aceptada                                |

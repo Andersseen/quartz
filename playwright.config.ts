@@ -30,9 +30,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `pnpm build:demo && pnpm exec vite preview --host 127.0.0.1 --port ${e2ePort} --strictPort`,
+    // Production build (prerendered + Pagefind index) served like Cloudflare Pages: directory
+    // indexes, `_redirects`, real 404s, no SPA fallback.
+    command: `pnpm build:demo && node scripts/preview-static.mjs dist/analog/public ${e2ePort}`,
     url: baseURL,
-    reuseExistingServer: false,
+    reuseExistingServer: !!process.env.E2E_REUSE_SERVER,
     timeout: 120000,
   },
 });

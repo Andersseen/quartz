@@ -89,64 +89,138 @@ import { VoltBadge } from '@voltui/components';
 })
 export default class ComponentsCatalogPage {
   readonly core = [
-    { name: 'Collection', path: '/docs', detail: 'Registration, DOM order, typeahead and focus' },
-    { name: 'Focus', path: '/docs', detail: 'Initial focus, focus trap and safe restoration' },
-    { name: 'Dismiss', path: '/docs', detail: 'Escape, outside pointer, focus outside and scroll' },
+    {
+      name: 'Collection',
+      path: '/docs/core/collection',
+      detail: 'Registration, DOM order, typeahead and focus',
+    },
+    {
+      name: 'Focus',
+      path: '/docs/core/focus',
+      detail: 'Initial focus, focus trap and safe restoration',
+    },
+    {
+      name: 'Dismiss',
+      path: '/docs/core/dismiss',
+      detail: 'Escape, outside pointer, focus outside and scroll',
+    },
     {
       name: 'Directionality',
-      path: '/directionality',
+      path: '/docs/core/directionality',
       detail: 'LTR/RTL resolution and inline keys',
     },
-    { name: 'Overlay', path: '/overlay', detail: 'Portal rendering and positioning' },
-    { name: 'ScrollLock', path: '/scroll-lock', detail: 'Per-Document body scroll coordination' },
-    { name: 'Viewport', path: '/viewport', detail: 'Reactive breakpoint matching' },
-    { name: 'DragDrop', path: '/drag-drop', detail: 'Native pointer-based drag and drop' },
+    { name: 'Overlay', path: '/docs/core/overlay', detail: 'Portal rendering and positioning' },
+    {
+      name: 'ScrollLock',
+      path: '/docs/core/scroll-lock',
+      detail: 'Per-Document body scroll coordination',
+    },
+    { name: 'Viewport', path: '/docs/core/viewport', detail: 'Reactive breakpoint matching' },
+    {
+      name: 'DragDrop',
+      path: '/docs/core/drag-drop',
+      detail: 'Native pointer-based drag and drop',
+    },
     {
       name: 'VirtualScroll',
-      path: '/virtual-scroll',
+      path: '/docs/core/virtual-scroll',
       detail: 'Windowed rendering for large lists',
     },
-    { name: 'Splitter', path: '/splitter', detail: 'Resizable panels and keyboard handles' },
+    {
+      name: 'Splitter',
+      path: '/docs/core/splitter',
+      detail: 'Resizable panels and keyboard handles',
+    },
   ];
 
   readonly primitiveGroups = [
     {
       label: 'Floating / Selection',
       items: [
-        { name: 'Dialog', path: '/dialog', detail: 'Modal dialog and drawer behavior' },
-        { name: 'Tooltip', path: '/tooltip', detail: 'Hover and focus descriptions' },
-        { name: 'Popover', path: '/popover', detail: 'Dismissible floating content' },
-        { name: 'Menu', path: '/menu', detail: 'Menus, submenus and checkable items' },
-        { name: 'Listbox', path: '/listbox', detail: 'Single and multiple selection' },
-        { name: 'Combobox', path: '/combobox', detail: 'Editable suggestions' },
-        { name: 'Select', path: '/select', detail: 'Button-triggered listbox popup' },
+        {
+          name: 'Dialog',
+          path: '/docs/primitives/dialog',
+          detail: 'Modal dialog and drawer behavior',
+        },
+        {
+          name: 'Tooltip',
+          path: '/docs/primitives/tooltip',
+          detail: 'Hover and focus descriptions',
+        },
+        {
+          name: 'Popover',
+          path: '/docs/primitives/popover',
+          detail: 'Dismissible floating content',
+        },
+        {
+          name: 'Menu',
+          path: '/docs/primitives/menu',
+          detail: 'Menus, submenus and checkable items',
+        },
+        {
+          name: 'Listbox',
+          path: '/docs/primitives/listbox',
+          detail: 'Single and multiple selection',
+        },
+        { name: 'Combobox', path: '/docs/primitives/combobox', detail: 'Editable suggestions' },
+        {
+          name: 'Select',
+          path: '/docs/primitives/select',
+          detail: 'Button-triggered listbox popup',
+        },
       ],
     },
     {
       label: 'Navigation / Layout',
       items: [
-        { name: 'Sidebar', path: '/sidebar', detail: 'Application navigation layout' },
-        { name: 'Navbar', path: '/navbar', detail: 'Sticky and responsive menu state' },
-        { name: 'Stepper', path: '/stepper', detail: 'Sequential flow navigation' },
-        { name: 'Tree', path: '/tree', detail: 'Hierarchical keyboard navigation' },
-        { name: 'Tabs', path: '/tabs', detail: 'Tablist and panels' },
-        { name: 'Accordion', path: '/accordion', detail: 'Single or multiple disclosure sections' },
+        {
+          name: 'Sidebar',
+          path: '/docs/primitives/sidebar',
+          detail: 'Application navigation layout',
+        },
+        {
+          name: 'Navbar',
+          path: '/docs/primitives/navbar',
+          detail: 'Sticky and responsive menu state',
+        },
+        { name: 'Stepper', path: '/docs/primitives/stepper', detail: 'Sequential flow navigation' },
+        { name: 'Tree', path: '/docs/primitives/tree', detail: 'Hierarchical keyboard navigation' },
+        { name: 'Tabs', path: '/docs/primitives/tabs', detail: 'Tablist and panels' },
+        {
+          name: 'Accordion',
+          path: '/docs/primitives/accordion',
+          detail: 'Single or multiple disclosure sections',
+        },
       ],
     },
     {
       label: 'Controls',
       items: [
-        { name: 'Switch', path: '/switch', detail: 'Boolean setting control' },
-        { name: 'Checkbox', path: '/checkbox', detail: 'Checked, unchecked and mixed state' },
-        { name: 'RadioGroup', path: '/radio-group', detail: 'Standalone radio selection' },
-        { name: 'Toggle', path: '/toggle', detail: 'Pressed button state' },
-        { name: 'ToggleGroup', path: '/toggle-group', detail: 'Single or multiple pressed items' },
-        { name: 'Slider', path: '/slider', detail: 'Single-thumb range input' },
+        { name: 'Switch', path: '/docs/primitives/switch', detail: 'Boolean setting control' },
+        {
+          name: 'Checkbox',
+          path: '/docs/primitives/checkbox',
+          detail: 'Checked, unchecked and mixed state',
+        },
+        {
+          name: 'RadioGroup',
+          path: '/docs/primitives/radio-group',
+          detail: 'Standalone radio selection',
+        },
+        { name: 'Toggle', path: '/docs/primitives/toggle', detail: 'Pressed button state' },
+        {
+          name: 'ToggleGroup',
+          path: '/docs/primitives/toggle-group',
+          detail: 'Single or multiple pressed items',
+        },
+        { name: 'Slider', path: '/docs/primitives/slider', detail: 'Single-thumb range input' },
       ],
     },
     {
       label: 'Feedback',
-      items: [{ name: 'Toast', path: '/toast', detail: 'Accessible notifications' }],
+      items: [
+        { name: 'Toast', path: '/docs/primitives/toast', detail: 'Accessible notifications' },
+      ],
     },
   ];
 }

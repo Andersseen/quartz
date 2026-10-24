@@ -1,0 +1,125 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <!-- Modal Dialog -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Centered Modal</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Classic modal dialog rendered in a portal on the body. Closes on backdrop click or Escape
+        key.
+      </p>
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <volt-button variant="solid" (click)="openModal()"
+          ><span slot="leading">◻</span> Open Modal</volt-button
+        >
+      </div>
+    </section>
+
+    <!-- Side Drawers -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Side Drawers</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Slide-in panels from any edge of the viewport. Pass <code>width</code> or
+        <code>height</code>
+        to size the panel.
+      </p>
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        @for (item of drawerPositions; track item.pos) {
+          <volt-button variant="outline" (click)="openDrawer(item.pos)">
+            {{ item.icon }} {{ item.label }}
+          </volt-button>
+        }
+      </div>
+    </section>
+
+    <!-- Backdrop config -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Backdrop & Close Behavior</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Control backdrop visibility, click-outside close, and Escape key handling independently.
+      </p>
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <volt-button variant="ghost" (click)="openModal()">With Backdrop</volt-button>
+        <volt-button variant="ghost" (click)="openNoBackdrop()">No Backdrop</volt-button>
+      </div>
+    </section>
+
+    <!-- DialogRef -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">DialogRef Lifecycle</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        <code>DialogService.open()</code> returns a <code>DialogRef</code> for programmatic control
+        and close event handling.
+      </p>
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <volt-button variant="solid" (click)="openModal()">
+          Open &amp; observe lifecycle
+        </volt-button>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- Modal Template -->
+<ng-template
+  #modalTemplate
+  let-ref
+  let-ariaLabelledBy="ariaLabelledBy"
+  let-ariaDescribedBy="ariaDescribedBy"
+>
+  <div class="qz-dialog">
+    <div class="qz-dialog__header">
+      <div class="qz-dialog__icon">◻</div>
+      <div>
+        <h4 [attr.id]="ariaLabelledBy" class="qz-dialog__title">Confirm Action</h4>
+        <p [attr.id]="ariaDescribedBy" class="qz-dialog__subtitle">
+          This dialog was created via <code>DialogService</code>.
+        </p>
+      </div>
+    </div>
+    <div class="qz-dialog__body">
+      <p>
+        This is a headless dialog panel. Quartz handles the portal, backdrop, and keyboard events.
+        You own the design completely.
+      </p>
+      <p>Press <kbd>Escape</kbd> or click the backdrop to close.</p>
+    </div>
+    <div class="qz-dialog__footer">
+      <volt-button variant="ghost" size="sm" (click)="ref.close()">Cancel</volt-button>
+      <volt-button variant="solid" size="sm" (click)="ref.close()">Confirm</volt-button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Drawer Template -->
+<ng-template
+  #drawerTemplate
+  let-ref
+  let-ariaLabelledBy="ariaLabelledBy"
+  let-ariaDescribedBy="ariaDescribedBy"
+>
+  <div class="qz-drawer">
+    <div class="qz-drawer__header">
+      <h4 [attr.id]="ariaLabelledBy" class="qz-drawer__title">Settings Panel</h4>
+      <button class="qz-drawer__close" (click)="ref.close()">✕</button>
+    </div>
+    <div class="qz-drawer__body">
+      <p>
+        This drawer slides in from the <strong>{{ activeDrawer() }}</strong> edge.
+      </p>
+      <p>The panel width/height is fully configurable via the <code>DialogConfig</code>.</p>
+      <div class="qz-drawer__options">
+        <div class="qz-drawer__option">
+          <span>Dark Mode</span>
+          <div class="toggle toggle--active"></div>
+        </div>
+        <div class="qz-drawer__option">
+          <span>Notifications</span>
+          <div class="toggle"></div>
+        </div>
+        <div class="qz-drawer__option">
+          <span>Auto-save</span>
+          <div class="toggle toggle--active"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

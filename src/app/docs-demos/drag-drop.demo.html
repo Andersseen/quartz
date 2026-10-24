@@ -1,0 +1,214 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <!-- ── 1. File Upload Simulation ───────────────────────────────────── -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">File Upload Zone</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Drag a file chip and drop it onto the upload zone. The drop zone only accepts
+        <code>qzDraggableType="file"</code> items. Progress is simulated after each drop.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-5">
+        <span class="hd-tag">[qzDropZoneAccept]="['file']"</span>
+        <span class="hd-tag--output hd-tag">(qzDrop)</span>
+        <span class="hd-tag--input hd-tag">qzDraggableType="file"</span>
+      </div>
+
+      <div class="file-demo">
+        <!-- Source chips -->
+        <div class="file-sources">
+          <p class="file-sources__label">Files to upload</p>
+          <div class="file-chips">
+            @for (file of fileItems(); track file.id) {
+              <div
+                class="file-chip"
+                qzDraggable
+                [qzDraggableData]="file"
+                qzDraggableType="file"
+                (qzDragStart)="onDragStart($event)"
+              >
+                <span class="file-chip__icon">{{ file.icon }}</span>
+                <div class="file-chip__info">
+                  <span class="file-chip__name">{{ file.name }}</span>
+                  <span class="file-chip__size">{{ file.size }}</span>
+                </div>
+                <span class="file-chip__grip">⠿</span>
+              </div>
+            }
+            @if (fileItems().length === 0) {
+              <p class="file-sources__empty">All files queued</p>
+            }
+          </div>
+        </div>
+
+        <!-- Drop / upload zone -->
+        <div
+          class="upload-zone"
+          qzDropZone
+          [qzDropZoneAccept]="['file']"
+          (qzDrop)="onFileDrop($event)"
+        >
+          @if (uploadQueue().length === 0) {
+            <div class="upload-zone__placeholder">
+              <span class="upload-zone__icon">📂</span>
+              <span class="upload-zone__text">Drop files here to upload</span>
+            </div>
+          } @else {
+            <div class="upload-items">
+              @for (entry of uploadQueue(); track entry.id) {
+                <div class="upload-item" [class.upload-item--done]="entry.done">
+                  <span class="upload-item__icon">{{ entry.icon }}</span>
+                  <div class="upload-item__body">
+                    <div class="upload-item__meta">
+                      <span class="upload-item__name">{{ entry.name }}</span>
+                      @if (entry.done) {
+                        <span class="upload-item__status upload-item__status--done">✓ Done</span>
+                      } @else {
+                        <span class="upload-item__status">{{ entry.progress }}%</span>
+                      }
+                    </div>
+                    @if (!entry.done) {
+                      <div class="upload-progress">
+                        <div class="upload-progress__bar" [style.width.%]="entry.progress"></div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <button class="upload-reset" (click)="resetUpload()">Reset</button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 2. Sortable List ─────────────────────────────────────────────── -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Sortable List</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Drag items to reorder within a single container.
+        <code>[qzDropZoneSortable]="true"</code> calculates the insertion index automatically.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-5">
+        <span class="hd-tag">[qzDropZoneSortable]="true"</span>
+        <span class="hd-tag--output hd-tag">(qzDrop) → index</span>
+      </div>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div
+          class="sortable-list"
+          qzDropZone
+          [qzDropZoneSortable]="true"
+          (qzDrop)="onReorder($event)"
+        >
+          @for (item of sortableItems(); track item.id) {
+            <div
+              class="sortable-item"
+              qzDraggable
+              [qzDraggableData]="item"
+              qzDraggableType="sortable"
+            >
+              <span class="sortable-item__handle">⠿</span>
+              <span class="sortable-item__number">{{ item.id }}</span>
+              <span class="sortable-item__text">{{ item.text }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 3. Kanban — between containers ──────────────────────────────── -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Between Containers (Kanban)</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Each column is a separate drop zone that accepts only <code>qzDraggableType="task"</code>.
+        Drag cards across columns to change their status.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-5">
+        <span class="hd-tag">[qzDropZoneAccept]="['task']"</span>
+        <span class="hd-tag--output hd-tag">(qzDrop) per column</span>
+        <span class="hd-tag--input hd-tag">qzDraggableType="task"</span>
+      </div>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div class="kanban">
+          @for (column of columns; track column.id) {
+            <div
+              class="kanban__column"
+              qzDropZone
+              [qzDropZoneAccept]="['task']"
+              (qzDrop)="onTaskDrop($event, column.id)"
+            >
+              <div class="kanban__header">
+                <span class="kanban__badge" [class]="'kanban__badge--' + column.id">
+                  {{ getTasksByStatus(column.id).length }}
+                </span>
+                <h3 class="kanban__title">{{ column.title }}</h3>
+              </div>
+
+              <div class="kanban__tasks">
+                @for (task of getTasksByStatus(column.id); track task.id) {
+                  <div
+                    class="task-card"
+                    qzDraggable
+                    [qzDraggableData]="task"
+                    qzDraggableType="task"
+                  >
+                    <div class="task-card__header">
+                      <span
+                        class="task-card__priority"
+                        [class]="'task-card__priority--' + task.priority"
+                      ></span>
+                      <span class="task-card__id">{{ task.id }}</span>
+                    </div>
+                    <h4 class="task-card__title">{{ task.title }}</h4>
+                    <p class="task-card__desc">{{ task.description }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 4. Free Position Drag ──────────────────────────────────────── -->
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Free Position Drag</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Drag tokens freely within a bounded canvas using pointer events. No drop zones — position is
+        updated live with pointer capture.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-5">
+        <span class="hd-tag">(pointerdown) grab</span>
+        <span class="hd-tag">(pointermove) move</span>
+        <span class="hd-tag">(pointerup) release</span>
+      </div>
+
+      <div class="free-canvas-wrap">
+        <div
+          class="free-canvas"
+          #freeCanvas
+          (pointermove)="onNodeMove($event)"
+          (pointerup)="onNodeRelease()"
+        >
+          @for (node of freeNodes(); track node.id) {
+            <div
+              class="free-node"
+              [style.left.px]="node.x"
+              [style.top.px]="node.y"
+              [style.background]="node.color"
+              (pointerdown)="onNodeGrab($event, node.id)"
+            >
+              {{ node.label }}
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -77,7 +77,13 @@ export class ComboboxDirective<T> implements OnDestroy {
   private readonly generatedId = `qz-combobox-${++comboboxId}`;
   private readonly generatedPanelId = `${this.generatedId}-listbox`;
 
+  readonly #formDisabled = signal(false);
+
+  /** Selected value in single mode. In `multiple` mode use `values`. */
   readonly value = model<T | null>(null);
+  /** Selected values in `multiple` mode (controlled: write a new array to change the selection). */
+  readonly values = model<readonly T[]>([]);
+  /** The text in the input: a query, distinct from the committed selection. */
   readonly inputValue = model('');
   readonly open = model(false);
 
@@ -85,6 +91,10 @@ export class ComboboxDirective<T> implements OnDestroy {
   readonly options = input<readonly T[] | null>(null);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Multiple selection: toggles options into `values`; the input stays a pure query. */
+  readonly multiple = input(false, { transform: booleanAttribute });
+  /** Single mode: choosing the selected option again clears the selection. */
+  readonly allowDeselect = input(false, { transform: booleanAttribute });
   readonly placement = input<OverlayPlacement>(DEFAULT_COMBOBOX_CONFIG.placement);
   readonly offset = input(DEFAULT_COMBOBOX_CONFIG.offset);
   readonly flip = input(DEFAULT_COMBOBOX_CONFIG.flip, { transform: booleanAttribute });
@@ -99,9 +109,8 @@ export class ComboboxDirective<T> implements OnDestroy {
   readonly openOnTyping = input(DEFAULT_COMBOBOX_CONFIG.openOnTyping, {
     transform: booleanAttribute,
   });
-  readonly closeOnSelect = input(DEFAULT_COMBOBOX_CONFIG.closeOnSelect, {
-    transform: booleanAttribute,
-  });
+  /** Defaults to `true` in single mode and `false` when `multiple` is set. */
+  readonly closeOnSelect = input<boolean | undefined>(undefined);
   readonly closeOnEscape = input(DEFAULT_COMBOBOX_CONFIG.closeOnEscape, {
     transform: booleanAttribute,
   });
@@ -129,9 +138,28 @@ export class ComboboxDirective<T> implements OnDestroy {
   readonly closed = output<void>();
   readonly selected = output<T | null>();
   readonly inputValueChangeCommitted = output<string>();
+  /**
+   * Single mode: fires when the committed value changes through a user action (option chosen,
+   * deselected, freeform committed, selection cleared by editing the text). Never for typing that
+   * does not change the selection and never for programmatic writes.
+   */
+  readonly valueChangeCommitted = output<T | null>();
+  /** Multiple mode: fires once per user toggle with the new array. Never for programmatic writes. */
+  readonly valuesChangeCommitted = output<readonly T[]>();
+  /** Fires with the new query after user typing (not during IME composition) or a query reset. */
+  readonly queryChanged = output<string>();
+  /** Fires when focus leaves the control. */
+  readonly touched = output<void>();
 
   readonly activeId = this.collection.activeId;
   readonly activeOption = computed(() => this.collection.activeItem());
+  /** Effective disabled state: the `disabled` input OR a disabled Angular Forms control. */
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+  readonly selectedValues = computed<readonly T[]>(() => {
+    if (this.multiple()) return this.values();
+    const value = this.value();
+    return value === null ? [] : [value];
+  });
   readonly isOpen = this.openState.asReadonly();
   readonly panelId = computed(() => (this.isOpen() ? this.generatedPanelId : null));
   readonly filteredOptions = computed(() => {
@@ -146,6 +174,10 @@ export class ComboboxDirective<T> implements OnDestroy {
     return this.collection.items().length === 0;
   });
   readonly isComposing = this.composing.asReadonly();
+  /** `loading` while the consumer fetches, `empty` with no options to show, otherwise `results`. */
+  readonly status = computed<'loading' | 'empty' | 'results'>(() =>
+    this.loading() ? 'loading' : this.empty() ? 'empty' : 'results',
+  );
 
   constructor() {
     effect(() => {
@@ -159,11 +191,35 @@ export class ComboboxDirective<T> implements OnDestroy {
 
     effect(() => {
       const value = this.value();
-      if (this.internalValueSync() || untracked(this.composing)) return;
+      if (this.multiple() || this.internalValueSync() || untracked(this.composing)) return;
       untracked(() => {
         this.syncInputValue(value === null ? '' : this.displayOption(value as T));
       });
     });
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`writeValue`); silent, never emits. */
+  writeFormValue(value: unknown): void {
+    if (this.multiple()) {
+      this.values.set(Array.isArray(value) ? (value as T[]) : value == null ? [] : [value as T]);
+      this.syncInputValue('');
+      return;
+    }
+    const next = Array.isArray(value)
+      ? ((value[0] as T | undefined) ?? null)
+      : ((value ?? null) as T | null);
+    this.value.set(next);
+    this.syncInputValue(next === null ? '' : this.displayOption(next));
+  }
+
+  /** Adapter hook for `@quartz-headless/primitives/forms` (`setDisabledState`). */
+  setFormDisabled(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
+    if (disabled) this.closePopup('programmatic');
+  }
+
+  onInputBlur(): void {
+    if (!this.isOpen()) this.touched.emit();
   }
 
   setContentTemplate(template: TemplateRef<unknown> | null): void {
@@ -192,17 +248,25 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   isSelected(option: ComboboxOptionDirective<T>): boolean {
-    const value = this.value();
-    return value !== null && this.compareWith()(value, option.value());
+    const compare = this.compareWith();
+    const target = option.value();
+    return this.selectedValues().some((value) => compare(value, target));
   }
 
   displayOption(value: T): string {
     return this.displayWith()(value);
   }
 
-  handleInput(value: string): void {
-    if (this.disabled()) return;
+  /**
+   * User typed. While an IME composition is active the query is neither filtered, committed nor
+   * rewritten (the browser owns the input text); it is applied once on `compositionend`.
+   */
+  handleInput(value: string, composing = false): void {
+    if (this.isDisabled()) return;
+    if (composing || this.composing()) return;
+    const changed = this.inputValue() !== value;
     this.syncInputValue(value);
+    if (changed) this.queryChanged.emit(value);
     this.clearSelectedValueIfInputDiverged(value);
     if (this.resolvedOpenOnTyping()) this.openPopup('input', { activate: 'first' });
     this.queueFrame(() => {
@@ -212,13 +276,14 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   handleFocus(): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     if (this.resolvedOpenOnFocus()) this.openPopup('focus', { activate: 'first' });
   }
 
   handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
-    if (this.composing() || event.isComposing) return;
+    if (this.isDisabled()) return;
+    // keyCode 229: Safari reports the Enter that ends a composition after `compositionend`.
+    if (this.composing() || event.isComposing || event.keyCode === 229) return;
 
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -268,7 +333,7 @@ export class ComboboxDirective<T> implements OnDestroy {
     _reason: ComboboxOpenReason = 'programmatic',
     options: { activate?: 'first' | 'last' } = {},
   ): void {
-    if (this.disabled() || this.isOpen()) return;
+    if (this.isDisabled() || this.isOpen()) return;
     const contentTemplate =
       this.content() ?? this.contentTemplate ?? this.projectedContent()?.templateRef ?? null;
     if (!this.document.defaultView || !this.inputElement || !contentTemplate) return;
@@ -321,28 +386,48 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   selectOption(option: ComboboxOptionDirective<T>): void {
-    if (this.disabled() || option.optionDisabled()) return;
+    if (this.isDisabled() || option.optionDisabled()) return;
     this.collection.setActive(option.id);
     const value = option.value();
-    this.internalValueSync.set(true);
-    this.value.set(value);
-    this.internalValueSync.set(false);
-    const label = option.label();
-    this.syncInputValue(label);
-    this.selected.emit(value);
-    this.inputValueChangeCommitted.emit(label);
+    if (this.multiple()) {
+      const compare = this.compareWith();
+      const next = [...this.values()];
+      const index = next.findIndex((item) => compare(item, value));
+      if (index === -1) next.push(value);
+      else next.splice(index, 1);
+      this.values.set(next);
+      this.selected.emit(value);
+      this.valuesChangeCommitted.emit(next);
+      this.resetQuery();
+    } else {
+      const previous = this.value();
+      const same = previous !== null && this.compareWith()(previous, value);
+      const committed = same && this.allowDeselect() ? null : value;
+      this.internalValueSync.set(true);
+      this.value.set(committed);
+      this.internalValueSync.set(false);
+      const label = committed === null ? '' : option.label();
+      this.syncInputValue(label);
+      this.selected.emit(committed);
+      this.inputValueChangeCommitted.emit(label);
+      if (!same || committed === null) this.valueChangeCommitted.emit(committed);
+    }
     if (this.resolvedCloseOnSelect()) this.closePopup('selection');
     this.queueFrame(() => focusSafely(this.inputElement));
   }
 
   commitFreeformValue(): void {
-    if (!this.allowFreeform()) return;
+    if (!this.allowFreeform() || this.multiple()) return;
     const value = this.inputValue() as unknown as T;
+    const previous = this.value();
     this.internalValueSync.set(true);
     this.value.set(value);
     this.internalValueSync.set(false);
     this.selected.emit(value);
     this.inputValueChangeCommitted.emit(this.inputValue());
+    if (previous === null || !this.compareWith()(previous, value)) {
+      this.valueChangeCommitted.emit(value);
+    }
   }
 
   ngOnDestroy(): void {
@@ -368,10 +453,13 @@ export class ComboboxDirective<T> implements OnDestroy {
     this.setOpenState(false);
     overlay?.destroy();
     if (reason === 'focus-outside' || reason === 'tab') {
-      if (this.allowFreeform()) this.commitFreeformValue();
+      if (this.allowFreeform() && !this.multiple()) this.commitFreeformValue();
       else this.restoreStrictInput();
     }
     this.closed.emit();
+    // Tab / blur-when-closed report touched from `onInputBlur`; these reasons moved focus away
+    // while the popup was still open.
+    if (reason === 'focus-outside' || reason === 'outside-pointer') this.touched.emit();
   }
 
   private attachDismissController(): void {
@@ -419,15 +507,27 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   private clearSelectedValueIfInputDiverged(inputValue: string): void {
+    if (this.multiple()) return;
     const value = this.value();
     if (value === null) return;
     if (this.displayOption(value as T) === inputValue) return;
     this.internalValueSync.set(true);
     this.value.set(null);
     this.internalValueSync.set(false);
+    this.valueChangeCommitted.emit(null);
+  }
+
+  private resetQuery(): void {
+    if (this.inputValue() === '') return;
+    this.syncInputValue('');
+    this.queryChanged.emit('');
   }
 
   private restoreStrictInput(): void {
+    if (this.multiple()) {
+      this.resetQuery();
+      return;
+    }
     if (this.allowFreeform()) return;
     const value = this.value();
     this.syncInputValue(value === null ? '' : this.displayOption(value));
@@ -472,7 +572,7 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   private resolvedCloseOnSelect(): boolean {
-    return this.resolvedConfig().closeOnSelect ?? this.closeOnSelect();
+    return this.resolvedConfig().closeOnSelect ?? this.closeOnSelect() ?? !this.multiple();
   }
 
   private resolvedCloseOnEscape(): boolean {

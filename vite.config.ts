@@ -1,5 +1,9 @@
 /// <reference types="vitest" />
 import analog from '@analogjs/platform';
+import { doqPrerenderRoutes } from '@doqs/analog';
+import { doqContent } from '@doqs/analog/content';
+import { doqDeterministicMarkdown } from '@doqs/analog/vite';
+import { doqPaths } from './src/doq.paths';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
@@ -12,11 +16,29 @@ export default defineConfig(() => ({
     },
   },
   plugins: [
+    // Resolves ::source, ::include and [[api:]] from src/authoring into src/content before Analog loads pages.
+    doqContent(),
     analog({
-      // The docs are a client-side application. Deploying it statically avoids
-      // shipping an SSR Pages worker and keeps every production route reliable.
-      ssr: false,
+      // Static prerendering: every route in `prerender.routes` becomes plain HTML that hydrates
+      // on the client, so Cloudflare Pages serves files only (no SSR worker).
+      ssr: true,
+      static: true,
+      content: { highlighter: 'prism' },
+      prerender: {
+        routes: async () => [
+          '/',
+          '/components',
+          // Browser-contract fixtures driven by Playwright (unstyled, not linked from the site).
+          '/e2e-forms',
+          '/e2e-floating',
+          '/e2e-layers',
+          '/e2e-selection',
+          ...doqPrerenderRoutes(doqPaths),
+        ],
+      },
     }),
+    // Renders Markdown one file at a time so duplicate-heading ids are identical between builds.
+    doqDeterministicMarkdown(),
     tailwindcss(),
   ],
   resolve: {

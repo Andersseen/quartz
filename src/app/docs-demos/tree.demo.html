@@ -1,0 +1,215 @@
+<div class="qz-demo flex flex-col gap-8">
+  <div class="flex flex-col gap-12">
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Basic Tree</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Pass an array of <code>TreeNode</code> objects. Each node can have an optional
+        <code>children</code> array. Click a node to select it; click the arrow to expand.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div
+          class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+          data-testid="basic-tree"
+        >
+          <qz-tree [nodes]="fileNodes" />
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Pre-expanded Nodes</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Set <code>expanded: true</code> on any node to start with its children visible.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div
+          class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+        >
+          <qz-tree [nodes]="expandedNodes" />
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Custom Node Template</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Provide a custom <code>ng-template</code> to render nodes your way — icons, badges,
+        checkboxes, or any HTML you need.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap">
+        <div
+          class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[400px] w-full"
+        >
+          <qz-tree [nodes]="customNodes">
+            <!--
+                qz-tree-node's own host already owns role="treeitem", tabindex, every
+                aria-*, indentation and click/keydown/focus handling for the row — this
+                template only supplies content/visuals. Don't re-add role, tabindex, aria-*
+                or a row-level select() handler here; that would duplicate the host.
+              -->
+            <ng-template
+              let-node
+              let-expanded="expanded"
+              let-selected="selected"
+              let-hasChildren="hasChildren"
+              let-toggle="toggle"
+            >
+              <div
+                [class]="
+                  'flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-100 text-sm ' +
+                  (selected
+                    ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
+                    : 'text-gray-200 hover:bg-white/5')
+                "
+              >
+                @if (hasChildren) {
+                  <span
+                    class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] text-gray-400 cursor-pointer flex-shrink-0"
+                    tabindex="0"
+                    role="button"
+                    [attr.aria-label]="'Toggle ' + node.label"
+                    (click)="toggle(); $event.stopPropagation()"
+                    (keydown.enter)="toggle(); $event.stopPropagation()"
+                  >
+                    {{ expanded ? '▼' : '▶' }}
+                  </span>
+                } @else {
+                  <span class="w-4 flex-shrink-0"></span>
+                }
+                <span class="text-base flex-shrink-0">
+                  {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
+                </span>
+                <span class="flex-1 min-w-0">{{ node.label }}</span>
+              </div>
+            </ng-template>
+          </qz-tree>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">Lazy Loading (per level)</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Pass <code>loadChildren</code> and mark unknown branches with
+        <code>hasChildren: true</code>. A node fetches its children the first time it is expanded
+        &mdash; <strong>once</strong>: collapsing and expanding again renders from memory. The
+        context exposes <code>loading</code>, <code>error</code> and <code>retry()</code> as
+        signals, so a failed branch stays collapsed with a retry affordance instead of spinning
+        forever. <code>expandAll()</code> deliberately only expands what is already loaded.
+      </p>
+
+      <div class="flex flex-col gap-3">
+        <div
+          class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 min-w-[320px] max-w-[420px] w-full"
+          data-testid="lazy-tree"
+        >
+          <!--
+              qz-tree-node's own host already owns role="treeitem", tabindex, every aria-*
+              (including aria-busy while loading()), indentation and click/keydown/focus
+              handling for the row — this template only supplies content/visuals.
+            -->
+          <ng-template
+            #lazyTpl
+            let-node
+            let-expanded="expanded"
+            let-selected="selected"
+            let-hasChildren="hasChildren"
+            let-loading="loading"
+            let-error="error"
+            let-toggle="toggle"
+            let-retry="retry"
+          >
+            <div
+              [class]="
+                'flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-100 text-sm ' +
+                (selected
+                  ? 'bg-[rgba(124,58,237,0.15)] text-[#a78bfa]'
+                  : 'text-gray-200 hover:bg-white/5')
+              "
+            >
+              @if (hasChildren) {
+                <span
+                  class="inline-flex items-center justify-center w-4 h-4 text-[0.65rem] cursor-pointer flex-shrink-0"
+                  [class]="error() ? 'text-amber-400' : 'text-gray-400'"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="
+                    error() ? 'Retry loading ' + node.label : 'Toggle ' + node.label
+                  "
+                  (click)="error() ? retry() : toggle(); $event.stopPropagation()"
+                  (keydown.enter)="error() ? retry() : toggle(); $event.stopPropagation()"
+                >
+                  @if (loading()) {
+                    <span class="animate-pulse">◌</span>
+                  } @else if (error()) {
+                    ↻
+                  } @else {
+                    {{ expanded ? '▼' : '▶' }}
+                  }
+                </span>
+              } @else {
+                <span class="w-4 flex-shrink-0"></span>
+              }
+              <span class="text-base flex-shrink-0">
+                {{ hasChildren ? (expanded ? '📂' : '📁') : '📄' }}
+              </span>
+              <span class="flex-1 min-w-0">{{ node.label }}</span>
+              @if (loading()) {
+                <span class="text-[0.7rem] text-gray-400">loading…</span>
+              }
+              @if (error()) {
+                <span class="text-[0.7rem] text-amber-400">{{ messageOf(error()) }}</span>
+              }
+            </div>
+          </ng-template>
+
+          <qz-tree [nodes]="lazyNodes" [loadChildren]="loadPrefix" [nodeTemplate]="lazyTpl" />
+        </div>
+        <p class="text-xs text-gray-400">
+          Requests issued:
+          <span class="text-gray-300 font-mono">{{ requestCount() }}</span>
+          &mdash; collapse a folder and open it again, the counter stays put.
+          <code>restricted/</code> always fails, click ↻ to retry.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-[#0f0f13] border border-[#1e1e2a] rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-gray-200 mb-2">API Usage</h3>
+      <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+        Inject <code>TreeService</code> to programmatically expand, collapse, or select nodes.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+        <div
+          class="bg-[#0a0a0c] border border-[#1e1e2a] rounded-xl p-4 pb-3 min-w-[320px] max-w-[400px] w-full"
+        >
+          <qz-tree [nodes]="fileNodes" #apiTree />
+          <div class="flex gap-2 mt-4 pt-3 border-t border-[#1e1e2a]">
+            <button
+              class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+              (click)="apiTree.treeService.expandAll()"
+            >
+              Expand All
+            </button>
+            <button
+              class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+              (click)="apiTree.treeService.collapseAll()"
+            >
+              Collapse All
+            </button>
+            <button
+              class="inline-flex items-center gap-2 bg-transparent text-gray-400 border border-[#2a2a3a] rounded-md text-xs font-medium cursor-pointer transition-all duration-150 hover:bg-[#1e1e2a] hover:text-gray-200 px-3.5 py-2"
+              (click)="apiTree.treeService.clearSelection()"
+            >
+              Clear Selection
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

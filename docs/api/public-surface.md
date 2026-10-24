@@ -149,3 +149,14 @@ Additive and behavioural changes:
   `--qz-toast-max-width` and `--qz-toast-z-index` (defaults unchanged).
 - `ToastService.pause()` freezes the exact remaining time; `resume()` on an unpaused toast is a no-op.
 - `OverlayRef` no longer re-destroys a view Angular is already destroying.
+
+## 0.10.0 additions (deliberate, additive)
+
+Snapshots in `docs/api/snapshots/` were regenerated and reviewed; nothing was removed or re-signed.
+
+| Entry point                         | Added exports                                                                                                                                                                                                                                                                                      |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@quartz-headless/primitives`       | `SelectGroupDirective`, `SelectGroupLabelDirective`, `SelectSeparatorDirective`, `ListboxGroupDirective`, `ListboxGroupLabelDirective`, `ListboxSeparatorDirective`, `ComboboxGroupDirective`, `ComboboxGroupLabelDirective`, `ComboboxSeparatorDirective`, `createLatestRequest`, `LatestRequest` |
+| `@quartz-headless/primitives/forms` | `ComboboxControlDirective` (also in `QUARTZ_FORMS`)                                                                                                                                                                                                                                                |
+
+Member additions (declaration-level, not in the export snapshot): `SelectDirective` — `multiple`, `values`, `closeOnSelect`, `valuesChangeCommitted`, `selectedValues`, `selectedLabels`, `isEmpty`, `writeFormValue()`; `ComboboxDirective` — `multiple`, `values`, `allowDeselect`, `status`, `isDisabled`, `selectedValues`, `valueChangeCommitted`, `valuesChangeCommitted`, `queryChanged`, `touched`, `writeFormValue()`, `setFormDisabled()`; `closeOnSelect` on Combobox is now `boolean | undefined` (superset of the previous type).

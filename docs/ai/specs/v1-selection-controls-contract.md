@@ -79,3 +79,11 @@ primary API. `*ChangeCommitted` outputs are user-commit signals, not mirrors of 
 
 1. ~~Should Toggle and ToggleGroup be part of the first stable catalogue?~~ **Yes** — Volt exports both; owner milestone 0.11.
 2. ~~Should Slider be included in 1.0?~~ **Yes** — Volt exports Slider and RangeSlider; owner milestone 0.11 (browser pointer fixture required).
+
+## 9. 0.10 amendment — advanced selection (implemented)
+
+- **Select:** `multiple` + `values: readonly T[]` (separate from the single `value` so existing `[(value)]` bindings keep compiling); `closeOnSelect` defaults to `!multiple`; `valuesChangeCommitted` once per toggle; `selectedLabels`/`selectedLabel` derive from the value via `displayWith`, so an unrendered option keeps its label; selection and active option remain independent signals.
+- **Groups:** `qz{Select,Listbox,Combobox}Group` (`role=group` + `aria-labelledby`), `GroupLabel`, `Separator` (decorative, `aria-hidden`: ARIA forbids `separator` in a listbox — found by axe). None register with the Collection, so navigation/typeahead skip them.
+- **Listbox:** single mode stays scalar; array translation belongs to a Volt adapter.
+- **Combobox:** query (`inputValue`) and selection (`value`/`values`) are separate; editing a selected value's text clears it and reports `valueChangeCommitted(null)`; IME composition is neither filtered nor committed (`isComposing`, `compositionstart/end`, keyCode 229); Quartz does not fetch — `createLatestRequest()` guards consumer-owned requests (abort + discard stale results); a disabled combobox input is natively `disabled`.
+- **Select scroll guard:** a scroll in flight when the popup opens (e.g. the browser scrolling the trigger into view) cannot dismiss it; scroll dismissal arms two frames after open.
