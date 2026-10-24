@@ -277,6 +277,87 @@ test.describe('live demos and playgrounds', () => {
   });
 });
 
+test.describe('0.11 range and toggle playgrounds', () => {
+  test('the RangeSlider playground drives the real primitive without competing bindings', async ({
+    page,
+  }) => {
+    const problems = trackConsole(page);
+    await go(page, '/docs/primitives/range-slider');
+    const playground = page.locator('[data-doq-playground="quartz-range-slider"]');
+    await expect(playground.getByText('Range: 20 – 70')).toBeVisible();
+
+    const low = playground.getByRole('slider', { name: 'Minimum', exact: true });
+    await low.focus();
+    await page.keyboard.press('End'); // stops at the high thumb
+    await expect(playground.getByText('Range: 70 – 70')).toBeVisible();
+    await expect(playground.locator('.doq-pg-events')).toContainText(/low[^0-9]+70/);
+
+    // A control change re-applies the invariants: high wins, low is pulled back.
+    await playground.getByLabel('Min distance').fill('10');
+    await expect(playground.getByText('Range: 60 – 70')).toBeVisible();
+    await expect(low).toHaveAttribute('aria-valuemax', '60');
+    await playground.getByLabel('Disabled').check();
+    await expect(low).toHaveAttribute('aria-disabled', 'true');
+    expect(problems).toEqual([]);
+  });
+
+  test('the Slider, Toggle and ToggleGroup playgrounds respond to controls and user input', async ({
+    page,
+  }) => {
+    await go(page, '/docs/primitives/slider');
+    const slider = page.locator('[data-doq-playground="quartz-slider"]');
+    await slider.getByLabel('Value', { exact: true }).fill('80');
+    await expect(slider.getByText('Value: 80')).toBeVisible();
+    await slider.getByRole('slider', { name: 'Volume' }).focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(slider.getByText('Value: 75')).toBeVisible();
+    await expect(slider.locator('.doq-pg-events')).toContainText('75');
+
+    await go(page, '/docs/primitives/toggle');
+    const toggle = page.locator('[data-doq-playground="quartz-toggle"]');
+    await toggle.getByLabel('Pressed').check();
+    await expect(toggle.getByRole('button', { name: 'Bold: on' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await toggle.getByRole('button', { name: 'Bold: on' }).click();
+    await expect(toggle.getByRole('button', { name: 'Bold: off' })).toBeVisible();
+    await expect(toggle.locator('.doq-pg-events')).toContainText('false');
+
+    await go(page, '/docs/primitives/toggle-group');
+    const group = page.locator('[data-doq-playground="quartz-toggle-group"]');
+    await group.getByLabel('Allow deselection').uncheck();
+    const bold = group.getByRole('button', { name: 'bold' });
+    await bold.click();
+    await bold.click();
+    await expect(bold).toHaveAttribute('aria-pressed', 'true');
+    await group.getByRole('button', { name: 'italic' }).click();
+    await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('search finds the new RangeSlider guide', async ({ page }) => {
+    await go(page, '/docs/guides/accessibility');
+    await page.getByRole('button', { name: 'Search' }).click();
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('searchbox').fill('RangeSlider');
+    const links = dialog.getByRole('list', { name: 'Search results' }).getByRole('link');
+    await expect(links.first()).toBeVisible();
+    const hrefs = await links.evaluateAll((all) => all.map((link) => link.getAttribute('href')));
+    expect(hrefs.some((href) => href?.startsWith('/docs/primitives/range-slider'))).toBe(true);
+  });
+
+  test('the generated API reference lists the new symbols', async ({ page }) => {
+    await go(page, '/docs/reference/api/primitives/range-slider-directive');
+    await expect(
+      page.getByRole('heading', { name: 'RangeSliderDirective', level: 1 }),
+    ).toBeVisible();
+    await go(page, '/docs/reference/api/forms/range-slider-control-directive');
+    await expect(
+      page.getByRole('heading', { name: 'RangeSliderControlDirective', level: 1 }),
+    ).toBeVisible();
+  });
+});
+
 test.describe('generated API reference', () => {
   test('is linked from the reference index and documents the 0.10 additions', async ({ page }) => {
     await go(page, '/docs/reference/packages-and-versions');
@@ -301,6 +382,11 @@ test.describe('health', () => {
     '/docs/primitives/combobox',
     '/docs/primitives/listbox',
     '/docs/primitives/dialog',
+    '/docs/primitives/slider',
+    '/docs/primitives/range-slider',
+    '/docs/primitives/toggle',
+    '/docs/primitives/toggle-group',
+    '/docs/migration/upgrading-to-0-11',
     '/docs/core/overlay',
     '/docs/reference/api/core',
   ];

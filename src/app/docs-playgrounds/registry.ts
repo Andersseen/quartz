@@ -1,11 +1,13 @@
 import { formatDoqUsage, type DoqPlaygroundDefinition } from '@doqs/analog';
 import {
   CheckboxPlaygroundComponent,
+  RangeSliderPlaygroundComponent,
   RadioGroupPlaygroundComponent,
   SliderPlaygroundComponent,
   SwitchPlaygroundComponent,
   TabsPlaygroundComponent,
   ToggleGroupPlaygroundComponent,
+  TogglePlaygroundComponent,
 } from './control-playgrounds';
 import { ComboboxPlaygroundComponent } from './combobox-playground';
 import { ListboxPlaygroundComponent } from './listbox-playground';
@@ -135,10 +137,37 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
     ],
   },
+  'quartz-toggle': {
+    component: TogglePlaygroundComponent,
+    title: 'Toggle',
+    description: 'A real qzToggle. The pressed control sets the state; clicks commit once each.',
+    controls: [bool('pressed', 'Pressed'), bool('disabled', 'Disabled')],
+    outputs: [{ event: 'committed', label: 'Committed state' }],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          formatDoqUsage(
+            'button',
+            {},
+            {
+              attributes: [
+                'qzToggle',
+                '[(pressed)]="bold"',
+                ...(v['disabled'] ? ['disabled'] : []),
+              ],
+              text: 'Bold',
+            },
+          ),
+      },
+    ],
+  },
   'quartz-toggle-group': {
     component: ToggleGroupPlaygroundComponent,
     title: 'ToggleGroup',
-    description: 'A real qzToggleGroup.',
+    description:
+      'A real qzToggleGroup. allowDeselection applies to single mode; the committed output is the new value.',
     controls: [
       {
         input: 'type',
@@ -150,19 +179,115 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
           { label: 'Multiple', value: 'multiple' },
         ],
       },
+      bool('allowDeselection', 'Allow deselection', true),
       orientation(),
       bool('disabled', 'Disabled'),
+    ],
+    outputs: [{ event: 'committed', label: 'Committed value' }],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          formatDoqUsage(
+            'div',
+            {},
+            {
+              attributes: [
+                'qzToggleGroup',
+                'aria-label="Formatting"',
+                `type="${v['type']}"`,
+                ...(v['type'] === 'single' && !v['allowDeselection']
+                  ? ['[allowDeselection]="false"']
+                  : []),
+                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
+                ...(v['disabled'] ? ['disabled'] : []),
+                '[(value)]="formats"',
+              ],
+              text: '<button qzToggleItem="bold">Bold</button> …',
+            },
+          ),
+      },
     ],
   },
   'quartz-slider': {
     component: SliderPlaygroundComponent,
     title: 'Slider',
-    description: 'A real qzSlider.',
+    description:
+      'A real qzSlider. The value control sets the value; dragging and keys override it. Committed fires per user change.',
     controls: [
+      { input: 'value', kind: 'number', label: 'Value', initial: 40 },
       { input: 'min', kind: 'number', label: 'Min', initial: 0 },
       { input: 'max', kind: 'number', label: 'Max', initial: 100 },
-      { input: 'step', kind: 'number', label: 'Step', initial: 5, min: 1 },
+      { input: 'step', kind: 'number', label: 'Step', initial: 5, min: 0.1 },
+      orientation(),
       bool('disabled', 'Disabled'),
+    ],
+    outputs: [{ event: 'committed', label: 'Committed value' }],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          formatDoqUsage(
+            'div',
+            {},
+            {
+              attributes: [
+                'qzSlider',
+                '[(value)]="volume"',
+                `[min]="${v['min']}"`,
+                `[max]="${v['max']}"`,
+                `[step]="${v['step']}"`,
+                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
+                ...(v['disabled'] ? ['disabled'] : []),
+              ],
+              text: '<div qzSliderTrack>…<button qzSliderThumb aria-label="Volume"></button></div>',
+            },
+          ),
+      },
+    ],
+  },
+  'quartz-range-slider': {
+    component: RangeSliderPlaygroundComponent,
+    title: 'RangeSlider',
+    description:
+      'A real qzRangeSlider. Thumbs never cross; minDistance keeps them apart. Committed is the { low, high } object.',
+    controls: [
+      { input: 'low', kind: 'number', label: 'Low', initial: 20 },
+      { input: 'high', kind: 'number', label: 'High', initial: 70 },
+      { input: 'min', kind: 'number', label: 'Min', initial: 0 },
+      { input: 'max', kind: 'number', label: 'Max', initial: 100 },
+      { input: 'step', kind: 'number', label: 'Step', initial: 5, min: 0.1 },
+      { input: 'minDistance', kind: 'number', label: 'Min distance', initial: 0, min: 0 },
+      orientation(),
+      bool('disabled', 'Disabled'),
+    ],
+    outputs: [{ event: 'committed', label: 'Committed value' }],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          formatDoqUsage(
+            'div',
+            {},
+            {
+              attributes: [
+                'qzRangeSlider',
+                '[(low)]="low"',
+                '[(high)]="high"',
+                `[min]="${v['min']}"`,
+                `[max]="${v['max']}"`,
+                `[step]="${v['step']}"`,
+                ...(Number(v['minDistance']) > 0 ? [`[minDistance]="${v['minDistance']}"`] : []),
+                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
+                ...(v['disabled'] ? ['disabled'] : []),
+              ],
+              text: '<button qzRangeSliderThumb="low" aria-label="Minimum"></button> …',
+            },
+          ),
+      },
     ],
   },
 };

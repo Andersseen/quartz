@@ -160,3 +160,16 @@ Snapshots in `docs/api/snapshots/` were regenerated and reviewed; nothing was re
 | `@quartz-headless/primitives/forms` | `ComboboxControlDirective` (also in `QUARTZ_FORMS`)                                                                                                                                                                                                                                                |
 
 Member additions (declaration-level, not in the export snapshot): `SelectDirective` — `multiple`, `values`, `closeOnSelect`, `valuesChangeCommitted`, `selectedValues`, `selectedLabels`, `isEmpty`, `writeFormValue()`; `ComboboxDirective` — `multiple`, `values`, `allowDeselect`, `status`, `isDisabled`, `selectedValues`, `valueChangeCommitted`, `valuesChangeCommitted`, `queryChanged`, `touched`, `writeFormValue()`, `setFormDisabled()`; `closeOnSelect` on Combobox is now `boolean | undefined` (superset of the previous type).
+
+## 0.11.0 additions (deliberate, additive)
+
+Snapshots in `docs/api/snapshots/` were regenerated and reviewed; nothing was removed or re-signed.
+
+| Entry point                         | Added exports                                                                                                                                                                                                                           |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@quartz-headless/primitives`       | `RangeSliderDirective`, `RangeSliderThumbDirective`, `RangeSliderTrackDirective`, `RangeSliderRangeDirective`, `DEFAULT_RANGE_SLIDER_CONFIG`, `RangeSliderConfig`, `RangeSliderOrientation`, `RangeSliderThumbName`, `RangeSliderValue` |
+| `@quartz-headless/primitives/forms` | `SliderControlDirective`, `RangeSliderControlDirective`, `ToggleControlDirective`, `ToggleGroupControlDirective` (all in `QUARTZ_FORMS`)                                                                                                |
+
+Member additions (declaration-level, not in the export snapshot): `SliderDirective` — `valueChangeCommitted`, `isDisabled`, `bounds`, `setFormDisabled()`; `ToggleDirective` — `isDisabled`, `setFormDisabled()`; `ToggleGroupDirective` — `allowDeselection`, `valueChangeCommitted`, `isDisabled`, `setFormDisabled()`; `DEFAULT_TOGGLE_GROUP_CONFIG` / `ToggleGroupConfig` — `allowDeselection` (default `true`). Internal, **not exported**: `slider-value.ts` snapping helpers (`snapSliderValue`, `resolveSliderBounds`, …) and `slider-interaction.ts` (keyboard/pointer helpers shared by Slider and RangeSlider).
+
+Behavioural changes (see the 0.11 migration guide): the Slider value grid now includes `max`; `ToggleGroupDirective.isPressed` is mode-aware; the `role="group"` host no longer renders `aria-orientation`.

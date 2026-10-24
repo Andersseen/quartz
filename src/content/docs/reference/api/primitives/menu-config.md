@@ -3,7 +3,7 @@
 title: MenuConfig
 description: Interface reference for MenuConfig.
 group: "API: Primitives"
-order: 1183
+order: 1187
 generated: doq-api
 category: interface
 ---

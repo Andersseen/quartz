@@ -3,7 +3,7 @@
 title: AccordionType
 description: Type alias reference for AccordionType.
 group: "API: Primitives"
-order: 1199
+order: 1205
 generated: doq-api
 category: type
 ---

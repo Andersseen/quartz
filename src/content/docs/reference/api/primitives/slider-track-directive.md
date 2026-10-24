@@ -3,7 +3,7 @@
 title: SliderTrackDirective
 description: "Directive reference for SliderTrackDirective with the selector [qzSliderTrack]."
 group: "API: Primitives"
-order: 1153
+order: 1157
 generated: doq-api
 category: directive
 ---

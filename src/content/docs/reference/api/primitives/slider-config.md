@@ -3,7 +3,7 @@
 title: SliderConfig
 description: Interface reference for SliderConfig.
 group: "API: Primitives"
-order: 1189
+order: 1195
 generated: doq-api
 category: interface
 ---

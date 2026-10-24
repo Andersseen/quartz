@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { describe, expect, it } from 'vitest';
 import { SliderDirective } from './slider.directive';
@@ -112,5 +113,79 @@ describe('Slider', () => {
 
     expect(fixture.componentInstance.value()).toBe(0);
     expect(thumb).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  describe('committed value contract', () => {
+    it('emits once per user key step and never for programmatic writes', async () => {
+      const { fixture } = await render(SliderHost);
+      const slider = fixture.debugElement
+        .query(By.directive(SliderDirective))
+        .injector.get(SliderDirective);
+      const committed: number[] = [];
+      slider.valueChangeCommitted.subscribe((v) => committed.push(v));
+      const thumb = screen.getByRole('slider');
+
+      fixture.componentInstance.value.set(40);
+      fixture.detectChanges();
+      expect(committed).toEqual([]);
+
+      fireEvent.keyDown(thumb, { key: 'ArrowRight' });
+      fireEvent.keyDown(thumb, { key: 'ArrowRight' });
+      fixture.detectChanges();
+      expect(committed).toEqual([41, 42]);
+
+      fireEvent.keyDown(thumb, { key: 'End' });
+      fireEvent.keyDown(thumb, { key: 'End' });
+      expect(committed).toEqual([41, 42, 100]);
+    });
+
+    it('uses decimal steps without drift across repeated key presses', async () => {
+      const { fixture } = await render(SliderHost);
+      fixture.componentInstance.max.set(1);
+      fixture.componentInstance.step.set(0.1);
+      fixture.detectChanges();
+      const thumb = screen.getByRole('slider');
+      for (let i = 0; i < 3; i++) fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+      fixture.detectChanges();
+      expect(fixture.componentInstance.value()).toBe(0.3);
+    });
+
+    it('lets the pointer override an external write during a drag and ends it when disabled', async () => {
+      const { fixture } = await render(SliderHost);
+      const root = screen.getByRole('slider').closest('[qzslider]') as HTMLElement;
+      root.setPointerCapture = () => undefined;
+      root.releasePointerCapture = () => undefined;
+      root.getBoundingClientRect = () =>
+        ({ left: 0, right: 100, top: 0, bottom: 10, width: 100, height: 10 }) as DOMRect;
+
+      fireEvent.pointerDown(root, { pointerId: 1, clientX: 10 });
+      fixture.componentInstance.value.set(70);
+      fixture.detectChanges();
+      expect(fixture.componentInstance.value()).toBe(70);
+      fireEvent.pointerMove(root, { pointerId: 1, clientX: 30 });
+      fixture.detectChanges();
+      expect(fixture.componentInstance.value()).toBe(30);
+
+      fixture.componentInstance.disabled.set(true);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(root).not.toHaveAttribute('data-qz-dragging');
+      fireEvent.pointerMove(root, { pointerId: 1, clientX: 90 });
+      expect(fixture.componentInstance.value()).toBe(30);
+    });
+
+    it('ends the drag on lostpointercapture and on destroy', async () => {
+      const { fixture } = await render(SliderHost);
+      const root = screen.getByRole('slider').closest('[qzslider]') as HTMLElement;
+      root.setPointerCapture = () => undefined;
+      root.getBoundingClientRect = () =>
+        ({ left: 0, right: 100, top: 0, bottom: 10, width: 100, height: 10 }) as DOMRect;
+      fireEvent.pointerDown(root, { pointerId: 2, clientX: 50 });
+      fixture.detectChanges();
+      expect(root).toHaveAttribute('data-qz-dragging');
+      fireEvent.lostPointerCapture(root, { pointerId: 2 });
+      fixture.detectChanges();
+      expect(root).not.toHaveAttribute('data-qz-dragging');
+    });
   });
 });

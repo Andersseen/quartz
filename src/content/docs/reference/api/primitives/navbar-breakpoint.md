@@ -3,7 +3,7 @@
 title: NavbarBreakpoint
 description: Type alias reference for NavbarBreakpoint.
 group: "API: Primitives"
-order: 1209
+order: 1215
 generated: doq-api
 category: type
 ---

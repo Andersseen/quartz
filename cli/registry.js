@@ -359,10 +359,28 @@ const REGISTRY = {
       'slider/slider-range.directive.ts',
       'slider/slider.types.ts',
       'slider/slider-value.ts',
+      'slider/slider-interaction.ts',
       'slider/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/docs/primitives/slider',
+  },
+  'range-slider': {
+    description: 'Two-thumb ARIA range slider (low/high) with minimum distance and RTL support',
+    layer: 'primitives',
+    files: [
+      'range-slider/range-slider.directive.ts',
+      'range-slider/range-slider-thumb.directive.ts',
+      'range-slider/range-slider-track.directive.ts',
+      'range-slider/range-slider-range.directive.ts',
+      'range-slider/range-slider.types.ts',
+      'range-slider/index.ts',
+    ],
+    // Imports ../slider/* (numeric contract + pointer/keyboard helpers): the CLI copies the
+    // `slider` folder alongside it (cross-import scan in cli/commands/add.js).
+    deps: ['slider'],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/range-slider',
   },
 };
 

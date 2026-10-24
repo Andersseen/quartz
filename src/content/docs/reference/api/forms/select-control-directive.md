@@ -3,7 +3,7 @@
 title: SelectControlDirective
 description: "Angular Forms adapter for [qzSelect]."
 group: "API: Forms"
-order: 1505
+order: 1506
 generated: doq-api
 category: directive
 ---

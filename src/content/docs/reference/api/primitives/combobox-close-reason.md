@@ -3,7 +3,7 @@
 title: ComboboxCloseReason
 description: Type alias reference for ComboboxCloseReason.
 group: "API: Primitives"
-order: 1202
+order: 1208
 generated: doq-api
 category: type
 ---

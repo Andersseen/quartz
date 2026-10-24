@@ -3,7 +3,7 @@
 title: RadioGroupOrientation
 description: Type alias reference for RadioGroupOrientation.
 group: "API: Primitives"
-order: 1212
+order: 1218
 generated: doq-api
 category: type
 ---

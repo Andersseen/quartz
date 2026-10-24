@@ -97,6 +97,7 @@ describe('documentation content', () => {
       'toggle',
       'toggle-group',
       'slider',
+      'range-slider',
       'tree',
       'sidebar',
       'navbar',

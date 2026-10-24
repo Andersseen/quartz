@@ -3,7 +3,7 @@
 title: MenuService
 description: Service reference for MenuService.
 group: "API: Primitives"
-order: 1171
+order: 1175
 generated: doq-api
 category: service
 ---

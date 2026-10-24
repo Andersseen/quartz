@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] — 2026-10-24
+
+Release target: `@quartz-headless/core@0.11.0` and `@quartz-headless/primitives@0.11.0`. Range and toggle
+controls with Angular Forms adapters. Evidence: `docs/releases/0.11-acceptance.md`.
+
+### Added
+
+- **RangeSlider:** `RangeSliderDirective`, `RangeSliderTrackDirective`, `RangeSliderRangeDirective`, `RangeSliderThumbDirective` (`qzRangeSliderThumb="low|high"`), `RangeSliderValue` (`{ low, high }`), minimum distance, non-crossing thumbs, nearest-thumb track press, RTL/vertical, `--qz-range-*` CSS variables. CLI: `quartz add range-slider`.
+- **Slider:** `valueChangeCommitted` (user changes only), `isDisabled`/`setFormDisabled()`, `bounds`, development warning for an unnamed thumb.
+- **ToggleGroup:** `allowDeselection` (single mode, default `true`), `valueChangeCommitted`. **Toggle:** `isDisabled`/`setFormDisabled()`.
+- **Forms:** `SliderControlDirective` (`number`), `RangeSliderControlDirective` (`{ low, high }`), `ToggleControlDirective` (`boolean`), `ToggleGroupControlDirective` (scalar/`null` or array), all in `QUARTZ_FORMS`.
+- **Documentation:** RangeSlider page, rewritten Slider/Toggle/ToggleGroup pages, playgrounds for Slider/RangeSlider/Toggle/ToggleGroup, migration guide 0.10 → 0.11.
+- **Tests:** unit coverage for the numeric contract, RangeSlider, committed outputs and the four adapters; `e2e/range-toggle.spec.ts` (Chromium, Firefox, WebKit, axe); the consumer smoke compiles the new surface under strict templates.
+
+### Changed
+
+- Slider numeric contract: integer-scaled arithmetic (no decimal drift), `max` is always on the grid, invalid `step` is `1`, `NaN`/`±Infinity` writes clamp, swapped/non-finite bounds are repaired.
+- Slider gestures end on `pointercancel`, `lostpointercapture`, disabling and destroy; only the primary button starts a drag; the root sets `touch-action: none`.
+- `ToggleGroupDirective.isPressed` follows `type` (an array in single mode, or a scalar in multiple mode, presses nothing).
+
+### Fixed
+
+- `ToggleGroup` rendered `aria-orientation` on its `role="group"` host, which ARIA does not allow (found by axe); removed (use `data-qz-orientation`).
+- Slider `End`/`PageUp` could not reach `max` when the range was not a multiple of `step`.
+
 ## [0.10.0] — 2026-10-24
 
 Release target: `@quartz-headless/core@0.10.0` and `@quartz-headless/primitives@0.10.0`. Advanced

@@ -63,3 +63,35 @@ describe('Toggle', () => {
     expect(fixture.componentInstance.commits).toEqual([true]);
   });
 });
+
+describe('Toggle committed events', () => {
+  it('emits once per activation, never for programmatic writes, and not while disabled', async () => {
+    const committed: boolean[] = [];
+    const { fixture } = await render(
+      `<button qzToggle [(pressed)]="on" [disabled]="off" (pressedChangeCommitted)="log($event)">Bold</button>`,
+      {
+        imports: [ToggleDirective],
+        componentProperties: {
+          on: false,
+          off: false,
+          log: (v: boolean) => committed.push(v),
+        },
+      },
+    );
+    const button = screen.getByRole('button', { name: 'Bold' });
+    fixture.componentInstance.on = true;
+    fixture.detectChanges();
+    expect(committed).toEqual([]);
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(committed).toEqual([false, true]);
+    expect(button).toHaveAttribute('type', 'button');
+
+    fixture.componentInstance.off = true;
+    fixture.detectChanges();
+    fireEvent.click(button);
+    expect(committed).toEqual([false, true]);
+  });
+});

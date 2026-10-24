@@ -3,7 +3,7 @@
 title: DEFAULT_SELECT_CONFIG
 description: Constant reference for DEFAULT_SELECT_CONFIG.
 group: "API: Primitives"
-order: 1241
+order: 1250
 generated: doq-api
 category: constant
 ---

@@ -3,7 +3,7 @@
 title: SidebarConfig
 description: Interface reference for SidebarConfig.
 group: "API: Primitives"
-order: 1188
+order: 1194
 generated: doq-api
 category: interface
 ---

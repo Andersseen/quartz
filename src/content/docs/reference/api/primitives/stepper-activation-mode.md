@@ -3,7 +3,7 @@
 title: StepperActivationMode
 description: Type alias reference for StepperActivationMode.
 group: "API: Primitives"
-order: 1222
+order: 1230
 generated: doq-api
 category: type
 ---

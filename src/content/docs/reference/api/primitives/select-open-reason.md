@@ -3,7 +3,7 @@
 title: SelectOpenReason
 description: Type alias reference for SelectOpenReason.
 group: "API: Primitives"
-order: 1214
+order: 1222
 generated: doq-api
 category: type
 ---

@@ -3,7 +3,7 @@
 title: SliderThumbDirective
 description: "Directive reference for SliderThumbDirective with the selector [qzSliderThumb]."
 group: "API: Primitives"
-order: 1152
+order: 1156
 generated: doq-api
 category: directive
 ---
@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzSliderThumb`
-- **Source:** [packages/primitives/src/slider/slider-thumb.directive.ts:26](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/slider/slider-thumb.directive.ts#L26)
+- **Source:** [packages/primitives/src/slider/slider-thumb.directive.ts:28](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/slider/slider-thumb.directive.ts#L28)
 
 ## Selector
 
