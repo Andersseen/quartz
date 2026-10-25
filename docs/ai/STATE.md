@@ -7,8 +7,9 @@ Implemented shared local-civil-date calendar behavior, DatePicker, DateRangePick
 CLI entries, Doqs pages, live demos and playgrounds. Validation: 612 unit tests and coverage pass; typecheck,
 lint and format pass; library and demo builds pass; API snapshot and docs checks pass; installed-tarball
 strict Angular AOT passes; the 21-execution date E2E suite passes in Chromium, Firefox and WebKit with axe.
-The full E2E run passed 634/636; two Firefox docs-route timeouts passed when rerun against the unchanged
-baseline, indicating an intermittent docs-route issue. PR #42 is open; 0.11 publication is the merge/release gate.
+The full E2E run passed 634/636; the two Firefox docs-route timeouts passed focused reruns on both the
+feature branch and unchanged baseline, indicating intermittent docs-route timing. PR #42 is open;
+0.11 publication is the merge/release gate.
 
 Release gate: `main` run 40124305295 failed its E2E job; deploy and publish jobs were skipped. A retry of that
 job is running through Actions. Both scoped 0.11.0 package versions returned npm 404 and GitHub Release
