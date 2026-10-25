@@ -3,7 +3,7 @@
 title: RangeSliderControlDirective
 description: "Angular Forms adapter for [qzRangeSlider]."
 group: "API: Forms"
-order: 1505
+order: 1507
 generated: doq-api
 category: directive
 ---

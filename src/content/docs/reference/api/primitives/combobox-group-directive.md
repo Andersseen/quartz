@@ -3,7 +3,7 @@
 title: ComboboxGroupDirective
 description: "Labelled group of options: role=\"group\" named by a qzComboboxGroupLabel child."
 group: "API: Primitives"
-order: 1112
+order: 1119
 generated: doq-api
 category: directive
 ---

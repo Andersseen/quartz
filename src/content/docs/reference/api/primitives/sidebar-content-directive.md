@@ -3,7 +3,7 @@
 title: SidebarContentDirective
 description: "Directive reference for SidebarContentDirective with the selector [qzSidebarContent]."
 group: "API: Primitives"
-order: 1150
+order: 1159
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: SidebarFocusMode
 description: Type alias reference for SidebarFocusMode.
 group: "API: Primitives"
-order: 1224
+order: 1237
 generated: doq-api
 category: type
 ---

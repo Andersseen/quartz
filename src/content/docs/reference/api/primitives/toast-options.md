@@ -3,7 +3,7 @@
 title: ToastOptions
 description: Interface reference for ToastOptions.
 group: "API: Primitives"
-order: 1199
+order: 1211
 generated: doq-api
 category: interface
 ---

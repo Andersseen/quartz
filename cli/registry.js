@@ -382,6 +382,36 @@ const REGISTRY = {
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/docs/primitives/range-slider',
   },
+  'date-picker': {
+    description: 'Inline accessible calendar for selecting one local civil date',
+    layer: 'primitives',
+    files: [
+      'date-picker/date-picker.directive.ts',
+      'date-picker/date-range-picker.directive.ts',
+      'date-picker/date-picker.types.ts',
+      'date-picker/date-operations.ts',
+      'date-picker/calendar-context.ts',
+      'date-picker/calendar-part.directive.ts',
+      'date-picker/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/date-picker',
+  },
+  'date-range-picker': {
+    description: 'Inline accessible calendar for selecting a date range',
+    layer: 'primitives',
+    files: [
+      'date-picker/date-range-picker.directive.ts',
+      'date-picker/date-picker.directive.ts',
+      'date-picker/date-picker.types.ts',
+      'date-picker/date-operations.ts',
+      'date-picker/calendar-context.ts',
+      'date-picker/calendar-part.directive.ts',
+      'date-picker/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/date-range-picker',
+  },
 };
 
 module.exports = { REGISTRY };

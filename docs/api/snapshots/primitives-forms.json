@@ -5,6 +5,12 @@
   "ComboboxControlDirective": {
     "kind": "class"
   },
+  "DatePickerControlDirective": {
+    "kind": "class"
+  },
+  "DateRangePickerControlDirective": {
+    "kind": "class"
+  },
   "ListboxControlDirective": {
     "kind": "class"
   },

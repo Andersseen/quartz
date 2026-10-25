@@ -3,7 +3,7 @@
 title: ComboboxSeparatorDirective
 description: "Decorative separator between options or groups; excluded from navigation."
 group: "API: Primitives"
-order: 1117
+order: 1124
 generated: doq-api
 category: directive
 ---

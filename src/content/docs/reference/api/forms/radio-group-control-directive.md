@@ -3,7 +3,7 @@
 title: RadioGroupControlDirective
 description: "Angular Forms adapter for [qzRadioGroup]."
 group: "API: Forms"
-order: 1504
+order: 1506
 generated: doq-api
 category: directive
 ---

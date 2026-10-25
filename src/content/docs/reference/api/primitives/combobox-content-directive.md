@@ -3,7 +3,7 @@
 title: ComboboxContentDirective
 description: "Directive reference for ComboboxContentDirective with the selector ng-template[qzComboboxContent]."
 group: "API: Primitives"
-order: 1110
+order: 1117
 generated: doq-api
 category: directive
 ---

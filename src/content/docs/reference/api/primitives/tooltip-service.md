@@ -3,7 +3,7 @@
 title: TooltipService
 description: Service reference for TooltipService.
 group: "API: Primitives"
-order: 1177
+order: 1186
 generated: doq-api
 category: service
 ---

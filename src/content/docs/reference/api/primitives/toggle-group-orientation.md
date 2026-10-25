@@ -3,7 +3,7 @@
 title: ToggleGroupOrientation
 description: Type alias reference for ToggleGroupOrientation.
 group: "API: Primitives"
-order: 1236
+order: 1249
 generated: doq-api
 category: type
 ---

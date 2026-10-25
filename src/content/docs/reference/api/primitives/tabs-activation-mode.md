@@ -3,7 +3,7 @@
 title: TabsActivationMode
 description: Type alias reference for TabsActivationMode.
 group: "API: Primitives"
-order: 1232
+order: 1245
 generated: doq-api
 category: type
 ---

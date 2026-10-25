@@ -26,6 +26,9 @@ import { ToggleDemoComponent } from './toggle.demo';
 import { ToggleGroupDemoComponent } from './toggle-group.demo';
 import { SliderDemoComponent } from './slider.demo';
 import { RangeSliderDemoComponent } from './range-slider.demo';
+import { DatePickerDemoComponent } from './date-picker.demo';
+import { DateRangePickerDemoComponent } from './date-range-picker.demo';
+import { DateFormsDemoComponent } from './date-forms.demo';
 import { TreeDemoComponent } from './tree.demo';
 import { SidebarDemoComponent } from './sidebar.demo';
 import { NavbarDemoComponent } from './navbar.demo';
@@ -320,6 +323,42 @@ class SliderDemoLoader {}
 class RangeSliderDemoLoader {}
 
 @Component({
+  selector: 'app-date-picker-demo-loader',
+  imports: [DatePickerDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-date-picker-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class DatePickerDemoLoader {}
+
+@Component({
+  selector: 'app-date-range-picker-demo-loader',
+  imports: [DateRangePickerDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-date-range-picker-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class DateRangePickerDemoLoader {}
+
+@Component({
+  selector: 'app-date-forms-demo-loader',
+  imports: [DateFormsDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-date-forms-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class DateFormsDemoLoader {}
+
+@Component({
   selector: 'app-tree-demo-loader',
   imports: [TreeDemoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -392,6 +431,9 @@ export const DOC_DEMOS = {
   'toggle-group': ToggleGroupDemoLoader,
   slider: SliderDemoLoader,
   'range-slider': RangeSliderDemoLoader,
+  'date-picker': DatePickerDemoLoader,
+  'date-range-picker': DateRangePickerDemoLoader,
+  'date-forms': DateFormsDemoLoader,
   tree: TreeDemoLoader,
   sidebar: SidebarDemoLoader,
   navbar: NavbarDemoLoader,

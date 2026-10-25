@@ -204,3 +204,18 @@ export type {
   RangeSliderThumbName,
   RangeSliderValue,
 } from './range-slider';
+
+// Date selection
+export {
+  DatePickerDirective,
+  DateRangePickerDirective,
+  CalendarGridDirective,
+  CalendarRowDirective,
+  CalendarCellDirective,
+  CalendarDateButtonDirective,
+  CalendarMonthLabelDirective,
+  CalendarPreviousMonthDirective,
+  CalendarNextMonthDirective,
+  DEFAULT_DATE_PICKER_CONFIG,
+} from './date-picker';
+export type { CalendarDay, DateDisabled, DatePickerConfig, DateRange } from './date-picker';

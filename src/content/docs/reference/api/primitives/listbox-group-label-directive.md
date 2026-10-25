@@ -3,7 +3,7 @@
 title: ListboxGroupLabelDirective
 description: Visible label of a qzListboxGroup.
 group: "API: Primitives"
-order: 1121
+order: 1130
 generated: doq-api
 category: directive
 ---

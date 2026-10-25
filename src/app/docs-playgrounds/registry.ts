@@ -12,6 +12,10 @@ import {
 import { ComboboxPlaygroundComponent } from './combobox-playground';
 import { ListboxPlaygroundComponent } from './listbox-playground';
 import { SelectPlaygroundComponent } from './select-playground';
+import {
+  DatePickerPlaygroundComponent,
+  DateRangePickerPlaygroundComponent,
+} from './date-playgrounds';
 
 const orientation = (label = 'Orientation') => ({
   input: 'orientation',
@@ -289,5 +293,142 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
           ),
       },
     ],
+  },
+  'quartz-date-picker': {
+    component: DatePickerPlaygroundComponent,
+    title: 'DatePicker',
+    description:
+      'A real inline qzDatePicker. Change the civil date, bounds, locale, week start and direction.',
+    controls: [
+      {
+        input: 'month',
+        kind: 'select',
+        label: 'Displayed month',
+        initial: '2024-02',
+        options: [
+          { label: 'February 2024', value: '2024-02' },
+          { label: 'March 2024', value: '2024-03' },
+          { label: 'December 2024', value: '2024-12' },
+        ],
+      },
+      {
+        input: 'selectedDay',
+        kind: 'number',
+        label: 'Selected day (0 clears)',
+        initial: 15,
+        min: 0,
+        max: 28,
+      },
+      {
+        input: 'minDay',
+        kind: 'number',
+        label: 'Minimum day (0 none)',
+        initial: 0,
+        min: 0,
+        max: 28,
+      },
+      {
+        input: 'maxDay',
+        kind: 'number',
+        label: 'Maximum day (0 none)',
+        initial: 0,
+        min: 0,
+        max: 28,
+      },
+      {
+        input: 'firstDayOfWeek',
+        kind: 'select',
+        label: 'Week starts',
+        initial: 1,
+        options: [
+          { label: 'Sunday', value: 0 },
+          { label: 'Monday', value: 1 },
+          { label: 'Saturday', value: 6 },
+        ],
+      },
+      {
+        input: 'locale',
+        kind: 'select',
+        label: 'Locale',
+        initial: 'en-US',
+        options: [
+          { label: 'English', value: 'en-US' },
+          { label: 'French', value: 'fr-FR' },
+          { label: 'Arabic', value: 'ar-EG' },
+        ],
+      },
+      bool('disabled', 'Disabled'),
+      bool('rtl', 'RTL'),
+    ],
+    outputs: [{ event: 'selection', label: 'Committed date' }],
+  },
+  'quartz-date-range-picker': {
+    component: DateRangePickerPlaygroundComponent,
+    title: 'DateRangePicker',
+    description:
+      'A real inline qzDateRangePicker. Start-only selection previews a range; blocked dates prevent crossing.',
+    controls: [
+      {
+        input: 'month',
+        kind: 'select',
+        label: 'Displayed month',
+        initial: '2024-02',
+        options: [
+          { label: 'February 2024', value: '2024-02' },
+          { label: 'March 2024', value: '2024-03' },
+          { label: 'December 2024', value: '2024-12' },
+        ],
+      },
+      {
+        input: 'startDay',
+        kind: 'number',
+        label: 'Start day (0 none)',
+        initial: 0,
+        min: 0,
+        max: 28,
+      },
+      { input: 'endDay', kind: 'number', label: 'End day (0 none)', initial: 0, min: 0, max: 28 },
+      {
+        input: 'minDay',
+        kind: 'number',
+        label: 'Minimum day (0 none)',
+        initial: 0,
+        min: 0,
+        max: 28,
+      },
+      {
+        input: 'maxDay',
+        kind: 'number',
+        label: 'Maximum day (0 none)',
+        initial: 0,
+        min: 0,
+        max: 28,
+      },
+      {
+        input: 'firstDayOfWeek',
+        kind: 'select',
+        label: 'Week starts',
+        initial: 1,
+        options: [
+          { label: 'Sunday', value: 0 },
+          { label: 'Monday', value: 1 },
+          { label: 'Saturday', value: 6 },
+        ],
+      },
+      {
+        input: 'locale',
+        kind: 'select',
+        label: 'Locale',
+        initial: 'en-US',
+        options: [
+          { label: 'English', value: 'en-US' },
+          { label: 'French', value: 'fr-FR' },
+          { label: 'Arabic', value: 'ar-EG' },
+        ],
+      },
+      bool('disabled', 'Disabled'),
+      bool('rtl', 'RTL'),
+    ],
+    outputs: [{ event: 'selection', label: 'Committed range' }],
   },
 };

@@ -3,7 +3,7 @@
 title: TabsOrientation
 description: Type alias reference for TabsOrientation.
 group: "API: Primitives"
-order: 1233
+order: 1246
 generated: doq-api
 category: type
 ---

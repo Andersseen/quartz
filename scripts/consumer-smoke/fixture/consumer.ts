@@ -19,6 +19,15 @@ import {
 } from '@quartz-headless/core';
 import {
   CheckboxDirective,
+  DatePickerDirective,
+  DateRangePickerDirective,
+  CalendarGridDirective,
+  CalendarRowDirective,
+  CalendarCellDirective,
+  CalendarDateButtonDirective,
+  CalendarMonthLabelDirective,
+  CalendarPreviousMonthDirective,
+  CalendarNextMonthDirective,
   ComboboxContentDirective,
   ComboboxDirective,
   ComboboxGroupDirective,
@@ -45,6 +54,7 @@ import {
   RangeSliderThumbDirective,
   RangeSliderTrackDirective,
   type RangeSliderValue,
+  type DateRange,
   SliderDirective,
   SliderThumbDirective,
   SliderTrackDirective,
@@ -479,3 +489,69 @@ class RangeToggleComponent {
 }
 
 void RangeToggleComponent;
+
+// 0.12 date controls and optional Forms adapters compile from installed package tarballs.
+@Component({
+  selector: 'app-consumer-smoke-dates',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    DatePickerDirective,
+    DateRangePickerDirective,
+    CalendarGridDirective,
+    CalendarRowDirective,
+    CalendarCellDirective,
+    CalendarDateButtonDirective,
+    CalendarMonthLabelDirective,
+    CalendarPreviousMonthDirective,
+    CalendarNextMonthDirective,
+    ...QUARTZ_FORMS,
+  ],
+  template: `
+    <form [formGroup]="form">
+      <section qzDatePicker [today]="today" formControlName="date" #single="qzDatePicker">
+        <h2 qzCalendarMonthLabel></h2>
+        <button qzCalendarPreviousMonth>Previous</button><button qzCalendarNextMonth>Next</button>
+        <div qzCalendarGrid>
+          <div qzCalendarRow>
+            @for (weekday of single.weekdays(); track $index) {
+              <div role="columnheader">{{ weekday }}</div>
+            }
+          </div>
+          @for (week of single.weeks(); track $index) {
+            <div qzCalendarRow>
+              @for (day of week; track day.date.getTime()) {
+                <div [qzCalendarCell]="day">
+                  <button [qzCalendarDateButton]="day">{{ day.day }}</button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+      <section qzDateRangePicker formControlName="range" #range="qzDateRangePicker">
+        <h2 qzCalendarMonthLabel></h2>
+        <div qzCalendarGrid>
+          @for (week of range.weeks(); track $index) {
+            <div qzCalendarRow>
+              @for (day of week; track day.date.getTime()) {
+                <div [qzCalendarCell]="day">
+                  <button [qzCalendarDateButton]="day">{{ day.day }}</button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    </form>
+  `,
+})
+class DateControlsComponent {
+  readonly today = new Date(2024, 1, 15, 12);
+  readonly form = new FormGroup({
+    date: new FormControl<Date | null>(null),
+    range: new FormControl<DateRange | null>({ start: null, end: null }),
+  });
+}
+
+void DateControlsComponent;

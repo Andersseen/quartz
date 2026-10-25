@@ -1,0 +1,48 @@
+<div class="qz-demo flex flex-col gap-5 rounded-xl border border-white/10 bg-[#0f1115] p-6">
+  <div
+    qzDateRangePicker
+    [(startDate)]="startDate"
+    [(endDate)]="endDate"
+    [today]="today"
+    [firstDayOfWeek]="1"
+    [dateDisabled]="disabledDay"
+    #calendar="qzDateRangePicker"
+    class="max-w-md"
+  >
+    <div class="mb-4 flex items-center justify-between">
+      <button qzCalendarPreviousMonth class="rounded border border-white/15 px-3 py-2">
+        Previous
+      </button>
+      <h3 qzCalendarMonthLabel class="font-semibold text-gray-100">Current month</h3>
+      <button qzCalendarNextMonth class="rounded border border-white/15 px-3 py-2">Next</button>
+    </div>
+    <div qzCalendarGrid class="flex flex-col gap-1 text-center text-sm text-gray-300">
+      <div qzCalendarRow class="grid grid-cols-7 gap-1">
+        @for (weekday of calendar.weekdays(); track $index) {
+          <div role="columnheader" class="py-2">{{ weekday }}</div>
+        }
+      </div>
+      @for (week of calendar.weeks(); track $index) {
+        <div qzCalendarRow class="grid grid-cols-7 gap-1">
+          @for (day of week; track day.date.getTime()) {
+            <div
+              [qzCalendarCell]="day"
+              class="rounded-md p-1 data-[qz-outside-month]:opacity-40 data-[qz-in-range]:bg-cyan-500/20 data-[qz-range-preview]:bg-cyan-500/10"
+            >
+              <button
+                [qzCalendarDateButton]="day"
+                class="size-9 rounded-md text-gray-100 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400 data-[qz-range-start]:bg-cyan-500 data-[qz-range-end]:bg-cyan-500 data-[qz-in-range]:text-cyan-100 data-[qz-disabled]:opacity-35"
+              >
+                {{ day.day }}
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <p class="text-sm text-gray-300">
+    Range: {{ startDate() ? (startDate() | date: 'mediumDate') : 'choose a start' }} →
+    {{ endDate() ? (endDate() | date: 'mediumDate') : 'choose an end' }}
+  </p>
+</div>

@@ -3,7 +3,7 @@
 title: TreeLoadChildrenFn
 description: Resolves the children of node.
 group: "API: Primitives"
-order: 1239
+order: 1252
 generated: doq-api
 category: type
 ---

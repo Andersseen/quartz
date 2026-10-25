@@ -3,7 +3,7 @@
 title: MenuCollectionEntry
 description: Interface reference for MenuCollectionEntry.
 group: "API: Primitives"
-order: 1186
+order: 1198
 generated: doq-api
 category: interface
 ---

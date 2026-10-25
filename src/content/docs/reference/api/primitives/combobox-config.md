@@ -3,7 +3,7 @@
 title: ComboboxConfig
 description: Interface reference for ComboboxConfig.
 group: "API: Primitives"
-order: 1182
+order: 1192
 generated: doq-api
 category: interface
 ---
