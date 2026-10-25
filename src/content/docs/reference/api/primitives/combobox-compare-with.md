@@ -3,7 +3,7 @@
 title: ComboboxCompareWith
 description: Type alias reference for ComboboxCompareWith.
 group: "API: Primitives"
-order: 1209
+order: 1221
 generated: doq-api
 category: type
 ---

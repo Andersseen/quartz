@@ -3,7 +3,7 @@
 title: ListboxSeparatorDirective
 description: "Decorative separator between options or groups; excluded from navigation."
 group: "API: Primitives"
-order: 1123
+order: 1132
 generated: doq-api
 category: directive
 ---

@@ -64,8 +64,8 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **12 of 46** rows are verified-equivalent as of 0.11.0 (Checkbox, RadioGroup, Switch,
-Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup). Quartz 0.11 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
+Reading the numbers: **14 of 46** rows are verified-equivalent as of 0.12.0 (Checkbox, RadioGroup, Switch,
+Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker). Quartz 0.12 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
 all have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
@@ -74,7 +74,7 @@ all have an owning milestone below.
 | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                            |
 | 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)                     |
-| 0.12 — Date and date-range interaction                                                                          | `date-picker` (M), `date-range-picker` (M)                                             |
+| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                             |
 | 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
 | 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (M), `form-field` (M), `input-otp` (M), `file-upload` (M)                   |
 | 0.15 — Feedback and value indicators (Progress, Meter, Avatar, Toast content API)                               | `avatar` (M), `progress` (M), `meter` (M), `toast` (P)                                 |
@@ -575,33 +575,35 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.10 (closed in 0.10.0)
 - **Acceptance tests needed:** Unit: IME composition does not filter mid-composition; stale response ignored; e2e typing/selection in 3 engines; Forms harness; axe.
 
-### `date-picker` — Missing (**M**)
+### `date-picker` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-date-picker`, `-label`, `-previous-month`, `-next-month`, `-grid`, `-cell`, `-date-button` (CVA); re-exports `NgpDatePickerCellRender`, `NgpDatePickerRowRender`, `injectDatePickerCellDate`, `injectDatePickerWeek`
 - **Behavioural dependency:** ng-primitives `date-picker` + `date-time`
 - **Observable headless contract required:** `grid` with roving day focus, arrows/PageUp/PageDown/Home/End, min/max, disabled dates, first day of week, month label live region, selected/today/outside-month states, locale-aware names, Forms `Date`.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
-- **Accessibility:** APG date-picker grid: `aria-label` per cell, `aria-selected`, month change announced, focus preserved across month navigation.
-- **Forms:** `Date | null`; writeValue silent; one onChange per selection; touched; disabled; reset → `null`.
-- **Angular / SSR:** Locale formatting must match between server and client (hydration).
-- **Remaining work:** Calendar grid primitive with a date-adapter boundary (no date library dependency).
+- **Quartz equivalent:** `DatePickerDirective`, shared `CalendarGridDirective`/`CalendarCellDirective`/`CalendarDateButtonDirective`, locale labels and the optional `DatePickerControlDirective`.
+- **Current evidence:** `date-picker.directive.spec.ts` covers local date arithmetic, leap/year bounds, grid semantics, selection, min/max, disabled dates, RTL and silent programmatic updates. `forms.date-picker.spec.ts` covers Forms contracts. `e2e/date-picker.spec.ts` passes in Chromium, Firefox and WebKit, including keyboard navigation, RTL, locale changes, custom accessible naming and disabled dates. Axe passes on both grids; `pnpm verify:consumer` passes against packed tarballs with strict AOT.
+- **Accessibility:** Grid and row semantics, selected/disabled state, localized full-date names with a consumer callback override, month live announcement and focus preservation across month navigation.
+- **Forms:** `Date | null`; silent writes, one change per user commit, touched when focus leaves, disabled state and reset to `null` are verified.
+- **Angular / SSR:** The model is a local civil date. Server and client must share a timezone, stable `today` and compatible locale data; cross-cutting hydration proof remains in 0.17.
+- **Known differences:** Quartz exports standalone behavior directives and leaves markup to consumers. It supports native `Date` only and does not expose Volt's native-date adapter or rendering-context helpers.
+- **Remaining work:** None for the 0.12 contract.
 - **Owning milestone:** 0.12
-- **Acceptance tests needed:** Unit: navigation incl. month/year boundaries and disabled dates; e2e keyboard and RTL; locale formatting SSR; Forms harness; axe.
+- **Acceptance evidence:** Unit: month/year navigation and disabled dates; E2E: keyboard, RTL, locale and disabled dates across three engines; Forms harness; axe; installed-tarball AOT.
 
-### `date-range-picker` — Missing (**M**)
+### `date-range-picker` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-date-range-picker` (same barrel as date-picker)
 - **Behavioural dependency:** ng-primitives `date-picker` (range) + `date-time`
 - **Observable headless contract required:** Start/end selection with hover preview, ordered range, min/max, same grid semantics, `startDate`/`endDate` models.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
-- **Accessibility:** Range endpoints and in-range cells exposed; selection step announced.
-- **Forms:** `{start, end}`; partial range (start only) is a valid transient state — define validity ownership.
-- **Angular / SSR:** As date-picker.
-- **Remaining work:** Range mode on the calendar primitive.
+- **Quartz equivalent:** `DateRangePickerDirective` uses the same calendar grid and publishes start-only and normalized complete `{ start, end }` ranges; preview and disabled-span handling are implemented.
+- **Current evidence:** `date-picker.directive.spec.ts` covers partial values, reverse normalization, preview and disabled-span rejection. `forms.date-picker.spec.ts` covers the range adapter. `e2e/date-picker.spec.ts` verifies keyboard selection including a one-day range, pointer preview, disabled-span rejection and Forms write/reset/disable in Chromium, Firefox and WebKit. Axe passes on the range grid; `pnpm verify:consumer` passes strict AOT with the Forms adapter.
+- **Accessibility:** Start/end, selected and in-range states are exposed through ARIA and data attributes; month changes announce through the shared live label.
+- **Forms:** `{ start, end } | null`; a partial `{ start, end: null }` value is emitted after selecting a start. Quartz does not assign form validity; consumers own validation policy.
+- **Angular / SSR:** Same local civil date, timezone and locale constraints as DatePicker.
+- **Known differences:** Quartz uses one ordered range object and consumer-owned markup; Volt exposes separate `startDate` and `endDate` models and ng-primitives render contexts.
+- **Remaining work:** None for the 0.12 contract.
 - **Owning milestone:** 0.12
-- **Acceptance tests needed:** Unit: reversed selection, single-day range, preview; e2e keyboard range selection; Forms harness.
+- **Acceptance evidence:** Unit: reverse selection, partial state, preview and disabled spans; E2E: keyboard, one-day range, pointer preview and Forms in three engines; axe; installed-tarball AOT.
 
 ### `listbox` — Implemented and verified (**V**)
 

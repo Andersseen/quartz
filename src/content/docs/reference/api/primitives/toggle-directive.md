@@ -3,7 +3,7 @@
 title: ToggleDirective
 description: "Directive reference for ToggleDirective with the selector button[qzToggle]."
 group: "API: Primitives"
-order: 1169
+order: 1178
 generated: doq-api
 category: directive
 ---

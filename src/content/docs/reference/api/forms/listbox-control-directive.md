@@ -3,7 +3,7 @@
 title: ListboxControlDirective
 description: "Angular Forms adapter for [qzListbox]."
 group: "API: Forms"
-order: 1503
+order: 1505
 generated: doq-api
 category: directive
 ---

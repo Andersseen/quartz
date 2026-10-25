@@ -3,7 +3,7 @@
 title: RangeSliderDirective
 description: Two-thumb slider root.
 group: "API: Primitives"
-order: 1138
+order: 1147
 generated: doq-api
 category: directive
 ---

@@ -17,6 +17,30 @@
   "AccordionType": {
     "kind": "type"
   },
+  "CalendarCellDirective": {
+    "kind": "class"
+  },
+  "CalendarDateButtonDirective": {
+    "kind": "class"
+  },
+  "CalendarDay": {
+    "kind": "interface"
+  },
+  "CalendarGridDirective": {
+    "kind": "class"
+  },
+  "CalendarMonthLabelDirective": {
+    "kind": "class"
+  },
+  "CalendarNextMonthDirective": {
+    "kind": "class"
+  },
+  "CalendarPreviousMonthDirective": {
+    "kind": "class"
+  },
+  "CalendarRowDirective": {
+    "kind": "class"
+  },
   "CheckboxDirective": {
     "kind": "class"
   },
@@ -75,10 +99,28 @@
     "kind": "function",
     "signatures": ["(): LatestRequest"]
   },
+  "DateDisabled": {
+    "kind": "type"
+  },
+  "DatePickerConfig": {
+    "kind": "interface"
+  },
+  "DatePickerDirective": {
+    "kind": "class"
+  },
+  "DateRange": {
+    "kind": "interface"
+  },
+  "DateRangePickerDirective": {
+    "kind": "class"
+  },
   "DEFAULT_ACCORDION_CONFIG": {
     "kind": "const"
   },
   "DEFAULT_COMBOBOX_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_DATE_PICKER_CONFIG": {
     "kind": "const"
   },
   "DEFAULT_DIALOG_CONFIG": {

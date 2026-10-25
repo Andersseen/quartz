@@ -3,7 +3,7 @@
 title: DEFAULT_RANGE_SLIDER_CONFIG
 description: Constant reference for DEFAULT_RANGE_SLIDER_CONFIG.
 group: "API: Primitives"
-order: 1249
+order: 1263
 generated: doq-api
 category: constant
 ---

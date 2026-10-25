@@ -1,5 +1,20 @@
 # STATE — Current Project Status
 
+## 0.12.0 Date & Date Range — 2026-10-25
+
+Branch `feat/quartz-0.12-date-range`, starting at `af0488b939e60ee6e0bdba4460229a39198dbd7a`.
+Implemented shared local-civil-date calendar behavior, DatePicker, DateRangePicker, optional Forms adapters,
+CLI entries, Doqs pages, live demos and playgrounds. Validation: 612 unit tests and coverage pass; typecheck,
+lint and format pass; library and demo builds pass; API snapshot and docs checks pass; installed-tarball
+strict Angular AOT passes; the 21-execution date E2E suite passes in Chromium, Firefox and WebKit with axe.
+The full E2E run passed 634/636; the two Firefox docs-route timeouts passed focused reruns on both the
+feature branch and unchanged baseline, indicating intermittent docs-route timing. PR #42 is open;
+0.11 publication is the merge/release gate.
+
+Release gate: `main` run 40124305295 failed its E2E job; deploy and publish jobs were skipped. A retry of that
+job is running through Actions. Both scoped 0.11.0 package versions returned npm 404 and GitHub Release
+`v0.11.0` was absent at verification. Do not report a 0.12 release until the 0.11 prerequisite is resolved.
+
 ## 0.11.0 Range & toggle controls — 2026-10-24
 
 Branch `feat/quartz-0.11-range-toggle-controls` (baseline `main` @ `820bcf8`, 0.10.0). Delivers RangeSlider
@@ -9,7 +24,8 @@ Branch `feat/quartz-0.11-range-toggle-controls` (baseline `main` @ `820bcf8`, 0.
 `range-slider`, `toggle`, `toggle-group` → V (12/46 V). Evidence, differences from Volt and limitations:
 [0.11 acceptance](../releases/0.11-acceptance.md). Packages are `0.11.0`.
 
-Open follow-ups: 0.12 date & date range; manual screen-reader review; real SSR/hydration matrix (0.17).
+Open follow-ups: resolve/release 0.11, then merge and verify PR #42/release; manual screen-reader review;
+real SSR/hydration matrix (0.17).
 
 ## 0.10.0 Advanced selection + Doqs documentation — 2026-10-24
 

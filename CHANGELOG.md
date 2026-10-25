@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] — 2026-10-25
+
+Release target: `@quartz-headless/core@0.12.0` and `@quartz-headless/primitives@0.12.0`. Adds the
+local-civil-date calendar foundation, DatePicker and DateRangePicker, optional Forms adapters,
+Doqs documentation and live examples. Evidence: `docs/releases/0.12-acceptance.md`.
+
+### Added
+
+- **Calendar:** shared month grid, locale-aware labels, keyboard focus, min/max and disabled-date constraints.
+- **DatePicker:** controlled `Date | null` selection with keyboard, pointer, RTL and Forms behavior.
+- **DateRangePicker:** partial and complete `{ start, end }` selection, reverse normalization and blocked-span validation.
+- **Forms:** `DatePickerControlDirective` and `DateRangePickerControlDirective` in `QUARTZ_FORMS`.
+- **Documentation:** DatePicker/DateRangePicker pages, real demos and interactive playgrounds.
+
 ## [0.11.0] — 2026-10-24
 
 Release target: `@quartz-headless/core@0.11.0` and `@quartz-headless/primitives@0.11.0`. Range and toggle

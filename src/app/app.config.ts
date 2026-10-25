@@ -32,7 +32,17 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    provideFileRouter(withExtraRoutes(doqRoutes(doqConfig))),
+    provideFileRouter(
+      withExtraRoutes([
+        ...doqRoutes(doqConfig),
+        // This fixture occasionally misses Analog's file-route scan until the next cold build.
+        {
+          path: 'e2e-calendar',
+          loadComponent: () =>
+            import('./pages/e2e-calendar.page').then((module) => module.E2eCalendarPage),
+        },
+      ]),
+    ),
     provideContent(withMarkdownRenderer()),
     provideDoq(doqConfig),
     provideHttpClient(withInterceptors([requestContextInterceptor])),

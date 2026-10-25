@@ -1,0 +1,127 @@
+<form
+  [formGroup]="form"
+  class="qz-demo flex flex-col gap-8 rounded-xl border border-white/10 bg-[#0f1115] p-6"
+>
+  <section>
+    <h3 class="mb-3 font-semibold text-gray-100">Single date</h3>
+    <div qzDatePicker formControlName="date" [today]="today" #single="qzDatePicker">
+      <div class="mb-3 flex items-center justify-between">
+        <button
+          qzCalendarPreviousMonth
+          aria-label="Previous month"
+          class="rounded border border-white/15 px-3 py-2"
+        >
+          Previous
+        </button>
+        <h4 qzCalendarMonthLabel class="font-medium text-gray-100">Current month</h4>
+        <button
+          qzCalendarNextMonth
+          aria-label="Next month"
+          class="rounded border border-white/15 px-3 py-2"
+        >
+          Next
+        </button>
+      </div>
+      <div qzCalendarGrid class="flex flex-col gap-1 text-center text-gray-300">
+        <div qzCalendarRow class="grid grid-cols-7">
+          @for (weekday of weekdays; track $index) {
+            <div role="columnheader">{{ weekday }}</div>
+          }
+        </div>
+        @for (week of single.weeks(); track $index) {
+          <div qzCalendarRow class="grid grid-cols-7">
+            @for (day of week; track day.date.getTime()) {
+              <div [qzCalendarCell]="day">
+                <button
+                  [qzCalendarDateButton]="day"
+                  class="size-9 rounded text-gray-100 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400 data-[qz-selected]:bg-cyan-500"
+                >
+                  {{ day.day }}
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    <p class="mt-2 text-sm text-gray-300">
+      Form value: {{ form.controls.date.value | date: 'longDate' }}
+    </p>
+  </section>
+
+  <section>
+    <h3 class="mb-3 font-semibold text-gray-100">Date range</h3>
+    <div qzDateRangePicker formControlName="range" [today]="today" #range="qzDateRangePicker">
+      <div class="mb-3 flex items-center justify-between">
+        <button
+          qzCalendarPreviousMonth
+          aria-label="Previous month"
+          class="rounded border border-white/15 px-3 py-2"
+        >
+          Previous
+        </button>
+        <h4 qzCalendarMonthLabel class="font-medium text-gray-100">Current month</h4>
+        <button
+          qzCalendarNextMonth
+          aria-label="Next month"
+          class="rounded border border-white/15 px-3 py-2"
+        >
+          Next
+        </button>
+      </div>
+      <div qzCalendarGrid class="flex flex-col gap-1 text-center text-gray-300">
+        <div qzCalendarRow class="grid grid-cols-7">
+          @for (weekday of weekdays; track $index) {
+            <div role="columnheader">{{ weekday }}</div>
+          }
+        </div>
+        @for (week of range.weeks(); track $index) {
+          <div qzCalendarRow class="grid grid-cols-7">
+            @for (day of week; track day.date.getTime()) {
+              <div [qzCalendarCell]="day">
+                <button
+                  [qzCalendarDateButton]="day"
+                  class="size-9 rounded text-gray-100 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400 data-[qz-selected]:bg-cyan-500 data-[qz-in-range]:bg-cyan-500/20"
+                >
+                  {{ day.day }}
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+    <p class="mt-2 text-sm text-gray-300">
+      Range: {{ form.controls.range.value?.start | date: 'mediumDate' }} –
+      {{
+        form.controls.range.value?.end
+          ? (form.controls.range.value?.end | date: 'mediumDate')
+          : 'choose an end date'
+      }}
+    </p>
+  </section>
+
+  <div class="flex gap-3">
+    <button
+      type="button"
+      (click)="form.reset()"
+      class="rounded border border-white/15 px-3 py-2 text-gray-100"
+    >
+      Reset
+    </button>
+    <button
+      type="button"
+      (click)="form.disable()"
+      class="rounded border border-white/15 px-3 py-2 text-gray-100"
+    >
+      Disable
+    </button>
+    <button
+      type="button"
+      (click)="form.enable()"
+      class="rounded border border-white/15 px-3 py-2 text-gray-100"
+    >
+      Enable
+    </button>
+  </div>
+</form>

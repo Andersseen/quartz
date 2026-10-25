@@ -3,7 +3,7 @@
 title: createLatestRequest
 description: Stale-response guard for consumer-owned searches.
 group: "API: Primitives"
-order: 1179
+order: 1188
 generated: doq-api
 category: function
 ---

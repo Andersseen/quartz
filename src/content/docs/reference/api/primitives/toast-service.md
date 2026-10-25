@@ -3,7 +3,7 @@
 title: ToastService
 description: Service reference for ToastService.
 group: "API: Primitives"
-order: 1176
+order: 1185
 generated: doq-api
 category: service
 ---

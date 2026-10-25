@@ -3,7 +3,7 @@
 title: CheckboxDirective
 description: "Directive reference for CheckboxDirective with the selector button[qzCheckbox]."
 group: "API: Primitives"
-order: 1109
+order: 1116
 generated: doq-api
 category: directive
 ---

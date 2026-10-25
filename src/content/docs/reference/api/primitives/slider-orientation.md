@@ -3,7 +3,7 @@
 title: SliderOrientation
 description: Type alias reference for SliderOrientation.
 group: "API: Primitives"
-order: 1228
+order: 1241
 generated: doq-api
 category: type
 ---

@@ -3,7 +3,7 @@
 title: DEFAULT_POPOVER_CONFIG
 description: Constant reference for DEFAULT_POPOVER_CONFIG.
 group: "API: Primitives"
-order: 1247
+order: 1261
 generated: doq-api
 category: constant
 ---

@@ -3,7 +3,7 @@
 title: TooltipPlacement
 description: Type alias reference for TooltipPlacement.
 group: "API: Primitives"
-order: 1238
+order: 1251
 generated: doq-api
 category: type
 ---

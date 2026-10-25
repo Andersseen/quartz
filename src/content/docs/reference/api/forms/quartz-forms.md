@@ -3,7 +3,7 @@
 title: QUARTZ_FORMS
 description: "Import this in a standalone component's imports to enable Forms on every Quartz control."
 group: "API: Forms"
-order: 1511
+order: 1513
 generated: doq-api
 category: constant
 ---
@@ -13,7 +13,7 @@ category: constant
 Import this in a standalone component's `imports` to enable Forms on every Quartz control.
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/forms/src/public-api.ts:24](https://github.com/Andersseen/quartz/blob/main/packages/primitives/forms/src/public-api.ts#L24)
+- **Source:** [packages/primitives/forms/src/public-api.ts:28](https://github.com/Andersseen/quartz/blob/main/packages/primitives/forms/src/public-api.ts#L28)
 
 ## Type
 
