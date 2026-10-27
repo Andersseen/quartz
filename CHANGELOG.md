@@ -11,9 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial 0.14 FormField, InputOTP, autofill and native file selection/dropzone APIs, optional Forms integration, CLI registration and Doqs documentation. Acceptance and release checks are still in progress; see `docs/releases/0.14-acceptance.md`.
 
-## [0.13.0] — post-merge release verification pending
+## [0.13.0] — post-merge E2E failed; release pending
 
-Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. PR #43 merged the 0.13 implementation, but its merge workflow published that source under 0.12.0. PR #44 merged the version correction; post-merge workflow `40526751145` is running to publish and verify 0.13.0 before 0.14 can proceed.
+Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. PR #43 merged the 0.13 implementation, but its merge workflow published that source under 0.12.0. PR #44 merged the version correction, but post-merge workflow `40526751145` failed E2E, so npm publication, Pages deployment and GitHub release were skipped. Resolve that gate before 0.14 can proceed.
 
 ### Added
 
