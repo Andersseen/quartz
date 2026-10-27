@@ -1,7 +1,7 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado actual: **0.11 está integrado, pero su workflow falló y npm no muestra 0.11.0; 0.12 fecha y rango está implementado y validado localmente, pendiente del PR y del gate de release de 0.11**.
-> Fecha: 2026-10-23. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
+> Estado actualizado 2026-10-27: el reintento de 0.12 en el workflow `40223989422` sigue ejecutando E2E; npm no muestra ambos paquetes 0.12.0 y `v0.12.0` no existe todavía. La rama 0.13 está en implementación; no versionar ni integrar hasta cerrar el gate 0.12.
+> Estado histórico al redactar: 0.11 integrado pero pendiente de release; 0.12 implementado y validado localmente. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
 > ([inventario](../api/volt-parity.md)); por eso hay siete minors de paridad (0.10–0.16) antes de consumo (0.17) y congelación (0.18). Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).
 

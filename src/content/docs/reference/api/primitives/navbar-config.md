@@ -3,7 +3,7 @@
 title: NavbarConfig
 description: Interface reference for NavbarConfig.
 group: "API: Primitives"
-order: 1200
+order: 1214
 generated: doq-api
 category: interface
 ---

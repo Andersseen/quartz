@@ -3,7 +3,7 @@
 title: PopoverDirective
 description: "Directive reference for PopoverDirective with the selector [qzPopover]."
 group: "API: Primitives"
-order: 1143
+order: 1155
 generated: doq-api
 category: directive
 ---

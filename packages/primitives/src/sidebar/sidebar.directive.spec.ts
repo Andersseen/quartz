@@ -28,10 +28,13 @@ const SIDEBAR_IMPORTS = [
       [side]="side()"
       [breakpoint]="768"
       [autoCloseOnMobile]="false"
+      [focusMode]="focusMode()"
+      [scrollLock]="scrollLock()"
       [attr.dir]="dir()"
     >
       <aside qzSidebarPanel aria-label="App navigation">
         <button>First link</button>
+        <button>Second link</button>
       </aside>
       <main qzSidebarContent>
         <button qzSidebarTrigger>Toggle</button>
@@ -46,6 +49,8 @@ class SidebarHost {
   readonly mode = signal<'push' | 'overlay' | null>('push');
   readonly side = signal<'inline-start' | 'inline-end'>('inline-start');
   readonly dir = signal<'ltr' | 'rtl'>('ltr');
+  readonly focusMode = signal<'none' | 'initial' | 'trap'>('none');
+  readonly scrollLock = signal(true);
 }
 
 describe('Sidebar', () => {
@@ -94,5 +99,54 @@ describe('Sidebar', () => {
     fireEvent.pointerDown(document.body);
     fixture.detectChanges();
     expect(fixture.componentInstance.open()).toBe(false);
+  });
+
+  it('restores focus after Escape and keeps scroll lock for the overlay lifetime', async () => {
+    const { fixture } = await render(SidebarHost);
+    const host = fixture.componentInstance;
+    host.open.set(false);
+    host.mode.set('overlay');
+    fixture.detectChanges();
+    const trigger = screen.getByRole('button', { name: 'Toggle' });
+    trigger.focus();
+    fireEvent.click(trigger);
+    fixture.detectChanges();
+
+    expect(document.body.style.overflow).toBe('hidden');
+    fireEvent.keyDown(document, { key: 'Escape' });
+    fixture.detectChanges();
+    expect(host.open()).toBe(false);
+    expect(document.body.style.overflow).toBe('');
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('traps focus only when configured and separates collapsed rail from closed drawer', async () => {
+    const { fixture } = await render(SidebarHost);
+    const host = fixture.componentInstance;
+    host.mode.set('overlay');
+    host.focusMode.set('trap');
+    fixture.detectChanges();
+    const panel = screen.getByLabelText('App navigation');
+    const first = screen.getByRole('button', { name: 'First link' });
+    const second = screen.getByRole('button', { name: 'Second link' });
+    second.focus();
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    panel.dispatchEvent(tab);
+    expect(tab.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(first);
+
+    host.collapsed.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[data-qz-sidebar]')).toHaveAttribute(
+      'data-qz-state',
+      'collapsed',
+    );
+    host.open.set(false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[data-qz-sidebar]')).toHaveAttribute(
+      'data-qz-state',
+      'closed',
+    );
+    expect(host.collapsed()).toBe(true);
   });
 });

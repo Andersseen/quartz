@@ -25,6 +25,7 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly accordion = inject(AccordionDirective<T>);
   private triggerElement: HTMLElement | null = null;
+  hasFocus = false;
 
   readonly value = input.required<T>({ alias: 'qzAccordionItem' });
   readonly disabled = input(false, {
@@ -34,7 +35,7 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
 
   readonly id = `qz-accordion-trigger-${++accordionItemId}`;
   readonly panelId = `qz-accordion-panel-${accordionItemId}`;
-  readonly itemDisabled = computed(() => this.disabled());
+  readonly itemDisabled = computed(() => this.accordion.disabled() || this.disabled());
   readonly open = computed(() => this.accordion.isOpen(this));
   readonly element = () => this.triggerElement ?? this.host.nativeElement;
   readonly label = () => this.triggerElement?.textContent?.trim() ?? '';
@@ -52,6 +53,10 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
     if (element) this.accordion.refreshItems();
   }
 
+  setFocused(focused: boolean): void {
+    this.hasFocus = focused;
+  }
+
   activeTabIndex(): 0 | -1 {
     return this.accordion.activeTabIndex(this.id);
   }
@@ -65,15 +70,11 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
   }
 
   handleKeydown(event: KeyboardEvent): void {
-    if (
-      event.key === 'ArrowDown' ||
-      event.key === 'ArrowUp' ||
-      event.key === 'Home' ||
-      event.key === 'End'
-    ) {
-      this.setActive();
-    }
     this.accordion.handleTriggerKeydown(this, event);
+  }
+
+  requiredOpen(): boolean {
+    return this.accordion.isRequiredOpen(this);
   }
 
   useRegion(): boolean {

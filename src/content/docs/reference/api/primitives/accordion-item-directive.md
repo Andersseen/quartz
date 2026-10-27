@@ -31,6 +31,7 @@ category: directive
 
 | Name | Type | Description |
 | --- | --- | --- |
+| `hasFocus` | `boolean` |  |
 | `readonly id` | `string` |  |
 | `readonly panelId` | `string` |  |
 | `readonly itemDisabled` | `Signal<boolean>` |  |
@@ -49,6 +50,16 @@ setTriggerElement(element: HTMLElement | null): void
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `element` | `HTMLElement \| null` |  |  |
+
+### setFocused
+
+```ts
+setFocused(focused: boolean): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `focused` | `boolean` |  |  |
 
 ### activeTabIndex
 
@@ -81,6 +92,12 @@ handleKeydown(event: KeyboardEvent): void
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `event` | `KeyboardEvent` |  |  |
+
+### requiredOpen
+
+```ts
+requiredOpen(): boolean
+```
 
 ### useRegion
 

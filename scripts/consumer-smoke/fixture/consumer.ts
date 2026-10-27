@@ -18,6 +18,10 @@ import {
   type DismissReason,
 } from '@quartz-headless/core';
 import {
+  AccordionDirective,
+  AccordionItemDirective,
+  AccordionPanelDirective,
+  AccordionTriggerDirective,
   CheckboxDirective,
   DatePickerDirective,
   DateRangePickerDirective,
@@ -47,6 +51,18 @@ import {
   MenuDirective,
   MenuItemDirective,
   MenuTriggerDirective,
+  NavigationMenuContentDirective,
+  NavigationMenuDirective,
+  NavigationMenuItemDirective,
+  NavigationMenuLinkDirective,
+  NavigationMenuListDirective,
+  NavigationMenuTriggerDirective,
+  PaginationDirective,
+  PaginationFirstDirective,
+  PaginationLastDirective,
+  PaginationNextDirective,
+  PaginationPageDirective,
+  PaginationPreviousDirective,
   PopoverDirective,
   PopoverTriggerDirective,
   RangeSliderDirective,
@@ -74,6 +90,12 @@ import {
   SelectOptionDirective,
   SelectTriggerDirective,
   SwitchDirective,
+  SidebarContentDirective,
+  SidebarDirective,
+  SidebarPanelDirective,
+  SidebarTriggerDirective,
+  ToolbarDirective,
+  ToolbarItemDirective,
 } from '@quartz-headless/primitives';
 import { QUARTZ_FORMS } from '@quartz-headless/primitives/forms';
 
@@ -555,3 +577,81 @@ class DateControlsComponent {
 }
 
 void DateControlsComponent;
+
+// Quartz 0.13 navigation and roving-focus public imports compiled from external tarballs.
+@Component({
+  selector: 'app-consumer-smoke-navigation',
+  standalone: true,
+  imports: [
+    ToolbarDirective,
+    ToolbarItemDirective,
+    NavigationMenuDirective,
+    NavigationMenuListDirective,
+    NavigationMenuItemDirective,
+    NavigationMenuTriggerDirective,
+    NavigationMenuContentDirective,
+    NavigationMenuLinkDirective,
+    PaginationDirective,
+    PaginationFirstDirective,
+    PaginationPreviousDirective,
+    PaginationNextDirective,
+    PaginationLastDirective,
+    PaginationPageDirective,
+    AccordionDirective,
+    AccordionItemDirective,
+    AccordionTriggerDirective,
+    AccordionPanelDirective,
+    SidebarDirective,
+    SidebarPanelDirective,
+    SidebarContentDirective,
+    SidebarTriggerDirective,
+  ],
+  template: `
+    <div qzToolbar aria-label="Formatting" orientation="horizontal">
+      <button qzToolbarItem>Bold</button
+      ><button qzToolbarItem [qzToolbarItemDisabled]="locked">Link</button>
+    </div>
+    <nav qzNavigationMenu aria-label="Primary" [(value)]="openSection">
+      <ul qzNavigationMenuList>
+        <li qzNavigationMenuItem="products">
+          <button qzNavigationMenuTrigger>Products</button>
+          <ng-template qzNavigationMenuContent
+            ><a qzNavigationMenuLink href="/products">Browse</a></ng-template
+          >
+        </li>
+      </ul>
+    </nav>
+    <nav qzPagination aria-label="Results" [(page)]="page" [pageCount]="pageCount">
+      <button qzPaginationFirst>First</button><button qzPaginationPrevious>Previous</button>
+      <button [qzPaginationPage]="1">1</button>
+      <button qzPaginationNext>Next</button><button qzPaginationLast>Last</button>
+    </nav>
+    <div qzAccordion [(value)]="section" orientation="horizontal">
+      <section qzAccordionItem="account">
+        <button qzAccordionTrigger>Account</button>
+        <div qzAccordionPanel>Settings</div>
+      </section>
+    </div>
+    <div
+      qzSidebar
+      [(open)]="sidebarOpen"
+      [(collapsed)]="sidebarCollapsed"
+      mode="push"
+      side="inline-start"
+    >
+      <aside qzSidebarPanel><button qzSidebarTrigger>Toggle</button></aside>
+      <main qzSidebarContent>Content</main>
+    </div>
+  `,
+})
+class NavigationControlsComponent {
+  locked = false;
+  openSection = '';
+  page = 1;
+  pageCount = 3;
+  section: string | string[] | null = 'account';
+  sidebarOpen = true;
+  sidebarCollapsed = false;
+}
+
+void NavigationControlsComponent;

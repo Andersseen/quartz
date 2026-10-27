@@ -119,6 +119,23 @@ test.describe('modal isolation', () => {
   });
 });
 
+test.describe('NavigationMenu composition', () => {
+  test('a flyout inside Dialog is the Escape owner and restores focus without closing the Dialog', async ({
+    page,
+  }) => {
+    await activate(page, '#open-x');
+    await expect(page.locator('#x-content')).toBeVisible();
+    await activate(page, '#x-navigation-trigger');
+    await expect(page.locator('#x-navigation-link')).toBeVisible();
+    expect(await inInert(page, '#x-navigation-link')).toBe(false);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#x-navigation-link')).toHaveCount(0);
+    await expect(page.locator('#x-content')).toBeVisible();
+    await expect(page.locator('#x-navigation-trigger')).toBeFocused();
+  });
+});
+
 test.describe('Dialog → floating surface', () => {
   test.beforeEach(async ({ page }) => {
     await activate(page, '#open-x');

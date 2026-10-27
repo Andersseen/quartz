@@ -3,7 +3,7 @@
 title: ToastType
 description: Type alias reference for ToastType.
 group: "API: Primitives"
-order: 1248
+order: 1267
 generated: doq-api
 category: type
 ---

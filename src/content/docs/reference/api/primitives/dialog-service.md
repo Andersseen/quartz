@@ -3,7 +3,7 @@
 title: DialogService
 description: Service reference for DialogService.
 group: "API: Primitives"
-order: 1182
+order: 1196
 generated: doq-api
 category: service
 ---

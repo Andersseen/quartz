@@ -3,7 +3,7 @@
 title: DEFAULT_DATE_PICKER_CONFIG
 description: Constant reference for DEFAULT_DATE_PICKER_CONFIG.
 group: "API: Primitives"
-order: 1256
+order: 1276
 generated: doq-api
 category: constant
 ---

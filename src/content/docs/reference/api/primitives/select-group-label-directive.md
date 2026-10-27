@@ -3,7 +3,7 @@
 title: SelectGroupLabelDirective
 description: Visible label of a qzSelectGroup.
 group: "API: Primitives"
-order: 1154
+order: 1166
 generated: doq-api
 category: directive
 ---

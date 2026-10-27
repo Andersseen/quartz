@@ -3,7 +3,7 @@
 title: ComboboxDisplayWith
 description: Type alias reference for ComboboxDisplayWith.
 group: "API: Primitives"
-order: 1222
+order: 1240
 generated: doq-api
 category: type
 ---

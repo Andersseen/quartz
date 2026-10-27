@@ -12,6 +12,11 @@ import {
   MenuDirective,
   MenuItemDirective,
   MenuTriggerDirective,
+  NavigationMenuContentDirective,
+  NavigationMenuDirective,
+  NavigationMenuItemDirective,
+  NavigationMenuLinkDirective,
+  NavigationMenuTriggerDirective,
   PopoverDirective,
   PopoverTriggerDirective,
   SelectContentDirective,
@@ -37,6 +42,11 @@ import {
     MenuDirective,
     MenuItemDirective,
     MenuTriggerDirective,
+    NavigationMenuDirective,
+    NavigationMenuItemDirective,
+    NavigationMenuTriggerDirective,
+    NavigationMenuContentDirective,
+    NavigationMenuLinkDirective,
     PopoverDirective,
     PopoverTriggerDirective,
     SelectContentDirective,
@@ -125,6 +135,18 @@ import {
       <div id="x-content" style="background: white; padding: 16px">
         <h2 [id]="labelledBy">Dialog X</h2>
         <input id="x-first" type="text" aria-label="X first" />
+        <nav qzNavigationMenu aria-label="Dialog site navigation">
+          <ul>
+            <li qzNavigationMenuItem="inside">
+              <button id="x-navigation-trigger" qzNavigationMenuTrigger>Navigation</button>
+              <ng-template qzNavigationMenuContent>
+                <div>
+                  <a id="x-navigation-link" href="#inside" qzNavigationMenuLink>Inside link</a>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </nav>
         <button id="x-menu-trigger" type="button" qzMenuTrigger [menu]="xMenu">Menu</button>
         <button id="x-pop-trigger" type="button" qzPopoverTrigger [popover]="xPop">Popover</button>
         <div qzSelect #sel="qzSelect" [(value)]="selected">

@@ -3,7 +3,7 @@
 title: SelectContentDirective
 description: "Directive reference for SelectContentDirective with the selector ng-template[qzSelectContent]."
 group: "API: Primitives"
-order: 1151
+order: 1163
 generated: doq-api
 category: directive
 ---

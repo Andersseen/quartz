@@ -3,7 +3,7 @@
 title: SelectCloseReason
 description: Type alias reference for SelectCloseReason.
 group: "API: Primitives"
-order: 1234
+order: 1253
 generated: doq-api
 category: type
 ---

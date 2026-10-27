@@ -3,7 +3,7 @@
 title: DEFAULT_ACCORDION_CONFIG
 description: Constant reference for DEFAULT_ACCORDION_CONFIG.
 group: "API: Primitives"
-order: 1254
+order: 1274
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/accordion/accordion.types.ts:10](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.types.ts#L10)
+- **Source:** [packages/primitives/src/accordion/accordion.types.ts:12](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.types.ts#L12)
 
 ## Type
 

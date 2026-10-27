@@ -3,7 +3,7 @@
 title: RadioGroupConfig
 description: Interface reference for RadioGroupConfig.
 group: "API: Primitives"
-order: 1202
+order: 1218
 generated: doq-api
 category: interface
 ---

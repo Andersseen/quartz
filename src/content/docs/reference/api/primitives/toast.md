@@ -3,7 +3,7 @@
 title: Toast
 description: Interface reference for Toast.
 group: "API: Primitives"
-order: 1210
+order: 1226
 generated: doq-api
 category: interface
 ---

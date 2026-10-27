@@ -3,7 +3,7 @@
 title: ComboboxOpenReason
 description: Type alias reference for ComboboxOpenReason.
 group: "API: Primitives"
-order: 1224
+order: 1242
 generated: doq-api
 category: type
 ---

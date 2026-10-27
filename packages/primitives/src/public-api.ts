@@ -115,6 +115,34 @@ export {
 } from './tabs';
 export type { TabsActivationMode, TabsConfig, TabsOrientation } from './tabs';
 
+// Toolbar
+export { ToolbarDirective, ToolbarItemDirective, DEFAULT_TOOLBAR_CONFIG } from './toolbar';
+export type { ToolbarConfig, ToolbarOrientation } from './toolbar';
+
+// Pagination
+export {
+  PaginationDirective,
+  PaginationFirstDirective,
+  PaginationPreviousDirective,
+  PaginationNextDirective,
+  PaginationLastDirective,
+  PaginationPageDirective,
+  DEFAULT_PAGINATION_CONFIG,
+} from './pagination';
+export type { PaginationConfig } from './pagination';
+
+// NavigationMenu
+export {
+  NavigationMenuDirective,
+  NavigationMenuListDirective,
+  NavigationMenuItemDirective,
+  NavigationMenuTriggerDirective,
+  NavigationMenuContentDirective,
+  NavigationMenuLinkDirective,
+  DEFAULT_NAVIGATION_MENU_CONFIG,
+} from './navigation-menu';
+export type { NavigationMenuConfig, NavigationMenuOrientation } from './navigation-menu';
+
 // Accordion
 export {
   AccordionDirective,
@@ -123,7 +151,7 @@ export {
   AccordionPanelDirective,
   DEFAULT_ACCORDION_CONFIG,
 } from './accordion';
-export type { AccordionConfig, AccordionType } from './accordion';
+export type { AccordionConfig, AccordionOrientation, AccordionType } from './accordion';
 
 // Navigation & Layout
 export {

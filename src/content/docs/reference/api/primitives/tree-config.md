@@ -3,7 +3,7 @@
 title: TreeConfig
 description: Interface reference for TreeConfig.
 group: "API: Primitives"
-order: 1214
+order: 1231
 generated: doq-api
 category: interface
 ---

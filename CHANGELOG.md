@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] — in progress
+
+Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. Release remains gated on successful completion and verification of the 0.12 workflow and publication.
+
+### Added
+
+- Toolbar with roving focus, dynamic order, orientation and RTL behavior.
+- NavigationMenu with delayed hover, keyboard navigation, nonmodal overlay content and dismissal.
+- Pagination with a bounded one-based page model, native boundary states and focus recovery.
+
+### Changed
+
+- Accordion adds container disabled state, horizontal/RTL navigation and required-open accessibility semantics.
+- Sidebar acceptance coverage now exercises collapsed versus closed state, focus trapping, Escape restoration and scroll-lock cleanup.
+- Added Doqs docs, live demos/playgrounds, CLI source-copy entries and public API reference for the new primitives.
+
 ## [0.12.0] — 2026-10-25
 
 Release target: `@quartz-headless/core@0.12.0` and `@quartz-headless/primitives@0.12.0`. Adds the

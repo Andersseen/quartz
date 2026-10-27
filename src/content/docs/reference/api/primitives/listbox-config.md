@@ -3,7 +3,7 @@
 title: ListboxConfig
 description: Interface reference for ListboxConfig.
 group: "API: Primitives"
-order: 1197
+order: 1211
 generated: doq-api
 category: interface
 ---

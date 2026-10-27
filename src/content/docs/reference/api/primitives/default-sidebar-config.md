@@ -3,7 +3,7 @@
 title: DEFAULT_SIDEBAR_CONFIG
 description: Constant reference for DEFAULT_SIDEBAR_CONFIG.
 group: "API: Primitives"
-order: 1265
+order: 1287
 generated: doq-api
 category: constant
 ---

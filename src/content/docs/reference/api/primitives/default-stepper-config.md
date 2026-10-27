@@ -3,7 +3,7 @@
 title: DEFAULT_STEPPER_CONFIG
 description: Constant reference for DEFAULT_STEPPER_CONFIG.
 group: "API: Primitives"
-order: 1267
+order: 1289
 generated: doq-api
 category: constant
 ---

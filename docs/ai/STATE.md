@@ -1,5 +1,21 @@
 # STATE — Current Project Status
 
+## 0.13 Navigation & Roving Focus — in progress (2026-10-27)
+
+Feature branch `feat/quartz-0.13-navigation-roving-focus`, based on synchronized `main` at
+`46643ae1d8a79113f9048dd2147f2c8ff41fd940`. Toolbar, NavigationMenu and Pagination directives,
+Accordion orientation/disabled behavior, Sidebar regression coverage, API exports, CLI entries,
+Doqs pages/demos/playgrounds, and a focused cross-browser fixture are implemented. Current local
+evidence: typecheck, library build, API snapshot verification, docs generation/doctor, 633 unit tests,
+focused navigation E2E (12 checks across Chromium/Firefox/WebKit), and CLI copy smoke pass. The
+installed-tarball consumer smoke is being extended and rerun. Full E2E, coverage, docs build and
+remaining CI-equivalent checks are pending. Volt parity classifications remain unchanged until all
+acceptance gates pass.
+
+Prerequisite: run `40223989422` attempt 2 has successful Quality Checks and Unit Tests, while its E2E
+job is still in progress. Both npm 0.12.0 packages and GitHub Release `v0.12.0` were absent at the
+last check. Do not bump versions or merge 0.13 before that release completes.
+
 ## 0.12.0 Date & Date Range — 2026-10-25
 
 Branch `feat/quartz-0.12-date-range`, starting at `af0488b939e60ee6e0bdba4460229a39198dbd7a`.

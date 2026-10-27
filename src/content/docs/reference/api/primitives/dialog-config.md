@@ -3,7 +3,7 @@
 title: DialogConfig
 description: Interface reference for DialogConfig.
 group: "API: Primitives"
-order: 1195
+order: 1209
 generated: doq-api
 category: interface
 ---
