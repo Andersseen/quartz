@@ -3,7 +3,7 @@
 title: DEFAULT_TREE_CONFIG
 description: Constant reference for DEFAULT_TREE_CONFIG.
 group: "API: Primitives"
-order: 1272
+order: 1295
 generated: doq-api
 category: constant
 ---

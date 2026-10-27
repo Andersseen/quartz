@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzAccordion`
-- **Source:** [packages/primitives/src/accordion/accordion.directive.ts:19](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.directive.ts#L19)
+- **Source:** [packages/primitives/src/accordion/accordion.directive.ts:34](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.directive.ts#L34)
 
 ## Selector
 
@@ -27,6 +27,8 @@ category: directive
 | `type` | [`AccordionType`](/docs/reference/api/primitives/accordion-type) | `DEFAULT_ACCORDION_CONFIG.type` |  |  |
 | `collapsible` | `unknown` | `DEFAULT_ACCORDION_CONFIG.collapsible` |  | Transform `booleanAttribute`; reads as `boolean`. |
 | `region` | `unknown` | `DEFAULT_ACCORDION_CONFIG.region` |  | Transform `booleanAttribute`; reads as `boolean`. |
+| `orientation` | [`AccordionOrientation`](/docs/reference/api/primitives/accordion-orientation) | `DEFAULT_ACCORDION_CONFIG.orientation` |  |  |
+| `disabled` | `unknown` | `false` |  | Transform `booleanAttribute`; reads as `boolean`. |
 | `compareWith` | `(a: T, b: T) => boolean` | `DEFAULT_ACCORDION_CONFIG.compareWith` |  |  |
 | `config` | `Partial<AccordionConfig<T>>` | `{}` |  |  |
 
@@ -118,8 +120,19 @@ handleTriggerKeydown(item: AccordionItemDirective<T>, event: KeyboardEvent): voi
 | `item` | `AccordionItemDirective<T>` |  |  |
 | `event` | `KeyboardEvent` |  |  |
 
+### isRequiredOpen
+
+```ts
+isRequiredOpen(item: AccordionItemDirective<T>): boolean
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `item` | `AccordionItemDirective<T>` |  |  |
+
 ## Related types
 
 - [`AccordionConfig`](/docs/reference/api/primitives/accordion-config)
 - [`AccordionItemDirective`](/docs/reference/api/primitives/accordion-item-directive)
+- [`AccordionOrientation`](/docs/reference/api/primitives/accordion-orientation)
 - [`AccordionType`](/docs/reference/api/primitives/accordion-type)

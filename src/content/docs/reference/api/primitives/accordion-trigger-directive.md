@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzAccordionTrigger`
-- **Source:** [packages/primitives/src/accordion/accordion-trigger.directive.ts:23](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion-trigger.directive.ts#L23)
+- **Source:** [packages/primitives/src/accordion/accordion-trigger.directive.ts:24](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion-trigger.directive.ts#L24)
 
 ## Selector
 
@@ -36,6 +36,12 @@ onClick(event: MouseEvent): void
 
 ```ts
 onFocus(): void
+```
+
+### onBlur
+
+```ts
+onBlur(): void
 ```
 
 ### onKeydown

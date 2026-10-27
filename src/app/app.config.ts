@@ -41,6 +41,11 @@ export const appConfig: ApplicationConfig = {
           loadComponent: () =>
             import('./pages/e2e-calendar.page').then((module) => module.E2eCalendarPage),
         },
+        {
+          path: 'e2e-navigation',
+          loadComponent: () =>
+            import('./pages/e2e-navigation.page').then((module) => module.default),
+        },
       ]),
     ),
     provideContent(withMarkdownRenderer()),

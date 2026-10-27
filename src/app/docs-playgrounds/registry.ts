@@ -16,6 +16,13 @@ import {
   DatePickerPlaygroundComponent,
   DateRangePickerPlaygroundComponent,
 } from './date-playgrounds';
+import {
+  AccordionPlaygroundComponent,
+  NavigationMenuPlaygroundComponent,
+  PaginationPlaygroundComponent,
+  SidebarPlaygroundComponent,
+  ToolbarPlaygroundComponent,
+} from './navigation-playgrounds';
 
 const orientation = (label = 'Orientation') => ({
   input: 'orientation',
@@ -40,6 +47,121 @@ const bool = (input: string, label: string, initial = false) => ({
  * stay free of Angular components.
  */
 export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
+  'quartz-toolbar': {
+    component: ToolbarPlaygroundComponent,
+    title: 'Toolbar',
+    description: 'Roving focus toolbar with orientation, RTL and disabled-state controls.',
+    controls: [orientation(), bool('rtl', 'RTL'), bool('disabled', 'Disabled')],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          formatDoqUsage(
+            'div',
+            {},
+            {
+              attributes: [
+                'qzToolbar',
+                'aria-label="Formatting"',
+                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
+                ...(v['disabled'] ? ['disabled'] : []),
+              ],
+              text: '<button qzToolbarItem>Bold</button>…',
+            },
+          ),
+      },
+    ],
+  },
+  'quartz-navigation-menu': {
+    component: NavigationMenuPlaygroundComponent,
+    title: 'NavigationMenu',
+    description: 'Site navigation with one hover- and keyboard-controlled flyout.',
+    controls: [
+      orientation(),
+      { input: 'showDelay', kind: 'number', label: 'Show delay (ms)', initial: 150, min: 0 },
+      { input: 'hideDelay', kind: 'number', label: 'Hide delay (ms)', initial: 150, min: 0 },
+      bool('disabled', 'Disabled'),
+      bool('rtl', 'RTL'),
+    ],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: () =>
+          '<nav qzNavigationMenu aria-label="Main navigation"><ul qzNavigationMenuList><li qzNavigationMenuItem="products"><button qzNavigationMenuTrigger>Products</button><ng-template qzNavigationMenuContent>…</ng-template></li></ul></nav>',
+      },
+    ],
+  },
+  'quartz-pagination': {
+    component: PaginationPlaygroundComponent,
+    title: 'Pagination',
+    description: 'Bounded page model with current-page semantics and boundary focus recovery.',
+    controls: [
+      { input: 'page', kind: 'number', label: 'Page', initial: 2, min: 1 },
+      { input: 'pageCount', kind: 'number', label: 'Page count', initial: 5, min: 0 },
+      bool('disabled', 'Disabled'),
+    ],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          `<nav qzPagination aria-label="Search results" [(page)]="page" [pageCount]="${v['pageCount']}"${v['disabled'] ? ' disabled' : ''}>…</nav>`,
+      },
+    ],
+  },
+  'quartz-accordion': {
+    component: AccordionPlaygroundComponent,
+    title: 'Accordion',
+    description:
+      'Disclosure sections with single/multiple values, orientation, disabled and collapsible states.',
+    controls: [
+      orientation('Header orientation'),
+      {
+        input: 'type',
+        kind: 'select',
+        label: 'Type',
+        initial: 'single',
+        options: [
+          { label: 'Single', value: 'single' },
+          { label: 'Multiple', value: 'multiple' },
+        ],
+      },
+      bool('disabled', 'Disabled'),
+      bool('collapsible', 'Collapsible'),
+    ],
+  },
+  'quartz-sidebar': {
+    component: SidebarPlaygroundComponent,
+    title: 'Sidebar',
+    description: 'Responsive sidebar state with layout mode, breakpoint and logical side controls.',
+    controls: [
+      bool('open', 'Open', true),
+      bool('collapsed', 'Collapsed'),
+      {
+        input: 'mode',
+        kind: 'select',
+        label: 'Mode',
+        initial: 'push',
+        options: [
+          { label: 'Push', value: 'push' },
+          { label: 'Overlay', value: 'overlay' },
+        ],
+      },
+      { input: 'breakpoint', kind: 'number', label: 'Breakpoint (px)', initial: 768, min: 0 },
+      {
+        input: 'side',
+        kind: 'select',
+        label: 'Side',
+        initial: 'inline-start',
+        options: [
+          { label: 'Inline start', value: 'inline-start' },
+          { label: 'Inline end', value: 'inline-end' },
+        ],
+      },
+    ],
+  },
   'quartz-select': {
     component: SelectPlaygroundComponent,
     title: 'Select',

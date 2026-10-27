@@ -8,6 +8,9 @@
   "AccordionItemDirective": {
     "kind": "class"
   },
+  "AccordionOrientation": {
+    "kind": "type"
+  },
   "AccordionPanelDirective": {
     "kind": "class"
   },
@@ -135,6 +138,12 @@
   "DEFAULT_NAVBAR_CONFIG": {
     "kind": "const"
   },
+  "DEFAULT_NAVIGATION_MENU_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_PAGINATION_CONFIG": {
+    "kind": "const"
+  },
   "DEFAULT_POPOVER_CONFIG": {
     "kind": "const"
   },
@@ -163,6 +172,9 @@
     "kind": "const"
   },
   "DEFAULT_TOGGLE_GROUP_CONFIG": {
+    "kind": "const"
+  },
+  "DEFAULT_TOOLBAR_CONFIG": {
     "kind": "const"
   },
   "DEFAULT_TOOLTIP_CONFIG": {
@@ -259,6 +271,51 @@
     "kind": "type"
   },
   "NavbarTriggerDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuConfig": {
+    "kind": "interface"
+  },
+  "NavigationMenuContentDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuItemDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuLinkDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuListDirective": {
+    "kind": "class"
+  },
+  "NavigationMenuOrientation": {
+    "kind": "type"
+  },
+  "NavigationMenuTriggerDirective": {
+    "kind": "class"
+  },
+  "PaginationConfig": {
+    "kind": "interface"
+  },
+  "PaginationDirective": {
+    "kind": "class"
+  },
+  "PaginationFirstDirective": {
+    "kind": "class"
+  },
+  "PaginationLastDirective": {
+    "kind": "class"
+  },
+  "PaginationNextDirective": {
+    "kind": "class"
+  },
+  "PaginationPageDirective": {
+    "kind": "class"
+  },
+  "PaginationPreviousDirective": {
     "kind": "class"
   },
   "PopoverConfig": {
@@ -479,6 +536,18 @@
   },
   "ToggleItemDirective": {
     "kind": "class"
+  },
+  "ToolbarConfig": {
+    "kind": "interface"
+  },
+  "ToolbarDirective": {
+    "kind": "class"
+  },
+  "ToolbarItemDirective": {
+    "kind": "class"
+  },
+  "ToolbarOrientation": {
+    "kind": "type"
   },
   "TooltipConfig": {
     "kind": "interface"

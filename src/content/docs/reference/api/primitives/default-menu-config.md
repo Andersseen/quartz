@@ -3,7 +3,7 @@
 title: DEFAULT_MENU_CONFIG
 description: Constant reference for DEFAULT_MENU_CONFIG.
 group: "API: Primitives"
-order: 1259
+order: 1279
 generated: doq-api
 category: constant
 ---

@@ -2,11 +2,28 @@
   <div class="flex flex-col gap-10">
     <section class="bg-[#0f1115] border border-white/10 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-gray-200 mb-2">Push and collapsed</h3>
+      <div class="mb-4 flex flex-wrap gap-2">
+        <button type="button" (click)="desktopMode.update(v => v === 'push' ? 'overlay' : 'push')">
+          Mode: {{ desktopMode() }}
+        </button>
+        <button type="button" (click)="breakpoint.update(v => v === 768 ? 1024 : 768)">
+          Breakpoint: {{ breakpoint() }}px
+        </button>
+        <button
+          type="button"
+          (click)="side.update(v => v === 'inline-start' ? 'inline-end' : 'inline-start')"
+        >
+          Side: {{ side() }}
+        </button>
+      </div>
       <div
         preview
         qzSidebar
         [(open)]="open"
         [(collapsed)]="collapsed"
+        [desktopMode]="desktopMode()"
+        [breakpoint]="breakpoint()"
+        [side]="side()"
         class="w-full min-h-[360px] overflow-hidden border border-white/10 bg-[#090b10]"
         style="--qz-sidebar-size: 15rem; --qz-sidebar-collapsed-size: 5rem"
       >

@@ -3,7 +3,7 @@
 title: NavbarScrollDirection
 description: Type alias reference for NavbarScrollDirection.
 group: "API: Primitives"
-order: 1230
+order: 1248
 generated: doq-api
 category: type
 ---

@@ -263,6 +263,42 @@ const REGISTRY = {
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/docs/primitives/accordion',
   },
+  toolbar: {
+    description: 'Accessible toolbar with roving focus, RTL and disabled item handling',
+    layer: 'primitives',
+    files: [
+      'toolbar/toolbar.directive.ts',
+      'toolbar/toolbar-item.directive.ts',
+      'toolbar/toolbar.types.ts',
+      'toolbar/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/toolbar',
+  },
+  'navigation-menu': {
+    description: 'Accessible site navigation with hover and keyboard flyouts',
+    layer: 'primitives',
+    files: [
+      'navigation-menu/navigation-menu.directive.ts',
+      'navigation-menu/navigation-menu-item.directive.ts',
+      'navigation-menu/navigation-menu-trigger.directive.ts',
+      'navigation-menu/navigation-menu.types.ts',
+      'navigation-menu/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/navigation-menu',
+  },
+  pagination: {
+    description: 'Bounded pagination navigation with current page and focus recovery',
+    layer: 'primitives',
+    files: [
+      'pagination/pagination.directive.ts',
+      'pagination/pagination.types.ts',
+      'pagination/index.ts',
+    ],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/pagination',
+  },
   sidebar: {
     description: 'Application navigation sidebar with push/overlay, collapse and responsive state',
     layer: 'primitives',

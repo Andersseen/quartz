@@ -3,7 +3,7 @@
 title: DEFAULT_TOAST_OPTIONS
 description: Constant reference for DEFAULT_TOAST_OPTIONS.
 group: "API: Primitives"
-order: 1269
+order: 1291
 generated: doq-api
 category: constant
 ---

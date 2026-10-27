@@ -3,7 +3,7 @@
 title: AccordionConfig
 description: Interface reference for AccordionConfig.
 group: "API: Primitives"
-order: 1190
+order: 1204
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/primitives/src/accordion/accordion.types.ts:3](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.types.ts#L3)
+- **Source:** [packages/primitives/src/accordion/accordion.types.ts:4](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion.types.ts#L4)
 
 ## Declaration
 
@@ -26,8 +26,10 @@ interface AccordionConfig<T>
 | `type` | [`AccordionType`](/docs/reference/api/primitives/accordion-type) |  |
 | `collapsible` | `boolean` |  |
 | `region` | `boolean` |  |
+| `orientation` | [`AccordionOrientation`](/docs/reference/api/primitives/accordion-orientation) |  |
 | `compareWith` | `(a: T, b: T) => boolean` |  |
 
 ## Related types
 
+- [`AccordionOrientation`](/docs/reference/api/primitives/accordion-orientation)
 - [`AccordionType`](/docs/reference/api/primitives/accordion-type)

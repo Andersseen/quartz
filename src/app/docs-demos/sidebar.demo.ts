@@ -21,5 +21,8 @@ export class SidebarDemoComponent {
   readonly open = signal(true);
   readonly collapsed = signal(false);
   readonly overlayOpen = signal(false);
+  readonly desktopMode = signal<'push' | 'overlay'>('push');
+  readonly breakpoint = signal(768);
+  readonly side = signal<'inline-start' | 'inline-end'>('inline-start');
   readonly sidebarItems = ['Overview', 'Projects', 'Deployments', 'Settings'];
 }

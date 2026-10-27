@@ -3,7 +3,7 @@
 title: StepPanelDirective
 description: "Directive reference for StepPanelDirective with the selector [qzStepPanel]."
 group: "API: Primitives"
-order: 1168
+order: 1180
 generated: doq-api
 category: directive
 ---

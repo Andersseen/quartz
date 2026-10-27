@@ -10,13 +10,14 @@ import { AccordionItemDirective } from './accordion-item.directive';
     '[attr.id]': 'item.id',
     '[attr.aria-expanded]': 'item.open()',
     '[attr.aria-controls]': 'item.panelId',
-    '[attr.aria-disabled]': 'item.itemDisabled() || null',
+    '[attr.aria-disabled]': 'item.itemDisabled() || item.requiredOpen() || null',
     '[attr.tabindex]': 'item.itemDisabled() ? -1 : item.activeTabIndex()',
     '[attr.disabled]': 'item.itemDisabled() ? "" : null',
     '[attr.data-qz-state]': 'item.open() ? "open" : "closed"',
     '[attr.data-qz-disabled]': 'item.itemDisabled() ? "" : null',
     '(click)': 'onClick($event)',
     '(focus)': 'onFocus()',
+    '(blur)': 'onBlur()',
     '(keydown)': 'onKeydown($event)',
   },
 })
@@ -34,7 +35,12 @@ export class AccordionTriggerDirective implements OnDestroy {
   }
 
   onFocus(): void {
+    this.item.setFocused(true);
     this.item.setActive();
+  }
+
+  onBlur(): void {
+    this.item.setFocused(false);
   }
 
   onKeydown(event: KeyboardEvent): void {

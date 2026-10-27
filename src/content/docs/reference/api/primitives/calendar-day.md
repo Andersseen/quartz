@@ -3,7 +3,7 @@
 title: CalendarDay
 description: Interface reference for CalendarDay.
 group: "API: Primitives"
-order: 1191
+order: 1205
 generated: doq-api
 category: interface
 ---

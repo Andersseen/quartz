@@ -35,6 +35,7 @@ export default defineConfig(() => ({
           '/e2e-selection',
           '/e2e-range',
           '/e2e-calendar',
+          '/e2e-navigation',
           ...doqPrerenderRoutes(doqPaths),
         ],
       },

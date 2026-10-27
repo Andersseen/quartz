@@ -3,7 +3,7 @@
 title: DateDisabled
 description: Type alias reference for DateDisabled.
 group: "API: Primitives"
-order: 1225
+order: 1243
 generated: doq-api
 category: type
 ---

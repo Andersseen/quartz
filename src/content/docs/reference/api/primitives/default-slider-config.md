@@ -3,7 +3,7 @@
 title: DEFAULT_SLIDER_CONFIG
 description: Constant reference for DEFAULT_SLIDER_CONFIG.
 group: "API: Primitives"
-order: 1266
+order: 1288
 generated: doq-api
 category: constant
 ---

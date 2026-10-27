@@ -1,6 +1,19 @@
 import { DOCUMENT } from '@angular/common';
-import { Directive, OnDestroy, booleanAttribute, inject, input, model } from '@angular/core';
-import { CollectionStore, focusSafely, type CollectionItem } from '@quartz-headless/core';
+import {
+  Directive,
+  ElementRef,
+  OnDestroy,
+  booleanAttribute,
+  inject,
+  input,
+  model,
+} from '@angular/core';
+import {
+  CollectionStore,
+  focusSafely,
+  resolveDirection,
+  type CollectionItem,
+} from '@quartz-headless/core';
 import type { AccordionItemDirective } from './accordion-item.directive';
 import {
   DEFAULT_ACCORDION_CONFIG,
@@ -14,10 +27,13 @@ import {
   standalone: true,
   host: {
     '[attr.data-qz-type]': 'type()',
+    '[attr.data-qz-orientation]': 'orientation()',
+    '[attr.aria-disabled]': 'disabled() || null',
   },
 })
 export class AccordionDirective<T> implements OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly collection = new CollectionStore<AccordionItemDirective<T> & CollectionItem>(
     { focusStrategy: 'roving-tabindex', orientation: 'vertical' },
     this.document,
@@ -30,10 +46,13 @@ export class AccordionDirective<T> implements OnDestroy {
     transform: booleanAttribute,
   });
   readonly region = input(DEFAULT_ACCORDION_CONFIG.region, { transform: booleanAttribute });
+  readonly orientation = input(DEFAULT_ACCORDION_CONFIG.orientation);
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly compareWith = input<(a: T, b: T) => boolean>(DEFAULT_ACCORDION_CONFIG.compareWith);
   readonly config = input<Partial<AccordionConfig<T>>>({});
 
   registerItem(item: AccordionItemDirective<T>): void {
+    this.configureCollection();
     this.collection.register(item as AccordionItemDirective<T> & CollectionItem);
     this.ensureRequiredOpenItem();
   }
@@ -44,6 +63,7 @@ export class AccordionDirective<T> implements OnDestroy {
 
   unregisterItem(item: AccordionItemDirective<T>): void {
     const wasOpen = this.isOpen(item);
+    const wasFocused = this.document.activeElement === item.element() || item.hasFocus;
     this.collection.unregister(item as AccordionItemDirective<T> & CollectionItem);
     // Settle first: the accordion may be torn down as a whole (the bound value must survive) or
     // the item re-created with the same value (@for), in which case nothing was really removed.
@@ -54,6 +74,9 @@ export class AccordionDirective<T> implements OnDestroy {
         .some((current) => this.compareWith()(current.value(), item.value()));
       if (wasOpen && !returned) this.removeValue(item.value());
       this.ensureRequiredOpenItem();
+      if (wasFocused && !item.element()?.isConnected) {
+        focusSafely(this.collection.activeItem()?.element() ?? null);
+      }
     });
   }
 
@@ -62,11 +85,11 @@ export class AccordionDirective<T> implements OnDestroy {
   }
 
   setActive(item: AccordionItemDirective<T>, options: { focus?: boolean } = {}): void {
-    if (!item.itemDisabled()) this.collection.setActive(item.id, options);
+    if (!this.disabled() && !item.itemDisabled()) this.collection.setActive(item.id, options);
   }
 
   toggle(item: AccordionItemDirective<T>): void {
-    if (item.itemDisabled()) return;
+    if (this.disabled() || item.itemDisabled()) return;
     this.setActive(item);
     if (this.isMultiple()) {
       this.toggleMultiple(item.value());
@@ -90,29 +113,11 @@ export class AccordionDirective<T> implements OnDestroy {
   }
 
   handleTriggerKeydown(item: AccordionItemDirective<T>, event: KeyboardEvent): void {
-    const items = this.collection.enabledItems();
-    const current = Math.max(
-      0,
-      items.findIndex((entry) => entry === item),
-    );
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        this.focusItem(items[Math.min(current + 1, items.length - 1)] ?? null);
-        return;
-      case 'ArrowUp':
-        event.preventDefault();
-        this.focusItem(items[Math.max(current - 1, 0)] ?? null);
-        return;
-      case 'Home':
-        event.preventDefault();
-        this.focusItem(items[0] ?? null);
-        return;
-      case 'End':
-        event.preventDefault();
-        this.focusItem(items[items.length - 1] ?? null);
-        return;
-    }
+    if (this.disabled() || item.itemDisabled()) return;
+    this.configureCollection();
+    this.collection.refreshOrder();
+    this.collection.setActive(item.id);
+    this.collection.handleKeydown(event, { focus: true });
   }
 
   ngOnDestroy(): void {
@@ -144,12 +149,20 @@ export class AccordionDirective<T> implements OnDestroy {
 
   private ensureRequiredOpenItem(): void {
     if (this.isMultiple() || this.collapsible() || this.value() !== null) return;
-    const first = this.collection.enabledItems()[0];
+    const first = this.collection.items().find((item) => !item.disabled());
     if (first) this.value.set(first.value());
   }
 
-  private focusItem(item: AccordionItemDirective<T> | null): void {
-    if (item) this.collection.setActive(item.id);
-    focusSafely(item?.element() ?? null);
+  isRequiredOpen(item: AccordionItemDirective<T>): boolean {
+    return !this.isMultiple() && !this.collapsible() && this.isOpen(item);
+  }
+
+  private configureCollection(): void {
+    this.collection.configure({
+      focusStrategy: 'roving-tabindex',
+      orientation: this.orientation(),
+      direction: resolveDirection(this.elementRef.nativeElement),
+      wrap: false,
+    });
   }
 }

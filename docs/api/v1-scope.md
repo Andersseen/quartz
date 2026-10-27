@@ -43,6 +43,9 @@ areas that already exist in Quartz were conditional before 0.9 and are now manda
 | Primitives | Slider                   | `slider`, `range-slider` | 0.11             | browser pointer capture, decimal step, Forms, RangeSlider           |
 | Primitives | Toggle / ToggleGroup     | `toggle`, `toggle-group` | 0.11             | Forms, deselection semantics, RTL                                   |
 | Primitives | Sidebar                  | `sidebar`                | 0.13             | responsive/focus/scroll-lock proof in a browser, collapsed contract |
+| Primitives | NavigationMenu           | `navigation-menu`        | 0.13             | pointer, keyboard, overlay composition and accessible flyout proof  |
+| Primitives | Toolbar                  | `toolbar`                | 0.13             | roving focus, mixed controls, dynamic DOM order and RTL proof       |
+| Primitives | Pagination               | `pagination`             | 0.13             | bounded model, boundary focus and accessible current-page proof     |
 | Core       | Splitter                 | `resizable`              | 0.16             | pointer E2E, ARIA values, maxSize, resizing state                   |
 
 Families Volt needs that Quartz does not have yet (new work, no “conditional” escape hatch):

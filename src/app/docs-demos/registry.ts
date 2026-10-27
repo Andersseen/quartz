@@ -33,6 +33,9 @@ import { TreeDemoComponent } from './tree.demo';
 import { SidebarDemoComponent } from './sidebar.demo';
 import { NavbarDemoComponent } from './navbar.demo';
 import { StepperDemoComponent } from './stepper.demo';
+import { ToolbarDemoComponent } from './toolbar.demo';
+import { NavigationMenuDemoComponent } from './navigation-menu.demo';
+import { PaginationDemoComponent } from './pagination.demo';
 
 @Component({
   selector: 'app-overlay-demo-loader',
@@ -406,6 +409,42 @@ class NavbarDemoLoader {}
 })
 class StepperDemoLoader {}
 
+@Component({
+  selector: 'app-toolbar-demo-loader',
+  imports: [ToolbarDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-toolbar-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class ToolbarDemoLoader {}
+
+@Component({
+  selector: 'app-navigation-menu-demo-loader',
+  imports: [NavigationMenuDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-navigation-menu-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class NavigationMenuDemoLoader {}
+
+@Component({
+  selector: 'app-pagination-demo-loader',
+  imports: [PaginationDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-pagination-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class PaginationDemoLoader {}
+
 export const DOC_DEMOS = {
   overlay: OverlayDemoLoader,
   directionality: DirectionalityDemoLoader,
@@ -438,4 +477,7 @@ export const DOC_DEMOS = {
   sidebar: SidebarDemoLoader,
   navbar: NavbarDemoLoader,
   stepper: StepperDemoLoader,
+  toolbar: ToolbarDemoLoader,
+  'navigation-menu': NavigationMenuDemoLoader,
+  pagination: PaginationDemoLoader,
 } as const;
