@@ -3,7 +3,7 @@
 title: ToggleGroupControlDirective
 description: "Angular Forms adapter for [qzToggleGroup]."
 group: "API: Forms"
-order: 1512
+order: 1514
 generated: doq-api
 category: directive
 ---

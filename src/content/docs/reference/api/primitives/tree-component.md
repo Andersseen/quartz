@@ -3,7 +3,7 @@
 title: TreeComponent
 description: Component reference for TreeComponent with the selector qz-tree.
 group: "API: Primitives"
-order: 1103
+order: 1104
 generated: doq-api
 category: component
 ---

@@ -3,7 +3,7 @@
 title: ListboxGroupDirective
 description: "Labelled group of options: role=\"group\" named by a qzListboxGroupLabel child."
 group: "API: Primitives"
-order: 1129
+order: 1138
 generated: doq-api
 category: directive
 ---

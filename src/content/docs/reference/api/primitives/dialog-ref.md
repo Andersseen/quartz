@@ -3,7 +3,7 @@
 title: DialogRef
 description: Class reference for DialogRef.
 group: "API: Primitives"
-order: 1203
+order: 1212
 generated: doq-api
 category: class
 ---

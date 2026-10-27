@@ -3,7 +3,7 @@
 title: DEFAULT_PAGINATION_CONFIG
 description: Constant reference for DEFAULT_PAGINATION_CONFIG.
 group: "API: Primitives"
-order: 1282
+order: 1293
 generated: doq-api
 category: constant
 ---

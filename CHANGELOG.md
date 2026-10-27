@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Initial 0.14 FormField, InputOTP, autofill and native file selection/dropzone APIs, optional Forms integration, CLI registration and Doqs documentation. Acceptance and release checks are still in progress; see `docs/releases/0.14-acceptance.md`.
+
 ## [0.13.0] — in progress
 
 Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. Release remains gated on successful completion and verification of the 0.12 workflow and publication.

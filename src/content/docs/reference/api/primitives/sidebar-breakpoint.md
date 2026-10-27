@@ -3,7 +3,7 @@
 title: SidebarBreakpoint
 description: Type alias reference for SidebarBreakpoint.
 group: "API: Primitives"
-order: 1255
+order: 1266
 generated: doq-api
 category: type
 ---

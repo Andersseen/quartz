@@ -23,6 +23,7 @@ import {
   SidebarPlaygroundComponent,
   ToolbarPlaygroundComponent,
 } from './navigation-playgrounds';
+import { InputOtpPlaygroundComponent } from './input-otp-playground';
 
 const orientation = (label = 'Orientation') => ({
   input: 'orientation',
@@ -47,6 +48,24 @@ const bool = (input: string, label: string, initial = false) => ({
  * stay free of Angular components.
  */
 export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
+  'quartz-input-otp': {
+    component: InputOtpPlaygroundComponent,
+    title: 'InputOTP',
+    description: 'One real text input with filtered slots, native paste and completion state.',
+    controls: [
+      { input: 'length', kind: 'number', label: 'Slots', initial: 6, min: 1, max: 8 },
+      bool('disabled', 'Disabled'),
+    ],
+    outputs: [{ event: 'completed', label: 'Completed' }],
+    code: [
+      {
+        label: 'Template',
+        language: 'html',
+        code: (v) =>
+          `<qz-input-otp [length]="${v['length']}"${v['disabled'] ? ' disabled' : ''} [(value)]="code" (completed)="onCodeEntered($event)" />`,
+      },
+    ],
+  },
   'quartz-toolbar': {
     component: ToolbarPlaygroundComponent,
     title: 'Toolbar',

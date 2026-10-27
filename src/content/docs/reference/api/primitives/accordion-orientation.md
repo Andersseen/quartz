@@ -3,7 +3,7 @@
 title: AccordionOrientation
 description: Type alias reference for AccordionOrientation.
 group: "API: Primitives"
-order: 1234
+order: 1245
 generated: doq-api
 category: type
 ---

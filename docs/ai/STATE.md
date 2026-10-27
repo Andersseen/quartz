@@ -1,35 +1,26 @@
 # STATE — Current Project Status
 
-## 0.13 Navigation & Roving Focus — in progress (2026-10-27)
+# 0.14 Text, File Input & FormField — development in progress (2026-10-27)
 
-Feature branch `feat/quartz-0.13-navigation-roving-focus`, based on synchronized `main` at
-`46643ae1d8a79113f9048dd2147f2c8ff41fd940`. Toolbar, NavigationMenu and Pagination directives,
-Accordion orientation/disabled behavior, Sidebar regression coverage, API exports, CLI entries,
-Doqs pages/demos/playgrounds, and a focused cross-browser fixture are implemented. Current local
-evidence: typecheck, library build, API snapshot verification, docs generation/doctor, 633 unit tests,
-focused navigation E2E (12 checks across Chromium/Firefox/WebKit), and CLI copy smoke pass. The
-installed-tarball consumer smoke is being extended and rerun. Full E2E, coverage, docs build and
-remaining CI-equivalent checks are pending. Volt parity classifications remain unchanged until all
-acceptance gates pass.
+Branch `feat/quartz-0.14-text-file-form-field`, based on starting main `274745fe2626aa000bc79c3f37e9f4bccca4def6`. Initial FormField, InputOTP, Autofill and native FileUpload/Dropzone APIs, optional Forms adapters, CLI entries, docs, demo/playground, focused tests and consumer fixture are implemented. Core and Primitives library builds passed. Focused tests found and fixed a native `multiple` property binding defect; re-run is in progress. Release readiness is not claimed: cross-engine E2E, full CI-equivalent checks, SSR/hydration acceptance and complete Volt evidence remain to be closed. No 0.14 versions changed and no feature PR has been opened yet.
 
-Prerequisite: run `40223989422` attempt 2 has successful Quality Checks and Unit Tests, while its E2E
-job is still in progress. Both npm 0.12.0 packages and GitHub Release `v0.12.0` were absent at the
-last check. Do not bump versions or merge 0.13 before that release completes.
+Release prerequisite: PR #44 reconciles the actual 0.13 implementation to version 0.13.0 after the successful 0.12.0 publication contained the already merged 0.13 source. At the latest check, PR #44 Quality Checks and Unit/consumer jobs passed; E2E was still running. Do not merge or publish 0.14 over this unresolved chain.
+
+## 0.13 Navigation & Roving Focus — release reconciliation in progress (2026-10-27)
+
+The 0.13 implementation was merged in PR #43. Main workflow `40494140662` passed quality, unit/coverage,
+consumer and full three-engine E2E, then deployed Pages and created `v0.12.0`. The manifests were stale,
+so both npm packages were published as 0.12.0 from source that already included the 0.13 implementation.
+The immutable 0.12.0 artifacts are not republished. Maintenance PR #44 sets Core/Primitives to 0.13.0
+and the Primitives Core peer range to `^0.13.0`; at last check its quality and unit/consumer jobs passed,
+while E2E was still in progress. Verify npm 0.13.0, GitHub Release `v0.13.0` and Pages after that PR merges.
 
 ## 0.12.0 Date & Date Range — 2026-10-25
 
-Branch `feat/quartz-0.12-date-range`, starting at `af0488b939e60ee6e0bdba4460229a39198dbd7a`.
-Implemented shared local-civil-date calendar behavior, DatePicker, DateRangePicker, optional Forms adapters,
-CLI entries, Doqs pages, live demos and playgrounds. Validation: 612 unit tests and coverage pass; typecheck,
-lint and format pass; library and demo builds pass; API snapshot and docs checks pass; installed-tarball
-strict Angular AOT passes; the 21-execution date E2E suite passes in Chromium, Firefox and WebKit with axe.
-The full E2E run passed 634/636; the two Firefox docs-route timeouts passed focused reruns on both the
-feature branch and unchanged baseline, indicating intermittent docs-route timing. PR #42 is open;
-0.11 publication is the merge/release gate.
-
-Release gate: `main` run 40124305295 failed its E2E job; deploy and publish jobs were skipped. A retry of that
-job is running through Actions. Both scoped 0.11.0 package versions returned npm 404 and GitHub Release
-`v0.11.0` was absent at verification. Do not report a 0.12 release until the 0.11 prerequisite is resolved.
+DatePicker and DateRangePicker were merged before PR #43. The original 0.12 source workflow
+`40223989422` failed E2E, so it did not publish. Workflow `40494140662` later published both 0.12.0
+packages and deployed/created `v0.12.0` from `274745f`; that source included the 0.13 implementation.
+The package version is immutable. See the reconciliation record in `docs/releases/0.12-acceptance.md`.
 
 ## 0.11.0 Range & toggle controls — 2026-10-24
 
@@ -40,7 +31,7 @@ Branch `feat/quartz-0.11-range-toggle-controls` (baseline `main` @ `820bcf8`, 0.
 `range-slider`, `toggle`, `toggle-group` → V (12/46 V). Evidence, differences from Volt and limitations:
 [0.11 acceptance](../releases/0.11-acceptance.md). Packages are `0.11.0`.
 
-Open follow-ups: resolve/release 0.11, then merge and verify PR #42/release; manual screen-reader review;
+Open follow-ups: verify the 0.13.0 release reconciliation; manual screen-reader review;
 real SSR/hydration matrix (0.17).
 
 ## 0.10.0 Advanced selection + Doqs documentation — 2026-10-24

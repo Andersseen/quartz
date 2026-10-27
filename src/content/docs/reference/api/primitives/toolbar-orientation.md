@@ -3,7 +3,7 @@
 title: ToolbarOrientation
 description: Type alias reference for ToolbarOrientation.
 group: "API: Primitives"
-order: 1270
+order: 1281
 generated: doq-api
 category: type
 ---

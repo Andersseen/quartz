@@ -3,7 +3,7 @@
 title: ToastComponent
 description: Component reference for ToastComponent with the selector qz-toast.
 group: "API: Primitives"
-order: 1101
+order: 1102
 generated: doq-api
 category: component
 ---

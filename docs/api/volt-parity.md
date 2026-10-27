@@ -58,9 +58,9 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
 | V    | Implemented and verified        |     12 |           12 |
-| C    | Implemented, missing coverage   |      1 |            1 |
+| C    | Implemented, missing coverage   |      5 |            5 |
 | P    | Partial behavioural equivalence |      7 |            7 |
-| M    | Missing                         |     12 |           11 |
+| M    | Missing                         |      8 |            7 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
@@ -76,7 +76,7 @@ all have an owning milestone below.
 | 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)                     |
 | 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                             |
 | 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
-| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (M), `form-field` (M), `input-otp` (M), `file-upload` (M)                   |
+| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)                   |
 | 0.15 — Feedback and value indicators (Progress, Meter, Avatar, Toast content API)                               | `avatar` (M), `progress` (M), `meter` (M), `toast` (P)                                 |
 | 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) | `tooltip` (P), `drawer` (P), `popover` (P), `dropdown-menu` (C), `resizable` (P)       |
 
@@ -141,17 +141,17 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** E2E recipe: clear empties the model, focus returns to the input, button hidden when empty.
 
-### `autofill` — Missing (**M**)
+### `autofill` — Implemented, missing coverage (**C**)
 
 - **Volt public surface:** `voltAutofill`; re-exports `injectAutofillState`, `ngpAutofill`, `provideAutofillState`, `NgpAutofillProps`, `NgpAutofillState`
 - **Behavioural dependency:** ng-primitives `autofill`
 - **Observable headless contract required:** Detects browser autofill (via `:-webkit-autofill` animation start/`animationstart` hook) and exposes `data-autofill` + an `autofilled` output.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `AutofillDirective` detects configured animation-start/end events, maintains `data-autofilled` and emits state transitions. If autofill changes the host value without `input`, it dispatches a bubbling input event for Forms.
+- **Current evidence:** Unit transition and value-notification tests; genuine browser autofill and complete cross-engine limitations are still unverified.
 - **Accessibility:** None directly (styling signal).
 - **Forms:** Autofill fires no `input` event in some browsers; the value must reach the control.
 - **Angular / SSR:** Browser-only observer; must be a no-op on the server and not run at import.
-- **Remaining work:** Headless autofill-state directive with output and attribute; document cross-browser limits.
+- **Remaining work:** SSR and teardown tests; genuine supported-engine evidence; document engine limitations.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: animation-start toggles state; E2E (Chromium) with autofilled field style hook; SSR no-op.
 
@@ -239,17 +239,17 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.11 (closed in 0.11.0)
 - **Acceptance tests needed:** Done (see evidence).
 
-### `form-field` — Missing (**M**)
+### `form-field` — Implemented, missing coverage (**C**)
 
 - **Volt public surface:** `volt-form-field`, `volt-label`, `volt-hint`, `volt-error`
 - **Behavioural dependency:** ng-primitives `form-field`
 - **Observable headless contract required:** Generates ids and wires `aria-labelledby`/`aria-describedby` between label/hint/error and the projected control; mirrors invalid/touched/dirty/disabled from `NgControl` as data attributes; error shown per control state.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** Structural root, control, label, description and error directives; stable consumer-provided root ID; optional Forms state observer.
+- **Current evidence:** Focused native-control association tests and optional Forms state test. SSR/hydration, Checkbox/Switch composition, async validators and teardown evidence remain incomplete.
 - **Accessibility:** Dangling-reference-free ids; error announced (`role=alert`/describedby) when shown.
 - **Forms:** Reads `NgControl` state of the projected control — requires the optional `/forms` entry point.
 - **Angular / SSR:** Ids must be deterministic across server/client.
-- **Remaining work:** Headless field directive set with `NgControl` observation; works with native inputs and Quartz controls.
+- **Remaining work:** Complete control-family, dynamic validation, reset/async-validator and SSR/hydration coverage.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: ids/ARIA for native input and Quartz Switch; invalid/touched mirroring; e2e submit-error flow; SSR id stability.
 
@@ -533,31 +533,31 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.15
 - **Acceptance tests needed:** Unit: template content with context, action buttons, close from content; e2e pause/resume; axe.
 
-### `input-otp` — Missing (**M**)
+### `input-otp` — Implemented, missing coverage (**C**)
 
 - **Volt public surface:** `volt-input-otp`, `volt-input-otp-slot` (CVA)
 - **Behavioural dependency:** ng-primitives `input-otp`
 - **Observable headless contract required:** N slots over one hidden input: typing advances, Backspace retreats, paste distributes and filters by pattern, per-slot active/caret state, `autocomplete=one-time-code`, completion output.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `InputOtpComponent` with one real text input, presentational slots, string model, pattern filtering, completion and optional Forms adapter.
+- **Current evidence:** Focused typing/filtering/completion, IME and Forms tests. Browser keyboard, paste and accessibility evidence remains incomplete.
 - **Accessibility:** One accessible input (named); slots are presentational; announces progress sensibly.
 - **Forms:** String value, writeValue silent, onChange per change, touched on blur, disabled, reset → `''`.
 - **Angular / SSR:** Hidden input renders on the server; slots hydrate from value.
-- **Remaining work:** Primitive with selection-range tracking and paste handling.
+- **Remaining work:** Expand keyboard, deletion, dynamic length, paste and three-engine browser contracts; verify completion and IME edge cases.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: type/delete/paste/pattern; e2e mobile-like paste and IME; Forms harness; axe.
 
-### `file-upload` — Missing (**M**)
+### `file-upload` — Implemented, missing coverage (**C**)
 
 - **Volt public surface:** `voltFileUpload`, `volt-file-dropzone` (outputs, no CVA)
 - **Behavioural dependency:** ng-primitives `file-upload`; native `<input type=file>`
 - **Observable headless contract required:** File picker trigger, `accept`/`multiple`/`directory`, drag-and-drop zone (dragenter/leave counting, drop → files), disabled, selected-files output.
 - **Quartz equivalent:** Core drag-drop is element-to-element pointer DnD, not OS file drop. Picker: native input suffices (N).
-- **Current evidence:** Missing.
+- **Current evidence:** Unit coverage for filtering, drop, disabled behavior, nested drag state and excess files; live docs demo includes native picker and dropzone. Wrapper drop, directory fallback, keyboard picker and three-engine evidence remain incomplete.
 - **Accessibility:** Dropzone must remain keyboard-operable via the native picker; dragover state is cosmetic.
 - **Forms:** Output-based in Volt (no CVA). Requirement: files output; optionally a `File[]` adapter.
 - **Angular / SSR:** No file APIs at import.
-- **Remaining work:** File-drop directive (drag state, `accept` filtering, directory entries) and picker association.
+- **Remaining work:** Complete three-engine wrapper-drop, directory fallback, keyboard picker, cancellation and accessibility coverage. Directory trees are not traversed; filtering is UX-only.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** E2E with a real `DataTransfer` drop in 3 engines; unit accept filtering; keyboard picker path.
 

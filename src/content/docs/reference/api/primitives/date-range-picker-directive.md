@@ -3,7 +3,7 @@
 title: DateRangePickerDirective
 description: Inline range calendar.
 group: "API: Primitives"
-order: 1127
+order: 1129
 generated: doq-api
 category: directive
 ---

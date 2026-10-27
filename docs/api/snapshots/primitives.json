@@ -20,6 +20,9 @@
   "AccordionType": {
     "kind": "type"
   },
+  "AutofillDirective": {
+    "kind": "class"
+  },
   "CalendarCellDirective": {
     "kind": "class"
   },
@@ -195,6 +198,33 @@
   "DialogService": {
     "kind": "class"
   },
+  "FileDropzoneDirective": {
+    "kind": "class"
+  },
+  "FileUploadDirective": {
+    "kind": "class"
+  },
+  "FormFieldControlDirective": {
+    "kind": "class"
+  },
+  "FormFieldDescriptionDirective": {
+    "kind": "class"
+  },
+  "FormFieldDirective": {
+    "kind": "class"
+  },
+  "FormFieldErrorDirective": {
+    "kind": "class"
+  },
+  "FormFieldLabelDirective": {
+    "kind": "class"
+  },
+  "InputOtpComponent": {
+    "kind": "class"
+  },
+  "InputOtpSlot": {
+    "kind": "interface"
+  },
   "LatestRequest": {
     "kind": "interface"
   },
@@ -361,6 +391,9 @@
     "kind": "class"
   },
   "RangeSliderValue": {
+    "kind": "interface"
+  },
+  "RejectedFile": {
     "kind": "interface"
   },
   "SelectCloseReason": {

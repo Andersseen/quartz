@@ -3,7 +3,7 @@
 title: ToggleControlDirective
 description: "Angular Forms adapter for button[qzToggle]."
 group: "API: Forms"
-order: 1511
+order: 1513
 generated: doq-api
 category: directive
 ---

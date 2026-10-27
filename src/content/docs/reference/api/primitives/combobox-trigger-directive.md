@@ -3,7 +3,7 @@
 title: ComboboxTriggerDirective
 description: "Directive reference for ComboboxTriggerDirective with the selector [qzComboboxTrigger]."
 group: "API: Primitives"
-order: 1125
+order: 1127
 generated: doq-api
 category: directive
 ---

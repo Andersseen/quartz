@@ -3,7 +3,7 @@
 title: TreeNode
 description: Interface reference for TreeNode.
 group: "API: Primitives"
-order: 1232
+order: 1243
 generated: doq-api
 category: interface
 ---

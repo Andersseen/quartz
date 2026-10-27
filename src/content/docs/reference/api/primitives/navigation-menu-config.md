@@ -3,7 +3,7 @@
 title: NavigationMenuConfig
 description: Interface reference for NavigationMenuConfig.
 group: "API: Primitives"
-order: 1215
+order: 1225
 generated: doq-api
 category: interface
 ---

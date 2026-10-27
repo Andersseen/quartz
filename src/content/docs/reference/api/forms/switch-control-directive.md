@@ -3,7 +3,7 @@
 title: SwitchControlDirective
 description: "Angular Forms adapter for button[qzSwitch]."
 group: "API: Forms"
-order: 1510
+order: 1512
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: CalendarRowDirective
 description: "Directive reference for CalendarRowDirective with the selector [qzCalendarRow]."
 group: "API: Primitives"
-order: 1115
+order: 1117
 generated: doq-api
 category: directive
 ---

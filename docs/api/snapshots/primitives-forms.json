@@ -11,6 +11,12 @@
   "DateRangePickerControlDirective": {
     "kind": "class"
   },
+  "FormFieldStateDirective": {
+    "kind": "class"
+  },
+  "InputOtpControlDirective": {
+    "kind": "class"
+  },
   "ListboxControlDirective": {
     "kind": "class"
   },

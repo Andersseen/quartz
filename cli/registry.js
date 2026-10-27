@@ -12,6 +12,30 @@
 // the consumer to install instead of copying.
 
 const REGISTRY = {
+  'form-field': {
+    description: 'Accessible field labels, descriptions, errors and control relationships',
+    layer: 'primitives',
+    files: ['form-field/form-field.directive.ts', 'form-field/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/form-field',
+  },
+  autofill: {
+    description: 'Best-effort browser autofill transition detection',
+    layer: 'primitives',
+    files: ['autofill/autofill.directive.ts', 'autofill/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/autofill',
+  },
+  'file-upload': {
+    description: 'Native file picker and drag/drop filtering behavior',
+    layer: 'primitives',
+    files: ['file-upload/file-upload.directive.ts', 'file-upload/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/file-upload',
+  },
+  'input-otp': {
+    description: 'Single-input one-time-code control with slot state and paste filtering',
+    layer: 'primitives',
+    files: ['input-otp/input-otp.component.ts', 'input-otp/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/input-otp',
+  },
   collection: {
     description: 'Interactive collection foundation',
     layer: 'core',

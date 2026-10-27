@@ -36,6 +36,7 @@ import { StepperDemoComponent } from './stepper.demo';
 import { ToolbarDemoComponent } from './toolbar.demo';
 import { NavigationMenuDemoComponent } from './navigation-menu.demo';
 import { PaginationDemoComponent } from './pagination.demo';
+import { Controls014DemoComponent } from './controls-014.demo';
 
 @Component({
   selector: 'app-overlay-demo-loader',
@@ -445,6 +446,18 @@ class NavigationMenuDemoLoader {}
 })
 class PaginationDemoLoader {}
 
+@Component({
+  selector: 'app-controls-014-demo-loader',
+  imports: [Controls014DemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-controls-014-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class Controls014DemoLoader {}
+
 export const DOC_DEMOS = {
   overlay: OverlayDemoLoader,
   directionality: DirectionalityDemoLoader,
@@ -480,4 +493,5 @@ export const DOC_DEMOS = {
   toolbar: ToolbarDemoLoader,
   'navigation-menu': NavigationMenuDemoLoader,
   pagination: PaginationDemoLoader,
+  'controls-text-files': Controls014DemoLoader,
 } as const;

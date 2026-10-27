@@ -1,6 +1,6 @@
 # Roadmap hacia Quartz Headless 1.0
 
-> Plan activo · 2026-10-23 · 0.7 Core y 0.8 flotantes implementados; **0.9 selección, controles y Forms implementado** (ver [0.9 acceptance](docs/releases/0.9-acceptance.md)).
+> Plan activo · 2026-10-27 · 0.14 desarrollo iniciado en `feat/quartz-0.14-text-file-form-field`; no integrar ni publicar hasta cerrar la reconciliación 0.12/0.13 y completar la aceptación 0.14.
 > Requisito de producto nuevo: la 1.0 cubre el comportamiento headless de **todos** los componentes de Volt UI ([inventario](docs/api/volt-parity.md)). Por eso la secuencia 0.10/0.11 anterior (consumo y congelación) pasa a 0.17/0.18, detrás de siete hitos de paridad.
 > Este documento recoge el camino restante hacia 1.0; el hito 0.6 queda archivado en
 > [0.6 acceptance](docs/releases/0.6-acceptance.md).

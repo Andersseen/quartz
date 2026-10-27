@@ -3,7 +3,7 @@
 title: RangeSliderThumbDirective
 description: "One thumb of a qzRangeSlider: qzRangeSliderThumb=\"low\" or qzRangeSliderThumb=\"high\"."
 group: "API: Primitives"
-order: 1161
+order: 1170
 generated: doq-api
 category: directive
 ---

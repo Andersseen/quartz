@@ -247,3 +247,15 @@ export {
   DEFAULT_DATE_PICKER_CONFIG,
 } from './date-picker';
 export type { CalendarDay, DateDisabled, DatePickerConfig, DateRange } from './date-picker';
+
+// Form field composition
+export { InputOtpComponent, type InputOtpSlot } from './input-otp';
+export { FileDropzoneDirective, FileUploadDirective, type RejectedFile } from './file-upload';
+export { AutofillDirective } from './autofill';
+export {
+  FormFieldDirective,
+  FormFieldControlDirective,
+  FormFieldLabelDirective,
+  FormFieldDescriptionDirective,
+  FormFieldErrorDirective,
+} from './form-field';

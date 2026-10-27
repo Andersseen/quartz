@@ -3,7 +3,7 @@
 title: AccordionTriggerDirective
 description: "Directive reference for AccordionTriggerDirective with the selector [qzAccordionTrigger]."
 group: "API: Primitives"
-order: 1108
+order: 1109
 generated: doq-api
 category: directive
 ---
