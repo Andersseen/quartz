@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.13.0] — in progress
+## [0.13.0] — release reconciliation in progress
 
-Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. Release remains gated on successful completion and verification of the 0.12 workflow and publication.
+Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`. The 0.13 implementation was merged in PR #43. Its merge workflow mistakenly published the current main source under 0.12.0; this narrow release-readiness change assigns the implemented API its matching 0.13.0 version after verifying the earlier publication and current full CI run.
 
 ### Added
 
@@ -23,11 +23,14 @@ Target: `@quartz-headless/core@0.13.0` and `@quartz-headless/primitives@0.13.0`.
 - Sidebar acceptance coverage now exercises collapsed versus closed state, focus trapping, Escape restoration and scroll-lock cleanup.
 - Added Doqs docs, live demos/playgrounds, CLI source-copy entries and public API reference for the new primitives.
 
-## [0.12.0] — 2026-10-25
+## [0.12.0] — published 2026-10-27 (source/version discrepancy)
 
 Release target: `@quartz-headless/core@0.12.0` and `@quartz-headless/primitives@0.12.0`. Adds the
 local-civil-date calendar foundation, DatePicker and DateRangePicker, optional Forms adapters,
 Doqs documentation and live examples. Evidence: `docs/releases/0.12-acceptance.md`.
+
+The immutable packages and `v0.12.0` were published from commit `274745f`, which also included the
+0.13 implementation. See the acceptance record and the 0.13 version-reconciliation PR.
 
 ### Added
 
