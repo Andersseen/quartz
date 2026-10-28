@@ -3,7 +3,7 @@
 title: TooltipConfig
 description: Interface reference for TooltipConfig.
 group: "API: Primitives"
-order: 1241
+order: 1252
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: ToastPosition
 description: Type alias reference for ToastPosition.
 group: "API: Primitives"
-order: 1277
+order: 1288
 generated: doq-api
 category: type
 ---
@@ -11,7 +11,7 @@ category: type
 ## Overview
 
 - **Kind:** Type alias
-- **Source:** [packages/primitives/src/toast/toast.types.ts:2](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L2)
+- **Source:** [packages/primitives/src/toast/toast.types.ts:3](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L3)
 
 ## Definition
 

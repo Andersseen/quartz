@@ -26,7 +26,6 @@ import {
   SelectListboxDirective,
   SelectOptionDirective,
   SelectTriggerDirective,
-  ToastContainerComponent,
   TooltipDirective,
   ToastService,
   type DialogRef,
@@ -56,7 +55,6 @@ import {
     SelectListboxDirective,
     SelectOptionDirective,
     SelectTriggerDirective,
-    ToastContainerComponent,
     TooltipDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -118,8 +116,6 @@ import {
         <button id="rtl-menu-trigger" type="button" qzMenuTrigger [menu]="rtlMenu">RTL menu</button>
       </section>
     </main>
-
-    <qz-toast-container />
 
     <ng-template #bgPop>
       <div id="bg-pop-content" style="background: white; padding: 8px">Pre-existing</div>

@@ -3,7 +3,7 @@
 title: TreeNodeComponent
 description: "Quartz owns the accessible row — role=\"treeitem\", roving tabindex, every aria- attribute, and click/keydown/focus handling all live on this component's own hos…"
 group: "API: Primitives"
-order: 1105
+order: 1106
 generated: doq-api
 category: component
 ---

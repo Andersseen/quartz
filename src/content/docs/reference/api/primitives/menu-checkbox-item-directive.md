@@ -3,7 +3,7 @@
 title: MenuCheckboxItemDirective
 description: "Directive reference for MenuCheckboxItemDirective with the selector [qzMenuCheckboxItem]."
 group: "API: Primitives"
-order: 1142
+order: 1143
 generated: doq-api
 category: directive
 ---

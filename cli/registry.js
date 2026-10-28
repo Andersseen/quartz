@@ -12,6 +12,34 @@
 // the consumer to install instead of copying.
 
 const REGISTRY = {
+  progress: {
+    description: 'Accessible determinate and indeterminate progressbar semantics',
+    layer: 'primitives',
+    files: [
+      'progress/progress.directive.ts',
+      'progress/progress-track.directive.ts',
+      'progress/progress-indicator.directive.ts',
+      'progress/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/progress',
+  },
+  meter: {
+    description: 'Accessible scalar meter semantics with normalized range state',
+    layer: 'primitives',
+    files: [
+      'meter/meter.directive.ts',
+      'meter/meter-track.directive.ts',
+      'meter/meter-indicator.directive.ts',
+      'meter/index.ts',
+    ],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/meter',
+  },
+  avatar: {
+    description: 'Image loading state with configurable consumer supplied fallback',
+    layer: 'primitives',
+    files: ['avatar/avatar.component.ts', 'avatar/index.ts'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/avatar',
+  },
   'form-field': {
     description: 'Accessible field labels, descriptions, errors and control relationships',
     layer: 'primitives',

@@ -3,7 +3,7 @@
 title: RangeSliderConfig
 description: Interface reference for RangeSliderConfig.
 group: "API: Primitives"
-order: 1229
+order: 1236
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: AccordionConfig
 description: Interface reference for AccordionConfig.
 group: "API: Primitives"
-order: 1213
+order: 1220
 generated: doq-api
 category: interface
 ---

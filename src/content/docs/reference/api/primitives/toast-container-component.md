@@ -3,7 +3,7 @@
 title: ToastContainerComponent
 description: Component reference for ToastContainerComponent with the selector qz-toast-container.
 group: "API: Primitives"
-order: 1103
+order: 1104
 generated: doq-api
 category: component
 ---
@@ -11,7 +11,7 @@ category: component
 ## Overview
 
 - **Kind:** Component
-- **Source:** [packages/primitives/src/toast/toast-container.component.ts:110](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast-container.component.ts#L110)
+- **Source:** [packages/primitives/src/toast/toast-container.component.ts:112](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast-container.component.ts#L112)
 
 ## Selector
 
@@ -26,6 +26,17 @@ qz-toast-container
 | `readonly positions` | [`ToastPosition[]`](/docs/reference/api/primitives/toast-position) |  |
 
 ## Public methods
+
+### onAction
+
+```ts
+onAction(toast: { id: string; }, action: { dismiss?: boolean; }): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `toast` | `{ id: string }` |  |  |
+| `action` | `{ dismiss?: boolean }` |  |  |
 
 ### calculateProgress
 

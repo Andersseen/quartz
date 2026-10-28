@@ -62,6 +62,45 @@ describe('ToastService', () => {
     expect(byPosition.get('top-center')?.length).toBe(0);
   });
 
+  it('keeps the newest toasts within each configured position limit', () => {
+    const first = service.info('First', undefined, { position: 'top-left', maxVisible: 2 });
+    const second = service.info('Second', undefined, { position: 'top-left', maxVisible: 2 });
+    service.info('Other position', undefined, { position: 'top-right', maxVisible: 1 });
+    service.info('Third', undefined, { position: 'top-left', maxVisible: 2 });
+
+    expect(service.toasts().map((toast) => toast.id)).toEqual([
+      second,
+      expect.any(String),
+      expect.any(String),
+    ]);
+    expect(service.toasts().map((toast) => toast.message)).toEqual([
+      'Second',
+      'Other position',
+      'Third',
+    ]);
+    expect(service.toasts().some((toast) => toast.id === first)).toBe(false);
+    expect(
+      service
+        .toastsByPosition()
+        .get('top-left')
+        ?.map((toast) => toast.message),
+    ).toEqual(['Second', 'Third']);
+  });
+
+  it('normalizes invalid stack limits to at least one visible toast', () => {
+    service.info('First', undefined, { position: 'top-left', maxVisible: 0 });
+    service.info('Second', undefined, { position: 'top-left', maxVisible: 0 });
+    service.info('Fallback', undefined, { position: 'top-right', maxVisible: Number.NaN });
+    expect(
+      service
+        .toastsByPosition()
+        .get('top-left')
+        ?.map((toast) => toast.message),
+    ).toEqual(['Second']);
+    expect(service.toastsByPosition().get('top-left')?.[0].maxVisible).toBe(1);
+    expect(service.toastsByPosition().get('top-right')?.[0].maxVisible).toBe(5);
+  });
+
   it('should pause and resume correctly', () => {
     const id = service.warning('Warning', undefined, { duration: 2000 });
 

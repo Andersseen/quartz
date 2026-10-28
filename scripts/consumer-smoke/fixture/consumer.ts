@@ -4,7 +4,7 @@
 // published packages' exports/types are broken for a real external consumer, even though
 // the monorepo's own workspace-symlink-based dev flow would never surface it.
 
-import { Component, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   CollectionStore,
@@ -19,6 +19,7 @@ import {
 } from '@quartz-headless/core';
 import {
   AccordionDirective,
+  AvatarComponent,
   AutofillDirective,
   AccordionItemDirective,
   AccordionPanelDirective,
@@ -60,6 +61,9 @@ import {
   MenuDirective,
   MenuItemDirective,
   MenuTriggerDirective,
+  MeterDirective,
+  MeterIndicatorDirective,
+  MeterTrackDirective,
   NavigationMenuContentDirective,
   NavigationMenuDirective,
   NavigationMenuItemDirective,
@@ -74,6 +78,9 @@ import {
   PaginationPreviousDirective,
   PopoverDirective,
   PopoverTriggerDirective,
+  ProgressDirective,
+  ProgressIndicatorDirective,
+  ProgressTrackDirective,
   RangeSliderDirective,
   RangeSliderRangeDirective,
   RangeSliderThumbDirective,
@@ -88,6 +95,9 @@ import {
   ToggleItemDirective,
   ToastContainerComponent,
   ToastService,
+  type ToastContentComponent,
+  type ToastContentContext,
+  type ToastTemplateContext,
   TooltipDirective,
   ListboxDirective,
   ListboxOptionDirective,
@@ -154,6 +164,84 @@ class ControlsComponent {
 
 void DialogHostComponent;
 void ControlsComponent;
+
+// New 0.15 feedback and indicator APIs are compiled against installed package exports with strict
+// templates. This catches missing declarations/types that the workspace aliases can conceal.
+@Component({
+  selector: 'app-consumer-feedback',
+  standalone: true,
+  imports: [
+    AvatarComponent,
+    MeterDirective,
+    MeterTrackDirective,
+    MeterIndicatorDirective,
+    ProgressDirective,
+    ProgressTrackDirective,
+    ProgressIndicatorDirective,
+  ],
+  template: `
+    <div qzProgress [value]="progress" [min]="min" [max]="max" aria-label="Download">
+      <div qzProgressTrack><div qzProgressIndicator></div></div>
+    </div>
+    <div qzMeter [value]="measurement" [min]="min" [max]="max" aria-label="Storage">
+      <div qzMeterTrack><div qzMeterIndicator></div></div>
+    </div>
+    <qz-avatar [src]="avatarSrc" alt="Profile photo" fallback="JD" [fallbackDelay]="100" />
+  `,
+})
+class FeedbackIndicatorsComponent {
+  progress = 40;
+  measurement = 72;
+  min = 0;
+  max = 100;
+  avatarSrc = 'https://example.test/avatar.png';
+}
+
+@Component({ standalone: true, template: '{{ context.toast.message }}' })
+class ConsumerToastContentComponent implements ToastContentComponent {
+  @Input() context!: ToastContentContext;
+}
+
+@Component({
+  selector: 'app-consumer-toast-content',
+  standalone: true,
+  imports: [ToastContainerComponent],
+  template: `
+    <ng-template #toastTemplate let-toast="toast" let-dismiss="dismiss">
+      <span>{{ toast.message }}</span>
+      <button type="button" (click)="dismiss()">Dismiss</button>
+    </ng-template>
+    <button type="button" (click)="showTemplate()">Template toast</button>
+    <button type="button" (click)="showComponent()">Component toast</button>
+    <qz-toast-container />
+  `,
+})
+class ToastContentHostComponent {
+  private readonly toasts = inject(ToastService);
+  @ViewChild('toastTemplate', { static: true })
+  private toastTemplate!: TemplateRef<ToastTemplateContext>;
+
+  showTemplate(): void {
+    this.toasts.show({
+      type: 'success',
+      message: 'Template content',
+      content: this.toastTemplate,
+      actions: [{ label: 'Undo', run: () => {}, dismiss: false }],
+      maxVisible: 2,
+    });
+  }
+
+  showComponent(): void {
+    this.toasts.show({
+      type: 'info',
+      message: 'Component content',
+      content: ConsumerToastContentComponent,
+    });
+  }
+}
+
+void FeedbackIndicatorsComponent;
+void ToastContentHostComponent;
 
 // Core 0.7 contracts, compiled by the Angular AOT compiler against the installed tarball
 // (`ngc` with strictTemplates — see scripts/consumer-smoke.js).

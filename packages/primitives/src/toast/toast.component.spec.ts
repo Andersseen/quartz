@@ -1,7 +1,17 @@
 import { render, screen } from '@testing-library/angular';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { vi, describe, it, expect } from 'vitest';
 import { ToastComponent } from './toast.component';
-import { Toast } from './toast.types';
+import { Toast, ToastContentContext } from './toast.types';
+
+@Component({
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<button type="button" (click)="context().dismiss()">Custom close</button>',
+})
+class CustomToastContent {
+  readonly context = input.required<ToastContentContext>();
+}
 
 describe('ToastComponent', () => {
   const mockToast: Toast = {
@@ -67,6 +77,7 @@ describe('ToastComponent', () => {
     const resumeSpy = vi.spyOn(fixture.componentInstance.resumed, 'emit');
     const toastElement = fixture.nativeElement.querySelector('.qz-toast');
 
+    toastElement.dispatchEvent(new MouseEvent('mouseenter'));
     toastElement.dispatchEvent(new MouseEvent('mouseleave'));
     expect(resumeSpy).toHaveBeenCalled();
   });
@@ -101,5 +112,36 @@ describe('ToastComponent', () => {
     expect(screen.getByRole('button', { name: 'Close notification' })).toBeInTheDocument();
     await rerender({ inputs: { toast: { ...mockToast, closable: false }, progress: 100 } });
     expect(screen.queryByRole('button')).toBeNull();
+  });
+
+  it('renders a custom content component with a callable dismiss context', async () => {
+    const dismiss = vi.fn();
+    const { fixture } = await render(ToastComponent, {
+      inputs: {
+        toast: { ...mockToast, content: CustomToastContent },
+        dismissContext: dismiss,
+      },
+    });
+    expect(fixture.componentInstance.componentInputs().context.dismiss).toBe(dismiss);
+    expect(fixture.componentInstance.templateContext().dismiss).toBe(dismiss);
+    screen.getByRole('button', { name: 'Custom close' }).click();
+    expect(dismiss).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the timer paused while either hover or focus remains active', async () => {
+    const { fixture } = await render(ToastComponent, { inputs: { toast: mockToast } });
+    const toastElement = fixture.nativeElement.querySelector('.qz-toast') as HTMLElement;
+    const resumeSpy = vi.spyOn(fixture.componentInstance.resumed, 'emit');
+    const pauseSpy = vi.spyOn(fixture.componentInstance.paused, 'emit');
+
+    toastElement.dispatchEvent(new MouseEvent('mouseenter'));
+    toastElement.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    toastElement.dispatchEvent(new MouseEvent('mouseleave'));
+    expect(resumeSpy).not.toHaveBeenCalled();
+    toastElement.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body }),
+    );
+    expect(pauseSpy).toHaveBeenCalledOnce();
+    expect(resumeSpy).toHaveBeenCalledOnce();
   });
 });

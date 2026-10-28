@@ -3,7 +3,7 @@
 title: CalendarMonthLabelDirective
 description: Month heading text that announces navigation without introducing a second live region.
 group: "API: Primitives"
-order: 1114
+order: 1115
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: DateRange
 description: An incomplete or complete calendar date range.
 group: "API: Primitives"
-order: 1217
+order: 1224
 generated: doq-api
 category: interface
 ---

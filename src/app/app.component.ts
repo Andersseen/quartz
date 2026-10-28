@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { HeaderComponent } from './components/header/header.component';
+import { ToastContainerComponent } from '@quartz-headless/primitives';
 
 /**
  * Root shell. The landing and catalogue pages render their own header; the documentation region
@@ -12,7 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
  */
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, ToastContainerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (isDocs()) {
@@ -21,6 +22,7 @@ import { HeaderComponent } from './components/header/header.component';
     <div [class.qz-docs-host]="isDocs()" [attr.role]="documentRole() ? 'main' : null">
       <router-outlet />
     </div>
+    <qz-toast-container />
   `,
 })
 export class App {

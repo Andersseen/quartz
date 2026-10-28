@@ -3,7 +3,7 @@
 title: DEFAULT_ACCORDION_CONFIG
 description: Constant reference for DEFAULT_ACCORDION_CONFIG.
 group: "API: Primitives"
-order: 1285
+order: 1296
 generated: doq-api
 category: constant
 ---

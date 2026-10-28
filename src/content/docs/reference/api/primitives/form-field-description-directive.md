@@ -3,7 +3,7 @@
 title: FormFieldDescriptionDirective
 description: "Directive reference for FormFieldDescriptionDirective with the selector [qzFormFieldDescription]."
 group: "API: Primitives"
-order: 1133
+order: 1134
 generated: doq-api
 category: directive
 ---

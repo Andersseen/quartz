@@ -3,7 +3,7 @@
 title: ComboboxGroupLabelDirective
 description: Visible label of a qzComboboxGroup.
 group: "API: Primitives"
-order: 1122
+order: 1123
 generated: doq-api
 category: directive
 ---

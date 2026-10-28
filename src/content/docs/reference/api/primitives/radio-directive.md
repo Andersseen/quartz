@@ -3,7 +3,7 @@
 title: RadioDirective
 description: "Directive reference for RadioDirective with the selector [qzRadio]."
 group: "API: Primitives"
-order: 1166
+order: 1173
 generated: doq-api
 category: directive
 ---

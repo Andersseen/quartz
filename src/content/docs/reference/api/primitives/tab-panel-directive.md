@@ -3,7 +3,7 @@
 title: TabPanelDirective
 description: "Directive reference for TabPanelDirective with the selector [qzTabPanel]."
 group: "API: Primitives"
-order: 1197
+order: 1204
 generated: doq-api
 category: directive
 ---

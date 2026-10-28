@@ -3,7 +3,7 @@
 title: DEFAULT_TOAST_OPTIONS
 description: Constant reference for DEFAULT_TOAST_OPTIONS.
 group: "API: Primitives"
-order: 1302
+order: 1313
 generated: doq-api
 category: constant
 ---
@@ -11,12 +11,12 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/toast/toast.types.ts:45](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L45)
+- **Source:** [packages/primitives/src/toast/toast.types.ts:63](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L63)
 
 ## Type
 
 ```ts
-const DEFAULT_TOAST_OPTIONS: Required<Omit<ToastOptions, 'title' | 'message'>>
+const DEFAULT_TOAST_OPTIONS: Required< Omit<ToastOptions, 'title' | 'message' | 'content' | 'actions'> >
 ```
 
 ## Related types

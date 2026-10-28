@@ -3,7 +3,7 @@
 title: NavigationMenuLinkDirective
 description: "Directive reference for NavigationMenuLinkDirective with the selector [qzNavigationMenuLink]."
 group: "API: Primitives"
-order: 1155
+order: 1159
 generated: doq-api
 category: directive
 ---

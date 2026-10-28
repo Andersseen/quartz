@@ -3,7 +3,7 @@
 title: AutofillDirective
 description: "Detects supported browser autofill CSS animation transitions; this is best-effort."
 group: "API: Primitives"
-order: 1110
+order: 1111
 generated: doq-api
 category: directive
 ---

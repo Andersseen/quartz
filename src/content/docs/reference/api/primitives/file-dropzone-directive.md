@@ -3,7 +3,7 @@
 title: FileDropzoneDirective
 description: Adds keyboard friendly dropzone behavior around a native qzFileUpload input.
 group: "API: Primitives"
-order: 1130
+order: 1131
 generated: doq-api
 category: directive
 ---

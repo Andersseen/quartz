@@ -3,7 +3,7 @@
 title: AccordionPanelDirective
 description: "Directive reference for AccordionPanelDirective with the selector [qzAccordionPanel]."
 group: "API: Primitives"
-order: 1108
+order: 1109
 generated: doq-api
 category: directive
 ---

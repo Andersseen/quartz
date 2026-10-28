@@ -3,7 +3,7 @@
 title: ToastComponent
 description: Component reference for ToastComponent with the selector qz-toast.
 group: "API: Primitives"
-order: 1102
+order: 1103
 generated: doq-api
 category: component
 ---
@@ -11,7 +11,7 @@ category: component
 ## Overview
 
 - **Kind:** Component
-- **Source:** [packages/primitives/src/toast/toast.component.ts:47](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.component.ts#L47)
+- **Source:** [packages/primitives/src/toast/toast.component.ts:63](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.component.ts#L63)
 
 ## Selector
 
@@ -25,16 +25,45 @@ qz-toast
 | --- | --- | --- | --- | --- |
 | `toast` | [`Toast`](/docs/reference/api/primitives/toast) |  | Yes |  |
 | `progress` | `number` | `100` |  |  |
+| `dismissContext` | `() => void` |  | Yes |  |
 
 ## Outputs
 
 | Output | Payload | Description |
 | --- | --- | --- |
 | `dismiss` | `void` |  |
+| `action` | [`ToastAction`](/docs/reference/api/primitives/toast-action) |  |
 | `paused` | `void` |  |
 | `resumed` | `void` |  |
 
+## Properties
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `readonly templateContext` | `Signal<{ $implicit: Toast; toast: Toast; dismiss: () => void; }>` |  |
+| `readonly componentInputs` | `Signal<{ context: { toast: Toast; dismiss: () => void; }; }>` |  |
+
 ## Public methods
+
+### isTemplate
+
+```ts
+isTemplate(content: unknown): boolean
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `content` | `unknown` |  |  |
+
+### activate
+
+```ts
+activate(action: ToastAction): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `action` | [`ToastAction`](/docs/reference/api/primitives/toast-action) |  |  |
 
 ### onMouseEnter
 
@@ -48,6 +77,23 @@ onMouseEnter(): void
 onMouseLeave(): void
 ```
 
+### onFocusIn
+
+```ts
+onFocusIn(): void
+```
+
+### onFocusOut
+
+```ts
+onFocusOut(event: FocusEvent): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `FocusEvent` |  |  |
+
 ## Related types
 
 - [`Toast`](/docs/reference/api/primitives/toast)
+- [`ToastAction`](/docs/reference/api/primitives/toast-action)

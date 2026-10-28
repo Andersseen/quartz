@@ -3,7 +3,7 @@
 title: DEFAULT_DIALOG_CONFIG
 description: Constant reference for DEFAULT_DIALOG_CONFIG.
 group: "API: Primitives"
-order: 1288
+order: 1299
 generated: doq-api
 category: constant
 ---

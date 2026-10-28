@@ -3,7 +3,7 @@
 title: AccordionDirective
 description: "Directive reference for AccordionDirective with the selector [qzAccordion]."
 group: "API: Primitives"
-order: 1106
+order: 1107
 generated: doq-api
 category: directive
 ---
