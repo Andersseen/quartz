@@ -1,16 +1,16 @@
 # STATE — Current Project Status
 
-# 0.15 Feedback & Value Indicators — feature work in progress (2026-10-28)
+# 0.15 Feedback & Value Indicators — implementation complete, release blocked (2026-10-28)
 
 ## Current release gate
 
-Branch `feat/quartz-0.15-feedback-indicators`, based on synchronized main `adb817496d721bcf78810e8d28b96c4deb77a3ed`. Progress, Meter, Avatar, Toast content/actions, docs, demo/playground, CLI registrations and focused browser coverage are implemented. Full unit suite passes (660/660); focused 0.15 primitives pass (41/41); feedback E2E passes 15/15 across Chromium, Firefox and WebKit with axe and normal hydration; package build, strict consumer AOT and API snapshot checks pass. Full baseline E2E on the separate route-maintenance worktree has 644 passes and 7 failures, so 0.13/0.14 publication and 0.15 merge/release remain blocked. See `docs/releases/0.15-acceptance.md`.
+Branch `feat/quartz-0.15-feedback-indicators`, based on synchronized main `adb817496d721bcf78810e8d28b96c4deb77a3ed`, is in draft PR #46. Progress, Meter, Avatar (including deterministic SSR fallback and stale-load protection), Toast content/actions, docs, demos/playgrounds and CLI registrations are implemented. Full unit/coverage passes (666 tests; 89.51% statements, 76.61% branches, 91.89% functions, 92.11% lines); focused 0.15 primitives pass (43/43); feedback E2E passes 21/21 across Chromium, Firefox and WebKit with raw SSR fallback, axe and hydration checks; strict tarball consumer AOT and docs checks pass. Maintenance PR #47 has 648 clean full-suite passes and three WebKit cases passing after retry; its generated-docs correction is in a follow-up run. 0.13/0.14 publication and 0.15 merge/release remain blocked. See `docs/releases/0.15-acceptance.md`.
 
 ## 0.14 Text, File Input & FormField — merged, release pending (2026-10-28)
 
-Branch `feat/quartz-0.14-text-file-form-field`, based on starting main `274745fe2626aa000bc79c3f37e9f4bccca4def6`. Initial FormField, InputOTP, Autofill and native FileUpload/Dropzone APIs, optional Forms adapters, CLI entries, docs, demo/playground, focused tests and consumer fixture are implemented. Core and Primitives library builds passed. Focused tests found and fixed a native `multiple` property binding defect; re-run is in progress. Release readiness is not claimed: cross-engine E2E, full CI-equivalent checks, SSR/hydration acceptance and complete Volt evidence remain to be closed. No 0.14 versions changed and no feature PR has been opened yet.
+Branch `feat/quartz-0.14-text-file-form-field`, based on starting main `274745fe2626aa000bc79c3f37e9f4bccca4def6`. Initial FormField, InputOTP, Autofill and native FileUpload/Dropzone APIs, optional Forms adapters, CLI entries, docs, demo/playground, focused tests and consumer fixture are implemented. Core and Primitives library builds passed. The feature PR #45 is merged. This work has not produced a verified 0.14 package release: the manifests at the audited main commit remain 0.13.0, and only the earlier 0.12.0 npm artifacts are confirmed. Version and source-specific publication remains pending behind the 0.13 recovery.
 
-PR #45 merged the 0.14 implementation, but workflow `40654239949` failed E2E and skipped npm/Pages; the manifests remained at 0.13.0. The 0.13 reconciliation workflow `40526751145` also failed E2E and skipped publication. Do not bump or publish later minors until the 7 remaining full E2E failures in the maintenance rerun are classified and fixed or documented as genuine external blockers.
+PR #45 merged the 0.14 implementation, but workflow `40654239949` failed E2E and skipped npm/Pages; the manifests remained at 0.13.0. The 0.13 reconciliation workflow `40526751145` also failed E2E and skipped publication. A maintenance PR #47 now addresses the shared route activation cause and the three WebKit cases still requiring retries. Do not bump or publish later minors until its checks pass and the exact 0.13/0.14 source and version sequence is verified.
 
 ## 0.13 Navigation & Roving Focus — release reconciliation in progress (2026-10-27)
 
@@ -19,9 +19,7 @@ consumer and full three-engine E2E, then deployed Pages and created `v0.12.0`. T
 so both npm packages were published as 0.12.0 from source that already included the 0.13 implementation.
 The immutable 0.12.0 artifacts are not republished. Maintenance PR #44 set Core/Primitives to 0.13.0
 and the Primitives Core peer range to `^0.13.0`, but workflow `40526751145` failed E2E and skipped
-publication, release and Pages. A separate uncommitted maintenance worktree registers five legacy
-fixture routes; its focused route-contract test passed, but the full suite had 7 remaining failures
-(644/651 passed). Verify npm 0.13.0, GitHub Release `v0.13.0` and Pages only after those failures are resolved.
+publication, release and Pages. A separate maintenance branch registers the missing legacy fixture routes, uses a browser-platform readiness guard, and repairs a Pagination focus regression. Its final local full run completed 651 cases: 648 passed cleanly and three WebKit cases passed after retry; the three focused cases pass across all engines (9/9). PR #47 is open and its latest GitHub checks are pending. Verify npm 0.13.0, GitHub Release `v0.13.0` and Pages only after maintenance checks pass and publication from the exact historical source is complete.
 
 ## 0.12.0 Date & Date Range — 2026-10-25
 
