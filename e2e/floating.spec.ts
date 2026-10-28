@@ -24,7 +24,8 @@ const inInert = (page: Page, selector: string) =>
   );
 const isInert = (page: Page, selector: string) =>
   page.evaluate(
-    (sel) => (document.querySelector(sel) as HTMLElement | null)?.inert ?? false,
+    // Effective inertness: the element or any ancestor (the shell may isolate a wrapper).
+    (sel) => !!document.querySelector(sel)?.closest('[inert]'),
     selector,
   );
 const residue = (page: Page) =>
