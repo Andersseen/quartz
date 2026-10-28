@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Initial 0.15 feedback and value-indicator APIs: Progress, Meter, Avatar and Toast template/component content with actions. Validation and release remain blocked pending the earlier 0.13/0.14 release reconciliation; see `docs/releases/0.15-acceptance.md`.
 - Initial 0.14 FormField, InputOTP, autofill and native file selection/dropzone APIs, optional Forms integration, CLI registration and Doqs documentation. Acceptance and release checks are still in progress; see `docs/releases/0.14-acceptance.md`.
 
 ## [0.13.0] — post-merge E2E failed; release pending

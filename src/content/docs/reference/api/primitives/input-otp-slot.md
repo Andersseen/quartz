@@ -3,7 +3,7 @@
 title: InputOtpSlot
 description: Interface reference for InputOtpSlot.
 group: "API: Primitives"
-order: 1219
+order: 1226
 generated: doq-api
 category: interface
 ---

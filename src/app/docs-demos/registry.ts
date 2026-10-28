@@ -37,6 +37,11 @@ import { ToolbarDemoComponent } from './toolbar.demo';
 import { NavigationMenuDemoComponent } from './navigation-menu.demo';
 import { PaginationDemoComponent } from './pagination.demo';
 import { Controls014DemoComponent } from './controls-014.demo';
+import {
+  ProgressDemoComponent,
+  MeterDemoComponent,
+  AvatarDemoComponent,
+} from './feedback-indicators.demo';
 
 @Component({
   selector: 'app-overlay-demo-loader',
@@ -458,6 +463,40 @@ class PaginationDemoLoader {}
 })
 class Controls014DemoLoader {}
 
+@Component({
+  selector: 'app-progress-demo-loader',
+  imports: [ProgressDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-progress-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class ProgressDemoLoader {}
+@Component({
+  selector: 'app-meter-demo-loader',
+  imports: [MeterDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-meter-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class MeterDemoLoader {}
+@Component({
+  selector: 'app-avatar-demo-loader',
+  imports: [AvatarDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-avatar-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class AvatarDemoLoader {}
+
 export const DOC_DEMOS = {
   overlay: OverlayDemoLoader,
   directionality: DirectionalityDemoLoader,
@@ -469,6 +508,9 @@ export const DOC_DEMOS = {
   dialog: DialogDemoLoader,
   tooltip: TooltipDemoLoader,
   toast: ToastDemoLoader,
+  progress: ProgressDemoLoader,
+  meter: MeterDemoLoader,
+  avatar: AvatarDemoLoader,
   popover: PopoverDemoLoader,
   menu: MenuDemoLoader,
   select: SelectDemoLoader,

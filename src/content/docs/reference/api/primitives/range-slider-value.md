@@ -3,7 +3,7 @@
 title: RangeSliderValue
 description: "Canonical range value (also the Angular Forms value): low <= high, both within min..max."
 group: "API: Primitives"
-order: 1230
+order: 1237
 generated: doq-api
 category: interface
 ---

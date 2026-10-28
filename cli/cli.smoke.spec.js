@@ -89,6 +89,20 @@ describe('CLI smoke — quartz add', () => {
     expect(copied.tooltip).toContain('index.ts');
   });
 
+  it('copies the 0.15 feedback primitives as standalone Primitives source', () => {
+    const outDir = runAdd(tmpDir, ['progress', 'meter', 'avatar']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['avatar', 'meter', 'progress']);
+    expect(copied.progress).toContain('progress.directive.ts');
+    expect(copied.progress).toContain('progress-indicator.directive.ts');
+    expect(copied.meter).toContain('meter.directive.ts');
+    expect(copied.meter).toContain('meter-indicator.directive.ts');
+    expect(copied.avatar).toContain('avatar.component.ts');
+    expect(fs.existsSync(path.join(outDir, 'overlay'))).toBe(false);
+    expect(fs.existsSync(path.join(outDir, 'dismiss'))).toBe(false);
+  });
+
   it('should copy menu and popover as Primitives without copying Core folders', () => {
     const outDir = runAdd(tmpDir, ['menu', 'popover']);
     const copied = readFiles(outDir);

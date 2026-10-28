@@ -3,7 +3,7 @@
 title: InputOtpComponent
 description: Component reference for InputOtpComponent with the selector qz-input-otp.
 group: "API: Primitives"
-order: 1101
+order: 1102
 generated: doq-api
 category: component
 ---

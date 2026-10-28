@@ -3,7 +3,7 @@
 title: FileUploadDirective
 description: Adds filtering and drag/drop selection events to a native file input.
 group: "API: Primitives"
-order: 1131
+order: 1132
 generated: doq-api
 category: directive
 ---

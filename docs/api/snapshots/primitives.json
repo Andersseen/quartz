@@ -23,6 +23,9 @@
   "AutofillDirective": {
     "kind": "class"
   },
+  "AvatarComponent": {
+    "kind": "class"
+  },
   "CalendarCellDirective": {
     "kind": "class"
   },
@@ -282,6 +285,15 @@
   "MenuTriggerDirective": {
     "kind": "class"
   },
+  "MeterDirective": {
+    "kind": "class"
+  },
+  "MeterIndicatorDirective": {
+    "kind": "class"
+  },
+  "MeterTrackDirective": {
+    "kind": "class"
+  },
   "NavbarBreakpoint": {
     "kind": "type"
   },
@@ -355,6 +367,15 @@
     "kind": "class"
   },
   "PopoverTriggerDirective": {
+    "kind": "class"
+  },
+  "ProgressDirective": {
+    "kind": "class"
+  },
+  "ProgressIndicatorDirective": {
+    "kind": "class"
+  },
+  "ProgressTrackDirective": {
     "kind": "class"
   },
   "RadioDirective": {
@@ -534,11 +555,20 @@
   "Toast": {
     "kind": "interface"
   },
+  "ToastAction": {
+    "kind": "interface"
+  },
   "ToastComponent": {
     "kind": "class"
   },
   "ToastContainerComponent": {
     "kind": "class"
+  },
+  "ToastContentComponent": {
+    "kind": "interface"
+  },
+  "ToastContentContext": {
+    "kind": "interface"
   },
   "ToastOptions": {
     "kind": "interface"
@@ -548,6 +578,9 @@
   },
   "ToastService": {
     "kind": "class"
+  },
+  "ToastTemplateContext": {
+    "kind": "interface"
   },
   "ToastType": {
     "kind": "type"

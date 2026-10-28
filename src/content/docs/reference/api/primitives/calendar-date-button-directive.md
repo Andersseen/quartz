@@ -3,7 +3,7 @@
 title: CalendarDateButtonDirective
 description: Roving-focus native date button with APG keyboard behavior and date semantics.
 group: "API: Primitives"
-order: 1112
+order: 1113
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: RadioGroupDirective
 description: "Directive reference for RadioGroupDirective with the selector [qzRadioGroup]."
 group: "API: Primitives"
-order: 1167
+order: 1174
 generated: doq-api
 category: directive
 ---

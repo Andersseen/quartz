@@ -3,7 +3,7 @@
 title: MenuDirective
 description: "Directive reference for MenuDirective with the selector [qzMenu]."
 group: "API: Primitives"
-order: 1143
+order: 1144
 generated: doq-api
 category: directive
 ---

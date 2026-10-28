@@ -3,7 +3,7 @@
 title: DatePickerDirective
 description: Inline single-date calendar behavior.
 group: "API: Primitives"
-order: 1128
+order: 1129
 generated: doq-api
 category: directive
 ---

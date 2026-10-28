@@ -27,6 +27,8 @@ import { ALL_TOAST_POSITIONS } from './toast.types';
           <qz-toast
             [toast]="toast"
             [progress]="calculateProgress(toast)"
+            [dismissContext]="() => toastService.dismiss(toast.id)"
+            (action)="onAction(toast, $event)"
             (dismiss)="toastService.dismiss(toast.id)"
             (paused)="toastService.pause(toast.id)"
             (resumed)="toastService.resume(toast.id)"
@@ -111,6 +113,10 @@ export class ToastContainerComponent {
   protected readonly toastService = inject(ToastService);
 
   readonly positions = ALL_TOAST_POSITIONS;
+
+  onAction(toast: { id: string }, action: { dismiss?: boolean }): void {
+    if (action.dismiss) this.toastService.dismiss(toast.id);
+  }
 
   calculateProgress(toast: { duration: number; remainingTime: number }): number {
     if (toast.duration === 0) return 100;

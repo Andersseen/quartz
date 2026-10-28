@@ -49,6 +49,19 @@ describe('ToastContainerComponent', () => {
     expect(container.querySelectorAll('qz-toast')).toHaveLength(1);
   });
 
+  it('dismisses an action toast only when its action requests dismissal', async () => {
+    const { fixture } = await render(ToastContainerComponent);
+    const service = TestBed.inject(ToastService);
+    service.show({
+      message: 'Undo available',
+      duration: 0,
+      actions: [{ label: 'Undo', run: () => {}, dismiss: true }],
+    });
+    fixture.detectChanges();
+    screen.getByRole('button', { name: 'Undo' }).click();
+    expect(service.toasts()).toHaveLength(0);
+  });
+
   // NOTE: the "empty containers must stay click-through" guarantee is verified in
   // e2e/behavior.spec.ts — jsdom's getComputedStyle does not apply `pointer-events`
   // from a component stylesheet, so it cannot be asserted here.

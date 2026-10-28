@@ -24,6 +24,12 @@ import {
   ToolbarPlaygroundComponent,
 } from './navigation-playgrounds';
 import { InputOtpPlaygroundComponent } from './input-otp-playground';
+import {
+  AvatarPlaygroundComponent,
+  MeterPlaygroundComponent,
+  ProgressPlaygroundComponent,
+  ToastPlaygroundComponent,
+} from './feedback-playgrounds';
 
 const orientation = (label = 'Orientation') => ({
   input: 'orientation',
@@ -48,6 +54,90 @@ const bool = (input: string, label: string, initial = false) => ({
  * stay free of Angular components.
  */
 export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
+  'quartz-progress': {
+    component: ProgressPlaygroundComponent,
+    title: 'Progress',
+    description: 'Progressbar semantics with a dynamic determinate or indeterminate state.',
+    controls: [
+      { input: 'value', kind: 'number', label: 'Value', initial: 45, min: 0, max: 100 },
+      { input: 'min', kind: 'number', label: 'Minimum', initial: 0 },
+      { input: 'max', kind: 'number', label: 'Maximum', initial: 100 },
+      bool('indeterminate', 'Indeterminate'),
+      { input: 'valueText', kind: 'string', label: 'Value text', initial: '' },
+    ],
+  },
+  'quartz-meter': {
+    component: MeterPlaygroundComponent,
+    title: 'Meter',
+    description: 'A scalar measurement within a meaningful range.',
+    controls: [
+      { input: 'value', kind: 'number', label: 'Value', initial: 42, min: 0, max: 100 },
+      { input: 'min', kind: 'number', label: 'Minimum', initial: 0 },
+      { input: 'max', kind: 'number', label: 'Maximum', initial: 100 },
+    ],
+  },
+  'quartz-avatar': {
+    component: AvatarPlaygroundComponent,
+    title: 'Avatar',
+    description: 'Try a fallback, a loaded source or a broken image.',
+    controls: [
+      { input: 'src', kind: 'string', label: 'Image source', initial: '' },
+      { input: 'fallback', kind: 'string', label: 'Fallback', initial: 'JD' },
+      { input: 'delay', kind: 'number', label: 'Fallback delay (ms)', initial: 0, min: 0 },
+      bool('broken', 'Broken image'),
+    ],
+  },
+  'quartz-toast': {
+    component: ToastPlaygroundComponent,
+    title: 'Toast',
+    description: 'Configure a transient notification, custom content, action and stacking limit.',
+    controls: [
+      {
+        input: 'type',
+        kind: 'select',
+        label: 'Severity',
+        initial: 'info',
+        options: [
+          { label: 'Info', value: 'info' },
+          { label: 'Success', value: 'success' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Error', value: 'error' },
+        ],
+      },
+      {
+        input: 'duration',
+        kind: 'number',
+        label: 'Duration (ms, 0 persists)',
+        initial: 5000,
+        min: 0,
+      },
+      {
+        input: 'position',
+        kind: 'select',
+        label: 'Placement',
+        initial: 'bottom-right',
+        options: [
+          { label: 'Top left', value: 'top-left' },
+          { label: 'Top center', value: 'top-center' },
+          { label: 'Top right', value: 'top-right' },
+          { label: 'Bottom left', value: 'bottom-left' },
+          { label: 'Bottom center', value: 'bottom-center' },
+          { label: 'Bottom right', value: 'bottom-right' },
+        ],
+      },
+      bool('closable', 'Show close button', true),
+      bool('customContent', 'Use custom template'),
+      bool('actions', 'Include action'),
+      {
+        input: 'maxVisible',
+        kind: 'number',
+        label: 'Maximum visible',
+        initial: 5,
+        min: 1,
+        max: 10,
+      },
+    ],
+  },
   'quartz-input-otp': {
     component: InputOtpPlaygroundComponent,
     title: 'InputOTP',

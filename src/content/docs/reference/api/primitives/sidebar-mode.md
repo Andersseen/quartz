@@ -3,7 +3,7 @@
 title: SidebarMode
 description: Type alias reference for SidebarMode.
 group: "API: Primitives"
-order: 1268
+order: 1279
 generated: doq-api
 category: type
 ---

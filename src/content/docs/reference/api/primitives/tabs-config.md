@@ -3,7 +3,7 @@
 title: TabsConfig
 description: Interface reference for TabsConfig.
 group: "API: Primitives"
-order: 1236
+order: 1243
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: CalendarGridDirective
 description: Adds grid semantics and a live month label to a consumer-owned calendar grid.
 group: "API: Primitives"
-order: 1113
+order: 1114
 generated: doq-api
 category: directive
 ---

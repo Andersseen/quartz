@@ -3,7 +3,7 @@
 title: NavigationMenuItemDirective
 description: "Directive reference for NavigationMenuItemDirective with the selector [qzNavigationMenuItem]."
 group: "API: Primitives"
-order: 1154
+order: 1158
 generated: doq-api
 category: directive
 ---

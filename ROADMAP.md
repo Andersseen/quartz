@@ -1,6 +1,6 @@
 # Roadmap hacia Quartz Headless 1.0
 
-> Plan activo · 2026-10-27 · 0.13 ya está integrado. El workflow `40494140662` publicó el código 0.13 como `0.12.0` por manifests atrasados; PR #44 fusionó la reconciliación de versión. Verifica la publicación 0.13.0 y el despliegue antes de integrar o publicar 0.14, cuyo desarrollo está aislado en `feat/quartz-0.14-text-file-form-field`.
+> Plan activo · 2026-10-28 · PR #45 integró 0.14; el workflow `40654239949` falló E2E y omitió npm/Pages. Las manifests siguen en 0.13.0, cuya publicación también sigue sin verificar. 0.15 se implementa en `feat/quartz-0.15-feedback-indicators`; los gates pendientes están en [0.15 acceptance](docs/releases/0.15-acceptance.md). No integrar/publicar antes de reconciliar versiones y E2E anteriores.
 > Requisito de producto nuevo: la 1.0 cubre el comportamiento headless de **todos** los componentes de Volt UI ([inventario](docs/api/volt-parity.md)). Por eso la secuencia 0.10/0.11 anterior (consumo y congelación) pasa a 0.17/0.18, detrás de siete hitos de paridad.
 > Este documento recoge el camino restante hacia 1.0; el hito 0.6 queda archivado en
 > [0.6 acceptance](docs/releases/0.6-acceptance.md).

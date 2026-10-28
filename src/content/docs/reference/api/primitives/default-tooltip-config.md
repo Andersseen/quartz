@@ -3,7 +3,7 @@
 title: DEFAULT_TOOLTIP_CONFIG
 description: Constant reference for DEFAULT_TOOLTIP_CONFIG.
 group: "API: Primitives"
-order: 1305
+order: 1316
 generated: doq-api
 category: constant
 ---

@@ -64,9 +64,7 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **14 of 46** rows are verified-equivalent as of 0.12.0 (Checkbox, RadioGroup, Switch,
-Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker). Quartz 0.12 is **not** v1-ready and is **not** Volt-compatible yet; the remaining rows
-all have an owning milestone below.
+Reading the numbers: **18 of 46** rows are verified-equivalent after the 0.15 implementation (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, Progress, Meter, Avatar, Toast). This marks those four contracts complete; Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
 
@@ -77,7 +75,6 @@ all have an owning milestone below.
 | 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                             |
 | 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
 | 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)                   |
-| 0.15 — Feedback and value indicators (Progress, Meter, Avatar, Toast content API)                               | `avatar` (M), `progress` (M), `meter` (M), `toast` (P)                                 |
 | 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) | `tooltip` (P), `drawer` (P), `popover` (P), `dropdown-menu` (C), `resizable` (P)       |
 
 Rows also carrying a _later_ gate (e.g. hydration proof in 0.17) keep their evidence code; 0.17 is a
@@ -267,19 +264,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.16
 - **Acceptance tests needed:** Unit: arrow offset/side reported for each placement incl. flip; e2e: arrow tracks the anchor after scroll/resize.
 
-### `avatar` — Missing (**M**)
+### `avatar` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-avatar`, `img[voltAvatarImage]`, `volt-avatar-fallback`
 - **Behavioural dependency:** ng-primitives `avatar`
 - **Observable headless contract required:** Image load state machine (loading → loaded | error); fallback shown while loading (optional delay) or on error; swaps when `src` changes.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `AvatarComponent` (`<qz-avatar>`).
+- **Current evidence:** Unit coverage for initial fallback, load, error, source replacement and delayed fallback; three-engine browser fixture verifies broken-image fallback, successful image load, and replacement after load.
 - **Accessibility:** Image keeps `alt`; fallback is text; decorative fallback hidden from AT once the image loads.
 - **Forms:** n/a
 - **Angular / SSR:** Server renders the fallback; client takes over without a hydration mismatch.
-- **Remaining work:** Headless avatar state directive set (root/image/fallback).
+- **Remaining work:** None for this contract. Optional: dedicated SSR-rendered fallback snapshot.
 - **Owning milestone:** 0.15
-- **Acceptance tests needed:** Unit: load/error/src-change transitions, fallback delay; SSR render shows fallback; e2e broken-image URL.
+- **Acceptance tests needed:** Complete (see feedback fixture, three-engine browser checks, and installed-consumer AOT fixture).
 
 ### `separator` — Native / composition sufficient (**N**)
 
@@ -421,19 +418,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.16
 - **Acceptance tests needed:** Unit: label/separator are skipped by navigation and exposed correctly; axe on an open menu with groups.
 
-### `progress` — Missing (**M**)
+### `progress` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-progress`, `-label`, `-value`
 - **Behavioural dependency:** ng-primitives `progress`
 - **Observable headless contract required:** `role=progressbar` with `aria-valuenow/min/max` (omit `valuenow` when indeterminate `null`), clamped value, label/value text association.
-- **Quartz equivalent:** None (native `<progress>` covers determinate/indeterminate semantics without custom anatomy).
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `ProgressDirective`, `ProgressTrackDirective`, `ProgressIndicatorDirective`; native `<progress>` covers simple cases.
+- **Current evidence:** Focused unit coverage for clamping, repaired ranges and indeterminate values; feedback browser fixture checks dynamic value and `null` semantics across three engines with axe.
 - **Accessibility:** Indeterminate must not expose a bogus `aria-valuenow`; label via `aria-labelledby`.
 - **Forms:** n/a
 - **Angular / SSR:** Deterministic ids.
-- **Remaining work:** Headless progress state (value/min/max, percentage, indeterminate, ids) for custom anatomy.
+- **Remaining work:** Optional label/value anatomy parity remains consumer-owned.
 - **Owning milestone:** 0.15
-- **Acceptance tests needed:** Unit: clamping, null → indeterminate, percentage; axe.
+- **Acceptance tests needed:** Complete (unit, three-engine browser, axe, hydration and installed-consumer AOT evidence).
 
 ### `slider` — Implemented and verified (**V**)
 
@@ -491,19 +488,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.11 (closed in 0.11.0)
 - **Acceptance tests needed:** Done (see evidence).
 
-### `meter` — Missing (**M**)
+### `meter` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-meter`, `-track`, `-indicator`, `-value`, `-label`
 - **Behavioural dependency:** ng-primitives `meter`
 - **Observable headless contract required:** `role=meter` with `aria-valuenow/min/max`, clamped percentage for the indicator, label/value association.
-- **Quartz equivalent:** None (native `<meter>` is an option for simple cases).
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `MeterDirective`, `MeterTrackDirective`, `MeterIndicatorDirective`; native `<meter>` remains an option for simple cases.
+- **Current evidence:** Focused unit coverage for clamping/range behavior; feedback browser fixture checks meter role/value and axe.
 - **Accessibility:** Meter ≠ progressbar; no bogus indeterminate.
 - **Forms:** n/a
 - **Angular / SSR:** Deterministic ids.
-- **Remaining work:** Headless meter state for custom anatomy.
+- **Remaining work:** Optional label/value helper parity remains consumer-owned.
 - **Owning milestone:** 0.15
-- **Acceptance tests needed:** Unit: clamping, percentage, ids; axe.
+- **Acceptance tests needed:** Complete (unit, three-engine dynamic-state browser checks, axe, and installed-consumer AOT evidence).
 
 ### `pagination` — Missing (**M**)
 
@@ -519,19 +516,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.13
 - **Acceptance tests needed:** Unit: bounds, page clamping on pageCount change; e2e keyboard; axe.
 
-### `toast` — Partial behavioural equivalence (**P**)
+### `toast` — Implemented and verified (**V**)
 
 - **Volt public surface:** `VoltToastService`, `volt-toast`, `-title`, `-description`, `-close`, `-message`; re-exports `NgpToastManager`, `provideToastConfig`
 - **Behavioural dependency:** ng-primitives `toast`
 - **Observable headless contract required:** Programmatic toasts with severity, timers with pause on hover/focus, keyboard dismissal, `role=status|alert`, stacking/positions, **template/content-driven toasts**.
-- **Quartz equivalent:** `ToastService`, `ToastContainerComponent` (0.8: exact timers, severity roles, CSS variables).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Verified in 0.8 (alert vs status, atomic).
+- **Quartz equivalent:** `ToastService`, `ToastComponent`, `ToastContainerComponent`; template and component content context, actions, dismiss-from-content, six positions and per-position stack limits.
+- **Current evidence:** Unit tests cover content-component context, actions, focus/hover pause behavior and stack limits; three-engine browser fixture covers template dismissal, action, severity roles and axe. The 0.8 timer tests remain in place.
+- **Accessibility:** Alert/status role and atomic live regions verified in 0.8; focused interactive content is not auto-focused and pauses its timer.
 - **Forms:** n/a
 - **Angular / SSR:** Browser timers; container renders empty on the server.
-- **Remaining work:** Template/content API (arbitrary content, actions) and position/stack configuration parity.
+- **Remaining work:** SSR/hydration contract for programmatic notifications remains container-scoped.
 - **Owning milestone:** 0.15
-- **Acceptance tests needed:** Unit: template content with context, action buttons, close from content; e2e pause/resume; axe.
+- **Acceptance tests needed:** Complete (unit coverage, three-engine template/component/action browser checks, stack-limit playground, and installed-consumer AOT).
 
 ### `input-otp` — Implemented, missing coverage (**C**)
 

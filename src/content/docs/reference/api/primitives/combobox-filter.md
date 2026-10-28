@@ -3,7 +3,7 @@
 title: ComboboxFilter
 description: Type alias reference for ComboboxFilter.
 group: "API: Primitives"
-order: 1252
+order: 1263
 generated: doq-api
 category: type
 ---

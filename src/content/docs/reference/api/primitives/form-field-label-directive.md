@@ -3,7 +3,7 @@
 title: FormFieldLabelDirective
 description: "Use a native label for native controls; use this on a span for button-like controls."
 group: "API: Primitives"
-order: 1136
+order: 1137
 generated: doq-api
 category: directive
 ---

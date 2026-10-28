@@ -3,7 +3,7 @@
 title: Toast
 description: Interface reference for Toast.
 group: "API: Primitives"
-order: 1237
+order: 1244
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/primitives/src/toast/toast.types.ts:30](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L30)
+- **Source:** [packages/primitives/src/toast/toast.types.ts:46](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.types.ts#L46)
 
 ## Declaration
 
@@ -27,16 +27,22 @@ interface Toast
 | `type` | [`ToastType`](/docs/reference/api/primitives/toast-type) |  |
 | `title?` | `string` |  |
 | `message` | `string` |  |
+| `content?` | `TemplateRef<ToastTemplateContext> \| Type<ToastContentComponent>` |  |
+| `actions` | [`ToastAction[]`](/docs/reference/api/primitives/toast-action) |  |
 | `duration` | `number` |  |
 | `position` | [`ToastPosition`](/docs/reference/api/primitives/toast-position) |  |
 | `closable` | `boolean` |  |
 | `pauseOnHover` | `boolean` |  |
 | `showProgress` | `boolean` |  |
+| `maxVisible` | `number` |  |
 | `createdAt` | `Date` |  |
 | `remainingTime` | `number` |  |
 | `isPaused` | `boolean` |  |
 
 ## Related types
 
+- [`ToastAction`](/docs/reference/api/primitives/toast-action)
+- [`ToastContentComponent`](/docs/reference/api/primitives/toast-content-component)
 - [`ToastPosition`](/docs/reference/api/primitives/toast-position)
+- [`ToastTemplateContext`](/docs/reference/api/primitives/toast-template-context)
 - [`ToastType`](/docs/reference/api/primitives/toast-type)

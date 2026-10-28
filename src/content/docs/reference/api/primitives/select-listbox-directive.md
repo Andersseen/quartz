@@ -3,7 +3,7 @@
 title: SelectListboxDirective
 description: "Directive reference for SelectListboxDirective with the selector [qzSelectListbox]."
 group: "API: Primitives"
-order: 1176
+order: 1183
 generated: doq-api
 category: directive
 ---

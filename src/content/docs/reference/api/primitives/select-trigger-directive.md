@@ -3,7 +3,7 @@
 title: SelectTriggerDirective
 description: "Directive reference for SelectTriggerDirective with the selector [qzSelectTrigger]."
 group: "API: Primitives"
-order: 1179
+order: 1186
 generated: doq-api
 category: directive
 ---

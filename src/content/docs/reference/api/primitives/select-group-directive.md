@@ -3,7 +3,7 @@
 title: SelectGroupDirective
 description: "Labelled group of options: role=\"group\" named by a qzSelectGroupLabel child."
 group: "API: Primitives"
-order: 1174
+order: 1181
 generated: doq-api
 category: directive
 ---

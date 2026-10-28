@@ -3,7 +3,7 @@
 title: NavigationMenuOrientation
 description: Type alias reference for NavigationMenuOrientation.
 group: "API: Primitives"
-order: 1260
+order: 1271
 generated: doq-api
 category: type
 ---

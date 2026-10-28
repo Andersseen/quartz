@@ -1,6 +1,6 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado actualizado 2026-10-27: el workflow `40494140662` publicó Core/Primitives `0.12.0`, creó `v0.12.0` y desplegó Pages desde `274745f`, que ya incluía la implementación 0.13; el workflow original del código 0.12 (`40223989422`) falló E2E. PR #44 fusionó la reconciliación de versión 0.13. Verifica los paquetes `0.13.0`, la release y Pages antes de integrar/publicar 0.14, cuyo desarrollo permanece aislado.
+> Estado actualizado 2026-10-28: PR #45 integró 0.14, pero el workflow `40654239949` falló E2E y dejó npm/Pages omitidos; las manifests siguen en 0.13.0. La rama `feat/quartz-0.15-feedback-indicators` implementa 0.15, aún sin bump ni PR. Ver `docs/releases/0.15-acceptance.md` para provenance, diagnóstico de rutas y puertas abiertas. No integrar/publicar hasta reconciliar 0.13 y 0.14.
 > Estado histórico al redactar: 0.11 integrado pero pendiente de release; 0.12 implementado y validado localmente. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
 > ([inventario](../api/volt-parity.md)); por eso hay siete minors de paridad (0.10–0.16) antes de consumo (0.17) y congelación (0.18). Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).

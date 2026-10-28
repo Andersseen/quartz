@@ -3,7 +3,7 @@
 title: PopoverConfig
 description: Interface reference for PopoverConfig.
 group: "API: Primitives"
-order: 1227
+order: 1234
 generated: doq-api
 category: interface
 ---

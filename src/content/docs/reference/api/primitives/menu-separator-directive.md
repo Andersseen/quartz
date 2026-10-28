@@ -3,7 +3,7 @@
 title: MenuSeparatorDirective
 description: "Directive reference for MenuSeparatorDirective with the selector [qzMenuSeparator]."
 group: "API: Primitives"
-order: 1147
+order: 1148
 generated: doq-api
 category: directive
 ---

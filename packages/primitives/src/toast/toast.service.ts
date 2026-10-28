@@ -41,23 +41,39 @@ export class ToastService implements OnDestroy {
   show(options: ToastOptions): string {
     const id = generateId();
     const mergedOptions = { ...DEFAULT_TOAST_OPTIONS, ...options };
+    const maxVisible = Number.isFinite(mergedOptions.maxVisible)
+      ? Math.max(1, Math.floor(mergedOptions.maxVisible))
+      : DEFAULT_TOAST_OPTIONS.maxVisible;
 
     const toast: Toast = {
       id,
       type: mergedOptions.type,
       title: mergedOptions.title,
-      message: mergedOptions.message,
+      message: mergedOptions.message ?? '',
+      content: mergedOptions.content,
+      actions: mergedOptions.actions ?? [],
       duration: mergedOptions.duration,
       position: mergedOptions.position,
       closable: mergedOptions.closable,
       pauseOnHover: mergedOptions.pauseOnHover,
       showProgress: mergedOptions.showProgress,
+      maxVisible,
       createdAt: new Date(),
       remainingTime: mergedOptions.duration,
       isPaused: false,
     };
 
-    this.#toasts.update((toasts) => [...toasts, toast]);
+    this.#toasts.update((toasts) => {
+      const next = [...toasts, toast];
+      const samePosition = next.filter((item) => item.position === toast.position);
+      if (samePosition.length > toast.maxVisible) {
+        const remove = new Set(
+          samePosition.slice(0, samePosition.length - toast.maxVisible).map((item) => item.id),
+        );
+        return next.filter((item) => !remove.has(item.id));
+      }
+      return next;
+    });
     this.#ensureTimer();
     return id;
   }

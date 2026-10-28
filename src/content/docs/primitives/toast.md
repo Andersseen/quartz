@@ -1,73 +1,62 @@
 ---
 title: Toast
-description: 'Notification system with multiple positions, durations, and action support. Keep users informed without interrupting their workflow.'
+description: Transient application feedback that does not interrupt the page.
 group: Primitives
 order: 103
 ---
 
-## At a glance
+Toast communicates transient application feedback without taking over the page. Use an inline status message for persistent or field-specific information; use native browser notifications only when the application needs OS-level notification behavior.
 
-- **6 Positions** — All corners + centers
-- **Auto-dismiss** — Configurable duration
-- **Persistent** — Manual close option
-- **Actions** — Button support
-
-## Live examples
+## Live demo
 
 ::demo[toast]
 
-## Code
+::playground[quartz-toast]
 
-### Toast Types
+## Installation and imports
 
-```ts
-// Shorthand methods
-toastService.success('Operation completed!', 'Success');
-toastService.error('Something went wrong!', 'Error');
-toastService.warning('Please review your input.', 'Warning');
-toastService.info('This is an informational message.', 'Info');
+```sh
+pnpm quartz add toast
 ```
 
-### Positions
-
 ```ts
-// Any of 6 positions
-toastService.show({
-  type: 'info',
-  message: 'Positioned toast',
-  position: 'top-right', // or 'bottom-center', etc.
-});
+import { ToastService, ToastContainerComponent } from '@quartz-headless/primitives';
 ```
 
-### Duration Control
+Render one `<qz-toast-container />` in the application shell. The service supports `show`, `success`, `error`, `warning`, `info`, `dismiss`, `dismissAll`, `pause`, and `resume`.
 
 ```ts
-// Custom duration (ms)
-toastService.show({
-  type: 'info',
-  message: 'Quick toast',
-  duration: 2000, // 2 seconds
-});
-
-// Persistent toast
-toastService.show({
-  type: 'info',
-  message: 'Manual close required',
-  duration: 0, // No auto-dismiss
-  closable: true,
-});
-```
-
-### API Usage
-
-```ts
-// Full options
-toastService.show({
+this.toast.show({
   type: 'success',
-  title: 'Changes Saved',
-  message: 'Your modifications have been saved successfully.',
-  position: 'bottom-right',
+  title: 'Saved',
+  message: 'Your changes were saved.',
   duration: 5000,
-  closable: true,
+});
+this.toast.show({
+  type: 'info',
+  message: 'Undo is available',
+  actions: [{ label: 'Undo', run: () => this.undo(), dismiss: true }],
 });
 ```
+
+### Custom templates and components
+
+A template receives `$implicit`, `toast`, and `dismiss` in its context. A component content type receives a `context` input with the toast and a dismissal callback.
+
+```ts
+this.toast.show({ type: 'info', content: this.toastTemplate, duration: 0 });
+```
+
+```html
+<ng-template #toastTemplate let-dismiss="dismiss">
+  <span>Upload complete</span><button type="button" (click)="dismiss()">Close</button>
+</ng-template>
+```
+
+Actions are native buttons with accessible labels; `dismiss: true` closes after activation. Actionable toasts pause while focus is inside and resume when focus leaves. Quartz never moves focus into a newly shown toast. If focused content is removed, the browser's normal focus fallback applies; consumers should keep durations long enough for their actions or use `duration: 0`.
+
+## State and accessibility
+
+Options include severity (`type`), duration (`0` persists), one of six physical positions, dismissibility, hover pause, progress display, action buttons, template/component content, and `maxVisible` per placement (default 5). Newest notifications are retained when the limit is exceeded. `aria-live` comes from each toast's `role`: errors use `alert`, other severities use `status`; announcements are atomic. Do not place another live region inside custom content.
+
+CSS hooks include `data-qz-type`, `.qz-toast__action`, position classes, and `--qz-toast-z-index`, `--qz-toast-gap`, `--qz-toast-inset`, and `--qz-toast-max-width`. Quartz supplies only structural placement. Toast has no special keyboard handling; action controls use native keyboard activation. The service does not start timers without a browser window, and timers/embedded content are tied to the rendered container lifecycle. Avoid server-global state in SSR. CLI source-copy usage is `pnpm quartz add toast`; consult the API reference for options and types.

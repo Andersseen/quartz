@@ -18,6 +18,10 @@ export {
   type ToastOptions,
   type ToastType,
   type ToastPosition,
+  type ToastAction,
+  type ToastTemplateContext,
+  type ToastContentContext,
+  type ToastContentComponent,
   DEFAULT_TOAST_OPTIONS,
 } from './toast';
 
@@ -259,3 +263,8 @@ export {
   FormFieldDescriptionDirective,
   FormFieldErrorDirective,
 } from './form-field';
+
+// Feedback and value indicators
+export { ProgressDirective, ProgressTrackDirective, ProgressIndicatorDirective } from './progress';
+export { MeterDirective, MeterTrackDirective, MeterIndicatorDirective } from './meter';
+export { AvatarComponent } from './avatar';

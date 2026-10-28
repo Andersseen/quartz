@@ -3,7 +3,7 @@
 title: RejectedFile
 description: Interface reference for RejectedFile.
 group: "API: Primitives"
-order: 1231
+order: 1238
 generated: doq-api
 category: interface
 ---
