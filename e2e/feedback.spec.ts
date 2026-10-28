@@ -81,20 +81,20 @@ test.describe('feedback and value indicators', () => {
     await playground.getByLabel('Include action').check();
     await playground.getByLabel('Maximum visible').fill('2');
     await playground.getByRole('button', { name: 'Show toast' }).click();
-    const toast = playground.locator('qz-toast [role="alert"]');
+    const toast = page.locator('qz-toast [role="alert"]');
     await expect(toast).toContainText('Custom template notification');
     await expect(toast.getByRole('button', { name: 'Undo' })).toBeVisible();
     await toast.getByRole('button', { name: 'Undo' }).click();
     await expect(playground).toContainText('Actions used: 1');
     await toast.getByRole('button', { name: 'Dismiss from content' }).click();
-    await expect(playground.locator('qz-toast')).toHaveCount(0);
+    await expect(page.locator('qz-toast')).toHaveCount(0);
 
     await playground.getByLabel('Use custom template').uncheck();
     await playground.getByLabel('Include action').uncheck();
     await playground.getByRole('button', { name: 'Show stack' }).click();
-    await expect(playground.locator('qz-toast')).toHaveCount(2);
-    await expect(playground.getByText('Stack item 1')).toHaveCount(0);
-    await expect(playground.getByText('Stack item 2')).toBeVisible();
-    await expect(playground.getByText('Stack item 3')).toBeVisible();
+    await expect(page.locator('qz-toast')).toHaveCount(2);
+    await expect(page.getByText('Stack item 1')).toHaveCount(0);
+    await expect(page.getByText('Stack item 2')).toBeVisible();
+    await expect(page.getByText('Stack item 3')).toBeVisible();
   });
 });

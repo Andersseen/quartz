@@ -1,14 +1,10 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import {
-  ToastService,
-  ToastContainerComponent,
-  type ToastPosition,
-} from '@quartz-headless/primitives';
+import { ToastService, type ToastPosition } from '@quartz-headless/primitives';
 import { VoltButton } from '@voltui/components';
 
 @Component({
   selector: 'app-toast-demo',
-  imports: [ToastContainerComponent, VoltButton],
+  imports: [VoltButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './toast.demo.html',
 })

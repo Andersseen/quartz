@@ -15,7 +15,6 @@ import {
   ProgressDirective,
   ProgressIndicatorDirective,
   ProgressTrackDirective,
-  ToastContainerComponent,
   ToastService,
   type ToastContentComponent,
   type ToastContentContext,
@@ -48,7 +47,6 @@ class FeedbackToastContentComponent implements ToastContentComponent {
     MeterTrackDirective,
     MeterIndicatorDirective,
     AvatarComponent,
-    ToastContainerComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -98,7 +96,6 @@ class FeedbackToastContentComponent implements ToastContentComponent {
         </button></ng-template
       >
     </main>
-    <qz-toast-container />
   `,
 })
 export default class E2eFeedbackPage {

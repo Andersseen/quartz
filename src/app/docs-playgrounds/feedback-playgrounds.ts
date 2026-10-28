@@ -15,7 +15,6 @@ import {
   ProgressDirective,
   ProgressIndicatorDirective,
   ProgressTrackDirective,
-  ToastContainerComponent,
   ToastService,
   type ToastPosition,
   type ToastTemplateContext,
@@ -83,7 +82,6 @@ export class AvatarPlaygroundComponent {
 @Component({
   selector: 'app-toast-playground',
   standalone: true,
-  imports: [ToastContainerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<button type="button" (click)="show()">Show toast</button>
     <button type="button" (click)="showStack()">Show stack</button>
@@ -91,8 +89,7 @@ export class AvatarPlaygroundComponent {
     <ng-template #custom let-dismiss="dismiss">
       <span>Custom template notification</span>
       <button type="button" (click)="dismiss()">Dismiss from content</button>
-    </ng-template>
-    <qz-toast-container />`,
+    </ng-template>`,
 })
 export class ToastPlaygroundComponent {
   readonly type = input<ToastType>('info');
