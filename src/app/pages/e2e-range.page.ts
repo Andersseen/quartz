@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, afterNextRender, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  PLATFORM_ID,
+  afterNextRender,
+  inject,
+  signal,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -359,6 +367,7 @@ import { QUARTZ_FORMS } from '@quartz-headless/primitives/forms';
 })
 export default class E2eRangePage {
   protected readonly dir = inject(ActivatedRoute).snapshot.queryParamMap.get('dir') ?? 'ltr';
+  private readonly platformId = inject(PLATFORM_ID);
 
   /** Set once the client has rendered (the prerendered markup is replaced, not hydrated). */
   readonly ready = signal(false);
@@ -400,7 +409,9 @@ export default class E2eRangePage {
   readonly submitted = signal('');
 
   constructor() {
-    afterNextRender(() => this.ready.set(true));
+    afterNextRender(() => {
+      if (isPlatformBrowser(this.platformId)) this.ready.set(true);
+    });
     this.form.valueChanges.subscribe(() => {
       this.liveValue.set(JSON.stringify(this.form.getRawValue()));
       this.changes.update((n) => n + 1);

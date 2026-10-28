@@ -1,11 +1,13 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
   TemplateRef,
   ViewContainerRef,
+  afterNextRender,
   inject,
+  PLATFORM_ID,
   signal,
   viewChild,
 } from '@angular/core';
@@ -29,7 +31,7 @@ import {
   // Behaviour fixture: rendered on the client only (it queries ViewContainerRefs on elements).
   host: { ngSkipHydration: 'true' },
   template: `
-    <main style="padding: 24px; min-height: 2000px">
+    <main [attr.data-ready]="ready() ? '' : null" style="padding: 24px; min-height: 2000px">
       <h1>Core layer contracts</h1>
 
       <section>
@@ -125,6 +127,7 @@ import {
   `,
 })
 export default class E2eLayersPage implements OnDestroy {
+  readonly ready = signal(false);
   readonly viewport = inject(ViewportService);
   private readonly _dialogs = inject(DialogService);
   private readonly _vcr = inject(ViewContainerRef);
@@ -138,6 +141,7 @@ export default class E2eLayersPage implements OnDestroy {
   readonly doomedClosed = signal(0);
 
   private readonly _doc = inject(DOCUMENT);
+  private readonly _platformId = inject(PLATFORM_ID);
   readonly store = new CollectionStore<CollectionItem>(
     { focusStrategy: 'roving-tabindex', orientation: 'vertical' },
     this._doc,
@@ -151,6 +155,9 @@ export default class E2eLayersPage implements OnDestroy {
   );
 
   constructor() {
+    afterNextRender(() => {
+      if (isPlatformBrowser(this._platformId)) this.ready.set(true);
+    });
     this.collectionItems().forEach((item) => this.store.register(item));
   }
 
