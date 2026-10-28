@@ -64,18 +64,18 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **18 of 46** rows are verified-equivalent after the 0.15 implementation (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, Progress, Meter, Avatar, Toast). This marks those four contracts complete; Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
+Reading the numbers: **21 of 46** rows are verified-equivalent after the 0.15 implementation and review of the merged 0.13 work (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, NavigationMenu, Pagination, Toolbar, Progress, Meter, Avatar, Toast). This marks those seven contracts complete; Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
 
-| Milestone                                                                                                       | Rows                                                                                   |
-| --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                            |
-| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)                     |
-| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                             |
-| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `navigation-menu` (M), `pagination` (M), `toolbar` (M), `sidebar` (P) |
-| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)                   |
-| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) | `tooltip` (P), `drawer` (P), `popover` (P), `dropdown-menu` (C), `resizable` (P)       |
+| Milestone                                                                                                       | Rows                                                                             |
+| --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                      |
+| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)               |
+| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                       |
+| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `sidebar` (P)                                                   |
+| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)             |
+| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) | `tooltip` (P), `drawer` (P), `popover` (P), `dropdown-menu` (C), `resizable` (P) |
 
 Rows also carrying a _later_ gate (e.g. hydration proof in 0.17) keep their evidence code; 0.17 is a
 cross-cutting gate applied to **every** row, see §5.
@@ -348,19 +348,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a
 - **Acceptance tests needed:** None.
 
-### `navigation-menu` — Missing (**M**)
+### `navigation-menu` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-navigation-menu`, `-list`, `-item`, `-trigger`, `-content`, `-content-item`, `a[voltNavigationMenuLink]`
 - **Behavioural dependency:** ng-primitives `navigation-menu` + `portal`
 - **Observable headless contract required:** `navigation` landmark; triggers open content on hover (show/hide delays) or Enter/Space/ArrowDown; moving between triggers swaps content; Escape closes and restores focus; arrow keys between triggers; link `aria-current`.
-- **Quartz equivalent:** None equivalent. `NavbarDirective` is a responsive shell/menu toggle, not a menubar-with-flyouts.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `NavigationMenuDirective`, list/item/trigger/content/link directives; `NavbarDirective` remains a separate responsive shell.
+- **Current evidence:** Unit tests cover disclosure semantics, mounted content references, keyboard open/Escape focus restore, sibling swap, disabled triggers, delayed hover and outside dismissal. Three-engine E2E covers pointer gap/exit, sibling swap, disabled triggers, RTL keyboard, Tab exit, route teardown and `aria-current`; axe passes on open content. The installed-tarball strict AOT fixture imports and composes the public directives.
 - **Accessibility:** Disclosure-navigation pattern (not `role=menu`): `aria-expanded/controls` on triggers, focus management on open/close.
 - **Forms:** n/a
 - **Angular / SSR:** Content portalled in browser only; closed state renders no content.
-- **Remaining work:** Navigation-menu primitive on Core Overlay/Collection/Dismiss with hover intent timers.
-- **Owning milestone:** 0.13
-- **Acceptance tests needed:** Unit: hover-intent timers, swap, Escape focus return; e2e keyboard + pointer in 3 engines; axe on an open flyout.
+- **Remaining work:** None for this contract. Full SSR/hydration matrix remains a cross-cutting 0.17 gate.
+- **Owning milestone:** 0.13 (implemented and verified)
+- **Acceptance tests needed:** Complete (unit, three-engine E2E, axe and installed-consumer AOT).
 
 ### `dialog` — Implemented and verified (**V**)
 
@@ -502,19 +502,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.15
 - **Acceptance tests needed:** Complete (unit, three-engine dynamic-state browser checks, axe, and installed-consumer AOT evidence).
 
-### `pagination` — Missing (**M**)
+### `pagination` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-pagination`, `-button`, `-first`, `-previous`, `-next`, `-last`
 - **Behavioural dependency:** ng-primitives `pagination`
 - **Observable headless contract required:** `page` model, `pageCount`, first/previous/next/last disabled at bounds, `aria-current="page"` on the active page button, labelled controls, `nav` landmark.
-- **Quartz equivalent:** None.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `PaginationDirective` with first/previous/next/last/page directives.
+- **Current evidence:** Unit tests and three-engine E2E verify bounds, page-count changes, keyboard activation, no form submission, accessible current-page naming, and focus recovery when the focused boundary action becomes disabled; the installed-tarball strict AOT fixture imports and composes the public directives.
 - **Accessibility:** `nav` with label; `aria-current`; disabled controls still explain themselves; focus stays sensible when a control becomes disabled.
 - **Forms:** n/a
 - **Angular / SSR:** Deterministic.
-- **Remaining work:** Pagination state directive set; focus rule when the focused button becomes disabled.
-- **Owning milestone:** 0.13
-- **Acceptance tests needed:** Unit: bounds, page clamping on pageCount change; e2e keyboard; axe.
+- **Remaining work:** None for this contract.
+- **Owning milestone:** 0.13 (implemented and verified)
+- **Acceptance tests needed:** Complete (unit, three-engine E2E, and installed-consumer AOT).
 
 ### `toast` — Implemented and verified (**V**)
 
@@ -616,19 +616,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.10 (closed in 0.10.0)
 - **Acceptance tests needed:** Unit: grouped options keep keyboard order and skip headers; e2e grouped keyboard.
 
-### `toolbar` — Missing (**M**)
+### `toolbar` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-toolbar`, `[voltToolbarButton]`
 - **Behavioural dependency:** ng-primitives `toolbar` + `roving-focus` + `button`
 - **Observable headless contract required:** `role=toolbar`, orientation-aware roving focus (arrows/Home/End, RTL), one tab stop, remembers last focused item, disabled items skipped.
-- **Quartz equivalent:** None. Core `CollectionStore` (roving-tabindex) is the foundation.
-- **Current evidence:** Missing.
+- **Quartz equivalent:** `ToolbarDirective` and `ToolbarItemDirective` backed by Core `CollectionStore`.
+- **Current evidence:** Unit tests cover semantics, one tab stop, orientation, Home/End, focus memory, dynamic order and disabled items. Three-engine E2E covers horizontal/vertical and RTL arrows, disabled skipping, mixed native controls, reorder, and focus without activation; the installed-tarball strict AOT fixture imports and composes the public directives.
 - **Accessibility:** `aria-orientation`, accessible name required on the toolbar.
 - **Forms:** n/a
 - **Angular / SSR:** Host bindings only.
-- **Remaining work:** Toolbar directive set on Collection; focus-memory rule.
-- **Owning milestone:** 0.13
-- **Acceptance tests needed:** Unit: roving, last-focused memory, disabled skipping; e2e RTL.
+- **Remaining work:** None for this contract.
+- **Owning milestone:** 0.13 (implemented and verified)
+- **Acceptance tests needed:** Complete (unit, three-engine E2E, and installed-consumer AOT).
 
 ### `skeleton` — Native / composition sufficient (**N**)
 

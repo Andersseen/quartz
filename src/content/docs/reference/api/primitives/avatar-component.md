@@ -13,7 +13,7 @@ category: component
 Headless avatar image with a delayed, consumer supplied text fallback.
 
 - **Kind:** Component
-- **Source:** [packages/primitives/src/avatar/avatar.component.ts:39](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/avatar/avatar.component.ts#L39)
+- **Source:** [packages/primitives/src/avatar/avatar.component.ts:42](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/avatar/avatar.component.ts#L42)
 
 ## Selector
 
@@ -43,11 +43,19 @@ qz-avatar
 ### onLoad
 
 ```ts
-onLoad(): void
+onLoad(event: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` |  |  |
 
 ### onError
 
 ```ts
-onError(): void
+onError(event: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` |  |  |
