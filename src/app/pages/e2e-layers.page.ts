@@ -5,7 +5,6 @@ import {
   OnDestroy,
   TemplateRef,
   ViewContainerRef,
-  afterNextRender,
   inject,
   PLATFORM_ID,
   signal,
@@ -155,9 +154,7 @@ export default class E2eLayersPage implements OnDestroy {
   );
 
   constructor() {
-    afterNextRender(() => {
-      if (isPlatformBrowser(this._platformId)) this.ready.set(true);
-    });
+    if (isPlatformBrowser(this._platformId)) this.ready.set(true);
     this.collectionItems().forEach((item) => this.store.register(item));
   }
 

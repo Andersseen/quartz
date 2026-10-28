@@ -3,7 +3,6 @@ import {
   Component,
   TemplateRef,
   ViewContainerRef,
-  afterNextRender,
   inject,
   PLATFORM_ID,
   signal,
@@ -272,9 +271,7 @@ export default class E2eSelectionPage {
   readonly dialogValue = signal('none');
 
   constructor() {
-    afterNextRender(() => {
-      if (isPlatformBrowser(this.platformId)) this.ready.set(true);
-    });
+    if (isPlatformBrowser(this.platformId)) this.ready.set(true);
     this.form.valueChanges.subscribe(() => this.changes.update((n) => n + 1));
     this.dialogTags.valueChanges.subscribe((v) => this.dialogValue.set(JSON.stringify(v)));
   }

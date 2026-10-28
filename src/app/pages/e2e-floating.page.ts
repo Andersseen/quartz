@@ -3,7 +3,6 @@ import {
   Component,
   TemplateRef,
   ViewContainerRef,
-  afterNextRender,
   inject,
   PLATFORM_ID,
   signal,
@@ -223,9 +222,7 @@ export default class E2eFloatingPage {
   readonly closed = signal('');
 
   constructor() {
-    afterNextRender(() => {
-      if (isPlatformBrowser(this.platformId)) this.ready.set(true);
-    });
+    if (isPlatformBrowser(this.platformId)) this.ready.set(true);
   }
 
   openX(): void {

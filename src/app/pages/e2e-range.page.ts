@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  PLATFORM_ID,
-  afterNextRender,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -409,9 +402,7 @@ export default class E2eRangePage {
   readonly submitted = signal('');
 
   constructor() {
-    afterNextRender(() => {
-      if (isPlatformBrowser(this.platformId)) this.ready.set(true);
-    });
+    if (isPlatformBrowser(this.platformId)) this.ready.set(true);
     this.form.valueChanges.subscribe(() => {
       this.liveValue.set(JSON.stringify(this.form.getRawValue()));
       this.changes.update((n) => n + 1);
