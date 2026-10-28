@@ -3,7 +3,7 @@
 title: DatePickerConfig
 description: Interface reference for DatePickerConfig.
 group: "API: Primitives"
-order: 1207
+order: 1216
 generated: doq-api
 category: interface
 ---

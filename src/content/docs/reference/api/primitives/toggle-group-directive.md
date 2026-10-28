@@ -3,7 +3,7 @@
 title: ToggleGroupDirective
 description: "Directive reference for ToggleGroupDirective with the selector [qzToggleGroup]."
 group: "API: Primitives"
-order: 1191
+order: 1200
 generated: doq-api
 category: directive
 ---

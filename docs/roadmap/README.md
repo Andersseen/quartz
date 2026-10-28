@@ -1,6 +1,6 @@
 # Manual de ejecución del roadmap 1.0
 
-> Estado actualizado 2026-10-27: el workflow `40494140662` publicó Core/Primitives `0.12.0`, creó `v0.12.0` y desplegó Pages desde `274745f`, aunque ese SHA ya incluía la implementación 0.13. El 0.12 de origen (`46643ae`) falló E2E. La publicación 0.12 es inmutable; un PR de mantenimiento asigna ahora `0.13.0` al API realmente publicado antes de permitir el gate de 0.14.
+> Estado actualizado 2026-10-27: el workflow `40494140662` publicó Core/Primitives `0.12.0`, creó `v0.12.0` y desplegó Pages desde `274745f`, que ya incluía la implementación 0.13; el workflow original del código 0.12 (`40223989422`) falló E2E. PR #44 fusionó la reconciliación de versión 0.13. Verifica los paquetes `0.13.0`, la release y Pages antes de integrar/publicar 0.14, cuyo desarrollo permanece aislado.
 > Estado histórico al redactar: 0.11 integrado pero pendiente de release; 0.12 implementado y validado localmente. Requisito de producto: paridad de comportamiento con todos los componentes de Volt UI
 > ([inventario](../api/volt-parity.md)); por eso hay siete minors de paridad (0.10–0.16) antes de consumo (0.17) y congelación (0.18). Este directorio contiene documentación, no autorización para publicar.
 > Estrategia y alcance: [ROADMAP](../../ROADMAP.md). Evidencias: [diagnóstico](../releases/V1_AUDIT.md).
@@ -145,17 +145,17 @@ cerrados no se reutilizan. Un fallo posterior abre regresión enlazada con su ta
 
 ## 10. Estado inicial de las fases
 
-| Fase            | Estado                                            | Condición para iniciar implementación                                                                |
-| --------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 0.7             | Implementada                                      | Ver `docs/releases/0.7-acceptance.md`                                                                |
-| 0.8             | Implementada                                      | Ver `docs/releases/0.8-acceptance.md`                                                                |
-| 0.9             | Implementada                                      | Ver `docs/releases/0.9-acceptance.md`                                                                |
-| 0.10            | Implementada                                      | Ver `docs/releases/0.10-acceptance.md`                                                               |
-| 0.11            | Implementada                                      | Ver `docs/releases/0.11-acceptance.md`                                                               |
-| 0.12            | Publicada como 0.12.0 con discrepancia de fuente  | Evidencia en [`0.12-acceptance.md`](../releases/0.12-acceptance.md); no republicar versión inmutable |
-| 0.13            | Implementación integrada; versión por reconciliar | [`0.13-acceptance.md`](../releases/0.13-acceptance.md); PR estrecho de versión y gates verdes        |
-| 0.14            | Desarrollo aislado iniciado                       | No merge/publicar hasta cerrar la cadena 0.12/0.13                                                   |
-| 0.15 – 0.16     | No iniciadas                                      | Hito anterior de paridad aceptado (una familia por minor)                                            |
-| 0.17            | No iniciada                                       | Todas las familias de paridad (0.9–0.16) aceptadas                                                   |
-| 0.18            | No iniciada                                       | Matriz de consumo/compatibilidad (0.17) aceptada                                                     |
-| Beta / RC / 1.0 | No iniciada                                       | API congelada, **inventario Volt sin filas C/P/M** y autorización de la release                      |
+| Fase            | Estado                                                   | Condición para iniciar implementación                                                                |
+| --------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 0.7             | Implementada                                             | Ver `docs/releases/0.7-acceptance.md`                                                                |
+| 0.8             | Implementada                                             | Ver `docs/releases/0.8-acceptance.md`                                                                |
+| 0.9             | Implementada                                             | Ver `docs/releases/0.9-acceptance.md`                                                                |
+| 0.10            | Implementada                                             | Ver `docs/releases/0.10-acceptance.md`                                                               |
+| 0.11            | Implementada                                             | Ver `docs/releases/0.11-acceptance.md`                                                               |
+| 0.12            | Publicada como 0.12.0 con discrepancia de fuente         | Evidencia en [`0.12-acceptance.md`](../releases/0.12-acceptance.md); no republicar versión inmutable |
+| 0.13            | Implementación integrada; versión reconciliada en PR #44 | [`0.13-acceptance.md`](../releases/0.13-acceptance.md); verificar paquetes, release y Pages 0.13.0   |
+| 0.14            | Desarrollo aislado iniciado                              | No merge/publicar hasta verificar el cierre de la cadena 0.13                                        |
+| 0.15 – 0.16     | No iniciadas                                             | Hito anterior de paridad aceptado (una familia por minor)                                            |
+| 0.17            | No iniciada                                              | Todas las familias de paridad (0.9–0.16) aceptadas                                                   |
+| 0.18            | No iniciada                                              | Matriz de consumo/compatibilidad (0.17) aceptada                                                     |
+| Beta / RC / 1.0 | No iniciada                                              | API congelada, **inventario Volt sin filas C/P/M** y autorización de la release                      |

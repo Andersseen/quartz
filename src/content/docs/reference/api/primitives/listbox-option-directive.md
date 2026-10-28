@@ -3,7 +3,7 @@
 title: ListboxOptionDirective
 description: "Directive reference for ListboxOptionDirective with the selector [qzListboxOption]."
 group: "API: Primitives"
-order: 1131
+order: 1140
 generated: doq-api
 category: directive
 ---

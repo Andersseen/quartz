@@ -3,7 +3,7 @@
 title: PaginationLastDirective
 description: "Directive reference for PaginationLastDirective with the selector button[qzPaginationLast]."
 group: "API: Primitives"
-order: 1151
+order: 1160
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: MenuRadioItemDirective
 description: "Directive reference for MenuRadioItemDirective with the selector [qzMenuRadioItem]."
 group: "API: Primitives"
-order: 1137
+order: 1146
 generated: doq-api
 category: directive
 ---

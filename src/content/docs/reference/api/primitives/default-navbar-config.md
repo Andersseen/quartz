@@ -3,7 +3,7 @@
 title: DEFAULT_NAVBAR_CONFIG
 description: Constant reference for DEFAULT_NAVBAR_CONFIG.
 group: "API: Primitives"
-order: 1280
+order: 1291
 generated: doq-api
 category: constant
 ---

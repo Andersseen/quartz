@@ -3,7 +3,7 @@
 title: CalendarCellDirective
 description: Gridcell semantics and state hooks for one CalendarDay.
 group: "API: Primitives"
-order: 1109
+order: 1111
 generated: doq-api
 category: directive
 ---

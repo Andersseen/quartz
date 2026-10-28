@@ -3,7 +3,7 @@
 title: CalendarPreviousMonthDirective
 description: "Directive reference for CalendarPreviousMonthDirective with the selector button[qzCalendarPreviousMonth]."
 group: "API: Primitives"
-order: 1114
+order: 1116
 generated: doq-api
 category: directive
 ---

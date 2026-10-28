@@ -19,10 +19,19 @@ import {
 } from '@quartz-headless/core';
 import {
   AccordionDirective,
+  AutofillDirective,
   AccordionItemDirective,
   AccordionPanelDirective,
   AccordionTriggerDirective,
   CheckboxDirective,
+  FileDropzoneDirective,
+  FileUploadDirective,
+  FormFieldControlDirective,
+  FormFieldDescriptionDirective,
+  FormFieldDirective,
+  FormFieldErrorDirective,
+  FormFieldLabelDirective,
+  InputOtpComponent,
   DatePickerDirective,
   DateRangePickerDirective,
   CalendarGridDirective,
@@ -655,3 +664,48 @@ class NavigationControlsComponent {
 }
 
 void NavigationControlsComponent;
+
+// Quartz 0.14 text/file/form composition, compiled from packed npm tarballs.
+@Component({
+  selector: 'app-consumer-smoke-controls-014',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    AutofillDirective,
+    FileDropzoneDirective,
+    FileUploadDirective,
+    FormFieldControlDirective,
+    FormFieldDescriptionDirective,
+    FormFieldDirective,
+    FormFieldErrorDirective,
+    FormFieldLabelDirective,
+    InputOtpComponent,
+    ...QUARTZ_FORMS,
+  ],
+  template: `
+    <div qzFormField id="consumer-email">
+      <label qzFormFieldLabel for="consumer-email-control">Email</label>
+      <p qzFormFieldDescription id="consumer-email-hint">Work address.</p>
+      <p qzFormFieldError id="consumer-email-error">Invalid email.</p>
+      <input qzFormFieldControl id="consumer-email-control" type="email" [formControl]="email" />
+    </div>
+    <div qzFormField id="consumer-message">
+      <label qzFormFieldLabel for="consumer-message-control">Message</label>
+      <p qzFormFieldDescription id="consumer-message-hint">A native textarea example.</p>
+      <textarea qzFormFieldControl id="consumer-message-control" [formControl]="message"></textarea>
+    </div>
+    <qz-input-otp ariaLabel="One-time code" [formControl]="otp" />
+    <input qzAutofill aria-label="Autofill test" />
+    <div qzFileDropzone>
+      <input #consumerUpload="qzFileUpload" type="file" qzFileUpload accept="image/*,.txt" />
+      <button type="button" (click)="consumerUpload.openPicker()">Browse consumer files</button>
+    </div>
+  `,
+})
+class Controls014Component {
+  readonly email = new FormControl('');
+  readonly message = new FormControl('');
+  readonly otp = new FormControl('');
+}
+
+void Controls014Component;

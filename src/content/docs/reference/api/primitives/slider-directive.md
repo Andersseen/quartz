@@ -3,7 +3,7 @@
 title: SliderDirective
 description: Single-thumb slider root.
 group: "API: Primitives"
-order: 1175
+order: 1184
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: LatestRequest
 description: Interface reference for LatestRequest.
 group: "API: Primitives"
-order: 1210
+order: 1220
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: ComboboxInputDirective
 description: "Directive reference for ComboboxInputDirective with the selector input[qzComboboxInput]."
 group: "API: Primitives"
-order: 1121
+order: 1123
 generated: doq-api
 category: directive
 ---

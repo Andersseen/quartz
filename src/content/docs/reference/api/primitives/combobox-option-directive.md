@@ -3,7 +3,7 @@
 title: ComboboxOptionDirective
 description: "Directive reference for ComboboxOptionDirective with the selector [qzComboboxOption]."
 group: "API: Primitives"
-order: 1123
+order: 1125
 generated: doq-api
 category: directive
 ---

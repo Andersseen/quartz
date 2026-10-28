@@ -3,7 +3,7 @@
 title: PaginationPreviousDirective
 description: "Directive reference for PaginationPreviousDirective with the selector button[qzPaginationPrevious]."
 group: "API: Primitives"
-order: 1154
+order: 1163
 generated: doq-api
 category: directive
 ---

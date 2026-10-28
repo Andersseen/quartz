@@ -3,7 +3,7 @@
 title: StepTriggerDirective
 description: "Directive reference for StepTriggerDirective with the selector [qzStepTrigger]."
 group: "API: Primitives"
-order: 1181
+order: 1190
 generated: doq-api
 category: directive
 ---

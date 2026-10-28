@@ -3,7 +3,7 @@
 title: DEFAULT_LISTBOX_CONFIG
 description: Constant reference for DEFAULT_LISTBOX_CONFIG.
 group: "API: Primitives"
-order: 1278
+order: 1289
 generated: doq-api
 category: constant
 ---

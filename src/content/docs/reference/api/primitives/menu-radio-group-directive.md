@@ -3,7 +3,7 @@
 title: MenuRadioGroupDirective
 description: "Directive reference for MenuRadioGroupDirective with the selector [qzMenuRadioGroup]."
 group: "API: Primitives"
-order: 1136
+order: 1145
 generated: doq-api
 category: directive
 ---

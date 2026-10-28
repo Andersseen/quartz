@@ -3,7 +3,7 @@
 title: SelectOptionDirective
 description: "Directive reference for SelectOptionDirective with the selector [qzSelectOption]."
 group: "API: Primitives"
-order: 1168
+order: 1177
 generated: doq-api
 category: directive
 ---

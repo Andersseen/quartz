@@ -28,6 +28,10 @@ this file does not remove exports.
 | Primitives | RadioGroup       | Form control.                                                      | Done in 0.9 (`@quartz-headless/primitives/forms`).                                                                                        |
 | Primitives | Toast            | Feedback primitive.                                                | Announcement/timer contract and route cleanup.                                                                                            |
 | Primitives | Date / DateRange | Calendar selection and inclusive range control.                    | Local civil date contract, keyboard/RTL, disabled-span validation, Forms and cross-browser proof (0.12).                                  |
+| Primitives | FormField        | Accessible field composition for native and Quartz controls.       | Stable IDs, dynamic ARIA references, optional Forms state and SSR/hydration proof (0.14).                                                 |
+| Primitives | InputOTP         | One real input with presentational code slots.                     | Keyboard/paste/IME, completion and optional Forms contract (0.14).                                                                        |
+| Primitives | Autofill         | Browser autofill transition observation.                           | Supported-engine event contract and documented limitations (0.14).                                                                        |
+| Primitives | File selection   | Native picker and OS file drop behavior.                           | Native keyboard path, filtering, disabled, directory fallback and three-engine evidence (0.14).                                           |
 
 ## Volt-required (mandatory for 1.0)
 

@@ -1,0 +1,87 @@
+<section aria-labelledby="field-example-title">
+  <h3 id="field-example-title">Form field</h3>
+  <form novalidate (submit)="submitEmail($event)">
+    <div qzFormField id="demo-email-field">
+      <label qzFormFieldLabel for="demo-email">Email address</label>
+      <p qzFormFieldDescription id="demo-email-hint">Use a valid work email address.</p>
+      @if (email.invalid && email.touched) {
+        <p qzFormFieldError id="demo-email-error">Enter a valid email address.</p>
+      }
+      <input qzFormFieldControl id="demo-email" type="email" [formControl]="email" />
+      <button type="submit">Validate email</button>
+      <button type="button" (click)="resetEmail()">Reset email</button>
+    </div>
+  </form>
+
+  <div qzFormField id="demo-notifications-field">
+    <span qzFormFieldLabel>Product updates</span>
+    <button type="button" qzSwitch qzFormFieldControl [formControl]="notifications">
+      Product updates
+    </button>
+  </div>
+</section>
+
+<section aria-labelledby="otp-example-title">
+  <h3 id="otp-example-title">One-time code</h3>
+  <qz-input-otp
+    [length]="6"
+    ariaLabel="Six-digit one-time code"
+    [disabled]="codeDisabled()"
+    [formControl]="code"
+    (completed)="completedCode.set($event)"
+  />
+  <button type="button" (click)="resetCode()">Reset code</button>
+  <button type="button" (click)="codeDisabled.update((disabled) => !disabled)">
+    {{ codeDisabled() ? 'Enable code' : 'Disable code' }}
+  </button>
+  @if (completedCode()) {
+    <p role="status">Code entered.</p>
+  }
+</section>
+
+<section aria-labelledby="autofill-example-title">
+  <h3 id="autofill-example-title">Autofill detection</h3>
+  <label for="demo-autofill">Browser autofill example</label>
+  <input
+    id="demo-autofill"
+    type="email"
+    autocomplete="email"
+    qzAutofill
+    (autofilledChange)="autofilled.set($event)"
+  />
+  <p>Detected autofill state: {{ autofilled() ? 'autofilled' : 'not detected' }}.</p>
+</section>
+
+<section aria-labelledby="file-example-title">
+  <h3 id="file-example-title">Native file picker and drop</h3>
+  <p id="demo-files-help">Choose files or drop text and PDF files in this area.</p>
+  <div qzFileDropzone aria-describedby="demo-files-help" data-demo-dropzone>
+    <label for="demo-files">Choose text or PDF files</label>
+    <input
+      #upload="qzFileUpload"
+      id="demo-files"
+      type="file"
+      qzFileUpload
+      accept="text/plain,.pdf"
+      multiple
+      (filesChange)="files.set($event)"
+      (rejected)="rejectedFiles.set($event)"
+    />
+    <button type="button" (click)="upload.openPicker()">Browse files</button>
+  </div>
+  <p aria-live="polite">{{ files().length }} accepted file(s).</p>
+  @if (rejectedFiles().length) {
+    <p role="status">{{ rejectedFiles().length }} file(s) were rejected by the accept filter.</p>
+  }
+</section>
+
+<section aria-labelledby="search-example-title">
+  <h3 id="search-example-title">Search composition</h3>
+  <form role="search" (submit)="submitSearch($event)">
+    <label for="demo-search">Search this site</label>
+    <input #searchInput id="demo-search" type="search" [formControl]="query" />
+    @if (query.value) {
+      <button type="button" (click)="query.setValue(''); searchInput.focus()">Clear search</button>
+    }
+  </form>
+</section>

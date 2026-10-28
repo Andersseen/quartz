@@ -3,7 +3,7 @@
 title: AccordionItemDirective
 description: "Directive reference for AccordionItemDirective with the selector [qzAccordionItem]."
 group: "API: Primitives"
-order: 1106
+order: 1107
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: RangeSliderRangeDirective
 description: The selected span between the thumbs.
 group: "API: Primitives"
-order: 1160
+order: 1169
 generated: doq-api
 category: directive
 ---

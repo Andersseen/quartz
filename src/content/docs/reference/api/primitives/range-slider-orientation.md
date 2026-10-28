@@ -3,7 +3,7 @@
 title: RangeSliderOrientation
 description: Type alias reference for RangeSliderOrientation.
 group: "API: Primitives"
-order: 1251
+order: 1262
 generated: doq-api
 category: type
 ---

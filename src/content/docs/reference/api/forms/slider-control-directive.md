@@ -3,7 +3,7 @@
 title: SliderControlDirective
 description: "Angular Forms adapter for [qzSlider]."
 group: "API: Forms"
-order: 1509
+order: 1511
 generated: doq-api
 category: directive
 ---

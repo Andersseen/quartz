@@ -10,6 +10,8 @@ export { ToggleControlDirective } from './toggle-control.directive';
 export { ToggleGroupControlDirective } from './toggle-group-control.directive';
 export { DatePickerControlDirective } from './date-picker-control.directive';
 export { DateRangePickerControlDirective } from './date-range-picker-control.directive';
+export { FormFieldStateDirective } from './form-field-state.directive';
+export { InputOtpControlDirective } from './input-otp-control.directive';
 
 import { CheckboxControlDirective } from './checkbox-control.directive';
 import { SwitchControlDirective } from './switch-control.directive';
@@ -23,6 +25,8 @@ import { ToggleControlDirective } from './toggle-control.directive';
 import { ToggleGroupControlDirective } from './toggle-group-control.directive';
 import { DatePickerControlDirective } from './date-picker-control.directive';
 import { DateRangePickerControlDirective } from './date-range-picker-control.directive';
+import { FormFieldStateDirective } from './form-field-state.directive';
+import { InputOtpControlDirective } from './input-otp-control.directive';
 
 /** Import this in a standalone component's `imports` to enable Forms on every Quartz control. */
 export const QUARTZ_FORMS = [
@@ -38,4 +42,6 @@ export const QUARTZ_FORMS = [
   ToggleGroupControlDirective,
   DatePickerControlDirective,
   DateRangePickerControlDirective,
+  FormFieldStateDirective,
+  InputOtpControlDirective,
 ] as const;

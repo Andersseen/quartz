@@ -3,7 +3,7 @@
 title: CheckboxState
 description: Type alias reference for CheckboxState.
 group: "API: Primitives"
-order: 1236
+order: 1247
 generated: doq-api
 category: type
 ---
