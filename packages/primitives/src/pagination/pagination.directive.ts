@@ -55,32 +55,38 @@ export class PaginationDirective implements OnDestroy {
     });
   }
 
-  setPage(page: number, action?: 'first' | 'previous' | 'next' | 'last'): void {
+  setPage(page: number, action?: 'first' | 'previous' | 'next' | 'last', event?: Event): void {
     if (this.isDisabled()) return;
     const next = normalizePage(page, this.pageCount());
     const active = this.document.activeElement;
     const boundary =
       (action === 'next' && next === this.pageCount()) || (action === 'previous' && next === 1);
-    const focusedControl = active?.closest('[data-qz-pagination-action]') ?? null;
+    const eventTarget = event?.currentTarget;
+    const focusedControl =
+      (eventTarget instanceof HTMLElement
+        ? eventTarget.closest('[data-qz-pagination-action]')
+        : null) ??
+      active?.closest('[data-qz-pagination-action]') ??
+      null;
     const activeAction = focusedControl?.getAttribute('data-qz-pagination-action');
     if (boundary && activeAction === action) this.recoverFocus.set(true);
     this.page.set(next);
   }
 
-  first(): void {
-    this.setPage(1, 'first');
+  first(event?: Event): void {
+    this.setPage(1, 'first', event);
   }
 
-  previous(): void {
-    this.setPage(this.page() - 1, 'previous');
+  previous(event?: Event): void {
+    this.setPage(this.page() - 1, 'previous', event);
   }
 
-  next(): void {
-    this.setPage(this.page() + 1, 'next');
+  next(event?: Event): void {
+    this.setPage(this.page() + 1, 'next', event);
   }
 
-  last(): void {
-    this.setPage(this.pageCount(), 'last');
+  last(event?: Event): void {
+    this.setPage(this.pageCount(), 'last', event);
   }
 
   controlDisabled(action: 'first' | 'previous' | 'next' | 'last'): boolean {
@@ -111,7 +117,7 @@ export class PaginationDirective implements OnDestroy {
     '[attr.aria-label]': '"First page"',
     '[disabled]': 'pagination.controlDisabled("first")',
     '[attr.data-qz-pagination-action]': '"first"',
-    '(click)': 'pagination.first()',
+    '(click)': 'pagination.first($event)',
   },
 })
 export class PaginationFirstDirective {
@@ -127,7 +133,7 @@ export class PaginationFirstDirective {
     '[attr.aria-label]': '"Previous page"',
     '[disabled]': 'pagination.controlDisabled("previous")',
     '[attr.data-qz-pagination-action]': '"previous"',
-    '(click)': 'pagination.previous()',
+    '(click)': 'pagination.previous($event)',
   },
 })
 export class PaginationPreviousDirective {
@@ -143,7 +149,7 @@ export class PaginationPreviousDirective {
     '[attr.aria-label]': '"Next page"',
     '[disabled]': 'pagination.controlDisabled("next")',
     '[attr.data-qz-pagination-action]': '"next"',
-    '(click)': 'pagination.next()',
+    '(click)': 'pagination.next($event)',
   },
 })
 export class PaginationNextDirective {
@@ -159,7 +165,7 @@ export class PaginationNextDirective {
     '[attr.aria-label]': '"Last page"',
     '[disabled]': 'pagination.controlDisabled("last")',
     '[attr.data-qz-pagination-action]': '"last"',
-    '(click)': 'pagination.last()',
+    '(click)': 'pagination.last($event)',
   },
 })
 export class PaginationLastDirective {

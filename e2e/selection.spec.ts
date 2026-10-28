@@ -19,7 +19,8 @@ const overlayResidue = (page: Page) =>
   page.evaluate(() => document.querySelectorAll('[data-qz-overlay-container] > *').length);
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/e2e-selection');
+  await page.goto('/e2e-selection', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main[data-ready]')).toBeVisible();
   await expect(page.locator('#tags')).toBeVisible();
 });
 
@@ -75,7 +76,10 @@ test.describe('multiple and grouped Select', () => {
     await page.keyboard.press('Enter');
     await expect(list).toBeVisible();
     await expect
-      .poll(async () => ((await value(page))['tags'] as { id: number }[]).map((t) => t.id))
+      .poll(async () => {
+        const tags = (await value(page))['tags'];
+        return Array.isArray(tags) ? (tags as { id: number }[]).map((tag) => tag.id) : null;
+      })
       .toEqual([1, 10]);
     expect(await value(page)).toMatchObject({
       tags: expect.not.arrayContaining([{ id: 2, name: 'React' }]),

@@ -156,8 +156,10 @@ test.describe('Pagination', () => {
     await page.locator('#page-count-increase').click();
     await page.locator('#page-count-increase').click();
     await page.getByRole('button', { name: 'Next page' }).click();
-    await page.getByRole('button', { name: 'Next page' }).focus();
-    await page.getByRole('button', { name: 'Next page' }).click();
+    const next = page.getByRole('button', { name: 'Next page' });
+    await next.focus();
+    await expect(next).toBeFocused();
+    await next.click();
     await expect(page.getByRole('button', { name: 'Page 3' })).toBeFocused();
   });
 

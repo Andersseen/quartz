@@ -12,11 +12,16 @@ async function activate(page: Page, selector: string) {
   await page.keyboard.press('Enter');
 }
 
+async function gotoLayers(page: Page) {
+  await page.goto('/e2e-layers', { waitUntil: 'commit' });
+  await expect(page.locator('main[data-ready]')).toBeVisible();
+}
+
 const activeId = (page: Page) => page.evaluate(() => document.activeElement?.id ?? '');
 
 test.describe('nested layers', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await activate(page, '#open-a');
     await expect(page.locator('#dialog-a-content')).toBeVisible();
   });
@@ -101,7 +106,7 @@ test.describe('overlay geometry', () => {
   test('follows the anchor when it resizes, without an explicit updatePosition() call', async ({
     page,
   }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.locator('#geo-anchor').click();
     await expect(page.locator('#geo-content')).toBeVisible();
 
@@ -123,7 +128,7 @@ test.describe('overlay geometry', () => {
   test('keeps aligned with the anchor after scrolling when closeOnScroll is false', async ({
     page,
   }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.locator('#geo-anchor').click();
     await expect(page.locator('#geo-content')).toBeVisible();
     await page.mouse.wheel(0, 120);
@@ -138,7 +143,7 @@ test.describe('overlay geometry', () => {
   });
 
   test('clamps inside a narrow viewport after a resize', async ({ page }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.locator('#geo-anchor').click();
     await expect(page.locator('#geo-content')).toBeVisible();
     await page.setViewportSize({ width: 200, height: 600 });
@@ -148,12 +153,14 @@ test.describe('overlay geometry', () => {
         return o.x >= 0 && o.x + o.width <= 200;
       })
       .toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#geo-content')).toHaveCount(0);
   });
 
   test('closes when the anchor leaves the document, and destroying an open trigger closes it once', async ({
     page,
   }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.locator('#doomed-anchor').click();
     await expect(page.locator('#geo-content')).toBeVisible();
     await page.locator('#geo-remove-anchor').dispatchEvent('click');
@@ -166,7 +173,7 @@ test.describe('overlay geometry', () => {
 
 test.describe('viewport', () => {
   test('height-only resizes are observed', async ({ page }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.setViewportSize({ width: 900, height: 500 });
     await expect(page.locator('#viewport-size')).toHaveText('900x500');
     await page.setViewportSize({ width: 900, height: 420 });
@@ -178,7 +185,7 @@ test.describe('collection recovery', () => {
   test('removing the active item activates its neighbour and keeps keyboard navigation working', async ({
     page,
   }) => {
-    await page.goto('/e2e-layers');
+    await gotoLayers(page);
     await page.locator('#col-one').focus();
     await page.keyboard.press('ArrowDown');
     await expect(page.locator('#col-active')).toHaveText('two');

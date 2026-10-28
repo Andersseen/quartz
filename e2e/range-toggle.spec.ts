@@ -40,7 +40,7 @@ const prevented = (page: Page) =>
   page.evaluate(() => (window as unknown as { __prevented: boolean[] }).__prevented);
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/e2e-range');
+  await page.goto('/e2e-range', { waitUntil: 'commit' });
   await expect(page.locator('#app[data-ready]')).toBeAttached();
   await expect(page.locator('#s-basic')).toBeVisible();
 });

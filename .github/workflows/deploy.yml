@@ -8,6 +8,20 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Commit, tag, or branch to validate (and publish when explicitly enabled)
+        required: true
+        type: string
+      publish:
+        description: Publish this source after every required validation job passes
+        required: false
+        default: false
+        type: boolean
+      confirm_version:
+        description: Exact lockstep package version to publish (required when publish is enabled)
+        required: false
+        type: string
 
 jobs:
   quality:
@@ -16,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
@@ -53,6 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
@@ -92,6 +110,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
@@ -127,13 +147,15 @@ jobs:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
     needs: [unit-tests, e2e-tests]
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
@@ -171,15 +193,14 @@ jobs:
           command: pages deploy dist/analog/public --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
-  # Publishes @quartz-headless/core and @quartz-headless/primitives (two independent
-  # Angular library projects — see docs/ai/ARCHITECTURE.md). Core must publish first since
-  # primitives declares it as a peer dependency. The old unscoped `quartz-headless` package
-  # is frozen at its last published version and is no longer published from CI.
+  # Explicit manual release only: the selected source ref and confirmed lockstep version are
+  # validated above, then Core publishes before Primitives. Main pushes never publish package
+  # contents under a potentially stale manifest version. The unscoped package remains frozen.
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
     needs: [unit-tests, e2e-tests]
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     outputs:
       core-published: ${{ steps.version-core.outputs.published }}
       core-version: ${{ steps.version-core.outputs.version }}
@@ -192,6 +213,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
@@ -205,6 +228,18 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Verify explicit lockstep version confirmation
+        env:
+          CONFIRM_VERSION: ${{ inputs.confirm_version }}
+        run: |
+          core_version=$(node -p "require('./packages/core/package.json').version")
+          primitives_version=$(node -p "require('./packages/primitives/package.json').version")
+          core_peer=$(node -p "require('./packages/primitives/package.json').peerDependencies['@quartz-headless/core']")
+          if [ -z "$CONFIRM_VERSION" ] || [ "$core_version" != "$CONFIRM_VERSION" ] || [ "$primitives_version" != "$CONFIRM_VERSION" ] || [ "$core_peer" != "^$CONFIRM_VERSION" ]; then
+            echo "Refusing publication: both packages and the Core peer must match the explicitly confirmed version."
+            exit 1
+          fi
 
       - name: Check @quartz-headless/core version availability
         id: version-core
@@ -273,8 +308,6 @@ jobs:
           needed=false
           if [ "$CORE_PUBLISHED" = "true" ] || [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
             needed=true
-          elif ! gh release view "$tag" >/dev/null 2>&1; then
-            needed=true
           fi
 
           {
@@ -292,13 +325,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [publish]
     if: |
+      github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/main' &&
+      inputs.publish == true &&
       needs.publish.outputs.release-needed == 'true'
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref }}
 
       - name: Create GitHub Release
         env:
@@ -328,7 +365,7 @@ jobs:
 
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release edit "$tag" \
-              --target "$GITHUB_SHA" \
+              --target "$(git rev-parse HEAD)" \
               --title "v$version" \
               --notes "$(printf '%b' "$notes")" \
               --latest
@@ -336,7 +373,7 @@ jobs:
           fi
 
           gh release create "$tag" \
-            --target "$GITHUB_SHA" \
+            --target "$(git rev-parse HEAD)" \
             --title "v$version" \
             --notes "$(printf '%b' "$notes")" \
             --generate-notes \
