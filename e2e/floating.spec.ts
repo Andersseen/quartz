@@ -38,7 +38,8 @@ const residue = (page: Page) =>
   }));
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/e2e-floating');
+  await page.goto('/e2e-floating', { waitUntil: 'commit' });
+  await expect(page.locator('main[data-ready]')).toBeVisible();
   await expect(page.locator('#open-x')).toBeVisible();
 });
 
@@ -225,6 +226,7 @@ test.describe('Dialog → floating surface', () => {
   }) => {
     await activate(page, '#x-select-trigger');
     await expect(page.getByRole('listbox')).toBeVisible();
+    await expect(page.getByRole('option', { name: 'Option A' })).toBeFocused();
     expect(await inInert(page, '[role="listbox"]')).toBe(false);
 
     await page.keyboard.press('ArrowDown');

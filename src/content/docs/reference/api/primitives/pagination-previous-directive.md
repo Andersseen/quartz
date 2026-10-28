@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzPaginationPrevious`
-- **Source:** [packages/primitives/src/pagination/pagination.directive.ts:133](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/pagination/pagination.directive.ts#L133)
+- **Source:** [packages/primitives/src/pagination/pagination.directive.ts:139](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/pagination/pagination.directive.ts#L139)
 
 ## Selector
 
