@@ -4,10 +4,11 @@ import {
   TemplateRef,
   ViewContainerRef,
   inject,
+  PLATFORM_ID,
   signal,
   viewChild,
 } from '@angular/core';
-import { JsonPipe } from '@angular/common';
+import { isPlatformBrowser, JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -75,7 +76,7 @@ interface Tag {
   // Behaviour fixture: rendered on the client only (it queries ViewContainerRefs on elements).
   host: { ngSkipHydration: 'true' },
   template: `
-    <main id="app" style="padding: 24px" [attr.dir]="dir">
+    <main id="app" [attr.data-ready]="ready() ? '' : null" style="padding: 24px" [attr.dir]="dir">
       <h1>Advanced selection</h1>
       <form id="form" [formGroup]="form" novalidate>
         <div
@@ -235,6 +236,8 @@ interface Tag {
   `,
 })
 export default class E2eSelectionPage {
+  private readonly platformId = inject(PLATFORM_ID);
+  readonly ready = signal(false);
   private readonly dialogs = inject(DialogService);
   private readonly vcr = inject(ViewContainerRef);
   private readonly dialogTpl = viewChild.required<TemplateRef<unknown>>('dialogTpl');
@@ -268,6 +271,7 @@ export default class E2eSelectionPage {
   readonly dialogValue = signal('none');
 
   constructor() {
+    if (isPlatformBrowser(this.platformId)) this.ready.set(true);
     this.form.valueChanges.subscribe(() => this.changes.update((n) => n + 1));
     this.dialogTags.valueChanges.subscribe((v) => this.dialogValue.set(JSON.stringify(v)));
   }

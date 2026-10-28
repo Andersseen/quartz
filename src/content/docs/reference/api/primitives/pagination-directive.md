@@ -47,37 +47,54 @@ Two-way bindings: each model is an input and emits the matching change output.
 ### setPage
 
 ```ts
-setPage(page: number, action?: "first" | "previous" | "next" | "last"): void
+setPage(page: number, action?: "first" | "previous" | "next" | "last", event?: Event): void
 ```
 
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `page` | `number` |  |  |
 | `action` | `'first' \| 'previous' \| 'next' \| 'last'` | Yes |  |
+| `event` | `Event` | Yes |  |
 
 ### first
 
 ```ts
-first(): void
+first(event?: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` | Yes |  |
 
 ### previous
 
 ```ts
-previous(): void
+previous(event?: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` | Yes |  |
 
 ### next
 
 ```ts
-next(): void
+next(event?: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` | Yes |  |
 
 ### last
 
 ```ts
-last(): void
+last(event?: Event): void
 ```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `event` | `Event` | Yes |  |
 
 ### controlDisabled
 

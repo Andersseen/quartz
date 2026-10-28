@@ -35,7 +35,30 @@ export const appConfig: ApplicationConfig = {
     provideFileRouter(
       withExtraRoutes([
         ...doqRoutes(doqConfig),
-        // This fixture occasionally misses Analog's file-route scan until the next cold build.
+        // Playwright fixtures must use statically compiled lazy components. Analog's discovered
+        // route components can reach Angular's runtime JIT fallback in the production static
+        // router when their module is first activated, leaving the prerendered fixture inert.
+        {
+          path: 'e2e-forms',
+          loadComponent: () => import('./pages/e2e-forms.page').then((module) => module.default),
+        },
+        {
+          path: 'e2e-floating',
+          loadComponent: () => import('./pages/e2e-floating.page').then((module) => module.default),
+        },
+        {
+          path: 'e2e-layers',
+          loadComponent: () => import('./pages/e2e-layers.page').then((module) => module.default),
+        },
+        {
+          path: 'e2e-range',
+          loadComponent: () => import('./pages/e2e-range.page').then((module) => module.default),
+        },
+        {
+          path: 'e2e-selection',
+          loadComponent: () =>
+            import('./pages/e2e-selection.page').then((module) => module.default),
+        },
         {
           path: 'e2e-calendar',
           loadComponent: () =>

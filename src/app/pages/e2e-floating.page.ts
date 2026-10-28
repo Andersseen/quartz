@@ -4,9 +4,11 @@ import {
   TemplateRef,
   ViewContainerRef,
   inject,
+  PLATFORM_ID,
   signal,
   viewChild,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import {
   DialogService,
   MenuDirective,
@@ -61,7 +63,11 @@ import {
   // Behaviour fixture: rendered on the client only (it queries ViewContainerRefs on elements).
   host: { ngSkipHydration: 'true' },
   template: `
-    <main id="app" style="padding: 24px; min-height: 1600px">
+    <main
+      id="app"
+      [attr.data-ready]="ready() ? '' : null"
+      style="padding: 24px; min-height: 1600px"
+    >
       <h1>Floating composition</h1>
       <p id="state">{{ log() }}</p>
       <p id="closed">{{ closed() }}</p>
@@ -199,6 +205,8 @@ import {
   `,
 })
 export default class E2eFloatingPage {
+  private readonly platformId = inject(PLATFORM_ID);
+  readonly ready = signal(false);
   readonly toast = inject(ToastService);
   private readonly dialogs = inject(DialogService);
   private readonly vcr = inject(ViewContainerRef);
@@ -212,6 +220,10 @@ export default class E2eFloatingPage {
   readonly hostAlive = signal(true);
   readonly selected = signal<string | null>(null);
   readonly closed = signal('');
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) this.ready.set(true);
+  }
 
   openX(): void {
     this.track(this.dialogs.open(this.xTpl(), this.hostVcr() ?? this.vcr, { width: '360px' }), 'X');
