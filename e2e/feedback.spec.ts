@@ -5,6 +5,11 @@ test.describe('feedback and value indicators', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/e2e-feedback');
   });
+  test('Avatar SSR markup starts with a deterministic fallback', async ({ request }) => {
+    const html = await (await request.get('/e2e-feedback')).text();
+    expect(html).toContain('data-qz-part=\"fallback\"');
+    expect(html).toContain('>JD</span>');
+  });
   test('Progress updates and indeterminate state has no numeric value', async ({ page }) => {
     const progress = page.locator('#progress');
     await expect(progress).toHaveAttribute('role', 'progressbar');

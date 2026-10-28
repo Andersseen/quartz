@@ -21,8 +21,11 @@ describe('AvatarComponent', () => {
     await waitFor(() => expect(container.getAttribute('data-qz-state')).toBe('loaded'));
     await rerender({ inputs: { src: '/second.png', fallback: 'JD', fallbackDelay: 1000 } });
     const replacement = container.querySelector('img') as HTMLImageElement;
+    expect(replacement).not.toBe(image);
     expect(replacement.src).toContain('/second.png');
     await waitFor(() => expect(container.getAttribute('data-qz-state')).toBe('loading'));
+    fireEvent.load(image);
+    expect(container.getAttribute('data-qz-state')).toBe('loading');
   });
 
   it('shows fallback when image loading fails', async () => {
