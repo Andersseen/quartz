@@ -3,7 +3,7 @@
 title: FocusRestorer
 description: Interface reference for FocusRestorer.
 group: "API: Core"
-order: 1049
+order: 1052
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: StepDirective
 description: "Directive reference for StepDirective with the selector [qzStep]."
 group: "API: Primitives"
-order: 1195
+order: 1197
 generated: doq-api
 category: directive
 ---

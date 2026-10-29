@@ -11,7 +11,7 @@ category: directive
 ## Overview
 
 - **Kind:** Directive
-- **Source:** [packages/core/src/splitter/splitter-container.directive.ts:23](https://github.com/Andersseen/quartz/blob/main/packages/core/src/splitter/splitter-container.directive.ts#L23)
+- **Source:** [packages/core/src/splitter/splitter-container.directive.ts:25](https://github.com/Andersseen/quartz/blob/main/packages/core/src/splitter/splitter-container.directive.ts#L25)
 
 ## Selector
 
@@ -28,6 +28,7 @@ category: directive
 | `maxSize` | `number` | `100` |  |  |
 | `step` | `number` | `1` |  |  |
 | `defaultPosition` | `number` | `50` |  |  |
+| `disabled` | `unknown` | `false` |  | Turns pointer and keyboard resizing off. Transform `booleanAttribute`; reads as `boolean`. |
 
 ## Outputs
 

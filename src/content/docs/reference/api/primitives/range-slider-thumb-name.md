@@ -3,7 +3,7 @@
 title: RangeSliderThumbName
 description: Type alias reference for RangeSliderThumbName.
 group: "API: Primitives"
-order: 1274
+order: 1284
 generated: doq-api
 category: type
 ---

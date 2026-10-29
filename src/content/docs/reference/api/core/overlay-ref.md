@@ -3,7 +3,7 @@
 title: OverlayRef
 description: Class reference for OverlayRef.
 group: "API: Core"
-order: 1041
+order: 1044
 generated: doq-api
 category: class
 ---
@@ -11,7 +11,7 @@ category: class
 ## Overview
 
 - **Kind:** Class
-- **Source:** [packages/core/src/overlay/overlay-ref.ts:13](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay-ref.ts#L13)
+- **Source:** [packages/core/src/overlay/overlay-ref.ts:15](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay-ref.ts#L15)
 
 ## Declaration
 
@@ -26,6 +26,7 @@ class OverlayRef
 | `readonly closed$` | `Observable<void>` |  |
 | `readonly mounted$` | `Observable<HTMLElement>` |  |
 | `readonly position$` | `Observable<OverlayPosition>` |  |
+| `readonly position` | `OverlayPosition \| null` | The most recent position while open (`null` before the first measurement and after close). |
 | `readonly isOpen` | `boolean` |  |
 
 ## Public methods

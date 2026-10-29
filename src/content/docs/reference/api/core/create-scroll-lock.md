@@ -3,7 +3,7 @@
 title: createScrollLock
 description: Function reference for createScrollLock.
 group: "API: Core"
-order: 1019
+order: 1021
 generated: doq-api
 category: function
 ---

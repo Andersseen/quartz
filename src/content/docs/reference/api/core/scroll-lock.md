@@ -3,7 +3,7 @@
 title: ScrollLock
 description: Interface reference for ScrollLock.
 group: "API: Core"
-order: 1058
+order: 1063
 generated: doq-api
 category: interface
 ---

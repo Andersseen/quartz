@@ -3,7 +3,7 @@
 title: DialogService
 description: Service reference for DialogService.
 group: "API: Primitives"
-order: 1212
+order: 1214
 generated: doq-api
 category: service
 ---
@@ -12,7 +12,7 @@ category: service
 
 - **Kind:** Service
 - **Provided in:** `root`
-- **Source:** [packages/primitives/src/dialog/dialog.service.ts:26](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.service.ts#L26)
+- **Source:** [packages/primitives/src/dialog/dialog.service.ts:48](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.service.ts#L48)
 
 ## Public methods
 

@@ -3,7 +3,7 @@
 title: PopoverTriggerDirective
 description: "Directive reference for PopoverTriggerDirective with the selector [qzPopoverTrigger]."
 group: "API: Primitives"
-order: 1169
+order: 1171
 generated: doq-api
 category: directive
 ---
@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzPopoverTrigger`
-- **Source:** [packages/primitives/src/popover/popover-trigger.directive.ts:45](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover-trigger.directive.ts#L45)
+- **Source:** [packages/primitives/src/popover/popover-trigger.directive.ts:48](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover-trigger.directive.ts#L48)
 
 ## Selector
 
@@ -34,6 +34,8 @@ category: directive
 | `closeOnEscape` | `unknown` | `DEFAULT_POPOVER_CONFIG.closeOnEscape` |  | Transform `booleanAttribute`; reads as `boolean`. |
 | `closeOnClickOutside` | `unknown` | `DEFAULT_POPOVER_CONFIG.closeOnClickOutside` |  | Transform `booleanAttribute`; reads as `boolean`. |
 | `autoFocus` | `unknown` | `DEFAULT_POPOVER_CONFIG.autoFocus` |  | Transform `booleanAttribute`; reads as `boolean`. |
+| `arrowSize` | `number \| undefined` | `undefined` |  | Arrow length in px for consumer-rendered arrows; unset means no arrow geometry. |
+| `arrowPadding` | `number` | `0` |  | Minimum px between the arrow and either end of the popover edge. |
 
 ## Models
 
@@ -55,6 +57,9 @@ Two-way bindings: each model is an input and emits the matching change output.
 | Name | Type | Description |
 | --- | --- | --- |
 | `readonly isOpen` | `Signal<boolean>` |  |
+| `readonly arrow` | `Signal<OverlayArrowGeometry \| null>` | Geometry for a consumer-rendered arrow (requires `arrowSize`). Follows the surface after flip, shift, scroll-less repositioning and resize; `null` while closed. Check `available`. |
+| `readonly resolvedPlacement` | `Signal<OverlayPlacement \| null>` | Resolved physical placement after flip; `null` while closed. |
+| `readonly context` | [`PopoverContext`](/docs/reference/api/primitives/popover-context) | Template context: `let-arrow="arrow" let-placement="placement" let-open="open"`. |
 | `readonly panelId` | `Signal<string \| null>` |  |
 
 ## Public methods
@@ -90,3 +95,7 @@ onKeydown(event: KeyboardEvent): void
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `event` | `KeyboardEvent` |  |  |
+
+## Related types
+
+- [`PopoverContext`](/docs/reference/api/primitives/popover-context)

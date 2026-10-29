@@ -29,5 +29,5 @@ category: directive
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `widthStyle` | `Signal<string>` |  |
-| `heightStyle` | `Signal<string>` |  |
+| `widthStyle` | `Signal<string \| null>` |  |
+| `heightStyle` | `Signal<string \| null>` |  |

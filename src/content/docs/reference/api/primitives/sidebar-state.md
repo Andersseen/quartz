@@ -3,7 +3,7 @@
 title: SidebarState
 description: Type alias reference for SidebarState.
 group: "API: Primitives"
-order: 1281
+order: 1291
 generated: doq-api
 category: type
 ---

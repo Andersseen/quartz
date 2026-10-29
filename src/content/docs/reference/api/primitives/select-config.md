@@ -3,7 +3,7 @@
 title: SelectConfig
 description: Interface reference for SelectConfig.
 group: "API: Primitives"
-order: 1239
+order: 1245
 generated: doq-api
 category: interface
 ---

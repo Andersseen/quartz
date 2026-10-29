@@ -3,7 +3,7 @@
 title: QzDragOverInfo
 description: Interface reference for QzDragOverInfo.
 group: "API: Core"
-order: 1056
+order: 1061
 generated: doq-api
 category: interface
 ---

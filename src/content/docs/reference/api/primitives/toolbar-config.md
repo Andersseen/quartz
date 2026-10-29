@@ -3,7 +3,7 @@
 title: ToolbarConfig
 description: Interface reference for ToolbarConfig.
 group: "API: Primitives"
-order: 1251
+order: 1257
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: ProgressIndicatorDirective
 description: "Directive reference for ProgressIndicatorDirective with the selector [qzProgressIndicator]."
 group: "API: Primitives"
-order: 1171
+order: 1173
 generated: doq-api
 category: directive
 ---

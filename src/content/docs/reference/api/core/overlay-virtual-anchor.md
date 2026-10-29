@@ -3,7 +3,7 @@
 title: OverlayVirtualAnchor
 description: Interface reference for OverlayVirtualAnchor.
 group: "API: Core"
-order: 1053
+order: 1058
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/core/src/overlay/overlay.types.ts:41](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L41)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:56](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L56)
 
 ## Declaration
 

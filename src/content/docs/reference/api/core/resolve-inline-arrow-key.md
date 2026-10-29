@@ -3,7 +3,7 @@
 title: resolveInlineArrowKey
 description: "Classifies a keyboard event's key as an inline-start/inline-end move for direction, or null when it's not a horizontal arrow key at all."
 group: "API: Core"
-order: 1038
+order: 1041
 generated: doq-api
 category: function
 ---

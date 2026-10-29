@@ -3,7 +3,7 @@
 title: inlineEndKey
 description: "The arrow key that moves toward inline-end (the reading direction's end) for direction."
 group: "API: Core"
-order: 1029
+order: 1031
 generated: doq-api
 category: function
 ---

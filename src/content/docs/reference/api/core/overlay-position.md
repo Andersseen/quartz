@@ -3,7 +3,7 @@
 title: OverlayPosition
 description: Interface reference for OverlayPosition.
 group: "API: Core"
-order: 1052
+order: 1057
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/core/src/overlay/overlay.types.ts:65](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L65)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:80](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L80)
 
 ## Declaration
 
@@ -25,8 +25,10 @@ interface OverlayPosition
 | --- | --- | --- |
 | `top` | `number` |  |
 | `left` | `number` |  |
-| `placement` | [`OverlayPlacement`](/docs/reference/api/core/overlay-placement) |  |
+| `placement` | [`OverlayPlacement`](/docs/reference/api/core/overlay-placement) | Resolved physical placement after flip. |
+| `arrow?` | [`OverlayArrowGeometry`](/docs/reference/api/core/overlay-arrow-geometry) | Present only when the overlay was created with `arrowSize`. |
 
 ## Related types
 
+- [`OverlayArrowGeometry`](/docs/reference/api/core/overlay-arrow-geometry)
 - [`OverlayPlacement`](/docs/reference/api/core/overlay-placement)

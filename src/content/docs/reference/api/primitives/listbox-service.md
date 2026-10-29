@@ -3,7 +3,7 @@
 title: ListboxService
 description: Container-scoped registry and active-descendant state for qzListbox.
 group: "API: Primitives"
-order: 1213
+order: 1216
 generated: doq-api
 category: service
 ---

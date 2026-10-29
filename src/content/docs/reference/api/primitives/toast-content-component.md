@@ -3,7 +3,7 @@
 title: ToastContentComponent
 description: Interface reference for ToastContentComponent.
 group: "API: Primitives"
-order: 1246
+order: 1252
 generated: doq-api
 category: interface
 ---

@@ -62,3 +62,41 @@ import { MenuDirective, MenuTriggerDirective, MenuItemDirective } from '@quartz-
   <button qzMenuRadioItem value="comfortable">Comfortable</button>
 </div>
 ```
+
+## Groups, labels and separators
+
+::demo[menu-groups]
+
+```ts
+import {
+  MenuGroupDirective,
+  MenuLabelDirective,
+  MenuSeparatorDirective,
+} from '@quartz-headless/primitives';
+```
+
+```html
+<div qzMenu class="menu" aria-label="Workspace">
+  <div qzMenuGroup>
+    <div qzMenuLabel>Account</div>
+    <button qzMenuItem>Profile</button>
+    <button qzMenuItem [disabled]="true">Billing</button>
+  </div>
+  <div qzMenuSeparator></div>
+  <div qzMenuRadioGroup [(value)]="density">
+    <div qzMenuLabel>Density</div>
+    <button qzMenuRadioItem value="compact">Compact</button>
+    <button qzMenuRadioItem value="comfortable">Comfortable</button>
+  </div>
+</div>
+```
+
+`qzMenuGroup` is `role="group"` and is named by its `qzMenuLabel` through `aria-labelledby`; `qzMenuRadioGroup` is named the same way. A label keeps its own `id` when it has one. Labels, groups and separators (`role="separator"`, `aria-orientation="horizontal"`) are never registered as menu items: they are skipped by arrow keys, Home/End and typeahead, never take focus and cannot be activated. Removing a label removes `aria-labelledby`; groups can be added and removed dynamically.
+
+## Menu vs NavigationMenu
+
+Use Menu for an action menu (`role="menu"`) opened from a button. Use [NavigationMenu](/docs/primitives/navigation-menu) for site navigation with links and disclosure panels.
+
+## Differences from Volt and limitations
+
+The submenu `ng-template` must be declared inside its parent `qzMenu` so it resolves the parent menu service. Labels are plain elements; Quartz does not add visual separators or headings.

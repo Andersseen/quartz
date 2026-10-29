@@ -3,7 +3,7 @@
 title: VirtualScrollConfig
 description: Configuration object for virtual scroll.
 group: "API: Core"
-order: 1063
+order: 1068
 generated: doq-api
 category: interface
 ---

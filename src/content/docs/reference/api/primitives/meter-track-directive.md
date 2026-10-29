@@ -3,7 +3,7 @@
 title: MeterTrackDirective
 description: "Directive reference for MeterTrackDirective with the selector [qzMeterTrack]."
 group: "API: Primitives"
-order: 1152
+order: 1154
 generated: doq-api
 category: directive
 ---

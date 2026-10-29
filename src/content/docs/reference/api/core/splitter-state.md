@@ -3,7 +3,7 @@
 title: SplitterState
 description: Interface reference for SplitterState.
 group: "API: Core"
-order: 1060
+order: 1065
 generated: doq-api
 category: interface
 ---

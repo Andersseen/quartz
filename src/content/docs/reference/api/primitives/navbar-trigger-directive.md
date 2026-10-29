@@ -3,7 +3,7 @@
 title: NavbarTriggerDirective
 description: "Directive reference for NavbarTriggerDirective with the selector [qzNavbarTrigger]."
 group: "API: Primitives"
-order: 1155
+order: 1157
 generated: doq-api
 category: directive
 ---

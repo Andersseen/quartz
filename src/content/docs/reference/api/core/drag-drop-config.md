@@ -3,7 +3,7 @@
 title: DragDropConfig
 description: Interface reference for DragDropConfig.
 group: "API: Core"
-order: 1047
+order: 1050
 generated: doq-api
 category: interface
 ---

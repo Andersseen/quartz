@@ -3,7 +3,7 @@
 title: DEFAULT_TOOLBAR_CONFIG
 description: Constant reference for DEFAULT_TOOLBAR_CONFIG.
 group: "API: Primitives"
-order: 1315
+order: 1326
 generated: doq-api
 category: constant
 ---

@@ -3,7 +3,7 @@
 title: NavbarRevealMode
 description: Type alias reference for NavbarRevealMode.
 group: "API: Primitives"
-order: 1269
+order: 1279
 generated: doq-api
 category: type
 ---

@@ -3,7 +3,7 @@
 title: DEFAULT_DIALOG_CONFIG
 description: Constant reference for DEFAULT_DIALOG_CONFIG.
 group: "API: Primitives"
-order: 1299
+order: 1309
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/dialog/dialog.types.ts:71](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.types.ts#L71)
+- **Source:** [packages/primitives/src/dialog/dialog.types.ts:87](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.types.ts#L87)
 
 ## Type
 

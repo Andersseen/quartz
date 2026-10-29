@@ -3,7 +3,7 @@
 title: CollectionItem
 description: Interface reference for CollectionItem.
 group: "API: Core"
-order: 1043
+order: 1046
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: TooltipDirective
 description: Headless tooltip directive.
 group: "API: Primitives"
-order: 1211
+order: 1213
 generated: doq-api
 category: directive
 ---
@@ -27,7 +27,7 @@ Usage with template:
 
 - **Kind:** Directive
 - **Export as:** `qzTooltip`
-- **Source:** [packages/primitives/src/tooltip/tooltip.directive.ts:55](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.directive.ts#L55)
+- **Source:** [packages/primitives/src/tooltip/tooltip.directive.ts:60](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.directive.ts#L60)
 
 ## Selector
 
@@ -45,12 +45,17 @@ Usage with template:
 | `tooltipHideDelay` | `number` | `DEFAULT_TOOLTIP_CONFIG.hideDelay` |  |  |
 | `tooltipOffset` | `number` | `DEFAULT_TOOLTIP_CONFIG.offset` |  |  |
 | `tooltipDisabled` | `boolean` | `false` |  |  |
+| `tooltipArrowSize` | `number \| undefined` | `undefined` |  | Opts into arrow geometry: the length in px of the arrow you render along the tooltip edge. Leave unset for no arrow data. See [`TooltipDirective.arrow`](/docs/reference/api/primitives/tooltip-directive). |
+| `tooltipArrowPadding` | `number` | `0` |  | Minimum px between the arrow and either end of the tooltip edge. |
 
 ## Properties
 
 | Name | Type | Description |
 | --- | --- | --- |
 | `readonly tooltipId` | `WritableSignal<string \| null>` |  |
+| `readonly arrow` | `Signal<OverlayArrowGeometry \| null>` | Geometry for a consumer-rendered arrow while the tooltip is open (requires `tooltipArrowSize`). Follows the surface after flip, shift and resize. `null` when closed. Check `available` before rendering: it is `false` when no safe position exists. |
+| `readonly resolvedPlacement` | `Signal<TooltipPlacement \| null>` | Resolved physical placement after flip; `null` while closed. |
+| `readonly context` | [`TooltipContext`](/docs/reference/api/primitives/tooltip-context) | Template context for `TemplateRef` content: `let-arrow="arrow" let-placement="placement"`. |
 
 ## Public methods
 
@@ -69,3 +74,8 @@ hide(): void
 ```
 
 Programmatically hide the tooltip
+
+## Related types
+
+- [`TooltipContext`](/docs/reference/api/primitives/tooltip-context)
+- [`TooltipPlacement`](/docs/reference/api/primitives/tooltip-placement)

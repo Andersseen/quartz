@@ -3,7 +3,7 @@
 title: PopoverConfig
 description: Interface reference for PopoverConfig.
 group: "API: Primitives"
-order: 1234
+order: 1239
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/primitives/src/popover/popover.types.ts:3](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover.types.ts#L3)
+- **Source:** [packages/primitives/src/popover/popover.types.ts:8](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover.types.ts#L8)
 
 ## Declaration
 
@@ -31,3 +31,5 @@ interface PopoverConfig
 | `closeOnEscape` | `boolean` |  |
 | `closeOnClickOutside` | `boolean` |  |
 | `autoFocus` | `boolean` |  |
+| `arrowSize?` | `number` | Arrow length in px; unset means no arrow geometry. Default: unset. |
+| `arrowPadding?` | `number` | Minimum px between the arrow and either end of the popover edge. Default: 0 |

@@ -3,7 +3,7 @@
 title: ListboxOrientation
 description: Type alias reference for ListboxOrientation.
 group: "API: Primitives"
-order: 1267
+order: 1277
 generated: doq-api
 category: type
 ---

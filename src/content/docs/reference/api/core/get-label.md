@@ -3,7 +3,7 @@
 title: getLabel
 description: Function reference for getLabel.
 group: "API: Core"
-order: 1027
+order: 1029
 generated: doq-api
 category: function
 ---

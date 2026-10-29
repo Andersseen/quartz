@@ -3,7 +3,7 @@
 title: MeterDirective
 description: Accessible meter for a scalar measurement with a known meaningful range.
 group: "API: Primitives"
-order: 1150
+order: 1152
 generated: doq-api
 category: directive
 ---

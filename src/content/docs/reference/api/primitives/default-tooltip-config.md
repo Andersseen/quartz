@@ -3,7 +3,7 @@
 title: DEFAULT_TOOLTIP_CONFIG
 description: Constant reference for DEFAULT_TOOLTIP_CONFIG.
 group: "API: Primitives"
-order: 1316
+order: 1327
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:18](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L18)
+- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:37](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L37)
 
 ## Type
 

@@ -3,7 +3,7 @@
 title: QzDropInfo
 description: Interface reference for QzDropInfo.
 group: "API: Core"
-order: 1057
+order: 1062
 generated: doq-api
 category: interface
 ---

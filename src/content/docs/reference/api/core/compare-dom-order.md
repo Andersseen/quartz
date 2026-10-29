@@ -3,7 +3,7 @@
 title: compareDomOrder
 description: Function reference for compareDomOrder.
 group: "API: Core"
-order: 1015
+order: 1017
 generated: doq-api
 category: function
 ---

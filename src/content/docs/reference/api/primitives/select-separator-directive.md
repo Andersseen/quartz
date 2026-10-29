@@ -3,7 +3,7 @@
 title: SelectSeparatorDirective
 description: "Decorative separator between options or groups; excluded from navigation."
 group: "API: Primitives"
-order: 1185
+order: 1187
 generated: doq-api
 category: directive
 ---

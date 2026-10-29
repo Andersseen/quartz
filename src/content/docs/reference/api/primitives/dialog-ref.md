@@ -3,7 +3,7 @@
 title: DialogRef
 description: Class reference for DialogRef.
 group: "API: Primitives"
-order: 1219
+order: 1223
 generated: doq-api
 category: class
 ---
@@ -11,7 +11,7 @@ category: class
 ## Overview
 
 - **Kind:** Class
-- **Source:** [packages/primitives/src/dialog/dialog-ref.ts:4](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog-ref.ts#L4)
+- **Source:** [packages/primitives/src/dialog/dialog-ref.ts:11](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog-ref.ts#L11)
 
 ## Declaration
 
@@ -23,7 +23,8 @@ class DialogRef
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `readonly closed$` | `Observable<void>` |  |
+| `readonly closed$` | `Observable<void>` | Emits once, after the panel has been removed (after the exit transition, if any). |
+| `readonly state` | `Signal<DialogState>` | Current lifecycle state. |
 
 ## Public methods
 
@@ -34,3 +35,7 @@ close(): void
 ```
 
 Closes the dialog. Safe to call multiple times.
+
+## Related types
+
+- [`DialogState`](/docs/reference/api/primitives/dialog-state)

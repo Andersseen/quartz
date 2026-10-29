@@ -3,7 +3,7 @@
 title: RangeSliderTrackDirective
 description: "Directive reference for RangeSliderTrackDirective with the selector [qzRangeSliderTrack]."
 group: "API: Primitives"
-order: 1178
+order: 1180
 generated: doq-api
 category: directive
 ---

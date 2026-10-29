@@ -3,7 +3,7 @@
 title: ProgressTrackDirective
 description: "Directive reference for ProgressTrackDirective with the selector [qzProgressTrack]."
 group: "API: Primitives"
-order: 1172
+order: 1174
 generated: doq-api
 category: directive
 ---

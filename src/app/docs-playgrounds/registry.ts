@@ -23,6 +23,12 @@ import {
   SidebarPlaygroundComponent,
   ToolbarPlaygroundComponent,
 } from './navigation-playgrounds';
+import {
+  DrawerPlaygroundComponent,
+  PopoverArrowPlaygroundComponent,
+  ResizablePlaygroundComponent,
+  TooltipArrowPlaygroundComponent,
+} from './floating-playgrounds';
 import { InputOtpPlaygroundComponent } from './input-otp-playground';
 import {
   AvatarPlaygroundComponent,
@@ -661,5 +667,118 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('rtl', 'RTL'),
     ],
     outputs: [{ event: 'selection', label: 'Committed range' }],
+  },
+  'quartz-drawer': {
+    component: DrawerPlaygroundComponent,
+    title: 'Drawer',
+    description:
+      'A modal panel anchored to an edge, with configurable dismissal and exit presence.',
+    controls: [
+      {
+        input: 'side',
+        kind: 'select',
+        label: 'Side',
+        initial: 'inline-end',
+        options: [
+          { label: 'Left', value: 'left' },
+          { label: 'Right', value: 'right' },
+          { label: 'Top', value: 'top' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Inline start', value: 'inline-start' },
+          { label: 'Inline end', value: 'inline-end' },
+        ],
+      },
+      bool('closeOnEscape', 'Close on Escape', true),
+      bool('closeOnBackdropClick', 'Close on backdrop click', true),
+      bool('backdrop', 'Backdrop', true),
+      bool('presence', 'Exit presence', true),
+    ],
+  },
+  'quartz-resizable': {
+    component: ResizablePlaygroundComponent,
+    title: 'Resizable',
+    description: 'Two resizable panels on the Core Splitter: drag the bar or use the keyboard.',
+    controls: [
+      orientation(),
+      { input: 'minSize', kind: 'number', label: 'Minimum %', initial: 20, min: 0, max: 100 },
+      { input: 'maxSize', kind: 'number', label: 'Maximum %', initial: 80, min: 0, max: 100 },
+      { input: 'step', kind: 'number', label: 'Keyboard step %', initial: 5, min: 1, max: 50 },
+      bool('rtl', 'RTL'),
+      bool('disabled', 'Disabled'),
+    ],
+  },
+  'quartz-tooltip-arrow': {
+    component: TooltipArrowPlaygroundComponent,
+    title: 'Tooltip arrow',
+    description: 'Arrow geometry for a tooltip: resolved side, offset and padding.',
+    controls: [
+      {
+        input: 'placement',
+        kind: 'select',
+        label: 'Placement',
+        initial: 'top',
+        options: [
+          { label: 'Top', value: 'top' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top end', value: 'top-end' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Left', value: 'left' },
+          { label: 'Right', value: 'right' },
+        ],
+      },
+      { input: 'arrowSize', kind: 'number', label: 'Arrow size (px)', initial: 8, min: 0, max: 40 },
+      {
+        input: 'arrowPadding',
+        kind: 'number',
+        label: 'Arrow padding (px)',
+        initial: 6,
+        min: 0,
+        max: 40,
+      },
+      { input: 'offset', kind: 'number', label: 'Offset (px)', initial: 10, min: 0, max: 40 },
+    ],
+  },
+  'quartz-popover-arrow': {
+    component: PopoverArrowPlaygroundComponent,
+    title: 'Popover arrow',
+    description: 'Arrow geometry for a popover, with its open state and dismiss options.',
+    controls: [
+      {
+        input: 'placement',
+        kind: 'select',
+        label: 'Placement',
+        initial: 'bottom',
+        options: [
+          { label: 'Top', value: 'top' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top end', value: 'top-end' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Left', value: 'left' },
+          { label: 'Right', value: 'right' },
+        ],
+      },
+      {
+        input: 'arrowSize',
+        kind: 'number',
+        label: 'Arrow size (px)',
+        initial: 10,
+        min: 0,
+        max: 40,
+      },
+      {
+        input: 'arrowPadding',
+        kind: 'number',
+        label: 'Arrow padding (px)',
+        initial: 8,
+        min: 0,
+        max: 40,
+      },
+      bool('closeOnEscape', 'Close on Escape', true),
+      bool('closeOnClickOutside', 'Close on outside click', true),
+    ],
   },
 };

@@ -3,7 +3,7 @@
 title: OverlayConfig
 description: Interface reference for OverlayConfig.
 group: "API: Core"
-order: 1051
+order: 1056
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/core/src/overlay/overlay.types.ts:17](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L17)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:19](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L19)
 
 ## Declaration
 
@@ -31,6 +31,9 @@ interface OverlayConfig
 | `closeOnEscape` | `boolean` | Close on Escape key. Default: true |
 | `closeOnScroll` | `boolean` | Close when the trigger's scroll parent scrolls. Default: true |
 | `matchAnchorWidth` | `boolean` | Whether to match the anchor's width. Default: false |
+| `arrowSize?` | `number` | Opts the overlay into arrow geometry: the rendered arrow's length in px along the surface edge. When set (even to `0`), every position update carries `arrow` and the surface gets `data-side`, `data-placement`, `--qz-arrow-x` and `--qz-arrow-y`. Default: unset (no arrow). |
+| `arrowPadding?` | `number` | Minimum px between the arrow and either end of the surface edge. Default: 0. |
+| `context?` | `object` | Template context passed to `createEmbeddedView` (available as `let-` variables). Default: no context. |
 
 ## Related types
 

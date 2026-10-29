@@ -38,6 +38,13 @@ import { NavigationMenuDemoComponent } from './navigation-menu.demo';
 import { PaginationDemoComponent } from './pagination.demo';
 import { Controls014DemoComponent } from './controls-014.demo';
 import {
+  DrawerDemoComponent,
+  ResizableDemoComponent,
+  TooltipArrowDemoComponent,
+  PopoverArrowDemoComponent,
+  MenuGroupsDemoComponent,
+} from './floating-016.demo';
+import {
   ProgressDemoComponent,
   MeterDemoComponent,
   AvatarDemoComponent,
@@ -497,6 +504,66 @@ class MeterDemoLoader {}
 })
 class AvatarDemoLoader {}
 
+@Component({
+  selector: 'app-drawer-demo-loader',
+  imports: [DrawerDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-drawer-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class DrawerDemoLoader {}
+
+@Component({
+  selector: 'app-resizable-demo-loader',
+  imports: [ResizableDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-resizable-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class ResizableDemoLoader {}
+
+@Component({
+  selector: 'app-tooltip-arrow-demo-loader',
+  imports: [TooltipArrowDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-tooltip-arrow-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class TooltipArrowDemoLoader {}
+
+@Component({
+  selector: 'app-popover-arrow-demo-loader',
+  imports: [PopoverArrowDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-popover-arrow-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class PopoverArrowDemoLoader {}
+
+@Component({
+  selector: 'app-menu-groups-demo-loader',
+  imports: [MenuGroupsDemoComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `@defer (on idle) {
+      <app-menu-groups-demo />
+    } @placeholder {
+      <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    }`,
+})
+class MenuGroupsDemoLoader {}
+
 export const DOC_DEMOS = {
   overlay: OverlayDemoLoader,
   directionality: DirectionalityDemoLoader,
@@ -536,4 +603,9 @@ export const DOC_DEMOS = {
   'navigation-menu': NavigationMenuDemoLoader,
   pagination: PaginationDemoLoader,
   'controls-text-files': Controls014DemoLoader,
+  drawer: DrawerDemoLoader,
+  resizable: ResizableDemoLoader,
+  'tooltip-arrow': TooltipArrowDemoLoader,
+  'popover-arrow': PopoverArrowDemoLoader,
+  'menu-groups': MenuGroupsDemoLoader,
 } as const;

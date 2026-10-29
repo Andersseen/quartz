@@ -3,7 +3,7 @@
 title: SplitterConfig
 description: Interface reference for SplitterConfig.
 group: "API: Core"
-order: 1059
+order: 1064
 generated: doq-api
 category: interface
 ---

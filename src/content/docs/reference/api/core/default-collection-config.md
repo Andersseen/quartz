@@ -3,7 +3,7 @@
 title: DEFAULT_COLLECTION_CONFIG
 description: Constant reference for DEFAULT_COLLECTION_CONFIG.
 group: "API: Core"
-order: 1078
+order: 1084
 generated: doq-api
 category: constant
 ---

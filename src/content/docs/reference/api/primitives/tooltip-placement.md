@@ -3,7 +3,7 @@
 title: TooltipPlacement
 description: Type alias reference for TooltipPlacement.
 group: "API: Primitives"
-order: 1293
+order: 1303
 generated: doq-api
 category: type
 ---
@@ -11,7 +11,7 @@ category: type
 ## Overview
 
 - **Kind:** Type alias
-- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:3](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L3)
+- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:4](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L4)
 
 ## Definition
 

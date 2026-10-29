@@ -3,7 +3,7 @@
 title: ProgressDirective
 description: Accessible progress root.
 group: "API: Primitives"
-order: 1170
+order: 1172
 generated: doq-api
 category: directive
 ---

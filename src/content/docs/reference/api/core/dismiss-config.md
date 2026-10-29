@@ -3,7 +3,7 @@
 title: DismissConfig
 description: Interface reference for DismissConfig.
 group: "API: Core"
-order: 1045
+order: 1048
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: StepperPreviousDirective
 description: "Directive reference for StepperPreviousDirective with the selector [qzStepperPrevious]."
 group: "API: Primitives"
-order: 1200
+order: 1202
 generated: doq-api
 category: directive
 ---

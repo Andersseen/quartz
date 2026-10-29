@@ -3,7 +3,7 @@
 title: DEFAULT_OVERLAY_CONFIG
 description: Constant reference for DEFAULT_OVERLAY_CONFIG.
 group: "API: Core"
-order: 1079
+order: 1085
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/core/src/overlay/overlay.types.ts:54](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L54)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:69](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L69)
 
 ## Type
 

@@ -3,7 +3,7 @@
 title: CollectionOrientation
 description: Type alias reference for CollectionOrientation.
 group: "API: Core"
-order: 1066
+order: 1071
 generated: doq-api
 category: type
 ---

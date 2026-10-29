@@ -3,7 +3,7 @@
 title: InlineArrowKey
 description: The two arrow keys that move along the horizontal/inline axis.
 group: "API: Core"
-order: 1069
+order: 1074
 generated: doq-api
 category: type
 ---

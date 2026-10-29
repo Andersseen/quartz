@@ -3,7 +3,7 @@
 title: DialogConfig
 description: Interface reference for DialogConfig.
 group: "API: Primitives"
-order: 1225
+order: 1229
 generated: doq-api
 category: interface
 ---
@@ -33,6 +33,8 @@ interface DialogConfig
 | `height?` | `string` | Height of the dialog. |
 | `ariaLabelledBy?` | `string` | ID of the element that labels the dialog. Used for `aria-labelledby`; it is only applied when the element exists in the document. If omitted, a fallback ID is generated and exposed via the template context (`let-labelledBy="ariaLabelledBy"`) so consumers can bind it to a title element. |
 | `ariaLabel?` | `string` | Accessible name used when the dialog has no visible title element. Ignored when a valid `aria-labelledby` reference resolves. A dialog with neither has no accessible name, and a development-mode warning is logged. |
+| `presence?` | `boolean` | Keep the dialog mounted while a consumer-defined CSS exit transition/animation runs. On close the panel, wrapper and backdrop get `data-state="closing"`; the nodes are removed when their `transitionend`/`animationend` fired (or, as a safety net, shortly after the longest computed duration). With no transition/animation on those nodes, with `prefers-reduced-motion: reduce`, or when the host view is destroyed, removal is immediate. Quartz never sets a duration. Default: false (immediate removal). |
+| `panelAttributes?` | `Record<string, string>` | Extra attributes written on the panel element (e.g. `data-*` hooks). |
 | `ariaDescribedBy?` | `string` | ID of the element that describes the dialog. Used for `aria-describedby`. If omitted, a fallback ID is generated and exposed via the template context so consumers can bind it to a description element. |
 
 ## Related types

@@ -3,7 +3,7 @@
 title: ViewportBreakpoint
 description: Predefined breakpoint names used by the ViewportService.
 group: "API: Core"
-order: 1076
+order: 1082
 generated: doq-api
 category: type
 ---
