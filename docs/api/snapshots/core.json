@@ -1,4 +1,14 @@
 {
+  "applyArrowAttributes": {
+    "kind": "function",
+    "signatures": ["(el: HTMLElement, arrow: OverlayArrowGeometry): void"]
+  },
+  "calculateArrowGeometry": {
+    "kind": "function",
+    "signatures": [
+      "(anchor: { left: number; top: number; width: number; height: number; }, surface: { left: number; top: number; width: number; height: number; }, placement: OverlayPlacement, options?: OverlayArrowOptions): OverlayArrowGeometry"
+    ]
+  },
   "calculatePosition": {
     "kind": "function",
     "signatures": [
@@ -171,6 +181,12 @@
   "OverlayAnchor": {
     "kind": "type"
   },
+  "OverlayArrowGeometry": {
+    "kind": "interface"
+  },
+  "OverlayArrowOptions": {
+    "kind": "interface"
+  },
   "OverlayConfig": {
     "kind": "interface"
   },
@@ -189,6 +205,9 @@
   "OverlayService": {
     "kind": "class"
   },
+  "OverlaySide": {
+    "kind": "type"
+  },
   "OverlayTriggerDirective": {
     "kind": "class"
   },
@@ -201,6 +220,10 @@
   "physicalToInline": {
     "kind": "function",
     "signatures": ["(direction: Direction, physical: PhysicalHorizontal): LogicalInlineDirection"]
+  },
+  "placementSide": {
+    "kind": "function",
+    "signatures": ["(placement: OverlayPlacement): OverlaySide"]
   },
   "QzDragEndInfo": {
     "kind": "interface"

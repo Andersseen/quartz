@@ -109,6 +109,9 @@ function add(components, { output, verbose, cwd = process.cwd() } = {}) {
     process.exit(1);
   }
 
+  // An alias (e.g. `resizable` → `splitter`) installs the component it points at.
+  components = components.map((name) => REGISTRY[name]?.alias ?? name);
+
   const outputDir = resolveOutputDir(cwd, output);
   const queue = [...new Set(components)];
   const done = new Set();

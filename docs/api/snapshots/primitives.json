@@ -135,6 +135,9 @@
   "DEFAULT_DIALOG_CONFIG": {
     "kind": "const"
   },
+  "DEFAULT_DRAWER_CONFIG": {
+    "kind": "const"
+  },
   "DEFAULT_LISTBOX_CONFIG": {
     "kind": "const"
   },
@@ -200,6 +203,21 @@
   },
   "DialogService": {
     "kind": "class"
+  },
+  "DialogState": {
+    "kind": "type"
+  },
+  "DrawerConfig": {
+    "kind": "interface"
+  },
+  "DrawerPhysicalSide": {
+    "kind": "type"
+  },
+  "DrawerService": {
+    "kind": "class"
+  },
+  "DrawerSide": {
+    "kind": "type"
   },
   "FileDropzoneDirective": {
     "kind": "class"
@@ -267,7 +285,13 @@
   "MenuDirective": {
     "kind": "class"
   },
+  "MenuGroupDirective": {
+    "kind": "class"
+  },
   "MenuItemDirective": {
+    "kind": "class"
+  },
+  "MenuLabelDirective": {
     "kind": "class"
   },
   "MenuRadioGroupDirective": {
@@ -363,6 +387,9 @@
   "PopoverConfig": {
     "kind": "interface"
   },
+  "PopoverContext": {
+    "kind": "interface"
+  },
   "PopoverDirective": {
     "kind": "class"
   },
@@ -416,6 +443,10 @@
   },
   "RejectedFile": {
     "kind": "interface"
+  },
+  "resolveDrawerSide": {
+    "kind": "function",
+    "signatures": ["(side: DrawerSide, direction: Direction): DrawerPhysicalSide"]
   },
   "SelectCloseReason": {
     "kind": "type"
@@ -616,6 +647,9 @@
     "kind": "type"
   },
   "TooltipConfig": {
+    "kind": "interface"
+  },
+  "TooltipContext": {
     "kind": "interface"
   },
   "TooltipDirective": {

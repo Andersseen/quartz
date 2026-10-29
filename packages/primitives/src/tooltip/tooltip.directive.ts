@@ -8,6 +8,8 @@ import {
   OnDestroy,
   signal,
   effect,
+  type InputSignal,
+  type Signal,
   untracked,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -75,7 +77,7 @@ export class TooltipDirective implements OnDestroy {
    * Opts into arrow geometry: the length in px of the arrow you render along the tooltip edge.
    * Leave unset for no arrow data. See {@link TooltipDirective.arrow}.
    */
-  readonly tooltipArrowSize = input<number | undefined>(undefined);
+  readonly tooltipArrowSize: InputSignal<number | undefined> = input<number | undefined>(undefined);
   /** Minimum px between the arrow and either end of the tooltip edge. */
   readonly tooltipArrowPadding = input<number>(0);
 
@@ -105,9 +107,10 @@ export class TooltipDirective implements OnDestroy {
    * `tooltipArrowSize`). Follows the surface after flip, shift and resize. `null` when closed.
    * Check `available` before rendering: it is `false` when no safe position exists.
    */
-  readonly arrow = this.#arrow.asReadonly();
+  readonly arrow: Signal<OverlayArrowGeometry | null> = this.#arrow.asReadonly();
   /** Resolved physical placement after flip; `null` while closed. */
-  readonly resolvedPlacement = this.#resolvedPlacement.asReadonly();
+  readonly resolvedPlacement: Signal<TooltipPlacement | null> =
+    this.#resolvedPlacement.asReadonly();
   /** Template context for `TemplateRef` content: `let-arrow="arrow" let-placement="placement"`. */
   readonly context: TooltipContext = { arrow: this.arrow, placement: this.resolvedPlacement };
   private positionSubscription: Subscription | null = null;

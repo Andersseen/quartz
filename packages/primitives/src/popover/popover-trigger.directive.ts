@@ -14,6 +14,8 @@ import {
   output,
   signal,
   untracked,
+  type InputSignal,
+  type Signal,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
@@ -73,7 +75,7 @@ export class PopoverTriggerDirective implements OnDestroy {
   });
   readonly autoFocus = input(DEFAULT_POPOVER_CONFIG.autoFocus, { transform: booleanAttribute });
   /** Arrow length in px for consumer-rendered arrows; unset means no arrow geometry. */
-  readonly arrowSize = input<number | undefined>(undefined);
+  readonly arrowSize: InputSignal<number | undefined> = input<number | undefined>(undefined);
   /** Minimum px between the arrow and either end of the popover edge. */
   readonly arrowPadding = input<number>(0);
   readonly opened = output<void>();
@@ -88,9 +90,10 @@ export class PopoverTriggerDirective implements OnDestroy {
    * Geometry for a consumer-rendered arrow (requires `arrowSize`). Follows the surface after
    * flip, shift, scroll-less repositioning and resize; `null` while closed. Check `available`.
    */
-  readonly arrow = this.#arrow.asReadonly();
+  readonly arrow: Signal<OverlayArrowGeometry | null> = this.#arrow.asReadonly();
   /** Resolved physical placement after flip; `null` while closed. */
-  readonly resolvedPlacement = this.#resolvedPlacement.asReadonly();
+  readonly resolvedPlacement: Signal<OverlayPlacement | null> =
+    this.#resolvedPlacement.asReadonly();
   /** Template context: `let-arrow="arrow" let-placement="placement" let-open="open"`. */
   readonly context: PopoverContext = {
     arrow: this.arrow,

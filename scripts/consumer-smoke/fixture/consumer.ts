@@ -4,11 +4,24 @@
 // published packages' exports/types are broken for a real external consumer, even though
 // the monorepo's own workspace-symlink-based dev flow would never surface it.
 
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+  inject,
+  viewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   CollectionStore,
   OverlayTriggerDirective,
+  SplitterContainerDirective,
+  SplitterHandleDirective,
+  SplitterPanelDirective,
+  calculateArrowGeometry,
+  type OverlayArrowGeometry,
   createDismissController,
   createFocusRestorer,
   createFocusTrap,
@@ -58,7 +71,15 @@ import {
   createLatestRequest,
   DialogRef,
   DialogService,
+  DrawerService,
   MenuDirective,
+  MenuGroupDirective,
+  MenuLabelDirective,
+  MenuSeparatorDirective,
+  resolveDrawerSide,
+  type DrawerSide,
+  type PopoverContext,
+  type TooltipContext,
   MenuItemDirective,
   MenuTriggerDirective,
   MeterDirective,
@@ -797,3 +818,115 @@ class Controls014Component {
 }
 
 void Controls014Component;
+
+// Quartz 0.16 Drawer / Resizable / arrow geometry / Menu groups, compiled with strictTemplates
+// from packed npm tarballs.
+@Component({
+  selector: 'app-consumer-smoke-016',
+  standalone: true,
+  imports: [
+    MenuDirective,
+    MenuGroupDirective,
+    MenuItemDirective,
+    MenuLabelDirective,
+    MenuSeparatorDirective,
+    MenuTriggerDirective,
+    PopoverDirective,
+    PopoverTriggerDirective,
+    SplitterContainerDirective,
+    SplitterHandleDirective,
+    SplitterPanelDirective,
+    TooltipDirective,
+  ],
+  template: `
+    <button type="button" (click)="openDrawer('inline-start')">Open drawer</button>
+    <ng-template
+      #drawerTpl
+      let-ref
+      let-labelledBy="ariaLabelledBy"
+      let-describedBy="ariaDescribedBy"
+    >
+      <h2 [id]="labelledBy">Drawer</h2>
+      <p [id]="describedBy">Body</p>
+      <button type="button" (click)="ref.close()">Close</button>
+    </ng-template>
+
+    <div
+      qzSplitterContainer
+      orientation="horizontal"
+      [minSize]="20"
+      [maxSize]="80"
+      [step]="5"
+      [disabled]="false"
+    >
+      <div qzSplitterPanel>A</div>
+      <div qzSplitterHandle aria-label="Resize panels"></div>
+      <div [qzSplitterPanel]="false">B</div>
+    </div>
+
+    <button
+      [qzTooltip]="tipTpl"
+      tooltipPlacement="top"
+      [tooltipArrowSize]="8"
+      [tooltipArrowPadding]="4"
+    >
+      Tip
+    </button>
+    <ng-template #tipTpl let-arrow="arrow" let-placement="placement">
+      <div>{{ placement() }} {{ arrow()?.offset }} {{ arrow()?.available }}</div>
+    </ng-template>
+
+    <button
+      qzPopoverTrigger
+      [popover]="popTpl"
+      [arrowSize]="10"
+      [arrowPadding]="2"
+      #pop="qzPopoverTrigger"
+    >
+      Popover
+    </button>
+    <ng-template #popTpl let-arrow="arrow" let-placement="placement" let-open="open">
+      <div qzPopover>{{ placement() }} {{ open() }} {{ arrow()?.side }}</div>
+    </ng-template>
+    <span>{{ pop.arrow()?.edge }} {{ pop.resolvedPlacement() }}</span>
+
+    <button qzMenuTrigger [menu]="menuTpl">Menu</button>
+    <ng-template #menuTpl>
+      <div qzMenu>
+        <div qzMenuGroup>
+          <div qzMenuLabel>Account</div>
+          <button qzMenuItem>Profile</button>
+        </div>
+        <div qzMenuSeparator></div>
+        <button qzMenuItem>Sign out</button>
+      </div>
+    </ng-template>
+  `,
+})
+class Floating016Component {
+  private readonly drawers = inject(DrawerService);
+  private readonly vcr = inject(ViewContainerRef);
+  readonly drawerTpl = viewChild.required<TemplateRef<unknown>>('drawerTpl');
+
+  openDrawer(side: DrawerSide): DialogRef {
+    const ref = this.drawers.open(this.drawerTpl(), this.vcr, { side, presence: true });
+    const state: 'opening' | 'open' | 'closing' | 'closed' = ref.state();
+    void state;
+    return ref;
+  }
+}
+
+const geometry: OverlayArrowGeometry = calculateArrowGeometry(
+  { left: 0, top: 0, width: 10, height: 10 },
+  { left: 0, top: 10, width: 100, height: 40 },
+  'bottom',
+  { size: 8, padding: 2 },
+);
+const resolvedSide: 'left' | 'right' | 'top' | 'bottom' = resolveDrawerSide('inline-end', 'rtl');
+const tooltipContextShape: Pick<TooltipContext, 'arrow' | 'placement'> | null = null;
+const popoverContextShape: Pick<PopoverContext, 'open'> | null = null;
+void geometry;
+void resolvedSide;
+void tooltipContextShape;
+void popoverContextShape;
+void Floating016Component;

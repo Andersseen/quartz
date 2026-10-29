@@ -221,4 +221,41 @@ describe('CLI smoke — quartz add', () => {
     expect(copied.slider).toContain('slider-interaction.ts');
     expect(fs.existsSync(path.join(outDir, 'forms'))).toBe(false);
   });
+
+  it('should copy drawer with its dialog dependency and report the Core peer', () => {
+    const outDir = runAdd(tmpDir, ['drawer']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['dialog', 'drawer']);
+    expect(copied.drawer).toContain('drawer.service.ts');
+    expect(copied.drawer).toContain('drawer.types.ts');
+    expect(copied.dialog).toContain('dialog.service.ts');
+    expect(copied.dialog).toContain('modal-isolation.ts');
+    expect(fs.existsSync(path.join(outDir, 'overlay'))).toBe(false);
+  });
+
+  it('should install resizable as the Core splitter with its directionality dependency', () => {
+    const outDir = runAdd(tmpDir, ['resizable']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['directionality', 'splitter']);
+    expect(copied.splitter).toContain('splitter-handle.directive.ts');
+    expect(fs.existsSync(path.join(outDir, 'resizable'))).toBe(false);
+  });
+
+  it('should copy tooltip, popover and menu with every file they import', () => {
+    const outDir = runAdd(tmpDir, ['tooltip', 'popover', 'menu']);
+    const copied = readFiles(outDir);
+
+    expect(Object.keys(copied).sort()).toEqual(['menu', 'popover', 'tooltip']);
+    expect(copied.menu).toContain('menu-group.directive.ts');
+    expect(copied.menu).toContain('menu-separator.directive.ts');
+    expect(copied.tooltip).toContain('tooltip.types.ts');
+    expect(copied.popover).toContain('popover-trigger.directive.ts');
+  });
+
+  it('should copy the arrow geometry file with overlay', () => {
+    const outDir = runAdd(tmpDir, ['overlay']);
+    expect(readFiles(outDir).overlay).toContain('overlay-arrow.ts');
+  });
 });
