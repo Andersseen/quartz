@@ -3,7 +3,7 @@
 title: SliderRangeDirective
 description: "Directive reference for SliderRangeDirective with the selector [qzSliderRange]."
 group: "API: Primitives"
-order: 1192
+order: 1194
 generated: doq-api
 category: directive
 ---

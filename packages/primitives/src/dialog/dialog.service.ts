@@ -6,9 +6,10 @@ import {
   DOCUMENT,
   EmbeddedViewRef,
   isDevMode,
+  signal,
 } from '@angular/core';
 import { DialogConfig, DEFAULT_DIALOG_CONFIG, DialogPosition } from './dialog.types';
-import { DialogRef } from './dialog-ref';
+import { DialogRef, type DialogState } from './dialog-ref';
 import { isolateBackground, type ModalIsolation } from './modal-isolation';
 import {
   createDismissController,
@@ -21,6 +22,27 @@ import {
 } from '@quartz-headless/core';
 
 let dialogId = 0;
+
+interface ExitWait {
+  finishNow(): void;
+}
+
+/** Longest `duration + delay` pair, in seconds, of two comma-separated CSS time lists. */
+function maxTiming(durations: string, delays: string): number {
+  const parse = (list: string) =>
+    list.split(',').map((part) => {
+      const value = parseFloat(part);
+      if (!Number.isFinite(value)) return 0;
+      return part.trim().endsWith('ms') ? value / 1000 : value;
+    });
+  const d = parse(durations);
+  const l = parse(delays);
+  let max = 0;
+  d.forEach((duration, i) => {
+    if (duration > 0) max = Math.max(max, duration + (l[i % l.length] ?? 0));
+  });
+  return max;
+}
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -95,6 +117,13 @@ export class DialogService {
     if (resolvedConfig.panelClass) {
       panelEl.classList.add(...this.#toClassList(resolvedConfig.panelClass));
     }
+    for (const [name, value] of Object.entries(resolvedConfig.panelAttributes ?? {})) {
+      panelEl.setAttribute(name, value);
+    }
+    const stateEls = [backdropEl, wrapperEl, panelEl].filter((el): el is HTMLElement => !!el);
+    const setState = (value: DialogState) =>
+      stateEls.forEach((el) => el.setAttribute('data-state', value));
+    setState('opening');
 
     // -- Build DialogRef (cleanup uses closures captured above) -----------------
     let focusTrap: FocusTrap | null = null;
@@ -104,7 +133,11 @@ export class DialogService {
     const focusRestorer = createFocusRestorer(this.document);
     let viewRef!: EmbeddedViewRef<unknown>;
 
-    const ref = new DialogRef(() => {
+    const state = signal<DialogState>('opening');
+    let exit: ExitWait | null = null;
+    let cancelOpenFrame: (() => void) | null = null;
+
+    const teardown = () =>
       this.#performClose(
         ref,
         backdropEl,
@@ -116,7 +149,25 @@ export class DialogService {
         focusRestorer,
         viewDestroying,
       );
-    });
+
+    const ref = new DialogRef((complete) => {
+      cancelOpenFrame?.();
+      cancelOpenFrame = null;
+      // No further dismissal gestures once closing began (no double close, no re-entry).
+      dismissController?.destroy();
+      dismissController = null;
+      setState('closing');
+      if (resolvedConfig.presence && !viewDestroying) {
+        exit = this.#waitForExit(stateEls, () => {
+          exit = null;
+          teardown();
+          complete();
+        });
+        if (exit) return true;
+      }
+      teardown();
+      return false;
+    }, state);
 
     // -- Render template with DialogRef as $implicit context --------------------
     viewRef = viewContainerRef.createEmbeddedView(
@@ -135,7 +186,9 @@ export class DialogService {
     // never fire. ref.close() is idempotent, so this is a no-op when already closed.
     viewRef.onDestroy(() => {
       viewDestroying = true;
-      ref.close();
+      // Destroyed mid-exit (route change): skip the remaining transition and clean up now.
+      if (exit) exit.finishNow();
+      else ref.close();
     });
 
     for (const node of viewRef.rootNodes) {
@@ -177,6 +230,22 @@ export class DialogService {
     // -- Scroll lock -------------------------------------------------------------
     this.#scrollLock.lock();
     this.#openDialogs.add(ref);
+
+    // Enter styles are applied for one frame (`opening`) so a consumer transition can run
+    // from them to `open`.
+    const view = this.document.defaultView;
+    if (view?.requestAnimationFrame) {
+      const id = view.requestAnimationFrame(() => {
+        cancelOpenFrame = null;
+        if (state() !== 'opening') return;
+        state.set('open');
+        setState('open');
+      });
+      cancelOpenFrame = () => view.cancelAnimationFrame(id);
+    } else {
+      state.set('open');
+      setState('open');
+    }
 
     // -- Event listeners --------------------------------------------------------
     dismissController = createDismissController({
@@ -220,6 +289,61 @@ export class DialogService {
         s.justifyContent = 'flex-end';
         break;
     }
+  }
+
+  /**
+   * Waits for the consumer's exit transition/animation on `elements`. Returns `null` when
+   * nothing animates (or reduced motion is requested), so the caller removes the nodes
+   * synchronously. Otherwise `done` runs once, when every animated element reported its end
+   * event or — if one never does — shortly after the longest computed duration.
+   */
+  #waitForExit(elements: HTMLElement[], done: () => void): ExitWait | null {
+    const view = this.document.defaultView;
+    if (!view) return null;
+    if (view.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return null;
+
+    const pending = new Set<HTMLElement>();
+    let longest = 0;
+    for (const el of elements) {
+      const style = view.getComputedStyle(el);
+      const total = Math.max(
+        maxTiming(style.transitionDuration, style.transitionDelay),
+        maxTiming(style.animationDuration, style.animationDelay),
+      );
+      if (total > 0) {
+        pending.add(el);
+        longest = Math.max(longest, total);
+      }
+    }
+    if (!pending.size) return null;
+
+    let finished = false;
+    let timer: number | null = null;
+    const listeners: Array<() => void> = [];
+    const finishNow = () => {
+      if (finished) return;
+      finished = true;
+      if (timer !== null) view.clearTimeout(timer);
+      listeners.forEach((remove) => remove());
+      done();
+    };
+    const settle = (event: Event) => {
+      // Only the element's own end events count, not those bubbling up from its children.
+      if (event.target !== event.currentTarget) return;
+      pending.delete(event.currentTarget as HTMLElement);
+      if (!pending.size) finishNow();
+    };
+    for (const el of pending) {
+      // Only `*end` counts: an interrupted enter transition fires `transitioncancel` the
+      // moment the exit one replaces it, which must not end the exit. A cancelled exit simply
+      // falls through to the timer below.
+      for (const type of ['transitionend', 'animationend']) {
+        el.addEventListener(type, settle);
+        listeners.push(() => el.removeEventListener(type, settle));
+      }
+    }
+    timer = view.setTimeout(finishNow, longest * 1000 + 100);
+    return { finishNow };
   }
 
   #toClassList(value: string | string[]): string[] {

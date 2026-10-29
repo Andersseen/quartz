@@ -3,7 +3,7 @@
 title: ToggleGroupConfig
 description: Interface reference for ToggleGroupConfig.
 group: "API: Primitives"
-order: 1250
+order: 1256
 generated: doq-api
 category: interface
 ---

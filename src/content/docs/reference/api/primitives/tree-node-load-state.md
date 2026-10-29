@@ -3,7 +3,7 @@
 title: TreeNodeLoadState
 description: "Lifecycle of a node's lazily-loaded children."
 group: "API: Primitives"
-order: 1295
+order: 1305
 generated: doq-api
 category: type
 ---

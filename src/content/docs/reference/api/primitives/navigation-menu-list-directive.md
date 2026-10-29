@@ -3,7 +3,7 @@
 title: NavigationMenuListDirective
 description: "Directive reference for NavigationMenuListDirective with the selector [qzNavigationMenuList]."
 group: "API: Primitives"
-order: 1160
+order: 1162
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: ToolbarItemDirective
 description: "Directive reference for ToolbarItemDirective with the selector [qzToolbarItem]."
 group: "API: Primitives"
-order: 1210
+order: 1212
 generated: doq-api
 category: directive
 ---

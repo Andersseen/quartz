@@ -3,7 +3,7 @@
 title: PaginationConfig
 description: Interface reference for PaginationConfig.
 group: "API: Primitives"
-order: 1233
+order: 1238
 generated: doq-api
 category: interface
 ---

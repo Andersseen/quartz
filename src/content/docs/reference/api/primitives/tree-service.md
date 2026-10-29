@@ -3,7 +3,7 @@
 title: TreeService
 description: Service reference for TreeService.
 group: "API: Primitives"
-order: 1217
+order: 1220
 generated: doq-api
 category: service
 ---

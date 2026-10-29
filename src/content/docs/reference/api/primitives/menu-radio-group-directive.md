@@ -3,7 +3,7 @@
 title: MenuRadioGroupDirective
 description: "Directive reference for MenuRadioGroupDirective with the selector [qzMenuRadioGroup]."
 group: "API: Primitives"
-order: 1146
+order: 1148
 generated: doq-api
 category: directive
 ---
@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzMenuRadioGroup`
-- **Source:** [packages/primitives/src/menu/menu-radio-group.directive.ts:11](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-radio-group.directive.ts#L11)
+- **Source:** [packages/primitives/src/menu/menu-radio-group.directive.ts:14](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-radio-group.directive.ts#L14)
 
 ## Selector
 
@@ -35,6 +35,26 @@ Two-way bindings: each model is an input and emits the matching change output.
 | `value` | `T \| null` | `null` |  | `valueChange` |  |
 
 ## Public methods
+
+### registerLabel
+
+```ts
+registerLabel(id: string): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `id` | `string` |  |  |
+
+### unregisterLabel
+
+```ts
+unregisterLabel(id: string): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `id` | `string` |  |  |
 
 ### isChecked
 

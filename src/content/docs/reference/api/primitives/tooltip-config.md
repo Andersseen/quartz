@@ -3,7 +3,7 @@
 title: TooltipConfig
 description: Interface reference for TooltipConfig.
 group: "API: Primitives"
-order: 1252
+order: 1258
 generated: doq-api
 category: interface
 ---
@@ -11,7 +11,7 @@ category: interface
 ## Overview
 
 - **Kind:** Interface
-- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:5](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L5)
+- **Source:** [packages/primitives/src/tooltip/tooltip.types.ts:6](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.types.ts#L6)
 
 ## Declaration
 
@@ -28,6 +28,8 @@ interface TooltipConfig
 | `showDelay` | `number` | Delay in ms before showing the tooltip. Default: 300 |
 | `hideDelay` | `number` | Delay in ms before hiding the tooltip. Default: 100 |
 | `disabled` | `boolean` | Whether the tooltip is disabled. Default: false |
+| `arrowSize?` | `number` | Opts into arrow geometry: the rendered arrow's length in px along the tooltip edge. Unset means no arrow data. Default: unset. |
+| `arrowPadding?` | `number` | Minimum px between the arrow and either end of the tooltip edge. Default: 0 |
 
 ## Related types
 

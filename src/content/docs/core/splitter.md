@@ -50,3 +50,7 @@ order: 34
   <div qzSplitterPanel="false">Bottom Panel</div>
 </div>
 ```
+
+## Resizable behavior
+
+The Splitter backs the **Resizable** pattern; see [Resizable](/docs/primitives/resizable) for units (percent of the container), the ARIA contract (`aria-orientation` is the separator's own axis), RTL mirroring, `disabled`, the `resizing` state and the pointer lifecycle (`pointerup`, `pointercancel` and `lostpointercapture` end a drag).

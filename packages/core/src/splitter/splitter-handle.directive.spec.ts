@@ -26,7 +26,7 @@ describe('SplitterHandleDirective', () => {
 
     expect(handle).toHaveAttribute('role', 'separator');
     expect(handle).toHaveAttribute('tabindex', '0');
-    expect(handle).toHaveAttribute('aria-orientation', 'horizontal');
+    expect(handle).toHaveAttribute('aria-orientation', 'vertical');
     expect(handle).toHaveAttribute('aria-valuemin', '0');
     expect(handle).toHaveAttribute('aria-valuemax', '100');
     expect(handle).toHaveAttribute('aria-valuenow', '50');

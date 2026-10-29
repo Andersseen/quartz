@@ -3,7 +3,7 @@
 title: TooltipService
 description: Service reference for TooltipService.
 group: "API: Primitives"
-order: 1216
+order: 1219
 generated: doq-api
 category: service
 ---
@@ -19,7 +19,7 @@ category: service
 ### create
 
 ```ts
-create(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, anchorEl: HTMLElement, config?: Partial<TooltipConfig>): OverlayRef
+create(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, anchorEl: HTMLElement, config?: Partial<TooltipConfig>, context?: object): OverlayRef
 ```
 
 Creates a tooltip using OverlayService. Useful for programmatic control.
@@ -30,6 +30,7 @@ Creates a tooltip using OverlayService. Useful for programmatic control.
 | `viewContainerRef` | `ViewContainerRef` |  |  |
 | `anchorEl` | `HTMLElement` |  |  |
 | `config` | `Partial<TooltipConfig>` | Yes |  |
+| `context` | `object` | Yes |  |
 
 ### createTextElement
 

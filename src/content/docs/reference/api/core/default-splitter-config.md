@@ -3,7 +3,7 @@
 title: DEFAULT_SPLITTER_CONFIG
 description: Constant reference for DEFAULT_SPLITTER_CONFIG.
 group: "API: Core"
-order: 1080
+order: 1086
 generated: doq-api
 category: constant
 ---

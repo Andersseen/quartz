@@ -3,7 +3,7 @@
 title: TabDirective
 description: "Directive reference for TabDirective with the selector [qzTab]."
 group: "API: Primitives"
-order: 1202
+order: 1204
 generated: doq-api
 category: directive
 ---

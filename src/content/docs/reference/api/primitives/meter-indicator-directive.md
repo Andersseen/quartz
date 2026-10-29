@@ -3,7 +3,7 @@
 title: MeterIndicatorDirective
 description: "Directive reference for MeterIndicatorDirective with the selector [qzMeterIndicator]."
 group: "API: Primitives"
-order: 1151
+order: 1153
 generated: doq-api
 category: directive
 ---

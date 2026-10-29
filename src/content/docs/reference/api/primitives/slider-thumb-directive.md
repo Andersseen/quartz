@@ -3,7 +3,7 @@
 title: SliderThumbDirective
 description: "Directive reference for SliderThumbDirective with the selector [qzSliderThumb]."
 group: "API: Primitives"
-order: 1193
+order: 1195
 generated: doq-api
 category: directive
 ---

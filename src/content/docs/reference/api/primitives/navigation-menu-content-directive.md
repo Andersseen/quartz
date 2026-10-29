@@ -3,7 +3,7 @@
 title: NavigationMenuContentDirective
 description: "Directive reference for NavigationMenuContentDirective with the selector ng-template[qzNavigationMenuContent]."
 group: "API: Primitives"
-order: 1156
+order: 1158
 generated: doq-api
 category: directive
 ---

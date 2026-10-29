@@ -3,7 +3,7 @@
 title: PaginationFirstDirective
 description: "Directive reference for PaginationFirstDirective with the selector button[qzPaginationFirst]."
 group: "API: Primitives"
-order: 1163
+order: 1165
 generated: doq-api
 category: directive
 ---

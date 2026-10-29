@@ -3,7 +3,7 @@
 title: CollectionConfig
 description: Interface reference for CollectionConfig.
 group: "API: Core"
-order: 1042
+order: 1045
 generated: doq-api
 category: interface
 ---

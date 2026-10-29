@@ -3,7 +3,7 @@
 title: DEFAULT_POPOVER_CONFIG
 description: Constant reference for DEFAULT_POPOVER_CONFIG.
 group: "API: Primitives"
-order: 1305
+order: 1316
 generated: doq-api
 category: constant
 ---
@@ -11,7 +11,7 @@ category: constant
 ## Overview
 
 - **Kind:** Constant
-- **Source:** [packages/primitives/src/popover/popover.types.ts:14](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover.types.ts#L14)
+- **Source:** [packages/primitives/src/popover/popover.types.ts:36](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover.types.ts#L36)
 
 ## Type
 

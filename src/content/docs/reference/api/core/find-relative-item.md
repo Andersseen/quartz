@@ -3,7 +3,7 @@
 title: findRelativeItem
 description: Next/previous enabled item relative to activeId.
 group: "API: Core"
-order: 1021
+order: 1023
 generated: doq-api
 category: function
 ---

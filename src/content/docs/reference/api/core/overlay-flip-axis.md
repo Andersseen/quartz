@@ -3,7 +3,7 @@
 title: OverlayFlipAxis
 description: Type alias reference for OverlayFlipAxis.
 group: "API: Core"
-order: 1072
+order: 1077
 generated: doq-api
 category: type
 ---
@@ -11,7 +11,7 @@ category: type
 ## Overview
 
 - **Kind:** Type alias
-- **Source:** [packages/core/src/overlay/overlay.types.ts:15](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L15)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:17](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L17)
 
 ## Definition
 

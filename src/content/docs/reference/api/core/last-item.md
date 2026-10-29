@@ -3,7 +3,7 @@
 title: lastItem
 description: Function reference for lastItem.
 group: "API: Core"
-order: 1034
+order: 1036
 generated: doq-api
 category: function
 ---

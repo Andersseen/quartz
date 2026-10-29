@@ -242,6 +242,74 @@ test.describe('live demos and playgrounds', () => {
     expect(problems).toEqual([]);
   });
 
+  test('0.16 demos hydrate and work: Drawer, Resizable, Tooltip arrow, Popover arrow, Menu groups', async ({
+    page,
+  }) => {
+    const problems = trackConsole(page);
+
+    await go(page, '/docs/primitives/drawer');
+    const demo = page.locator('app-drawer-demo');
+    await expect(demo).toBeVisible();
+    await demo.getByRole('button', { name: 'left', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    const drawer = page.locator('[data-qz-drawer]');
+    await expect(drawer).toHaveAttribute('data-side', 'left');
+    await expect(drawer).toHaveAttribute('role', 'dialog');
+    await page.keyboard.press('Escape');
+    await expect(drawer).toHaveCount(0);
+
+    await go(page, '/docs/primitives/resizable');
+    const handle = page.getByRole('separator', { name: 'Resize navigator' });
+    await handle.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(handle).toHaveAttribute('aria-valuenow', '50');
+    await expect(page.locator('app-resizable-demo output').first()).toContainText('50 %');
+
+    await go(page, '/docs/primitives/tooltip');
+    const tipButton = page.locator('app-tooltip-arrow-demo button', { hasText: 'Arrow above' });
+    // Scroll first: a scroll while open dismisses overlays.
+    await tipButton.scrollIntoViewIfNeeded();
+    await tipButton.focus();
+    await expect(page.locator('.qz-tooltip[data-side]')).toBeVisible();
+    await page.keyboard.press('Escape');
+
+    await go(page, '/docs/primitives/popover');
+    const popButton = page.locator('app-popover-arrow-demo button', { hasText: 'Arrow below' });
+    await expect(popButton).toHaveAttribute('aria-expanded', 'false');
+    await popButton.scrollIntoViewIfNeeded();
+    await expect(async () => {
+      if ((await popButton.getAttribute('aria-expanded')) !== 'true') {
+        await popButton.focus();
+        await page.keyboard.press('Enter');
+      }
+      await expect(popButton).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 });
+      await expect(page.locator('[data-qz-popover][data-side]')).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10000 });
+    await page.keyboard.press('Escape');
+    await expect(popButton).toHaveAttribute('aria-expanded', 'false');
+
+    await go(page, '/docs/primitives/menu');
+    const menuButton = page.locator('app-menu-groups-demo').getByRole('button', {
+      name: 'Workspace',
+    });
+    // aria-expanded is written by the hydrated directive: wait for it before interacting.
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+    await menuButton.scrollIntoViewIfNeeded();
+    // Late layout shifts while the docs page settles can scroll-dismiss a just-opened overlay:
+    // re-open until the menu is stably visible.
+    await expect(async () => {
+      if ((await menuButton.getAttribute('aria-expanded')) !== 'true') {
+        await menuButton.focus();
+        await page.keyboard.press('Enter');
+      }
+      await expect(page.getByRole('group', { name: 'Account' })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('group', { name: 'Density' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10000 });
+    await page.keyboard.press('Escape');
+
+    expect(problems).toEqual([]);
+  });
+
   test('the Select playground drives the real primitive and reports outputs', async ({ page }) => {
     await go(page, '/docs/primitives/select');
     const playground = page.locator('[data-doq-playground="quartz-select"]');
@@ -382,6 +450,11 @@ test.describe('health', () => {
     '/docs/primitives/combobox',
     '/docs/primitives/listbox',
     '/docs/primitives/dialog',
+    '/docs/primitives/drawer',
+    '/docs/primitives/resizable',
+    '/docs/primitives/tooltip',
+    '/docs/primitives/popover',
+    '/docs/primitives/menu',
     '/docs/primitives/slider',
     '/docs/primitives/range-slider',
     '/docs/primitives/toggle',

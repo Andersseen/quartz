@@ -3,7 +3,7 @@
 title: CollectionFocusStrategy
 description: Type alias reference for CollectionFocusStrategy.
 group: "API: Core"
-order: 1065
+order: 1070
 generated: doq-api
 category: type
 ---

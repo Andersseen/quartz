@@ -15,6 +15,7 @@ export class TooltipService {
     viewContainerRef: ViewContainerRef,
     anchorEl: HTMLElement,
     config: Partial<TooltipConfig> = {},
+    context?: object,
   ): OverlayRef {
     const resolved: TooltipConfig = { ...DEFAULT_TOOLTIP_CONFIG, ...config };
     return this.overlayService.create(templateRef, viewContainerRef, anchorEl, {
@@ -29,6 +30,9 @@ export class TooltipService {
       flip: true,
       flipAxis: 'main',
       matchAnchorWidth: false,
+      arrowSize: resolved.arrowSize,
+      arrowPadding: resolved.arrowPadding,
+      context,
     });
   }
 

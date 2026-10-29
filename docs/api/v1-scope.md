@@ -51,11 +51,11 @@ areas that already exist in Quartz were conditional before 0.9 and are now manda
 | Primitives | NavigationMenu           | `navigation-menu`        | 0.13             | pointer, keyboard, overlay composition and accessible flyout proof  |
 | Primitives | Toolbar                  | `toolbar`                | 0.13             | roving focus, mixed controls, dynamic DOM order and RTL proof       |
 | Primitives | Pagination               | `pagination`             | 0.13             | bounded model, boundary focus and accessible current-page proof     |
-| Core       | Splitter                 | `resizable`              | 0.16             | pointer E2E, ARIA values, maxSize, resizing state                   |
+| Core       | Splitter                 | `resizable`              | 0.16 (done)      | closed in 0.16.0: pointer E2E, ARIA values, resizing state, RTL     |
 
 Families Volt needs that Quartz does not have yet (new work, no “conditional” escape hatch):
 Date/DateRange (0.12), NavigationMenu/Toolbar/Pagination (0.13), InputOTP/Autofill/FileUpload/FormField
-(0.14), Progress/Meter/Avatar and Toast content API (0.15), Drawer and Tooltip/Popover arrows (0.16).
+(0.14), Progress/Meter/Avatar and Toast content API (0.15), Drawer and Tooltip/Popover arrows (0.16, done).
 
 ## Explicit scope decisions still open (not required by Volt)
 

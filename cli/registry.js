@@ -112,6 +112,7 @@ const REGISTRY = {
       'overlay/overlay-trigger.directive.ts',
       'overlay/overlay-ref.ts',
       'overlay/overlay-position.ts',
+      'overlay/overlay-arrow.ts',
       'overlay/overlay.types.ts',
       'overlay/index.ts',
     ],
@@ -129,7 +130,13 @@ const REGISTRY = {
       'splitter/splitter.types.ts',
       'splitter/index.ts',
     ],
+    deps: ['directionality'],
     docs: 'https://quartz-headless.pages.dev/docs/core/splitter',
+  },
+  // Volt's name for the same behavior: `quartz add resizable` copies the Core Splitter.
+  resizable: {
+    description: 'Resizable panels (alias of splitter): separator, pointer capture, keyboard, RTL',
+    alias: 'splitter',
   },
   'drag-drop': {
     description: 'Native HTML drag and drop with sortable drop zones',
@@ -171,10 +178,20 @@ const REGISTRY = {
       'dialog/dialog.service.ts',
       'dialog/dialog-ref.ts',
       'dialog/dialog.types.ts',
+      'dialog/modal-isolation.ts',
       'dialog/index.ts',
     ],
     peerDeps: ['@quartz-headless/core'],
     docs: 'https://quartz-headless.pages.dev/docs/primitives/dialog',
+  },
+  drawer: {
+    description: 'Side-anchored modal (left/right/top/bottom, RTL-aware) with exit presence',
+    layer: 'primitives',
+    files: ['drawer/drawer.service.ts', 'drawer/drawer.types.ts', 'drawer/index.ts'],
+    // Builds on DialogService: the CLI copies the `dialog` folder alongside it.
+    deps: ['dialog'],
+    peerDeps: ['@quartz-headless/core'],
+    docs: 'https://quartz-headless.pages.dev/docs/primitives/drawer',
   },
   toast: {
     description: 'Lightweight toast notification system',
@@ -234,6 +251,7 @@ const REGISTRY = {
       'menu/menu-trigger.directive.ts',
       'menu/menu-item.directive.ts',
       'menu/menu-separator.directive.ts',
+      'menu/menu-group.directive.ts',
       'menu/menu-checkbox-item.directive.ts',
       'menu/menu-radio-group.directive.ts',
       'menu/menu-radio-item.directive.ts',

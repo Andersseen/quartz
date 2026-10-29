@@ -3,7 +3,7 @@
 title: FocusTrap
 description: Interface reference for FocusTrap.
 group: "API: Core"
-order: 1050
+order: 1053
 generated: doq-api
 category: interface
 ---

@@ -3,7 +3,7 @@
 title: PaginationDirective
 description: "Directive reference for PaginationDirective with the selector [qzPagination]."
 group: "API: Primitives"
-order: 1162
+order: 1164
 generated: doq-api
 category: directive
 ---

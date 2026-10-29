@@ -3,7 +3,7 @@
 title: MenuTriggerDirective
 description: "Directive reference for MenuTriggerDirective with the selector [qzMenuTrigger]."
 group: "API: Primitives"
-order: 1149
+order: 1151
 generated: doq-api
 category: directive
 ---

@@ -3,7 +3,7 @@
 title: StepperOrientation
 description: Type alias reference for StepperOrientation.
 group: "API: Primitives"
-order: 1285
+order: 1295
 generated: doq-api
 category: type
 ---

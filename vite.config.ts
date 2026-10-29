@@ -37,6 +37,7 @@ export default defineConfig(() => ({
           '/e2e-calendar',
           '/e2e-navigation',
           '/e2e-feedback',
+          '/e2e-floating-016',
           ...doqPrerenderRoutes(doqPaths),
         ],
       },

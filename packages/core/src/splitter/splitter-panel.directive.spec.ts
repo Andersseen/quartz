@@ -27,7 +27,9 @@ describe('SplitterPanelDirective', () => {
     const secondary = container.querySelector('.qz-splitter-panel--secondary') as HTMLElement;
 
     expect(primary.style.width).toBe('40%');
-    expect(secondary.style.width).toBe('60%');
+    // The secondary panel takes the remainder, so a handle with thickness never overflows it.
+    expect(secondary.style.width).toBe('');
+    expect(secondary.style.flex).toContain('1 1 0');
   });
 
   it('reacts to position changes', async () => {
@@ -39,6 +41,6 @@ describe('SplitterPanelDirective', () => {
     fixture.detectChanges();
 
     expect(primary.style.width).toBe('70%');
-    expect(secondary.style.width).toBe('30%');
+    expect(secondary.style.width).toBe('');
   });
 });

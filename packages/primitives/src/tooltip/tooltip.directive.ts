@@ -8,19 +8,24 @@ import {
   OnDestroy,
   signal,
   effect,
+  type InputSignal,
+  type Signal,
   untracked,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { TooltipService } from './tooltip.service';
-import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
+import { TooltipPlacement, DEFAULT_TOOLTIP_CONFIG, type TooltipContext } from './tooltip.types';
 import {
   OverlayRef,
+  applyArrowAttributes,
+  calculateArrowGeometry,
   calculatePosition,
   createDismissController,
   getScrollParents,
   resolveDirection,
   type DismissController,
+  type OverlayArrowGeometry,
 } from '@quartz-headless/core';
 
 let tooltipIdCounter = 0;
@@ -68,6 +73,13 @@ export class TooltipDirective implements OnDestroy {
   readonly tooltipHideDelay = input<number>(DEFAULT_TOOLTIP_CONFIG.hideDelay);
   readonly tooltipOffset = input<number>(DEFAULT_TOOLTIP_CONFIG.offset);
   readonly tooltipDisabled = input<boolean>(false);
+  /**
+   * Opts into arrow geometry: the length in px of the arrow you render along the tooltip edge.
+   * Leave unset for no arrow data. See {@link TooltipDirective.arrow}.
+   */
+  readonly tooltipArrowSize: InputSignal<number | undefined> = input<number | undefined>(undefined);
+  /** Minimum px between the arrow and either end of the tooltip edge. */
+  readonly tooltipArrowPadding = input<number>(0);
 
   // ── State ────────────────────────────────────────────────────────────────
 
@@ -87,6 +99,22 @@ export class TooltipDirective implements OnDestroy {
   private describedId: string | null = null;
 
   readonly tooltipId = signal<string | null>(null);
+
+  readonly #arrow = signal<OverlayArrowGeometry | null>(null);
+  readonly #resolvedPlacement = signal<TooltipPlacement | null>(null);
+  /**
+   * Geometry for a consumer-rendered arrow while the tooltip is open (requires
+   * `tooltipArrowSize`). Follows the surface after flip, shift and resize. `null` when closed.
+   * Check `available` before rendering: it is `false` when no safe position exists.
+   */
+  readonly arrow: Signal<OverlayArrowGeometry | null> = this.#arrow.asReadonly();
+  /** Resolved physical placement after flip; `null` while closed. */
+  readonly resolvedPlacement: Signal<TooltipPlacement | null> =
+    this.#resolvedPlacement.asReadonly();
+  /** Template context for `TemplateRef` content: `let-arrow="arrow" let-placement="placement"`. */
+  readonly context: TooltipContext = { arrow: this.arrow, placement: this.resolvedPlacement };
+  private positionSubscription: Subscription | null = null;
+  private stopTracking: (() => void) | null = null;
 
   // ── Host bindings ────────────────────────────────────────────────────────
 
@@ -185,23 +213,66 @@ export class TooltipDirective implements OnDestroy {
     this.cancelFrame = this.queueFrame(() => {
       this.cancelFrame = null;
       if (this.textTooltipEl !== el) return;
-      const view = this.document.defaultView;
-      const pos = calculatePosition(
-        this.elementRef.nativeElement.getBoundingClientRect(),
-        el,
-        this.tooltipPlacement(),
-        this.tooltipOffset(),
-        true,
-        'main',
-        view ? { width: view.innerWidth, height: view.innerHeight } : undefined,
-        resolveDirection(this.elementRef.nativeElement),
-      );
-      el.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
+      this.positionText(el);
       el.style.visibility = 'visible';
+      this.trackText(el);
     });
 
     // Close on scroll / Escape
     this.attachDismissListeners();
+  }
+
+  private positionText(el: HTMLElement): void {
+    const view = this.document.defaultView;
+    const anchorRect: DOMRect = this.elementRef.nativeElement.getBoundingClientRect();
+    const pos = calculatePosition(
+      anchorRect,
+      el,
+      this.tooltipPlacement(),
+      this.tooltipOffset(),
+      true,
+      'main',
+      view ? { width: view.innerWidth, height: view.innerHeight } : undefined,
+      resolveDirection(this.elementRef.nativeElement),
+    );
+    el.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
+    this.#resolvedPlacement.set(pos.placement);
+    const size = this.tooltipArrowSize();
+    if (size === undefined) {
+      this.#arrow.set(null);
+      return;
+    }
+    const arrow = calculateArrowGeometry(
+      anchorRect,
+      { left: pos.left, top: pos.top, width: el.offsetWidth, height: el.offsetHeight },
+      pos.placement,
+      { size, padding: this.tooltipArrowPadding() },
+    );
+    applyArrowAttributes(el, arrow);
+    this.#arrow.set(arrow);
+  }
+
+  /** Re-measures the text tooltip on viewport and size changes (Overlay does this for templates). */
+  private trackText(el: HTMLElement): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+    let cancel: (() => void) | null = null;
+    const schedule = () => {
+      if (cancel) return;
+      cancel = this.queueFrame(() => {
+        cancel = null;
+        if (this.textTooltipEl === el) this.positionText(el);
+      });
+    };
+    view.addEventListener('resize', schedule);
+    const observer = view.ResizeObserver ? new view.ResizeObserver(schedule) : null;
+    observer?.observe(el);
+    observer?.observe(this.elementRef.nativeElement);
+    this.stopTracking = () => {
+      view.removeEventListener('resize', schedule);
+      observer?.disconnect();
+      cancel?.();
+    };
   }
 
   private renderTemplate(templateRef: TemplateRef<unknown>): void {
@@ -214,8 +285,15 @@ export class TooltipDirective implements OnDestroy {
       {
         placement: this.tooltipPlacement(),
         offset: this.tooltipOffset(),
+        arrowSize: this.tooltipArrowSize(),
+        arrowPadding: this.tooltipArrowPadding(),
       },
+      this.context,
     );
+    this.positionSubscription = this.overlayRef.position$.subscribe((pos) => {
+      this.#resolvedPlacement.set(pos.placement);
+      this.#arrow.set(pos.arrow ?? null);
+    });
 
     this.overlayMountedSubscription = this.overlayRef.mounted$.subscribe((child) => {
       child.id = child.id || this.generateId();
@@ -235,6 +313,12 @@ export class TooltipDirective implements OnDestroy {
     this.removeDescription();
     this.overlayMountedSubscription?.unsubscribe();
     this.overlayMountedSubscription = null;
+    this.positionSubscription?.unsubscribe();
+    this.positionSubscription = null;
+    this.stopTracking?.();
+    this.stopTracking = null;
+    this.#arrow.set(null);
+    this.#resolvedPlacement.set(null);
 
     if (this.textTooltipEl) {
       this.textTooltipEl.remove();

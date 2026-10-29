@@ -3,7 +3,7 @@
 title: StepState
 description: Type alias reference for StepState.
 group: "API: Primitives"
-order: 1283
+order: 1293
 generated: doq-api
 category: type
 ---

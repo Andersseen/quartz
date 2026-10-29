@@ -3,7 +3,7 @@
 title: ComboboxAutocomplete
 description: Type alias reference for ComboboxAutocomplete.
 group: "API: Primitives"
-order: 1259
+order: 1266
 generated: doq-api
 category: type
 ---

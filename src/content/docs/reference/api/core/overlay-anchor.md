@@ -3,7 +3,7 @@
 title: OverlayAnchor
 description: Type alias reference for OverlayAnchor.
 group: "API: Core"
-order: 1071
+order: 1076
 generated: doq-api
 category: type
 ---
@@ -11,7 +11,7 @@ category: type
 ## Overview
 
 - **Kind:** Type alias
-- **Source:** [packages/core/src/overlay/overlay.types.ts:52](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L52)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:67](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L67)
 
 ## Definition
 

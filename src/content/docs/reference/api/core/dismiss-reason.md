@@ -3,7 +3,7 @@
 title: DismissReason
 description: Type alias reference for DismissReason.
 group: "API: Core"
-order: 1068
+order: 1073
 generated: doq-api
 category: type
 ---

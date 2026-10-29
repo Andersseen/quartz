@@ -3,7 +3,7 @@
 title: ToggleGroupType
 description: Type alias reference for ToggleGroupType.
 group: "API: Primitives"
-order: 1291
+order: 1301
 generated: doq-api
 category: type
 ---

@@ -61,6 +61,22 @@ export interface DialogConfig {
   ariaLabel?: string;
 
   /**
+   * Keep the dialog mounted while a consumer-defined CSS exit transition/animation runs.
+   *
+   * On close the panel, wrapper and backdrop get `data-state="closing"`; the nodes are removed
+   * when their `transitionend`/`animationend` fired (or, as a safety net, shortly after the
+   * longest computed duration). With no transition/animation on those nodes, with
+   * `prefers-reduced-motion: reduce`, or when the host view is destroyed, removal is immediate.
+   * Quartz never sets a duration. Default: false (immediate removal).
+   */
+  presence?: boolean;
+
+  /**
+   * Extra attributes written on the panel element (e.g. `data-*` hooks).
+   */
+  panelAttributes?: Record<string, string>;
+
+  /**
    * ID of the element that describes the dialog.
    * Used for `aria-describedby`. If omitted, a fallback ID is generated and
    * exposed via the template context so consumers can bind it to a description element.

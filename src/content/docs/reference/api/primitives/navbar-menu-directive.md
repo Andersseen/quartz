@@ -3,7 +3,7 @@
 title: NavbarMenuDirective
 description: "Directive reference for NavbarMenuDirective with the selector [qzNavbarMenu]."
 group: "API: Primitives"
-order: 1154
+order: 1156
 generated: doq-api
 category: directive
 ---

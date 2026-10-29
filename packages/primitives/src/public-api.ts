@@ -7,7 +7,16 @@ export {
   DEFAULT_DIALOG_CONFIG,
   type DialogPosition,
   type DialogConfig,
+  type DialogState,
 } from './dialog';
+export {
+  DrawerService,
+  resolveDrawerSide,
+  DEFAULT_DRAWER_CONFIG,
+  type DrawerSide,
+  type DrawerPhysicalSide,
+  type DrawerConfig,
+} from './drawer';
 
 // Toast
 export {
@@ -27,7 +36,7 @@ export {
 
 // Tooltip
 export { TooltipDirective, TooltipService, DEFAULT_TOOLTIP_CONFIG } from './tooltip';
-export type { TooltipConfig, TooltipPlacement } from './tooltip';
+export type { TooltipConfig, TooltipContext, TooltipPlacement } from './tooltip';
 
 // Tree
 export { TreeComponent, TreeNodeComponent, TreeService, DEFAULT_TREE_CONFIG } from './tree';
@@ -57,6 +66,8 @@ export {
   MenuTriggerDirective,
   MenuItemDirective,
   MenuSeparatorDirective,
+  MenuGroupDirective,
+  MenuLabelDirective,
   MenuCheckboxItemDirective,
   MenuRadioGroupDirective,
   MenuRadioItemDirective,
@@ -67,7 +78,7 @@ export type { MenuConfig, MenuCollectionEntry } from './menu';
 
 // Popover
 export { PopoverDirective, PopoverTriggerDirective, DEFAULT_POPOVER_CONFIG } from './popover';
-export type { PopoverConfig } from './popover';
+export type { PopoverConfig, PopoverContext } from './popover';
 
 // Combobox
 export {

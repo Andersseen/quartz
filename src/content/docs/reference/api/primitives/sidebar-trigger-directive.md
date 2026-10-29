@@ -3,7 +3,7 @@
 title: SidebarTriggerDirective
 description: "Directive reference for SidebarTriggerDirective with the selector [qzSidebarTrigger]."
 group: "API: Primitives"
-order: 1190
+order: 1192
 generated: doq-api
 category: directive
 ---

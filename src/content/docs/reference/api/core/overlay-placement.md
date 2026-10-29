@@ -3,7 +3,7 @@
 title: OverlayPlacement
 description: Type alias reference for OverlayPlacement.
 group: "API: Core"
-order: 1073
+order: 1078
 generated: doq-api
 category: type
 ---
@@ -11,7 +11,7 @@ category: type
 ## Overview
 
 - **Kind:** Type alias
-- **Source:** [packages/core/src/overlay/overlay.types.ts:1](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L1)
+- **Source:** [packages/core/src/overlay/overlay.types.ts:3](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay.types.ts#L3)
 
 ## Definition
 

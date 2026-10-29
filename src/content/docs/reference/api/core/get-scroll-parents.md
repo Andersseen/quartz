@@ -3,7 +3,7 @@
 title: getScrollParents
 description: Function reference for getScrollParents.
 group: "API: Core"
-order: 1028
+order: 1030
 generated: doq-api
 category: function
 ---
@@ -11,7 +11,7 @@ category: function
 ## Overview
 
 - **Kind:** Function
-- **Source:** [packages/core/src/overlay/overlay-ref.ts:363](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay-ref.ts#L363)
+- **Source:** [packages/core/src/overlay/overlay-ref.ts:410](https://github.com/Andersseen/quartz/blob/main/packages/core/src/overlay/overlay-ref.ts#L410)
 
 ## Signature
 

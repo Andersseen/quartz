@@ -60,6 +60,9 @@ export {
   OverlayService,
   OverlayRef,
   calculatePosition,
+  calculateArrowGeometry,
+  applyArrowAttributes,
+  placementSide,
   getScrollParents,
   DEFAULT_OVERLAY_CONFIG,
 } from './overlay';
@@ -70,6 +73,9 @@ export type {
   OverlayPosition,
   OverlayVirtualAnchor,
   OverlayFlipAxis,
+  OverlayArrowGeometry,
+  OverlayArrowOptions,
+  OverlaySide,
 } from './overlay';
 
 // Splitter

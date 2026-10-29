@@ -3,7 +3,7 @@
 title: TabListDirective
 description: "Directive reference for TabListDirective with the selector [qzTabList]."
 group: "API: Primitives"
-order: 1203
+order: 1205
 generated: doq-api
 category: directive
 ---

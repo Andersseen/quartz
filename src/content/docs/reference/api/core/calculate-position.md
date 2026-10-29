@@ -3,7 +3,7 @@
 title: calculatePosition
 description: Function reference for calculatePosition.
 group: "API: Core"
-order: 1014
+order: 1016
 generated: doq-api
 category: function
 ---

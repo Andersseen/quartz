@@ -3,7 +3,7 @@
 title: DEFAULT_TABS_CONFIG
 description: Constant reference for DEFAULT_TABS_CONFIG.
 group: "API: Primitives"
-order: 1312
+order: 1323
 generated: doq-api
 category: constant
 ---

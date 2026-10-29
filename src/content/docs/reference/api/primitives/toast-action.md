@@ -3,7 +3,7 @@
 title: ToastAction
 description: Interface reference for ToastAction.
 group: "API: Primitives"
-order: 1245
+order: 1251
 generated: doq-api
 category: interface
 ---

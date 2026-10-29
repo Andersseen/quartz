@@ -1,3 +1,5 @@
+import type { OverlayArrowGeometry } from './overlay-arrow';
+
 export type OverlayPlacement =
   | 'top'
   | 'top-start'
@@ -36,6 +38,19 @@ export interface OverlayConfig {
   closeOnScroll: boolean;
   /** Whether to match the anchor's width. Default: false */
   matchAnchorWidth: boolean;
+  /**
+   * Opts the overlay into arrow geometry: the rendered arrow's length in px along the surface
+   * edge. When set (even to `0`), every position update carries `arrow` and the surface gets
+   * `data-side`, `data-placement`, `--qz-arrow-x` and `--qz-arrow-y`. Default: unset (no arrow).
+   */
+  arrowSize?: number;
+  /** Minimum px between the arrow and either end of the surface edge. Default: 0. */
+  arrowPadding?: number;
+  /**
+   * Template context passed to `createEmbeddedView` (available as `let-` variables).
+   * Default: no context.
+   */
+  context?: object;
 }
 
 export interface OverlayVirtualAnchor {
@@ -65,5 +80,8 @@ export const DEFAULT_OVERLAY_CONFIG: OverlayConfig = {
 export interface OverlayPosition {
   top: number;
   left: number;
+  /** Resolved physical placement after flip. */
   placement: OverlayPlacement;
+  /** Present only when the overlay was created with `arrowSize`. */
+  arrow?: OverlayArrowGeometry;
 }

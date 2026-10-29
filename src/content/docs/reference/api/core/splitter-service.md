@@ -11,7 +11,7 @@ category: service
 ## Overview
 
 - **Kind:** Service
-- **Source:** [packages/core/src/splitter/splitter.service.ts:5](https://github.com/Andersseen/quartz/blob/main/packages/core/src/splitter/splitter.service.ts#L5)
+- **Source:** [packages/core/src/splitter/splitter.service.ts:6](https://github.com/Andersseen/quartz/blob/main/packages/core/src/splitter/splitter.service.ts#L6)
 
 ## Properties
 
@@ -21,6 +21,9 @@ category: service
 | `readonly orientation` | `Signal<SplitterOrientation>` |  |
 | `readonly isDragging` | `Signal<boolean>` |  |
 | `readonly containerRect` | `Signal<DOMRect \| null>` |  |
+| `readonly direction` | `Signal<Direction>` | Writing direction of the container; flips the horizontal axis in `rtl`. |
+| `readonly disabled` | `Signal<boolean>` | Whether resizing is turned off (pointer and keyboard). |
+| `readonly resizing` | `Signal<boolean>` | `true` while a pointer drag is in progress. Alias of `isDragging`. |
 | `readonly isHorizontal` | `Signal<boolean>` |  |
 | `readonly isVertical` | `Signal<boolean>` |  |
 | `readonly minSize` | `Signal<number>` |  |
@@ -35,9 +38,36 @@ category: service
 updateConfig(config: Partial<SplitterConfig>): void
 ```
 
+Units: every size is a percentage (0–100) of the container's main-axis size taken by the
+primary panel; the secondary panel gets the remainder. `minSize`/`maxSize` bound the
+primary panel, so the secondary panel's minimum is `100 - maxSize`.
+
+Non-finite values fall back to the defaults; `maxSize` is raised to `minSize` when smaller.
+The current position is re-clamped so dynamic bounds never leave it out of range.
+
 | Parameter | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `config` | `Partial<SplitterConfig>` |  |  |
+
+### setDirection
+
+```ts
+setDirection(direction: Direction): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `direction` | [`Direction`](/docs/reference/api/core/direction) |  |  |
+
+### setDisabled
+
+```ts
+setDisabled(disabled: boolean): void
+```
+
+| Parameter | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  |
 
 ### setOrientation
 
@@ -104,5 +134,6 @@ calculatePositionFromTouch(touch: Touch): number
 
 ## Related types
 
+- [`Direction`](/docs/reference/api/core/direction)
 - [`SplitterConfig`](/docs/reference/api/core/splitter-config)
 - [`SplitterOrientation`](/docs/reference/api/core/splitter-orientation)

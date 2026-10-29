@@ -3,7 +3,7 @@
 title: Direction
 description: Text/layout direction.
 group: "API: Core"
-order: 1067
+order: 1072
 generated: doq-api
 category: type
 ---

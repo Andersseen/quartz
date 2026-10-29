@@ -3,7 +3,7 @@
 title: NavigationMenuTriggerDirective
 description: "Directive reference for NavigationMenuTriggerDirective with the selector button[qzNavigationMenuTrigger]."
 group: "API: Primitives"
-order: 1161
+order: 1163
 generated: doq-api
 category: directive
 ---

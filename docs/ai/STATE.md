@@ -1,5 +1,9 @@
 # STATE — Current Project Status
 
+# 0.16 Drawer, Resizable & Floating — implementation complete (2026-10-29)
+
+Branch `feat/quartz-0.16-drawer-resizable-floating` (from main `ab0d56b`). `DrawerService` + Dialog exit presence, Core Splitter fixes for Resizable (RTL, `lostpointercapture`, `disabled`, `resizing`, WAI-ARIA orientation, sanitized bounds), Core overlay arrow geometry with Tooltip/Popover arrows and template contexts, Menu groups/labels, CLI (`drawer`, `resizable` alias), docs/demos/playgrounds, `e2e/floating-016.spec.ts` and consumer fixture. Rows drawer/resizable/tooltip/popover/dropdown-menu → V. Evidence and release-chain status: `docs/releases/0.16-acceptance.md`. Merge/publish only after 0.13–0.15 are published from their source snapshots.
+
 # 0.15 Feedback & Value Indicators — implementation complete, release blocked (2026-10-28)
 
 ## Current release gate
