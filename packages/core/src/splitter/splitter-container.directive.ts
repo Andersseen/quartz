@@ -1,8 +1,9 @@
-import { Directive, ElementRef, inject, input, effect } from '@angular/core';
+import { Directive, ElementRef, inject, input, effect, booleanAttribute } from '@angular/core';
 import { outputFromObservable, toObservable } from '@angular/core/rxjs-interop';
 import { skip, filter, map } from 'rxjs';
 import { SplitterService } from './splitter.service';
 import { SplitterOrientation } from './splitter.types';
+import { resolveDirection } from '../directionality';
 
 @Directive({
   selector: '[qzSplitterContainer]',
@@ -13,6 +14,7 @@ import { SplitterOrientation } from './splitter.types';
     '[class.qz-splitter-container--horizontal]': 'orientation() === "horizontal"',
     '[class.qz-splitter-container--vertical]': 'orientation() === "vertical"',
     '[class.qz-splitter-container--dragging]': 'splitterService.isDragging()',
+    '[attr.data-qz-resizing]': 'splitterService.resizing() ? "" : null',
     '[style.display]': '"flex"',
     '[style.flex-direction]': 'orientation() === "horizontal" ? "row" : "column"',
     '[style.width]': '"100%"',
@@ -29,6 +31,8 @@ export class SplitterContainerDirective {
   readonly maxSize = input<number>(100);
   readonly step = input<number>(1);
   readonly defaultPosition = input<number>(50);
+  /** Turns pointer and keyboard resizing off. */
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly positionChange = outputFromObservable(
     toObservable(this.splitterService.position).pipe(skip(1)),
@@ -69,10 +73,15 @@ export class SplitterContainerDirective {
     effect(() => {
       this.splitterService.setOrientation(this.orientation());
     });
+
+    effect(() => {
+      this.splitterService.setDisabled(this.disabled());
+    });
   }
 
   updateContainerRect(): void {
     const rect = this.elementRef.nativeElement.getBoundingClientRect();
     this.splitterService.setContainerRect(rect);
+    this.splitterService.setDirection(resolveDirection(this.elementRef.nativeElement));
   }
 }

@@ -4,6 +4,7 @@ export * from './menu.directive';
 export * from './menu-trigger.directive';
 export * from './menu-item.directive';
 export * from './menu-separator.directive';
+export * from './menu-group.directive';
 export * from './menu-checkbox-item.directive';
 export * from './menu-radio-group.directive';
 export * from './menu-radio-item.directive';

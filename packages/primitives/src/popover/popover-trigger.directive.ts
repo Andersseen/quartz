@@ -23,10 +23,11 @@ import {
   focusInitialElement,
   focusSafely,
   type FocusRestorer,
+  type OverlayArrowGeometry,
   type OverlayFlipAxis,
   type OverlayPlacement,
 } from '@quartz-headless/core';
-import { DEFAULT_POPOVER_CONFIG } from './popover.types';
+import { DEFAULT_POPOVER_CONFIG, type PopoverContext } from './popover.types';
 
 let popoverId = 0;
 
@@ -71,12 +72,32 @@ export class PopoverTriggerDirective implements OnDestroy {
     transform: booleanAttribute,
   });
   readonly autoFocus = input(DEFAULT_POPOVER_CONFIG.autoFocus, { transform: booleanAttribute });
+  /** Arrow length in px for consumer-rendered arrows; unset means no arrow geometry. */
+  readonly arrowSize = input<number | undefined>(undefined);
+  /** Minimum px between the arrow and either end of the popover edge. */
+  readonly arrowPadding = input<number>(0);
   readonly opened = output<void>();
   readonly closed = output<void>();
 
   readonly #isOpen = signal(false);
   readonly #panelId = signal<string | null>(null);
   readonly isOpen = this.#isOpen.asReadonly();
+  readonly #arrow = signal<OverlayArrowGeometry | null>(null);
+  readonly #resolvedPlacement = signal<OverlayPlacement | null>(null);
+  /**
+   * Geometry for a consumer-rendered arrow (requires `arrowSize`). Follows the surface after
+   * flip, shift, scroll-less repositioning and resize; `null` while closed. Check `available`.
+   */
+  readonly arrow = this.#arrow.asReadonly();
+  /** Resolved physical placement after flip; `null` while closed. */
+  readonly resolvedPlacement = this.#resolvedPlacement.asReadonly();
+  /** Template context: `let-arrow="arrow" let-placement="placement" let-open="open"`. */
+  readonly context: PopoverContext = {
+    arrow: this.arrow,
+    placement: this.resolvedPlacement,
+    open: this.isOpen,
+  };
+  private positionSubscription: Subscription | null = null;
   readonly panelId = computed(() => (this.isOpen() ? this.#panelId() : null));
 
   constructor() {
@@ -117,8 +138,15 @@ export class PopoverTriggerDirective implements OnDestroy {
         closeOnEscape: this.closeOnEscape(),
         closeOnClickOutside: this.closeOnClickOutside(),
         closeOnScroll: true,
+        arrowSize: this.arrowSize(),
+        arrowPadding: this.arrowPadding(),
+        context: this.context,
       },
     );
+    this.positionSubscription = this.overlayRef.position$.subscribe((pos) => {
+      this.#resolvedPlacement.set(pos.placement);
+      this.#arrow.set(pos.arrow ?? null);
+    });
     this.mountedSubscription = this.overlayRef.mounted$.subscribe((panel) => {
       const id = panel.id || `qz-popover-${++popoverId}`;
       panel.id = id;
@@ -168,6 +196,10 @@ export class PopoverTriggerDirective implements OnDestroy {
     this.cancelAutoFocus = null;
     this.mountedSubscription?.unsubscribe();
     this.closedSubscription?.unsubscribe();
+    this.positionSubscription?.unsubscribe();
+    this.positionSubscription = null;
+    this.#arrow.set(null);
+    this.#resolvedPlacement.set(null);
     this.mountedSubscription = null;
     this.closedSubscription = null;
     this.overlayRef = null;

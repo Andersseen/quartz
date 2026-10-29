@@ -7,8 +7,10 @@ import {
   OverlayVirtualAnchor,
 } from './overlay.types';
 import { calculatePosition } from './overlay-position';
+import { calculateArrowGeometry } from './overlay-arrow';
 import { createDismissController, type DismissController } from '../dismiss';
 import { resolveDirection } from '../directionality';
+import type { OverlayArrowGeometry } from './overlay-arrow';
 
 export class OverlayRef {
   private viewRef: EmbeddedViewRef<unknown> | null = null;
@@ -39,6 +41,12 @@ export class OverlayRef {
 
   #position$ = new Subject<OverlayPosition>();
   readonly position$ = this.#position$.asObservable();
+
+  #lastPosition: OverlayPosition | null = null;
+  /** The most recent position while open (`null` before the first measurement and after close). */
+  get position(): OverlayPosition | null {
+    return this.#lastPosition;
+  }
 
   constructor(
     private templateRef: TemplateRef<unknown>,
@@ -83,7 +91,7 @@ export class OverlayRef {
 
     // Render template into the wrapper
     const session = ++this.#session;
-    this.viewRef = this.viewContainerRef.createEmbeddedView(this.templateRef);
+    this.viewRef = this.viewContainerRef.createEmbeddedView(this.templateRef, this.config.context);
     this.viewRef.detectChanges();
     // If the host view container is destroyed while open (e.g. route change), Angular tears
     // down our view without calling close(); release the wrapper and listeners here.
@@ -143,6 +151,7 @@ export class OverlayRef {
     const wrapperEl = this.wrapperEl;
     this.viewRef = null;
     this.wrapperEl = null;
+    this.#lastPosition = null;
     if (!viewDestroying) viewRef?.destroy();
     wrapperEl?.remove();
 
@@ -193,6 +202,23 @@ export class OverlayRef {
     );
 
     this.wrapperEl.style.transform = `translate(${pos.left}px, ${pos.top}px)`;
+
+    if (this.config.arrowSize !== undefined) {
+      const arrow = calculateArrowGeometry(
+        anchorRect,
+        {
+          left: pos.left,
+          top: pos.top,
+          width: firstChild.offsetWidth,
+          height: firstChild.offsetHeight,
+        },
+        pos.placement,
+        { size: this.config.arrowSize, padding: this.config.arrowPadding },
+      );
+      pos.arrow = arrow;
+      applyArrowAttributes(firstChild, arrow);
+    }
+    this.#lastPosition = pos;
     this.#position$.next(pos);
   }
 
@@ -351,6 +377,27 @@ export class OverlayRef {
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
+
+/**
+ * Mirrors arrow geometry onto a surface element so consumers can style an arrow in plain CSS:
+ * `data-side`, `data-placement` and `--qz-arrow-x`/`--qz-arrow-y` (px; removed while the arrow is
+ * unavailable, with `data-qz-arrow="hidden"`).
+ */
+export function applyArrowAttributes(el: HTMLElement, arrow: OverlayArrowGeometry): void {
+  el.setAttribute('data-side', arrow.side);
+  el.setAttribute('data-placement', arrow.placement);
+  if (arrow.available && arrow.offset !== null) {
+    el.removeAttribute('data-qz-arrow');
+    const axisProp = arrow.axis === 'x' ? '--qz-arrow-x' : '--qz-arrow-y';
+    const otherProp = arrow.axis === 'x' ? '--qz-arrow-y' : '--qz-arrow-x';
+    el.style.setProperty(axisProp, `${arrow.offset}px`);
+    el.style.removeProperty(otherProp);
+  } else {
+    el.setAttribute('data-qz-arrow', 'hidden');
+    el.style.removeProperty('--qz-arrow-x');
+    el.style.removeProperty('--qz-arrow-y');
+  }
+}
 
 function isVirtualAnchor(anchor: OverlayAnchor): anchor is OverlayVirtualAnchor {
   return 'x' in anchor && 'y' in anchor;
