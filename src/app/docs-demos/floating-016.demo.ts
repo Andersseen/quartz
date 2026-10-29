@@ -216,7 +216,7 @@ export class ResizableDemoComponent {
           [tooltipArrowSize]="8"
           [tooltipArrowPadding]="6"
         >
-          {{ p }}
+          Arrow {{ labels[p] }}
         </button>
       }
     </div>
@@ -249,6 +249,12 @@ export class ResizableDemoComponent {
 })
 export class TooltipArrowDemoComponent {
   readonly placements: readonly OverlayPlacement[] = ['top', 'bottom', 'left', 'right'];
+  readonly labels: Record<string, string> = {
+    top: 'above',
+    bottom: 'below',
+    left: 'before',
+    right: 'after',
+  };
 }
 
 @Component({
@@ -270,7 +276,7 @@ export class TooltipArrowDemoComponent {
           [arrowPadding]="8"
           [closeOnEscape]="true"
         >
-          {{ p }}
+          Arrow {{ labels[p] }}
         </button>
       }
     </div>
@@ -290,6 +296,12 @@ export class TooltipArrowDemoComponent {
 })
 export class PopoverArrowDemoComponent {
   readonly placements: readonly OverlayPlacement[] = ['top', 'bottom', 'left', 'right'];
+  readonly labels: Record<string, string> = {
+    top: 'above',
+    bottom: 'below',
+    left: 'before',
+    right: 'after',
+  };
 
   /** Pins the arrow to the surface edge facing the anchor, at the computed cross-axis offset. */
   arrowStyle(arrow: OverlayArrowGeometry): Record<string, string> {

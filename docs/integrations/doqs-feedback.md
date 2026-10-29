@@ -118,6 +118,10 @@ and neither depends on Doqs (`@doqs/analog` is a website dependency only).
 - During Analog prerendering `afterNextRender` callbacks ran (a Virtual-scroll measurement hit `getBoundingClientRect is not a function`, and `requestAnimationFrame is not defined` appeared in host code). Quartz fixed its own library code; whether Angular or Analog should skip these on the server was not investigated further.
 - Early interactions immediately after `goto` can be lost before hydration completes; E2E waits for network idle.
 
+### 0.16 notes
+
+No new reproducible Doqs defects were found while adding the Drawer/Resizable pages, five demos and four playgrounds. Observation (not a defect): a `::demo[id]` whose component is missing from `DOC_DEMOS` is caught by `doq doctor`; a stale Vite/Analog cache after an interrupted `build:demo` can ship a bundle that fails with `JIT compiler unavailable` — clear `dist` and `node_modules/.vite` and rebuild.
+
 ## 4. Ready-to-file issue drafts
 
 **Doqs issue 1 — Add `aria-current="page"` to the active sidebar link**

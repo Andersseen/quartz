@@ -381,6 +381,13 @@ test.describe('tooltip arrow', () => {
     await expect(page.locator('#tip-tpl-arrow')).toBeVisible();
   });
 
+  test('has no axe violations while open', async ({ page }) => {
+    await page.locator('#tip-anchor').focus();
+    await expect(page.locator('.qz-tooltip')).toBeVisible();
+    const results = await new AxeBuilder({ page }).include('#tip-section').analyze();
+    expect(results.violations).toEqual([]);
+  });
+
   test('a tooltip without an arrow size adds no arrow data', async ({ page }) => {
     await page.locator('#tip-plain').focus();
     const tip = page.locator('.qz-tooltip');

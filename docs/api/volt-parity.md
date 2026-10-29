@@ -57,25 +57,25 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
-| V    | Implemented and verified        |     12 |           12 |
-| C    | Implemented, missing coverage   |      5 |            5 |
-| P    | Partial behavioural equivalence |      7 |            7 |
-| M    | Missing                         |      8 |            7 |
+| V    | Implemented and verified        |     26 |           26 |
+| C    | Implemented, missing coverage   |      4 |            4 |
+| P    | Partial behavioural equivalence |      2 |            2 |
+| M    | Missing                         |      0 |            0 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **21 of 46** rows are verified-equivalent after the 0.15 implementation and review of the merged 0.13 work (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, NavigationMenu, Pagination, Toolbar, Progress, Meter, Avatar, Toast). This marks those seven contracts complete; Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
+Reading the numbers: **26 of 46** rows are verified-equivalent after the 0.16 implementation (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, NavigationMenu, Pagination, Toolbar, Progress, Meter, Avatar, Toast, Drawer, Resizable, Tooltip, Popover, DropdownMenu); the summary counts were recomputed from the row headings in 0.16 (the 0.9-era table had drifted). The 1.0 prerequisite is every row V or N: six rows remain (`accordion` P, `sidebar` P, `autofill` C, `form-field` C, `input-otp` C, `file-upload` C); Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
 
 ### Rows by owning milestone (non-N, non-V)
 
-| Milestone                                                                                                       | Rows                                                                             |
-| --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**           | `select` (V), `combobox` (V), `listbox` (V)                                      |
-| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)               |
-| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                   | `date-picker` (V), `date-range-picker` (V)                                       |
-| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                | `accordion` (P), `sidebar` (P)                                                   |
-| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)        | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)             |
-| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) | `tooltip` (P), `drawer` (P), `popover` (P), `dropdown-menu` (C), `resizable` (P) |
+| Milestone                                                                                                                              | Rows                                                                             |
+| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**                                  | `select` (V), `combobox` (V), `listbox` (V)                                      |
+| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**                             | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)               |
+| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                                          | `date-picker` (V), `date-range-picker` (V)                                       |
+| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                                       | `accordion` (P), `sidebar` (P)                                                   |
+| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)                               | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)             |
+| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) — **closed in 0.16.0** | `tooltip` (V), `drawer` (V), `popover` (V), `dropdown-menu` (V), `resizable` (V) |
 
 Rows also carrying a _later_ gate (e.g. hydration proof in 0.17) keep their evidence code; 0.17 is a
 cross-cutting gate applied to **every** row, see §5.
@@ -250,19 +250,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: ids/ARIA for native input and Quartz Switch; invalid/touched mirroring; e2e submit-error flow; SSR id stability.
 
-### `tooltip` — Partial behavioural equivalence (**P**)
+### `tooltip` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltTooltip`, `volt-tooltip-content`, `volt-tooltip-arrow`; re-exports `injectTooltipArrowState`, `injectTooltipContext`, `provideTooltipArrowState`, `provideTooltipConfig`, `NgpTooltipArrowProps`, `NgpTooltipArrowState`
 - **Behavioural dependency:** ng-primitives `tooltip` + `portal`; Floating UI (via ng-primitives)
 - **Observable headless contract required:** Hover/focus show with delays, Escape/blur hide, `aria-describedby`, flip/shift placement, arrow positioning, template content.
-- **Quartz equivalent:** `TooltipDirective`, `TooltipService` (0.8: timers, dismissal, describedby preservation, axe).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Verified in 0.8 (describedby preserved, Escape, hover/focus sources).
+- **Quartz equivalent:** `TooltipDirective`, `TooltipService`; arrow geometry via `tooltipArrowSize`/`tooltipArrowPadding`, `arrow()`/`resolvedPlacement()` signals, `data-side`/`data-placement`/`--qz-arrow-x|y` and a reactive template context (`let-arrow`, `let-placement`); Core `calculateArrowGeometry`.
+- **Current evidence (0.16):** `tooltip-arrow.spec.ts` (resolved placement and arrow edge after flip, padding clamp, unavailable state without NaN, re-measure on resize/anchor change, template context, `aria-describedby` preserved and removed, no arrow data without a size, destroy); `overlay-arrow.spec.ts` (top/bottom/left/right, start/end alignment, RTL physical placement, viewport shift, arrow larger than the track, non-finite input); `e2e/floating-016.spec.ts` in Chromium, Firefox and WebKit (geometry centred on the real anchor, flip near the viewport edge, anchor resize, keyboard focus/Escape, template context, no-arrow tooltip, axe); `e2e/docs.spec.ts` demo hydration; strict installed-tarball AOT (`verify:consumer`).
+- **Accessibility:** `aria-describedby` preserved (0.8); axe scan of the open tooltip (0.16); no interactive content in `role=tooltip`.
 - **Forms:** n/a
-- **Angular / SSR:** Overlay is browser-only and not created on the server.
-- **Remaining work:** No arrow positioning data (offset/side) and no content-context injection equivalent; string vs template rendering paths still two engines (0.8 limitation).
-- **Owning milestone:** 0.16
-- **Acceptance tests needed:** Unit: arrow offset/side reported for each placement incl. flip; e2e: arrow tracks the anchor after scroll/resize.
+- **Angular / SSR:** Overlay and the text tooltip are browser-only; nothing is created on the server.
+- **Remaining work:** None for the behavioural contract. Quartz renders no arrow markup and the two rendering engines (string/template) still exist but share one positioning function and one geometry contract. Symbol parity (`injectTooltipArrowState` etc.) is an adapter concern.
+- **Owning milestone:** 0.16 (closed)
+- **Acceptance tests needed:** None beyond the committed tests above.
 
 ### `avatar` — Implemented and verified (**V**)
 
@@ -376,47 +376,47 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a (adapter)
 - **Acceptance tests needed:** `dialog-composition.spec.ts`, `modal-isolation.spec.ts`, `e2e/floating.spec.ts`.
 
-### `drawer` — Partial behavioural equivalence (**P**)
+### `drawer` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltDrawer`, `-overlay`, `-content`, `-title`, `-description`, `volt-drawer-close`; same dialog re-exports
 - **Behavioural dependency:** ng-primitives `dialog` (side-anchored)
 - **Observable headless contract required:** Dialog semantics anchored to a viewport edge; Escape (configurable), focus trap/return, scroll lock, enter/exit presence so exit animations complete before removal.
-- **Quartz equivalent:** `DialogService` with `DialogPosition` (centred/placement config).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Inherited from Dialog (verified 0.8).
+- **Quartz equivalent:** `DrawerService` (physical `left|right|top|bottom` and logical `inline-start|inline-end` sides) on top of `DialogService`, with `presence`, `DialogRef.state()` and `data-state`/`data-side` hooks.
+- **Current evidence (0.16):** `drawer.service.spec.ts` (all sides, logical sides in LTR/RTL, labelled modal, focus, scroll lock, exit presence: closing state, bubbled end events ignored, timer fallback, no double close, destroy mid-exit without orphan timers, reduced motion, `presence: false`, focus return and inert release after exit, Escape/backdrop configuration), `drawer.service.ssr.spec.ts`, existing `dialog-composition.spec.ts`/`modal-isolation.spec.ts`; `e2e/floating-016.spec.ts` in Chromium, Firefox and WebKit (four physical edges with real geometry, LTR/RTL logical sides, Tab trapping, Escape + focus return, backdrop and Escape configuration, exit transition, reduced motion, nested Popover Escape ownership, host-view destruction cleanup, axe on the open drawer); `e2e/docs.spec.ts` demo hydration; strict installed-tarball AOT.
+- **Accessibility:** Inherited from Dialog (`role=dialog`, `aria-modal`, `aria-labelledby`/`describedby` via template context); axe scan of the open drawer.
 - **Forms:** n/a
-- **Angular / SSR:** Browser-only.
-- **Remaining work:** Edge placement + RTL start/end edge; exit-animation presence (`closed$` timing vs CSS transition); swipe is Volt-owned and out of scope.
-- **Owning milestone:** 0.16
-- **Acceptance tests needed:** E2E: left/right/top/bottom edges incl. RTL, focus return, exit transition completes before removal; axe.
+- **Angular / SSR:** Browser-only; returns an already-closed `DialogRef` on the server.
+- **Remaining work:** None for the behavioural contract. Swipe/gesture dismissal is Volt-owned and intentionally not implemented. The side is fixed per `open()`.
+- **Owning milestone:** 0.16 (closed)
+- **Acceptance tests needed:** None beyond the committed tests above.
 
-### `popover` — Partial behavioural equivalence (**P**)
+### `popover` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltPopover`, `volt-popover-content`, `volt-popover-arrow`; re-exports `injectPopoverArrowState`, `injectPopoverContext`, `providePopoverArrowState`, `providePopoverConfig`, `NgpPopoverArrowProps`, `NgpPopoverArrowState`
 - **Behavioural dependency:** ng-primitives `popover` + `portal`; Floating UI
 - **Observable headless contract required:** Open model, Escape/outside dismissal, focus management, placement/flip, arrow positioning.
-- **Quartz equivalent:** `PopoverDirective`, `PopoverTriggerDirective` (0.8).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Verified in 0.8.
+- **Quartz equivalent:** `PopoverDirective`, `PopoverTriggerDirective` with `arrowSize`/`arrowPadding`, `arrow()`/`resolvedPlacement()` signals, `data-side`/`data-placement`/`--qz-arrow-x|y` and a reactive template context (`let-arrow`, `let-placement`, `let-open`).
+- **Current evidence (0.16):** `popover-arrow.spec.ts` (geometry on directive/surface/context, resolved placement after flip, viewport shift, unavailable state, close/reopen without stale state, `aria-expanded`/`aria-controls` sync, no arrow data without a size, non-finite anchor); existing `popover.directive.spec.ts`; `e2e/floating-016.spec.ts` in Chromium, Firefox and WebKit (arrow centred on the anchor, `aria-expanded`/`aria-controls`, flip, RTL `bottom-start` → physical `bottom-end`, Escape focus return, axe); `e2e/docs.spec.ts` demo hydration; strict installed-tarball AOT.
+- **Accessibility:** Verified in 0.8; axe scan of the open popover with an arrow (0.16).
 - **Forms:** n/a
 - **Angular / SSR:** Browser-only.
-- **Remaining work:** Arrow positioning data and trigger-state context.
-- **Owning milestone:** 0.16
-- **Acceptance tests needed:** As tooltip arrow tests, plus `aria-expanded` sync.
+- **Remaining work:** None for the behavioural contract; symbol parity is an adapter concern.
+- **Owning milestone:** 0.16 (closed)
+- **Acceptance tests needed:** None beyond the committed tests above.
 
-### `dropdown-menu` — Implemented, missing coverage (**C**)
+### `dropdown-menu` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltDropdownMenu`, `-item`, `-label`, `-separator`, `-submenu-trigger`; re-exports `injectMenuContext`, `injectMenuItemState`, `injectMenuState`, `injectMenuTriggerState`, `injectSubmenuTriggerState`, `provide*State`, `provideMenuConfig`, `NgpMenuConfig`, `NgpMenuPlacement`
 - **Behavioural dependency:** ng-primitives `menu` + `portal`
 - **Observable headless contract required:** `role=menu`, arrow/Home/End/typeahead, submenus (hover + arrows, RTL), Escape/outside, labels and separators.
-- **Quartz equivalent:** `MenuDirective`, `MenuTriggerDirective`, items incl. checkbox/radio, submenus (0.8).
-- **Current evidence:** Implemented, missing coverage.
-- **Accessibility:** Verified in 0.8 (focus, submenu, stale callbacks, RTL).
+- **Quartz equivalent:** `MenuDirective`, `MenuTriggerDirective`, items incl. checkbox/radio, submenus (0.8), plus `MenuGroupDirective`/`MenuLabelDirective` (0.16); `MenuSeparatorDirective`; radio groups are named by a label too.
+- **Current evidence (0.16):** `menu-group.directive.spec.ts` (group named by label, radio group named by label, separator roles, label removal clears `aria-labelledby`, dynamic groups, labels/separators never menu items or focus targets, arrow/Home/End and typeahead skip labels and disabled items); existing `menu.directive.spec.ts` and 0.8 floating E2E for submenus/RTL/Escape; `e2e/floating-016.spec.ts` in Chromium, Firefox and WebKit (labelled group, separator, keyboard skipping, submenu + one-level-at-a-time Escape with focus return, axe on a menu with named group, label, separator, disabled item and submenu); `e2e/docs.spec.ts` demo hydration; strict installed-tarball AOT.
+- **Accessibility:** Verified in 0.8; axe scan with groups/labels/separators/submenu (0.16).
 - **Forms:** n/a
 - **Angular / SSR:** Browser-only.
-- **Remaining work:** Group label / separator roles (`role=group` + label, `role=separator`) have no dedicated test evidence.
-- **Owning milestone:** 0.16
-- **Acceptance tests needed:** Unit: label/separator are skipped by navigation and exposed correctly; axe on an open menu with groups.
+- **Remaining work:** None for the behavioural contract. Submenu templates must be declared inside the parent `qzMenu` (documented).
+- **Owning milestone:** 0.16 (closed)
+- **Acceptance tests needed:** None beyond the committed tests above.
 
 ### `progress` — Implemented and verified (**V**)
 
@@ -658,19 +658,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a
 - **Acceptance tests needed:** None.
 
-### `resizable` — Partial behavioural equivalence (**P**)
+### `resizable` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-resizable`, `-panel`, `-handle` (`maxSize`, `resizingChange`)
 - **Behavioural dependency:** Volt-owned behaviour (pointer + keyboard); no ng-primitives
 - **Observable headless contract required:** Handle is `role=separator` with `aria-valuenow/min/max`, arrow keys on both axes, pointer drag with capture, size constraints, resizing state output.
-- **Quartz equivalent:** Core `SplitterContainerDirective`/`Handle`/`Panel`/`SplitterService` (conditional since 0.7).
-- **Current evidence:** Partial behavioural equivalence.
-- **Accessibility:** Splitter has keyboard + separator semantics; ARIA value parity and orientation coverage not proven in a browser.
+- **Quartz equivalent:** Core `SplitterContainerDirective`/`Handle`/`Panel`/`SplitterService` (no second engine), `quartz add resizable` aliases `splitter`.
+- **Current evidence (0.16):** `splitter-resizable.spec.ts` and the existing splitter specs (separator-axis `aria-orientation`, ARIA values, both axes, RTL arrows and pointer, Home/End and clamping at both bounds, dynamic min/max, NaN/collapsed-container safety, inverted bounds, pointer lifecycle incl. `pointercancel`/`lostpointercapture`, secondary pointers ignored, primary-button only, `disabled`, independent splitters); `e2e/floating-016.spec.ts` in Chromium, Firefox and WebKit (real pointer drag horizontal/vertical/RTL with clamping and layout size, keyboard, Tab order, `pointercancel`, no stale drag, axe); `e2e/docs.spec.ts` demo hydration; strict installed-tarball AOT.
+- **Accessibility:** `role=separator`, value triplet, WAI-ARIA `aria-orientation` (the separator's own axis — corrected in 0.16), `aria-disabled`; axe separator scan.
 - **Forms:** n/a
-- **Angular / SSR:** Layout sizes are client state; server renders defaults.
-- **Remaining work:** Browser pointer/keyboard E2E, ARIA value parity, `maxSize`, resizing-state signal, RTL, cleanup.
-- **Owning milestone:** 0.16
-- **Acceptance tests needed:** E2E drag/keyboard/cancel in 3 engines both orientations; unit constraints; axe separator checks.
+- **Angular / SSR:** Position is deterministic from `defaultPosition`; geometry is read only in the browser.
+- **Remaining work:** None for the behavioural contract. Sizes are percentages of the container (documented); the model is two panels (nest containers for more); Volt's visual grip is consumer styling. `maxSize` bounds the primary panel (the secondary minimum is `100 - maxSize`).
+- **Owning milestone:** 0.16 (closed)
+- **Acceptance tests needed:** None beyond the committed tests above.
 
 ### `alert` — Native / composition sufficient (**N**)
 
@@ -741,12 +741,12 @@ adapters or drops them in its own major.
 | combobox       | `NgpComboboxPortal`                                                                                                                                                                                                                                                                 | Behaviour: Quartz Overlay already portals; symbol: adapter.                   |
 | date-picker    | `NgpDatePickerCellRender`, `NgpDatePickerRowRender`, `injectDatePickerCellDate`, `injectDatePickerWeek`                                                                                                                                                                             | Behaviour: cell/row context in 0.12 calendar. Symbols: adapter.               |
 | dialog, drawer | `injectDialogRef`, `injectDialogState`, `NgpDialogManager`, `NgpDialogRef`, `provideDialogConfig`, `provideDialogState`, `NgpDialogConfig`                                                                                                                                          | Quartz `DialogService`/`DialogRef` cover the behaviour (V). Symbols: adapter. |
-| dropdown-menu  | `injectMenuContext`, `injectMenuItemState`, `injectMenuState`, `injectMenuTriggerState`, `injectSubmenuTriggerState`, `provideMenuConfig`, `provideMenuItemState`, `provideMenuState`, `provideMenuTriggerState`, `provideSubmenuTriggerState`, `NgpMenuConfig`, `NgpMenuPlacement` | Quartz Menu covers behaviour (C). Symbols: adapter.                           |
-| popover        | `injectPopoverArrowState`, `injectPopoverContext`, `providePopoverArrowState`, `providePopoverConfig`, `NgpPopoverArrowProps`, `NgpPopoverArrowState`                                                                                                                               | Arrow behaviour: 0.16. Symbols: adapter.                                      |
+| dropdown-menu  | `injectMenuContext`, `injectMenuItemState`, `injectMenuState`, `injectMenuTriggerState`, `injectSubmenuTriggerState`, `provideMenuConfig`, `provideMenuItemState`, `provideMenuState`, `provideMenuTriggerState`, `provideSubmenuTriggerState`, `NgpMenuConfig`, `NgpMenuPlacement` | Quartz Menu covers behaviour (V). Symbols: adapter.                           |
+| popover        | `injectPopoverArrowState`, `injectPopoverContext`, `providePopoverArrowState`, `providePopoverConfig`, `NgpPopoverArrowProps`, `NgpPopoverArrowState`                                                                                                                               | Arrow behaviour: V in 0.16. Symbols: adapter.                                 |
 | search         | `injectSearchState`, `provideSearchState`                                                                                                                                                                                                                                           | Recipe (N).                                                                   |
 | select         | `injectNativeSelectState`, `injectSelectConfig`, `injectSelectState`, `provideNativeSelectState`, `provideSelectConfig`, `provideSelectState`                                                                                                                                       | Behaviour: 0.10. Symbols: adapter.                                            |
 | toast          | `NgpToastManager`, `provideToastConfig`                                                                                                                                                                                                                                             | Behaviour: 0.15. Symbols: adapter.                                            |
-| tooltip        | `injectTooltipArrowState`, `injectTooltipContext`, `provideTooltipArrowState`, `provideTooltipConfig`, `NgpTooltipArrowProps`, `NgpTooltipArrowState`                                                                                                                               | Arrow behaviour: 0.16. Symbols: adapter.                                      |
+| tooltip        | `injectTooltipArrowState`, `injectTooltipContext`, `provideTooltipArrowState`, `provideTooltipConfig`, `NgpTooltipArrowProps`, `NgpTooltipArrowState`                                                                                                                               | Arrow behaviour: V in 0.16. Symbols: adapter.                                 |
 
 ## 5. Cross-cutting parity gates (apply to every row)
 

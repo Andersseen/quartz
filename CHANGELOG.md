@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- 0.16 Drawer, Resizable and floating API completeness (`docs/releases/0.16-acceptance.md`):
+  - `DrawerService` (`@quartz-headless/primitives`): a side-anchored modal on `DialogService` with physical (`left|right|top|bottom`) and writing-direction-aware (`inline-start|inline-end`) sides, `resolveDrawerSide`, `DEFAULT_DRAWER_CONFIG`.
+  - Dialog exit presence: `DialogConfig.presence` and `panelAttributes`, `DialogRef.state()` and `DialogState`; panel, wrapper and backdrop expose `data-state` (`opening` → `open` → `closing`). The panel stays mounted until the consumer's CSS `transitionend`/`animationend` (or a duration-based safety timer); reduced motion, no transition and host destruction remove it immediately. `closed$` still fires exactly once.
+  - Overlay arrow geometry in Core: `calculateArrowGeometry`, `applyArrowAttributes`, `placementSide`, `OverlayArrowGeometry`, `OverlayArrowOptions`, `OverlaySide`; `OverlayConfig.arrowSize`/`arrowPadding`/`context`, `OverlayPosition.arrow`, `OverlayRef.position`.
+  - Tooltip and Popover arrows: `tooltipArrowSize`/`tooltipArrowPadding` and `arrowSize`/`arrowPadding`, `arrow()`/`resolvedPlacement()` signals, `data-side`/`data-placement`/`--qz-arrow-x|y` on the surface, reactive template context (`TooltipContext`, `PopoverContext`).
+  - Menu `MenuGroupDirective` and `MenuLabelDirective` (named groups; radio groups can be labelled too).
+  - Splitter (Resizable): `disabled` input, `resizing()` signal and `data-qz-resizing`, `lostpointercapture` handling, RTL-mirrored pointer and arrow behavior, bounds sanitization and re-clamping; CLI `quartz add drawer` and `quartz add resizable` (alias of `splitter`).
+  - Docs: Drawer and Resizable pages, arrow and group sections for Tooltip, Popover, Menu and Splitter, five demos and four playgrounds; `e2e/floating-016.spec.ts` and a 0.16 consumer fixture.
+
+### Changed
+
+- `SplitterHandleDirective` now reports WAI-ARIA `aria-orientation` as the separator's own axis: a horizontal container's handle is `aria-orientation="vertical"` (previously it copied the layout orientation).
+- The secondary Splitter panel takes the remaining space (`flex: 1 1 0%`) instead of an explicit `100 - position` percentage, so a handle with its own thickness no longer overflows or clips it.
+- `SplitterService.updateConfig`/`setPosition` sanitize non-finite values, raise `maxSize` to `minSize` when inverted and re-clamp the current position.
+- Package versions are `0.16.0` with a `^0.16.0` Core peer (lockstep). 0.13.0–0.15.0 are published only from the dedicated source snapshots recorded in the 0.16 acceptance record; this release does not reuse immutable versions.
+
+### Fixed
+
+- CLI registry: `dialog` now includes `modal-isolation.ts`, and `splitter` declares its `directionality` dependency.
+
+### Added (0.14–0.15, release pending)
+
 - Initial 0.15 feedback and value-indicator APIs: Progress, Meter, Avatar and Toast template/component content with actions. Validation and release remain blocked pending the earlier 0.13/0.14 release reconciliation; see `docs/releases/0.15-acceptance.md`.
 - Initial 0.14 FormField, InputOTP, autofill and native file selection/dropzone APIs, optional Forms integration, CLI registration and Doqs documentation. Acceptance and release checks are still in progress; see `docs/releases/0.14-acceptance.md`.
 

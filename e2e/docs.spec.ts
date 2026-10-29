@@ -266,18 +266,25 @@ test.describe('live demos and playgrounds', () => {
     await expect(page.locator('app-resizable-demo output').first()).toContainText('50 %');
 
     await go(page, '/docs/primitives/tooltip');
-    const tipButton = page.locator('app-tooltip-arrow-demo button', { hasText: 'top' }).first();
+    const tipButton = page.locator('app-tooltip-arrow-demo button', { hasText: 'Arrow above' });
+    // Scroll first: a scroll while open dismisses overlays.
+    await tipButton.scrollIntoViewIfNeeded();
     await tipButton.focus();
     await expect(page.locator('.qz-tooltip[data-side]')).toBeVisible();
     await page.keyboard.press('Escape');
 
     await go(page, '/docs/primitives/popover');
-    const popButton = page.locator('app-popover-arrow-demo button', { hasText: 'bottom' });
+    const popButton = page.locator('app-popover-arrow-demo button', { hasText: 'Arrow below' });
     await expect(popButton).toHaveAttribute('aria-expanded', 'false');
-    await popButton.focus();
-    await page.keyboard.press('Enter');
-    await expect(popButton).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.locator('[data-qz-popover][data-side]')).toBeVisible();
+    await popButton.scrollIntoViewIfNeeded();
+    await expect(async () => {
+      if ((await popButton.getAttribute('aria-expanded')) !== 'true') {
+        await popButton.focus();
+        await page.keyboard.press('Enter');
+      }
+      await expect(popButton).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 });
+      await expect(page.locator('[data-qz-popover][data-side]')).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10000 });
     await page.keyboard.press('Escape');
     await expect(popButton).toHaveAttribute('aria-expanded', 'false');
 
@@ -287,10 +294,17 @@ test.describe('live demos and playgrounds', () => {
     });
     // aria-expanded is written by the hydrated directive: wait for it before interacting.
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
-    await menuButton.focus();
-    await page.keyboard.press('Enter');
-    await expect(page.getByRole('group', { name: 'Account' })).toBeVisible();
-    await expect(page.getByRole('group', { name: 'Density' })).toBeVisible();
+    await menuButton.scrollIntoViewIfNeeded();
+    // Late layout shifts while the docs page settles can scroll-dismiss a just-opened overlay:
+    // re-open until the menu is stably visible.
+    await expect(async () => {
+      if ((await menuButton.getAttribute('aria-expanded')) !== 'true') {
+        await menuButton.focus();
+        await page.keyboard.press('Enter');
+      }
+      await expect(page.getByRole('group', { name: 'Account' })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('group', { name: 'Density' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10000 });
     await page.keyboard.press('Escape');
 
     expect(problems).toEqual([]);
