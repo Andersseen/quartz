@@ -334,7 +334,10 @@ export class DialogService {
       if (!pending.size) finishNow();
     };
     for (const el of pending) {
-      for (const type of ['transitionend', 'transitioncancel', 'animationend', 'animationcancel']) {
+      // Only `*end` counts: an interrupted enter transition fires `transitioncancel` the
+      // moment the exit one replaces it, which must not end the exit. A cancelled exit simply
+      // falls through to the timer below.
+      for (const type of ['transitionend', 'animationend']) {
         el.addEventListener(type, settle);
         listeners.push(() => el.removeEventListener(type, settle));
       }

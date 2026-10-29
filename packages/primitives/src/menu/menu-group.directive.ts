@@ -1,4 +1,12 @@
-import { DestroyRef, Directive, InjectionToken, computed, inject, signal } from '@angular/core';
+import {
+  DestroyRef,
+  Directive,
+  ElementRef,
+  InjectionToken,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 
 /**
  * Anything that can be named by a {@link MenuLabelDirective} (menu groups and radio groups).
@@ -77,7 +85,10 @@ let menuLabelId = 0;
 })
 export class MenuLabelDirective {
   private readonly group = inject(QZ_MENU_LABEL_HOST, { optional: true });
-  readonly id = `qz-menu-label-${++menuLabelId}`;
+  /** The element's own `id` when it has one, otherwise a generated id. */
+  readonly id: string =
+    inject<ElementRef<HTMLElement>>(ElementRef).nativeElement.id ||
+    `qz-menu-label-${++menuLabelId}`;
 
   constructor() {
     this.group?.registerLabel(this.id);

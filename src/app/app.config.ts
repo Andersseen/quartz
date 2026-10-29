@@ -69,6 +69,11 @@ export const appConfig: ApplicationConfig = {
           loadComponent: () => import('./pages/e2e-feedback.page').then((module) => module.default),
         },
         {
+          path: 'e2e-floating-016',
+          loadComponent: () =>
+            import('./pages/e2e-floating-016.page').then((module) => module.default),
+        },
+        {
           path: 'e2e-navigation',
           loadComponent: () =>
             import('./pages/e2e-navigation.page').then((module) => module.default),
