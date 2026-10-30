@@ -61,6 +61,7 @@ jobs:
           pnpm docs:api:check
           pnpm docs:content:check
           pnpm docs:doctor
+          pnpm api:inventory:check
 
       # Every V/C/P parity row must still be backed by a real consumer test (see consumer/evidence-map.json).
       - name: Consumer Evidence Matrix
@@ -107,13 +108,69 @@ jobs:
           name: coverage-reports
           path: coverage/
 
+  # BUILD ONCE, PACK ONCE. This is the only job that compiles the publishable packages for release
+  # purposes: it builds, runs the package/API guards, packs both tarballs and records hashes in
+  # release-manifest.json. Every consumer job installs THESE tarballs (re-verified against the
+  # manifest) and the publish job uploads THESE exact files. Nothing downstream rebuilds.
+  package:
+    name: Build and pack release artifacts
+    runs-on: ubuntu-latest
+    needs: quality
+    outputs:
+      manifest-sha256: ${{ steps.pack.outputs.manifest-sha256 }}
+      version: ${{ steps.pack.outputs.version }}
+      source-commit: ${{ steps.pack.outputs.source-commit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Library
+        run: pnpm build:lib
+
+      - name: Verify build, package metadata and public API guard
+        run: pnpm verify:build
+
+      - name: Pack tarballs and write release manifest
+        id: pack
+        run: |
+          node scripts/release/release.mjs pack --out release-artifacts --commit "$(git rev-parse HEAD)"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+          {
+            echo "manifest-sha256=$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)"
+            echo "version=$(node scripts/release/release.mjs manifest-field --dir release-artifacts --name version)"
+            echo "source-commit=$(git rev-parse HEAD)"
+          } >> "$GITHUB_OUTPUT"
+          cat release-artifacts/SHA256SUMS
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
   # Fast PR gate: the critical external paths on ONE toolchain (Angular 21.2, Chromium) — strict AOT of
   # the installed tarballs incl. the negative-template proof, real SSR, hydration, interaction, axe, the
   # CLI source-copy consumer and the bundle budgets. The full declared matrix runs in consumer-matrix.
   consumer-smoke:
     name: Consumer Smoke (Angular 21.2 / Chromium)
     runs-on: ubuntu-latest
-    needs: quality
+    needs: [quality, package]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -135,8 +192,19 @@ jobs:
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Build Library
-        run: pnpm build:lib
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Verify downloaded artifacts against the packed manifest
+        env:
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+          echo "QUARTZ_RELEASE_ARTIFACTS=$PWD/release-artifacts" >> "$GITHUB_ENV"
 
       - name: Installed-tarball consumer (AOT, SSR, hydration, interaction, axe)
         run: pnpm verify:consumer:runtime -- --fixture angular-21.2 --project chromium
@@ -154,7 +222,7 @@ jobs:
   consumer-matrix:
     name: Consumer ${{ matrix.fixture }} / Node ${{ matrix.node }}
     runs-on: ubuntu-latest
-    needs: quality
+    needs: [quality, package]
     if: github.event_name != 'pull_request'
     strategy:
       fail-fast: false
@@ -184,8 +252,19 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build Library
-        run: pnpm build:lib
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Verify downloaded artifacts against the packed manifest
+        env:
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+          echo "QUARTZ_RELEASE_ARTIFACTS=$PWD/release-artifacts" >> "$GITHUB_ENV"
 
       - name: Setup Node (consumer toolchain)
         uses: actions/setup-node@v4
@@ -216,7 +295,7 @@ jobs:
   cli-consumer:
     name: CLI source-copy consumer (3 engines)
     runs-on: ubuntu-latest
-    needs: quality
+    needs: [quality, package]
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
@@ -239,8 +318,19 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build Library
-        run: pnpm build:lib
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Verify downloaded artifacts against the packed manifest
+        env:
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+          echo "QUARTZ_RELEASE_ARTIFACTS=$PWD/release-artifacts" >> "$GITHUB_ENV"
 
       - name: CLI source-copy consumer
         run: pnpm verify:consumer:cli
@@ -335,142 +425,87 @@ jobs:
           command: pages deploy dist/analog/public --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
-  # Explicit manual release only: the selected source ref and confirmed lockstep version are
-  # validated above, then Core publishes before Primitives. Main pushes never publish package
-  # contents under a potentially stale manifest version. The unscoped package remains frozen.
+  # Explicit manual release only. The publish job never builds: it downloads the tarballs the
+  # `package` job produced and that the consumer matrix installed, re-verifies them against the
+  # manifest (sha256, npm integrity, package contract, source commit, version confirmation), asks
+  # the registry what already exists (fail closed), then publishes exactly those files — Core first.
+  # Re-running is safe: versions that already match are verified and skipped; a version whose
+  # integrity differs, an inconsistent Core/Primitives pair or any ambiguous registry answer stops
+  # the job. The unscoped `quartz-headless` package remains frozen.
   publish:
-    name: Publish to npm
+    name: Publish validated artifacts to npm
     runs-on: ubuntu-latest
-    needs: [unit-tests, e2e-tests, consumer-smoke, consumer-matrix, cli-consumer]
+    needs:
+      - package
+      - unit-tests
+      - e2e-tests
+      - consumer-smoke
+      - consumer-matrix
+      - cli-consumer
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
-    outputs:
-      core-published: ${{ steps.version-core.outputs.published }}
-      core-version: ${{ steps.version-core.outputs.version }}
-      primitives-published: ${{ steps.version-primitives.outputs.published }}
-      primitives-version: ${{ steps.version-primitives.outputs.version }}
-      release-needed: ${{ steps.release-metadata.outputs.needed }}
-      release-version: ${{ steps.release-metadata.outputs.version }}
-      release-tag: ${{ steps.release-metadata.outputs.tag }}
-      release-primary-tag: ${{ steps.release-metadata.outputs.primary-tag }}
+    # One publisher at a time per repository; a queued run waits instead of racing. Never cancel a
+    # run that may be midway through publishing.
+    concurrency:
+      group: quartz-npm-release
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write # npm provenance attestation
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_ref }}
-
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v4
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Source commit must be on main
+        run: |
+          git fetch origin main
+          git merge-base --is-ancestor "$(git rev-parse HEAD)" origin/main || {
+            echo "Refusing publication: the selected source is not an ancestor of main."
+            exit 1
+          }
 
-      - name: Verify explicit lockstep version confirmation
+      - name: Download validated release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Verify artifact identity (hash, integrity, contract, commit)
         env:
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+
+      - name: Registry reconciliation plan (read-only, fails closed)
+        run: node scripts/release/release.mjs plan --dir release-artifacts
+
+      - name: Publish (Core, then Primitives) with provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           CONFIRM_VERSION: ${{ inputs.confirm_version }}
         run: |
-          core_version=$(node -p "require('./packages/core/package.json').version")
-          primitives_version=$(node -p "require('./packages/primitives/package.json').version")
-          core_peer=$(node -p "require('./packages/primitives/package.json').peerDependencies['@quartz-headless/core']")
-          if [ -z "$CONFIRM_VERSION" ] || [ "$core_version" != "$CONFIRM_VERSION" ] || [ "$primitives_version" != "$CONFIRM_VERSION" ] || [ "$core_peer" != "^$CONFIRM_VERSION" ]; then
-            echo "Refusing publication: both packages and the Core peer must match the explicitly confirmed version."
-            exit 1
-          fi
+          node scripts/release/release.mjs publish \
+            --dir release-artifacts \
+            --commit "$(git rev-parse HEAD)" \
+            --confirm-version "$CONFIRM_VERSION" \
+            --provenance
 
-      - name: Check @quartz-headless/core version availability
-        id: version-core
-        run: |
-          version=$(node -p "require('./packages/core/package.json').version")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          if npm view "@quartz-headless/core@$version" version >/dev/null 2>&1; then
-            echo "Version $version already exists on npm; skipping publication."
-            echo "published=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Version $version is new; publication will proceed."
-            echo "published=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Check @quartz-headless/primitives version availability
-        id: version-primitives
-        run: |
-          version=$(node -p "require('./packages/primitives/package.json').version")
-          if npm view "@quartz-headless/primitives@$version" version >/dev/null 2>&1; then
-            echo "Version $version already exists on npm; skipping publication."
-            echo "published=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Version $version is new; publication will proceed."
-            echo "published=true" >> "$GITHUB_OUTPUT"
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Build publishable library artifacts
-        if: steps.version-core.outputs.published == 'true' || steps.version-primitives.outputs.published == 'true'
-        run: pnpm build:lib
-
-      - name: Publish @quartz-headless/core
-        if: steps.version-core.outputs.published == 'true'
-        run: npm publish ./packages/core/dist --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @quartz-headless/primitives
-        if: steps.version-primitives.outputs.published == 'true'
-        run: npm publish ./packages/primitives/dist --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Resolve GitHub Release metadata
-        id: release-metadata
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CORE_PUBLISHED: ${{ steps.version-core.outputs.published }}
-          CORE_VERSION: ${{ steps.version-core.outputs.version }}
-          PRIMITIVES_PUBLISHED: ${{ steps.version-primitives.outputs.published }}
-          PRIMITIVES_VERSION: ${{ steps.version-primitives.outputs.version }}
-        run: |
-          if [ -n "$PRIMITIVES_VERSION" ]; then
-            version="$PRIMITIVES_VERSION"
-          else
-            version="$CORE_VERSION"
-          fi
-          primary_tag="v$version"
-          tag="$primary_tag"
-
-          primary_body="$(gh release view "$primary_tag" --json body --jq .body 2>/dev/null || true)"
-          if [ -n "$primary_body" ] && ! printf '%s' "$primary_body" | grep -q "@quartz-headless/.*@$version"; then
-            tag="quartz-headless-v$version"
-          fi
-
-          needed=false
-          if [ "$CORE_PUBLISHED" = "true" ] || [ "$PRIMITIVES_PUBLISHED" = "true" ]; then
-            needed=true
-          fi
-
-          {
-            echo "needed=$needed"
-            echo "version=$version"
-            echo "tag=$tag"
-            echo "primary-tag=$primary_tag"
-          } >> "$GITHUB_OUTPUT"
-
-  # Fires if EITHER package actually published (core and primitives are meant to stay
-  # version-locked, but this doesn't assume that holds — a core-only or primitives-only
-  # bump still gets a release instead of publishing silently).
+  # Runs after a fully verified publication (also on a re-run, where publish verifies and skips).
+  # The tag is created at the validated commit; an existing tag at another commit is a conflict.
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [publish]
-    if: |
-      github.event_name == 'workflow_dispatch' &&
-      github.ref == 'refs/heads/main' &&
-      inputs.publish == true &&
-      needs.publish.outputs.release-needed == 'true'
+    needs: [package, publish]
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     permissions:
       contents: write
     steps:
@@ -479,44 +514,25 @@ jobs:
         with:
           ref: ${{ inputs.source_ref }}
 
-      - name: Create GitHub Release
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download validated release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Verify artifact identity
+        env:
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
+          node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
+
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CORE_PUBLISHED: ${{ needs.publish.outputs.core-published }}
-          CORE_VERSION: ${{ needs.publish.outputs.core-version }}
-          PRIMITIVES_PUBLISHED: ${{ needs.publish.outputs.primitives-published }}
-          PRIMITIVES_VERSION: ${{ needs.publish.outputs.primitives-version }}
-          RELEASE_VERSION: ${{ needs.publish.outputs.release-version }}
-          RELEASE_TAG: ${{ needs.publish.outputs.release-tag }}
-          RELEASE_PRIMARY_TAG: ${{ needs.publish.outputs.release-primary-tag }}
-        run: |
-          version="$RELEASE_VERSION"
-          tag="$RELEASE_TAG"
-          primary_tag="$RELEASE_PRIMARY_TAG"
-
-          notes="Packages in this release:"
-          if [ -n "$CORE_VERSION" ]; then
-            notes="$notes\n- @quartz-headless/core@$CORE_VERSION"
-          fi
-          if [ -n "$PRIMITIVES_VERSION" ]; then
-            notes="$notes\n- @quartz-headless/primitives@$PRIMITIVES_VERSION"
-          fi
-          if [ "$tag" != "$primary_tag" ]; then
-            notes="$notes\n\nNote: $primary_tag already exists from the legacy package release history, so this scoped release uses tag $tag."
-          fi
-
-          if gh release view "$tag" >/dev/null 2>&1; then
-            gh release edit "$tag" \
-              --target "$(git rev-parse HEAD)" \
-              --title "v$version" \
-              --notes "$(printf '%b' "$notes")" \
-              --latest
-            exit 0
-          fi
-
-          gh release create "$tag" \
-            --target "$(git rev-parse HEAD)" \
-            --title "v$version" \
-            --notes "$(printf '%b' "$notes")" \
-            --generate-notes \
-            --latest
+        run: node scripts/release/release.mjs github-release --dir release-artifacts --commit "$(git rev-parse HEAD)"

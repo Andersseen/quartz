@@ -9,6 +9,9 @@
  *
  * Usage: node scripts/consumer/run.mjs --fixture angular-21.2|angular-22 [--stage build|e2e|all]
  *        [--update-lock] [--keep] [--project chromium,firefox,webkit]
+ * `--stage serve` builds the same installed-tarball app and keeps serving it for the manual
+ * screen-reader matrix (docs/releases/0.17-manual-a11y.md); it runs no automated tests.
+ * Set QUARTZ_RELEASE_ARTIFACTS=<dir> to install pre-packed, manifest-verified tarballs.
  * Prerequisite: `pnpm build:lib`.
  */
 import { execFileSync, spawn } from 'node:child_process';
@@ -25,6 +28,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTarballs } from './tarballs.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -55,14 +59,6 @@ const run = (cmd, cmdArgs, opts = {}) =>
   });
 const sha = (file) => createHash('sha256').update(readFileSync(file)).digest('hex');
 
-function pack(distDir, dest) {
-  const out = execFileSync('npm', ['pack', '--json', '--pack-destination', dest], {
-    cwd: distDir,
-    encoding: 'utf8',
-  });
-  return join(dest, JSON.parse(out)[0].filename);
-}
-
 const work = mkdtempSync(join(tmpdir(), `quartz-consumer-${fixture}-`));
 const app = join(work, 'app');
 const evidence = { fixture, tarballs: {}, versions: {}, node: process.version };
@@ -70,15 +66,10 @@ let server;
 process.on('exit', () => server?.kill());
 
 try {
-  for (const pkg of ['core', 'primitives']) {
-    if (!existsSync(join(ROOT, `packages/${pkg}/dist/package.json`)))
-      fail('run `pnpm build:lib` first');
-  }
-  console.log('→ packing tarballs');
-  const tarballs = {
-    core: pack(join(ROOT, 'packages/core/dist'), work),
-    primitives: pack(join(ROOT, 'packages/primitives/dist'), work),
-  };
+  const tarballs = resolveTarballs(work);
+  console.log(`→ tarballs from ${tarballs.source}`);
+  evidence.tarballSource = tarballs.source;
+  delete tarballs.source;
   for (const [k, f] of Object.entries(tarballs))
     evidence.tarballs[k] = { file: f.split('/').pop(), sha256: sha(f) };
 
@@ -186,6 +177,16 @@ try {
         setTimeout(poll, 250);
       })();
     });
+
+    if (stage === 'serve') {
+      console.log(
+        `\n✓ consumer(${fixture}) is being served for MANUAL assistive-technology testing`,
+      );
+      for (const page of ['forms', 'overlays', 'navigation', 'parity', 'controls'])
+        console.log(`  http://localhost:${port}/${page}`);
+      console.log('Record results in docs/releases/0.17-manual-a11y.md. Ctrl+C to stop.');
+      await new Promise(() => {});
+    }
 
     console.log('→ Playwright consumer suite');
     const resultsFile = join(work, 'e2e.json');

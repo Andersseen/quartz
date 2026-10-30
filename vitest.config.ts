@@ -7,6 +7,7 @@ export default defineConfig({
       'packages/primitives/vite.config.ts',
       'vitest.app.config.ts',
       'vitest.cli.config.ts',
+      'vitest.release.config.ts',
     ],
     coverage: {
       provider: 'v8',

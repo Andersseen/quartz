@@ -1,47 +1,231 @@
 {
-  "CheckboxControlDirective": {
-    "kind": "class"
+  "exports": {
+    "CheckboxControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzCheckbox][formControl], button[qzCheckbox][formControlName], button[qzCheckbox][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: CheckboxState) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: CheckboxState | null | undefined) => void"
+      }
+    },
+    "ComboboxControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCombobox][formControl], [qzCombobox][formControlName], [qzCombobox][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: unknown) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: unknown) => void"
+      }
+    },
+    "DatePickerControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDatePicker][formControl], [qzDatePicker][formControlName], [qzDatePicker][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: Date) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(disabled: boolean) => void",
+        "writeValue": "(value: Date | null | undefined) => void"
+      }
+    },
+    "DateRangePickerControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDateRangePicker][formControl], [qzDateRangePicker][formControlName], [qzDateRangePicker][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: DateRange) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(disabled: boolean) => void",
+        "writeValue": "(value: DateRange | null | undefined) => void"
+      }
+    },
+    "FormFieldStateDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormFieldControl][formControl], [qzFormFieldControl][formControlName], [qzFormFieldControl][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnInit": "() => void"
+      }
+    },
+    "InputOtpControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "qz-input-otp[formControl], qz-input-otp[formControlName], qz-input-otp[ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "onFocusOut": "(event: FocusEvent) => void",
+        "registerOnChange": "(fn: (value: string) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(disabled: boolean) => void",
+        "writeValue": "(value: string | null | undefined) => void"
+      }
+    },
+    "ListboxControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListbox][formControl], [qzListbox][formControlName], [qzListbox][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: unknown) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: unknown) => void"
+      }
+    },
+    "QUARTZ_FORMS": {
+      "kind": "const",
+      "type": "readonly [typeof CheckboxControlDirective, typeof SwitchControlDirective, typeof RadioGroupControlDirective, typeof SelectControlDirective, typeof ListboxControlDirective, typeof ComboboxControlDirective, typeof SliderControlDirective, typeof RangeSliderControlDirective, typeof ToggleControlDirective, typeof ToggleGroupControlDirective, typeof DatePickerControlDirective, typeof DateRangePickerControlDirective, typeof FormFieldStateDirective, typeof InputOtpControlDirective]"
+    },
+    "RadioGroupControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRadioGroup][formControl], [qzRadioGroup][formControlName], [qzRadioGroup][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: unknown) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: unknown) => void"
+      }
+    },
+    "RangeSliderControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRangeSlider][formControl], [qzRangeSlider][formControlName], [qzRangeSlider][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: RangeSliderValue) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: RangeSliderValue | null | undefined) => void"
+      }
+    },
+    "SelectControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelect][formControl], [qzSelect][formControlName], [qzSelect][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: unknown) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: unknown) => void"
+      }
+    },
+    "SliderControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSlider][formControl], [qzSlider][formControlName], [qzSlider][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: number) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: number | null | undefined) => void"
+      }
+    },
+    "SwitchControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzSwitch][formControl], button[qzSwitch][formControlName], button[qzSwitch][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: boolean) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: boolean | null | undefined) => void"
+      }
+    },
+    "ToggleControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzToggle][formControl], button[qzToggle][formControlName], button[qzToggle][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: boolean) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: boolean | null | undefined) => void"
+      }
+    },
+    "ToggleGroupControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzToggleGroup][formControl], [qzToggleGroup][formControlName], [qzToggleGroup][ngModel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerOnChange": "(fn: (value: unknown) => void) => void",
+        "registerOnTouched": "(fn: () => void) => void",
+        "setDisabledState": "(isDisabled: boolean) => void",
+        "writeValue": "(value: unknown) => void"
+      }
+    }
   },
-  "ComboboxControlDirective": {
-    "kind": "class"
-  },
-  "DatePickerControlDirective": {
-    "kind": "class"
-  },
-  "DateRangePickerControlDirective": {
-    "kind": "class"
-  },
-  "FormFieldStateDirective": {
-    "kind": "class"
-  },
-  "InputOtpControlDirective": {
-    "kind": "class"
-  },
-  "ListboxControlDirective": {
-    "kind": "class"
-  },
-  "QUARTZ_FORMS": {
-    "kind": "const"
-  },
-  "RadioGroupControlDirective": {
-    "kind": "class"
-  },
-  "RangeSliderControlDirective": {
-    "kind": "class"
-  },
-  "SelectControlDirective": {
-    "kind": "class"
-  },
-  "SliderControlDirective": {
-    "kind": "class"
-  },
-  "SwitchControlDirective": {
-    "kind": "class"
-  },
-  "ToggleControlDirective": {
-    "kind": "class"
-  },
-  "ToggleGroupControlDirective": {
-    "kind": "class"
-  }
+  "defaults": {}
 }

@@ -59,8 +59,10 @@ These are not suggestions. Lint, the pre-commit hook, or review will reject viol
   tests otherwise.
 - Run a single file: `pnpm exec vitest run packages/core/src/<x>/<x>.spec.ts` or
   `packages/primitives/src/<x>/<x>.spec.ts`.
-- E2E only for user-visible flows on the demo site (`e2e/*.spec.ts`, Playwright, targets
-  `localhost:5173`). Don't write E2E for logic a unit test can cover.
+- E2E only for user-visible flows. Demo-site flows live in `e2e/*.spec.ts` (Playwright, `localhost:5173`);
+  behavior that must hold in an installed, strict-AOT, SSR-hydrated application lives in `consumer/e2e/`
+  (see `docs/compatibility.md`). Don't write browser tests for logic a unit test can cover — but do write one
+  for focus order, blur timing, hydration and anything jsdom cannot reproduce.
 
 ## Formatting & lint (mechanical — just conform)
 
@@ -71,9 +73,10 @@ These are not suggestions. Lint, the pre-commit hook, or review will reject viol
 
 ## Commit / PR conventions
 
-- Conventional-ish prefixes seen in history: `feat:`, `fix:`, `refactor:`.
-- Branches: `feature/<topic>`, merged to `main` via PR.
-- Never commit `dist/`, never publish from the root (root package is `"private": true`).
+- Conventional-ish prefixes seen in history: `feat:`, `fix:`, `refactor:`, `chore:`.
+- Branches: `feat/<topic>` / `fix/<topic>` / `chore/<topic>`, merged to `main` via PR; never develop on `main`.
+- Never commit `dist/` or `release-artifacts/`. Never publish from the root or a workstation — only the guarded workflow publishes (`docs/releases/RELEASE_RUNBOOK.md`).
+- Public API changes require `node scripts/api-guard.js --update` with a reviewed snapshot diff (`docs/api/FREEZE_POLICY.md`).
 
 ## Common mistakes that waste sessions (learn from past pain)
 

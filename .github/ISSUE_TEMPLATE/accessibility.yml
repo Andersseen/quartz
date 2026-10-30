@@ -1,0 +1,25 @@
+name: Accessibility regression
+description: A keyboard, focus, ARIA or screen-reader problem
+labels: [accessibility]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Primitive and package version
+    validations: { required: true }
+  - type: input
+    id: at
+    attributes:
+      label: Assistive technology, browser and versions
+      description: e.g. VoiceOver 15 + Safari 18, NVDA 2025.1 + Firefox 140, or "keyboard only"
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps and minimal reproduction
+    validations: { required: true }
+  - type: textarea
+    id: announced
+    attributes:
+      label: Expected vs actual announcement, focus or keyboard behavior
+    validations: { required: true }

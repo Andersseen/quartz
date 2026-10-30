@@ -1,688 +1,3787 @@
 {
-  "AccordionConfig": {
-    "kind": "interface"
-  },
-  "AccordionDirective": {
-    "kind": "class"
-  },
-  "AccordionItemDirective": {
-    "kind": "class"
-  },
-  "AccordionOrientation": {
-    "kind": "type"
-  },
-  "AccordionPanelDirective": {
-    "kind": "class"
-  },
-  "AccordionTriggerDirective": {
-    "kind": "class"
-  },
-  "AccordionType": {
-    "kind": "type"
-  },
-  "AutofillDirective": {
-    "kind": "class"
-  },
-  "AvatarComponent": {
-    "kind": "class"
-  },
-  "CalendarCellDirective": {
-    "kind": "class"
-  },
-  "CalendarDateButtonDirective": {
-    "kind": "class"
-  },
-  "CalendarDay": {
-    "kind": "interface"
-  },
-  "CalendarGridDirective": {
-    "kind": "class"
-  },
-  "CalendarMonthLabelDirective": {
-    "kind": "class"
-  },
-  "CalendarNextMonthDirective": {
-    "kind": "class"
-  },
-  "CalendarPreviousMonthDirective": {
-    "kind": "class"
-  },
-  "CalendarRowDirective": {
-    "kind": "class"
-  },
-  "CheckboxDirective": {
-    "kind": "class"
-  },
-  "CheckboxState": {
-    "kind": "type"
-  },
-  "ComboboxAutocomplete": {
-    "kind": "type"
-  },
-  "ComboboxCloseReason": {
-    "kind": "type"
-  },
-  "ComboboxCompareWith": {
-    "kind": "type"
-  },
-  "ComboboxConfig": {
-    "kind": "interface"
-  },
-  "ComboboxContentDirective": {
-    "kind": "class"
-  },
-  "ComboboxDirective": {
-    "kind": "class"
-  },
-  "ComboboxDisplayWith": {
-    "kind": "type"
-  },
-  "ComboboxFilter": {
-    "kind": "type"
-  },
-  "ComboboxGroupDirective": {
-    "kind": "class"
-  },
-  "ComboboxGroupLabelDirective": {
-    "kind": "class"
-  },
-  "ComboboxInputDirective": {
-    "kind": "class"
-  },
-  "ComboboxListboxDirective": {
-    "kind": "class"
-  },
-  "ComboboxOpenReason": {
-    "kind": "type"
-  },
-  "ComboboxOptionDirective": {
-    "kind": "class"
-  },
-  "ComboboxSeparatorDirective": {
-    "kind": "class"
-  },
-  "ComboboxTriggerDirective": {
-    "kind": "class"
-  },
-  "createLatestRequest": {
-    "kind": "function",
-    "signatures": ["(): LatestRequest"]
-  },
-  "DateDisabled": {
-    "kind": "type"
-  },
-  "DatePickerConfig": {
-    "kind": "interface"
-  },
-  "DatePickerDirective": {
-    "kind": "class"
-  },
-  "DateRange": {
-    "kind": "interface"
-  },
-  "DateRangePickerDirective": {
-    "kind": "class"
-  },
-  "DEFAULT_ACCORDION_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_COMBOBOX_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_DATE_PICKER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_DIALOG_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_DRAWER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_LISTBOX_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_MENU_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_NAVBAR_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_NAVIGATION_MENU_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_PAGINATION_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_POPOVER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_RADIO_GROUP_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_RANGE_SLIDER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_SELECT_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_SIDEBAR_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_SLIDER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_STEPPER_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_TABS_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_TOAST_OPTIONS": {
-    "kind": "const"
-  },
-  "DEFAULT_TOGGLE_GROUP_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_TOOLBAR_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_TOOLTIP_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_TREE_CONFIG": {
-    "kind": "const"
-  },
-  "DialogConfig": {
-    "kind": "interface"
-  },
-  "DialogPosition": {
-    "kind": "type"
-  },
-  "DialogRef": {
-    "kind": "class"
-  },
-  "DialogService": {
-    "kind": "class"
-  },
-  "DialogState": {
-    "kind": "type"
-  },
-  "DrawerConfig": {
-    "kind": "interface"
-  },
-  "DrawerPhysicalSide": {
-    "kind": "type"
-  },
-  "DrawerService": {
-    "kind": "class"
-  },
-  "DrawerSide": {
-    "kind": "type"
-  },
-  "FileDropzoneDirective": {
-    "kind": "class"
-  },
-  "FileUploadDirective": {
-    "kind": "class"
-  },
-  "FormFieldControlDirective": {
-    "kind": "class"
-  },
-  "FormFieldDescriptionDirective": {
-    "kind": "class"
-  },
-  "FormFieldDirective": {
-    "kind": "class"
-  },
-  "FormFieldErrorDirective": {
-    "kind": "class"
-  },
-  "FormFieldLabelDirective": {
-    "kind": "class"
-  },
-  "InputOtpComponent": {
-    "kind": "class"
-  },
-  "InputOtpSlot": {
-    "kind": "interface"
-  },
-  "LatestRequest": {
-    "kind": "interface"
-  },
-  "ListboxConfig": {
-    "kind": "interface"
-  },
-  "ListboxDirective": {
-    "kind": "class"
-  },
-  "ListboxGroupDirective": {
-    "kind": "class"
-  },
-  "ListboxGroupLabelDirective": {
-    "kind": "class"
-  },
-  "ListboxOptionDirective": {
-    "kind": "class"
-  },
-  "ListboxOrientation": {
-    "kind": "type"
-  },
-  "ListboxSeparatorDirective": {
-    "kind": "class"
-  },
-  "ListboxService": {
-    "kind": "class"
-  },
-  "MenuCheckboxItemDirective": {
-    "kind": "class"
-  },
-  "MenuCollectionEntry": {
-    "kind": "interface"
-  },
-  "MenuConfig": {
-    "kind": "interface"
-  },
-  "MenuDirective": {
-    "kind": "class"
-  },
-  "MenuGroupDirective": {
-    "kind": "class"
-  },
-  "MenuItemDirective": {
-    "kind": "class"
-  },
-  "MenuLabelDirective": {
-    "kind": "class"
-  },
-  "MenuRadioGroupDirective": {
-    "kind": "class"
-  },
-  "MenuRadioItemDirective": {
-    "kind": "class"
-  },
-  "MenuSeparatorDirective": {
-    "kind": "class"
-  },
-  "MenuService": {
-    "kind": "class"
-  },
-  "MenuTriggerDirective": {
-    "kind": "class"
-  },
-  "MeterDirective": {
-    "kind": "class"
-  },
-  "MeterIndicatorDirective": {
-    "kind": "class"
-  },
-  "MeterTrackDirective": {
-    "kind": "class"
-  },
-  "NavbarBreakpoint": {
-    "kind": "type"
-  },
-  "NavbarConfig": {
-    "kind": "interface"
-  },
-  "NavbarDirective": {
-    "kind": "class"
-  },
-  "NavbarMenuDirective": {
-    "kind": "class"
-  },
-  "NavbarRevealMode": {
-    "kind": "type"
-  },
-  "NavbarScrollDirection": {
-    "kind": "type"
-  },
-  "NavbarTriggerDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuConfig": {
-    "kind": "interface"
-  },
-  "NavigationMenuContentDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuItemDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuLinkDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuListDirective": {
-    "kind": "class"
-  },
-  "NavigationMenuOrientation": {
-    "kind": "type"
-  },
-  "NavigationMenuTriggerDirective": {
-    "kind": "class"
-  },
-  "PaginationConfig": {
-    "kind": "interface"
-  },
-  "PaginationDirective": {
-    "kind": "class"
-  },
-  "PaginationFirstDirective": {
-    "kind": "class"
-  },
-  "PaginationLastDirective": {
-    "kind": "class"
-  },
-  "PaginationNextDirective": {
-    "kind": "class"
-  },
-  "PaginationPageDirective": {
-    "kind": "class"
-  },
-  "PaginationPreviousDirective": {
-    "kind": "class"
-  },
-  "PopoverConfig": {
-    "kind": "interface"
-  },
-  "PopoverContext": {
-    "kind": "interface"
-  },
-  "PopoverDirective": {
-    "kind": "class"
-  },
-  "PopoverTriggerDirective": {
-    "kind": "class"
-  },
-  "ProgressDirective": {
-    "kind": "class"
-  },
-  "ProgressIndicatorDirective": {
-    "kind": "class"
-  },
-  "ProgressTrackDirective": {
-    "kind": "class"
-  },
-  "RadioDirective": {
-    "kind": "class"
-  },
-  "RadioGroupConfig": {
-    "kind": "interface"
-  },
-  "RadioGroupDirective": {
-    "kind": "class"
-  },
-  "RadioGroupOrientation": {
-    "kind": "type"
-  },
-  "RangeSliderConfig": {
-    "kind": "interface"
-  },
-  "RangeSliderDirective": {
-    "kind": "class"
-  },
-  "RangeSliderOrientation": {
-    "kind": "type"
-  },
-  "RangeSliderRangeDirective": {
-    "kind": "class"
-  },
-  "RangeSliderThumbDirective": {
-    "kind": "class"
-  },
-  "RangeSliderThumbName": {
-    "kind": "type"
-  },
-  "RangeSliderTrackDirective": {
-    "kind": "class"
-  },
-  "RangeSliderValue": {
-    "kind": "interface"
-  },
-  "RejectedFile": {
-    "kind": "interface"
-  },
-  "resolveDrawerSide": {
-    "kind": "function",
-    "signatures": ["(side: DrawerSide, direction: Direction): DrawerPhysicalSide"]
-  },
-  "SelectCloseReason": {
-    "kind": "type"
-  },
-  "SelectConfig": {
-    "kind": "interface"
-  },
-  "SelectContentDirective": {
-    "kind": "class"
-  },
-  "SelectDirective": {
-    "kind": "class"
-  },
-  "SelectGroupDirective": {
-    "kind": "class"
-  },
-  "SelectGroupLabelDirective": {
-    "kind": "class"
-  },
-  "SelectListboxDirective": {
-    "kind": "class"
-  },
-  "SelectOpenReason": {
-    "kind": "type"
-  },
-  "SelectOptionDirective": {
-    "kind": "class"
-  },
-  "SelectSeparatorDirective": {
-    "kind": "class"
-  },
-  "SelectTriggerDirective": {
-    "kind": "class"
-  },
-  "SidebarBreakpoint": {
-    "kind": "type"
-  },
-  "SidebarConfig": {
-    "kind": "interface"
-  },
-  "SidebarContentDirective": {
-    "kind": "class"
-  },
-  "SidebarDirective": {
-    "kind": "class"
-  },
-  "SidebarFocusMode": {
-    "kind": "type"
-  },
-  "SidebarMode": {
-    "kind": "type"
-  },
-  "SidebarPanelDirective": {
-    "kind": "class"
-  },
-  "SidebarSide": {
-    "kind": "type"
-  },
-  "SidebarState": {
-    "kind": "type"
-  },
-  "SidebarTriggerDirective": {
-    "kind": "class"
-  },
-  "SliderConfig": {
-    "kind": "interface"
-  },
-  "SliderDirective": {
-    "kind": "class"
-  },
-  "SliderOrientation": {
-    "kind": "type"
-  },
-  "SliderRangeDirective": {
-    "kind": "class"
-  },
-  "SliderThumbDirective": {
-    "kind": "class"
-  },
-  "SliderTrackDirective": {
-    "kind": "class"
-  },
-  "StepDirective": {
-    "kind": "class"
-  },
-  "StepPanelDirective": {
-    "kind": "class"
-  },
-  "StepperActivationMode": {
-    "kind": "type"
-  },
-  "StepperConfig": {
-    "kind": "interface"
-  },
-  "StepperDirective": {
-    "kind": "class"
-  },
-  "StepperNextDirective": {
-    "kind": "class"
-  },
-  "StepperOrientation": {
-    "kind": "type"
-  },
-  "StepperPreviousDirective": {
-    "kind": "class"
-  },
-  "StepState": {
-    "kind": "type"
-  },
-  "StepTriggerDirective": {
-    "kind": "class"
-  },
-  "SwitchDirective": {
-    "kind": "class"
-  },
-  "TabDirective": {
-    "kind": "class"
-  },
-  "TabListDirective": {
-    "kind": "class"
-  },
-  "TabPanelDirective": {
-    "kind": "class"
-  },
-  "TabsActivationMode": {
-    "kind": "type"
-  },
-  "TabsConfig": {
-    "kind": "interface"
-  },
-  "TabsDirective": {
-    "kind": "class"
-  },
-  "TabsOrientation": {
-    "kind": "type"
-  },
-  "Toast": {
-    "kind": "interface"
-  },
-  "ToastAction": {
-    "kind": "interface"
-  },
-  "ToastComponent": {
-    "kind": "class"
-  },
-  "ToastContainerComponent": {
-    "kind": "class"
-  },
-  "ToastContentComponent": {
-    "kind": "interface"
-  },
-  "ToastContentContext": {
-    "kind": "interface"
-  },
-  "ToastOptions": {
-    "kind": "interface"
-  },
-  "ToastPosition": {
-    "kind": "type"
-  },
-  "ToastService": {
-    "kind": "class"
-  },
-  "ToastTemplateContext": {
-    "kind": "interface"
-  },
-  "ToastType": {
-    "kind": "type"
-  },
-  "ToggleDirective": {
-    "kind": "class"
-  },
-  "ToggleGroupConfig": {
-    "kind": "interface"
-  },
-  "ToggleGroupDirective": {
-    "kind": "class"
-  },
-  "ToggleGroupOrientation": {
-    "kind": "type"
-  },
-  "ToggleGroupType": {
-    "kind": "type"
-  },
-  "ToggleItemDirective": {
-    "kind": "class"
-  },
-  "ToolbarConfig": {
-    "kind": "interface"
-  },
-  "ToolbarDirective": {
-    "kind": "class"
-  },
-  "ToolbarItemDirective": {
-    "kind": "class"
-  },
-  "ToolbarOrientation": {
-    "kind": "type"
-  },
-  "TooltipConfig": {
-    "kind": "interface"
-  },
-  "TooltipContext": {
-    "kind": "interface"
-  },
-  "TooltipDirective": {
-    "kind": "class"
-  },
-  "TooltipPlacement": {
-    "kind": "type"
-  },
-  "TooltipService": {
-    "kind": "class"
-  },
-  "TreeComponent": {
-    "kind": "class"
-  },
-  "TreeConfig": {
-    "kind": "interface"
-  },
-  "TreeLoadChildrenFn": {
-    "kind": "type"
-  },
-  "TreeNode": {
-    "kind": "interface"
-  },
-  "TreeNodeComponent": {
-    "kind": "class"
-  },
-  "TreeNodeContext": {
-    "kind": "interface"
-  },
-  "TreeNodeLoadState": {
-    "kind": "type"
-  },
-  "TreeService": {
-    "kind": "class"
+  "exports": {
+    "AccordionConfig": {
+      "kind": "interface",
+      "members": {
+        "collapsible": "boolean",
+        "compareWith": "(a: T, b: T) => boolean",
+        "orientation": "AccordionOrientation",
+        "region": "boolean",
+        "type": "AccordionType"
+      }
+    },
+    "AccordionDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzAccordion]",
+        "exportAs": "[\"qzAccordion\"]",
+        "inputs": {
+          "collapsible": "{ \"alias\": \"collapsible\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "region": "{ \"alias\": \"region\"; \"required\": false; \"isSignal\": true; }",
+          "type": "{ \"alias\": \"type\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\""
+        }
+      },
+      "members": {
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "collapsible": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "config": "readonly _angular_core.InputSignal<Partial<AccordionConfig<T>>>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "handleTriggerKeydown": "(item: AccordionItemDirective<T>, event: KeyboardEvent) => void",
+        "isOpen": "(item: AccordionItemDirective<T>) => boolean",
+        "isRequiredOpen": "(item: AccordionItemDirective<T>) => boolean",
+        "ngOnDestroy": "() => void",
+        "orientation": "readonly _angular_core.InputSignal<AccordionOrientation>",
+        "refreshItems": "() => void",
+        "region": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "registerItem": "(item: AccordionItemDirective<T>) => void",
+        "setActive": "(item: AccordionItemDirective<T>, options?: { focus?: boolean; }) => void",
+        "toggle": "(item: AccordionItemDirective<T>) => void",
+        "type": "readonly _angular_core.InputSignal<AccordionType>",
+        "unregisterItem": "(item: AccordionItemDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T | T[]>"
+      }
+    },
+    "AccordionItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzAccordionItem]",
+        "exportAs": "[\"qzAccordionItem\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzAccordionItemDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzAccordionItem\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "activeTabIndex": "() => 0 | -1",
+        "blurredThisTask": "boolean",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "handleKeydown": "(event: KeyboardEvent) => void",
+        "hasFocus": "boolean",
+        "id": "readonly string",
+        "itemDisabled": "readonly _angular_core.Signal<boolean>",
+        "label": "readonly () => string",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "open": "readonly _angular_core.Signal<boolean>",
+        "panelId": "readonly string",
+        "requiredOpen": "() => boolean",
+        "setActive": "(options?: { focus?: boolean; }) => void",
+        "setFocused": "(focused: boolean) => void",
+        "setTriggerElement": "(element: HTMLElement | null) => void",
+        "toggle": "() => void",
+        "useRegion": "() => boolean",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "AccordionOrientation": {
+      "kind": "type",
+      "type": "AccordionOrientation"
+    },
+    "AccordionPanelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzAccordionPanel]",
+        "exportAs": "[\"qzAccordionPanel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "AccordionTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzAccordionTrigger]",
+        "exportAs": "[\"qzAccordionTrigger\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnDestroy": "() => void",
+        "onBlur": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void"
+      }
+    },
+    "AccordionType": {
+      "kind": "type",
+      "type": "AccordionType"
+    },
+    "AutofillDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "input[qzAutofill], textarea[qzAutofill]",
+        "exportAs": "[\"qzAutofill\"]",
+        "inputs": {
+          "cancelAnimationName": "{ \"alias\": \"cancelAnimationName\"; \"required\": false; \"isSignal\": true; }",
+          "startAnimationName": "{ \"alias\": \"startAnimationName\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "autofilledChange": "\"autofilledChange\""
+        }
+      },
+      "members": {
+        "autofilled": "readonly _angular_core.Signal<boolean>",
+        "autofilledChange": "readonly _angular_core.OutputEmitterRef<boolean>",
+        "cancelAnimationName": "readonly _angular_core.InputSignal<string>",
+        "onAnimationEnd": "(event: Event) => void",
+        "onAnimationStart": "(event: Event) => void",
+        "onNativeInput": "() => void",
+        "startAnimationName": "readonly _angular_core.InputSignal<string>"
+      }
+    },
+    "AvatarComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-avatar",
+        "exportAs": null,
+        "inputs": {
+          "alt": "{ \"alias\": \"alt\"; \"required\": false; \"isSignal\": true; }",
+          "fallback": "{ \"alias\": \"fallback\"; \"required\": false; \"isSignal\": true; }",
+          "fallbackDelay": "{ \"alias\": \"fallbackDelay\"; \"required\": false; \"isSignal\": true; }",
+          "src": "{ \"alias\": \"src\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "alt": "readonly _angular_core.InputSignal<string>",
+        "fallback": "readonly _angular_core.InputSignal<string>",
+        "fallbackDelay": "readonly _angular_core.InputSignal<number>",
+        "imageLoaded": "readonly _angular_core.WritableSignal<boolean>",
+        "ngOnDestroy": "() => void",
+        "onError": "(event: Event) => void",
+        "onLoad": "(event: Event) => void",
+        "showFallback": "readonly _angular_core.WritableSignal<boolean>",
+        "src": "readonly _angular_core.InputSignal<string>",
+        "state": "readonly () => \"loading\" | \"loaded\" | \"empty\" | \"fallback\""
+      }
+    },
+    "CalendarCellDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCalendarCell]",
+        "exportAs": null,
+        "inputs": {
+          "day": "{ \"alias\": \"qzCalendarCell\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "day": "readonly _angular_core.InputSignal<CalendarDay>"
+      }
+    },
+    "CalendarDateButtonDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzCalendarDateButton]",
+        "exportAs": "[\"qzCalendarDateButton\"]",
+        "inputs": {
+          "dateLabel": "{ \"alias\": \"dateLabel\"; \"required\": false; \"isSignal\": true; }",
+          "day": "{ \"alias\": \"qzCalendarDateButton\"; \"required\": true; \"isSignal\": true; }",
+          "locale": "{ \"alias\": \"locale\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "accessibleName": "readonly _angular_core.Signal<string>",
+        "dateKey": "(date: Date) => string",
+        "dateLabel": "readonly _angular_core.InputSignal<(date: Date, locale: string) => string>",
+        "day": "readonly _angular_core.InputSignal<CalendarDay>",
+        "locale": "readonly _angular_core.InputSignal<string>",
+        "sameDate": "(a: Date, b: Date) => boolean"
+      }
+    },
+    "CalendarDay": {
+      "kind": "interface",
+      "members": {
+        "date": "Date",
+        "day": "number",
+        "disabled": "boolean",
+        "inCurrentMonth": "boolean",
+        "inRange": "boolean",
+        "preview": "boolean",
+        "rangeEnd": "boolean",
+        "rangeStart": "boolean",
+        "selected": "boolean",
+        "today": "boolean"
+      }
+    },
+    "CalendarGridDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCalendarGrid]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "CalendarMonthLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCalendarMonthLabel]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "CalendarNextMonthDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzCalendarNextMonth]",
+        "exportAs": null,
+        "inputs": {
+          "label": "{ \"alias\": \"qzCalendarNextMonth\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "label": "readonly _angular_core.InputSignal<string>"
+      }
+    },
+    "CalendarPreviousMonthDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzCalendarPreviousMonth]",
+        "exportAs": null,
+        "inputs": {
+          "label": "{ \"alias\": \"qzCalendarPreviousMonth\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "label": "readonly _angular_core.InputSignal<string>"
+      }
+    },
+    "CalendarRowDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCalendarRow]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "CheckboxDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzCheckbox]",
+        "exportAs": "[\"qzCheckbox\"]",
+        "inputs": {
+          "checked": "{ \"alias\": \"checked\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "checked": "\"checkedChange\"",
+          "checkedChangeCommitted": "\"checkedChangeCommitted\""
+        }
+      },
+      "members": {
+        "ariaChecked": "readonly _angular_core.Signal<CheckboxState | \"mixed\">",
+        "checked": "readonly _angular_core.ModelSignal<CheckboxState>",
+        "checkedChangeCommitted": "readonly _angular_core.OutputEmitterRef<CheckboxState>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "state": "readonly _angular_core.Signal<\"indeterminate\" | \"checked\" | \"unchecked\">",
+        "toggle": "(event?: Event) => void"
+      }
+    },
+    "CheckboxState": {
+      "kind": "type",
+      "type": "CheckboxState"
+    },
+    "ComboboxAutocomplete": {
+      "kind": "type",
+      "type": "ComboboxAutocomplete"
+    },
+    "ComboboxCloseReason": {
+      "kind": "type",
+      "type": "ComboboxCloseReason"
+    },
+    "ComboboxCompareWith": {
+      "kind": "type",
+      "type": "ComboboxCompareWith<T>"
+    },
+    "ComboboxConfig": {
+      "kind": "interface",
+      "members": {
+        "allowFreeform": "boolean",
+        "autocomplete": "ComboboxAutocomplete",
+        "closeOnEscape": "boolean",
+        "closeOnFocusOutside": "boolean",
+        "closeOnOutsidePointer": "boolean",
+        "closeOnScroll": "boolean",
+        "closeOnSelect": "boolean",
+        "filter": "ComboboxFilter<T> | null",
+        "flip": "boolean",
+        "flipAxis": "_quartz_headless_core.OverlayFlipAxis",
+        "matchAnchorWidth": "boolean",
+        "offset": "number",
+        "openOnFocus": "boolean",
+        "openOnTyping": "boolean",
+        "placement": "_quartz_headless_core.OverlayPlacement",
+        "resetActiveOnClose": "boolean"
+      }
+    },
+    "ComboboxContentDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "ng-template[qzComboboxContent]",
+        "exportAs": "[\"qzComboboxContent\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "templateRef": "readonly _angular_core.TemplateRef<any>"
+      }
+    },
+    "ComboboxDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzCombobox]",
+        "exportAs": "[\"qzCombobox\"]",
+        "inputs": {
+          "allowDeselect": "{ \"alias\": \"allowDeselect\"; \"required\": false; \"isSignal\": true; }",
+          "allowFreeform": "{ \"alias\": \"allowFreeform\"; \"required\": false; \"isSignal\": true; }",
+          "autocomplete": "{ \"alias\": \"autocomplete\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnEscape": "{ \"alias\": \"closeOnEscape\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnFocusOutside": "{ \"alias\": \"closeOnFocusOutside\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnOutsidePointer": "{ \"alias\": \"closeOnOutsidePointer\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnScroll": "{ \"alias\": \"closeOnScroll\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnSelect": "{ \"alias\": \"closeOnSelect\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "content": "{ \"alias\": \"content\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "displayWith": "{ \"alias\": \"displayWith\"; \"required\": false; \"isSignal\": true; }",
+          "filter": "{ \"alias\": \"filter\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "inputValue": "{ \"alias\": \"inputValue\"; \"required\": false; \"isSignal\": true; }",
+          "loading": "{ \"alias\": \"loading\"; \"required\": false; \"isSignal\": true; }",
+          "matchAnchorWidth": "{ \"alias\": \"matchAnchorWidth\"; \"required\": false; \"isSignal\": true; }",
+          "multiple": "{ \"alias\": \"multiple\"; \"required\": false; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "open": "{ \"alias\": \"open\"; \"required\": false; \"isSignal\": true; }",
+          "openOnFocus": "{ \"alias\": \"openOnFocus\"; \"required\": false; \"isSignal\": true; }",
+          "openOnTyping": "{ \"alias\": \"openOnTyping\"; \"required\": false; \"isSignal\": true; }",
+          "options": "{ \"alias\": \"options\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }",
+          "resetActiveOnClose": "{ \"alias\": \"resetActiveOnClose\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }",
+          "values": "{ \"alias\": \"values\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "closed": "\"closed\"",
+          "inputValue": "\"inputValueChange\"",
+          "inputValueChangeCommitted": "\"inputValueChangeCommitted\"",
+          "open": "\"openChange\"",
+          "opened": "\"opened\"",
+          "queryChanged": "\"queryChanged\"",
+          "selected": "\"selected\"",
+          "touched": "\"touched\"",
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\"",
+          "values": "\"valuesChange\"",
+          "valuesChangeCommitted": "\"valuesChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeOption": "readonly _angular_core.Signal<ComboboxOptionDirective<T> & _quartz_headless_core.CollectionItem>",
+        "allowDeselect": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "allowFreeform": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "autocomplete": "readonly _angular_core.InputSignal<ComboboxAutocomplete>",
+        "closed": "readonly _angular_core.OutputEmitterRef<void>",
+        "closeOnEscape": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnFocusOutside": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnOutsidePointer": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnScroll": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnSelect": "readonly _angular_core.InputSignal<boolean>",
+        "closePopup": "(reason?: ComboboxCloseReason) => void",
+        "commitFreeformValue": "() => void",
+        "compareWith": "readonly _angular_core.InputSignal<ComboboxCompareWith<T>>",
+        "config": "readonly _angular_core.InputSignal<Partial<ComboboxConfig<T>>>",
+        "content": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "displayOption": "(value: T) => string",
+        "displayWith": "readonly _angular_core.InputSignal<ComboboxDisplayWith<T>>",
+        "empty": "readonly _angular_core.Signal<boolean>",
+        "endComposition": "(value: string) => void",
+        "filter": "readonly _angular_core.InputSignal<ComboboxFilter<T>>",
+        "filteredOptions": "readonly _angular_core.Signal<readonly T[]>",
+        "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
+        "handleFocus": "() => void",
+        "handleInput": "(value: string, composing?: boolean) => void",
+        "handleKeydown": "(event: KeyboardEvent) => void",
+        "inputValue": "readonly _angular_core.ModelSignal<string>",
+        "inputValueChangeCommitted": "readonly _angular_core.OutputEmitterRef<string>",
+        "isComposing": "readonly _angular_core.Signal<boolean>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "isSelected": "(option: ComboboxOptionDirective<T>) => boolean",
+        "loading": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "matchAnchorWidth": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "multiple": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onInputBlur": "() => void",
+        "open": "readonly _angular_core.ModelSignal<boolean>",
+        "opened": "readonly _angular_core.OutputEmitterRef<void>",
+        "openOnFocus": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "openOnTyping": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "openPopup": "(_reason?: ComboboxOpenReason, options?: { activate?: \"first\" | \"last\"; }) => void",
+        "options": "readonly _angular_core.InputSignal<readonly T[]>",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
+        "queryChanged": "readonly _angular_core.OutputEmitterRef<string>",
+        "register": "(option: ComboboxOptionDirective<T>) => void",
+        "resetActiveOnClose": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "selectActive": "() => void",
+        "selected": "readonly _angular_core.OutputEmitterRef<T>",
+        "selectedValues": "readonly _angular_core.Signal<readonly T[]>",
+        "selectOption": "(option: ComboboxOptionDirective<T>) => void",
+        "setActive": "(id: string | null) => void",
+        "setContentTemplate": "(template: TemplateRef<unknown> | null) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "setInputElement": "(element: HTMLInputElement | null) => void",
+        "setTriggerElement": "(element: HTMLElement | null) => void",
+        "startComposition": "() => void",
+        "status": "readonly _angular_core.Signal<\"loading\" | \"empty\" | \"results\">",
+        "togglePopup": "() => void",
+        "touched": "readonly _angular_core.OutputEmitterRef<void>",
+        "unregister": "(option: ComboboxOptionDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<T>",
+        "values": "readonly _angular_core.ModelSignal<readonly T[]>",
+        "valuesChangeCommitted": "readonly _angular_core.OutputEmitterRef<readonly T[]>",
+        "writeFormValue": "(value: unknown) => void"
+      }
+    },
+    "ComboboxDisplayWith": {
+      "kind": "type",
+      "type": "ComboboxDisplayWith<T>"
+    },
+    "ComboboxFilter": {
+      "kind": "type",
+      "type": "ComboboxFilter<T>"
+    },
+    "ComboboxGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxGroup]",
+        "exportAs": "[\"qzComboboxGroup\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "labelId": "readonly string"
+      }
+    },
+    "ComboboxGroupLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxGroupLabel]",
+        "exportAs": "[\"qzComboboxGroupLabel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "ComboboxInputDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "input[qzComboboxInput]",
+        "exportAs": "[\"qzComboboxInput\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "combobox": "readonly ComboboxDirective<any>",
+        "ngOnDestroy": "() => void",
+        "onCompositionEnd": "(event: CompositionEvent) => void",
+        "onCompositionStart": "() => void",
+        "onFocus": "() => void",
+        "onInput": "(event: Event) => void",
+        "onKeydown": "(event: KeyboardEvent) => void"
+      }
+    },
+    "ComboboxListboxDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxListbox]",
+        "exportAs": "[\"qzComboboxListbox\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "combobox": "readonly ComboboxDirective<any>"
+      }
+    },
+    "ComboboxOpenReason": {
+      "kind": "type",
+      "type": "ComboboxOpenReason"
+    },
+    "ComboboxOptionDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxOption]",
+        "exportAs": "[\"qzComboboxOption\"]",
+        "inputs": {
+          "qzComboboxOption": "{ \"alias\": \"qzComboboxOption\"; \"required\": true; \"isSignal\": true; }",
+          "qzComboboxOptionDisabled": "{ \"alias\": \"qzComboboxOptionDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "qzComboboxOptionLabel": "{ \"alias\": \"qzComboboxOptionLabel\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "active": "readonly _angular_core.Signal<boolean>",
+        "ariaSelected": "readonly _angular_core.Signal<boolean>",
+        "disabled": "readonly () => boolean",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "label": "readonly _angular_core.Signal<any>",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onPointerDown": "(event: MouseEvent) => void",
+        "optionDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "qzComboboxOption": "readonly _angular_core.InputSignal<T>",
+        "qzComboboxOptionDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "qzComboboxOptionLabel": "readonly _angular_core.InputSignal<string>",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "ComboboxSeparatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxSeparator]",
+        "exportAs": "[\"qzComboboxSeparator\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "ComboboxTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzComboboxTrigger]",
+        "exportAs": "[\"qzComboboxTrigger\"]",
+        "inputs": {
+          "ariaLabel": "{ \"alias\": \"ariaLabel\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "ariaLabel": "readonly _angular_core.InputSignal<string>",
+        "combobox": "readonly ComboboxDirective<any>",
+        "ngOnDestroy": "() => void",
+        "onClick": "(event: MouseEvent) => void"
+      }
+    },
+    "createLatestRequest": {
+      "kind": "function",
+      "signatures": ["(): LatestRequest"]
+    },
+    "DateDisabled": {
+      "kind": "type",
+      "type": "DateDisabled"
+    },
+    "DatePickerConfig": {
+      "kind": "interface",
+      "members": {
+        "firstDayOfWeek": "number",
+        "locale": "string"
+      }
+    },
+    "DatePickerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDatePicker]",
+        "exportAs": "[\"qzDatePicker\"]",
+        "inputs": {
+          "date": "{ \"alias\": \"date\"; \"required\": false; \"isSignal\": true; }",
+          "dateDisabled": "{ \"alias\": \"dateDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "dir": "{ \"alias\": \"dir\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "displayedMonth": "{ \"alias\": \"displayedMonth\"; \"required\": false; \"isSignal\": true; }",
+          "firstDayOfWeek": "{ \"alias\": \"firstDayOfWeek\"; \"required\": false; \"isSignal\": true; }",
+          "focusedDate": "{ \"alias\": \"focusedDate\"; \"required\": false; \"isSignal\": true; }",
+          "locale": "{ \"alias\": \"locale\"; \"required\": false; \"isSignal\": true; }",
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "today": "{ \"alias\": \"today\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "date": "\"dateChange\"",
+          "dateChangeCommitted": "\"dateChangeCommitted\"",
+          "displayedMonth": "\"displayedMonthChange\"",
+          "focusedDate": "\"focusedDateChange\""
+        }
+      },
+      "members": {
+        "chooseDate": "(value: Date) => void",
+        "currentToday": "readonly _angular_core.Signal<Date>",
+        "date": "readonly _angular_core.ModelSignal<Date>",
+        "dateChangeCommitted": "readonly _angular_core.OutputEmitterRef<Date>",
+        "dateDisabled": "readonly _angular_core.InputSignal<DateDisabled>",
+        "days": "readonly _angular_core.Signal<{ disabled: boolean; date: Date; day: number; inCurrentMonth: boolean; today: boolean; selected: boolean; rangeStart: boolean; rangeEnd: boolean; inRange: boolean; preview: boolean; }[]>",
+        "dir": "readonly _angular_core.InputSignal<\"ltr\" | \"rtl\">",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "displayedMonth": "readonly _angular_core.ModelSignal<Date>",
+        "firstDayOfWeek": "readonly _angular_core.InputSignal<number>",
+        "focused": "readonly _angular_core.Signal<Date>",
+        "focusedDate": "readonly _angular_core.ModelSignal<Date>",
+        "isDateDisabled": "(value: Date) => boolean",
+        "isDateFocused": "(value: Date) => boolean",
+        "isDateSelected": "(value: Date) => boolean",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isFocused": "(date: Date) => boolean",
+        "locale": "readonly _angular_core.InputSignal<string>",
+        "max": "readonly _angular_core.InputSignal<Date>",
+        "min": "readonly _angular_core.InputSignal<Date>",
+        "month": "readonly _angular_core.Signal<Date>",
+        "monthLabel": "readonly _angular_core.Signal<string>",
+        "moveFocus": "(value: Date) => void",
+        "nextMonth": "() => void",
+        "onDateButtonKeydown": "(date: Date, event: KeyboardEvent) => void",
+        "onFocusOut": "(event: FocusEvent) => void",
+        "previousMonth": "() => void",
+        "selectedDate": "readonly _angular_core.Signal<Date>",
+        "setFormDisabled": "(value: boolean) => void",
+        "setPreview": "(_date: Date | null) => void",
+        "today": "readonly _angular_core.InputSignal<Date>",
+        "weekdays": "readonly _angular_core.Signal<string[]>",
+        "weeks": "readonly _angular_core.Signal<{ disabled: boolean; date: Date; day: number; inCurrentMonth: boolean; today: boolean; selected: boolean; rangeStart: boolean; rangeEnd: boolean; inRange: boolean; preview: boolean; }[][]>",
+        "writeFormValue": "(value: Date | null | undefined) => void"
+      }
+    },
+    "DateRange": {
+      "kind": "interface",
+      "members": {
+        "end": "Date | null",
+        "start": "Date | null"
+      }
+    },
+    "DateRangePickerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDateRangePicker]",
+        "exportAs": "[\"qzDateRangePicker\"]",
+        "inputs": {
+          "dateDisabled": "{ \"alias\": \"dateDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "dir": "{ \"alias\": \"dir\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "displayedMonth": "{ \"alias\": \"displayedMonth\"; \"required\": false; \"isSignal\": true; }",
+          "endDate": "{ \"alias\": \"endDate\"; \"required\": false; \"isSignal\": true; }",
+          "firstDayOfWeek": "{ \"alias\": \"firstDayOfWeek\"; \"required\": false; \"isSignal\": true; }",
+          "focusedDate": "{ \"alias\": \"focusedDate\"; \"required\": false; \"isSignal\": true; }",
+          "locale": "{ \"alias\": \"locale\"; \"required\": false; \"isSignal\": true; }",
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "startDate": "{ \"alias\": \"startDate\"; \"required\": false; \"isSignal\": true; }",
+          "today": "{ \"alias\": \"today\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "displayedMonth": "\"displayedMonthChange\"",
+          "endDate": "\"endDateChange\"",
+          "focusedDate": "\"focusedDateChange\"",
+          "rangeChangeCommitted": "\"rangeChangeCommitted\"",
+          "startDate": "\"startDateChange\""
+        }
+      },
+      "members": {
+        "chooseDate": "(value: Date) => void",
+        "clear": "() => void",
+        "currentToday": "readonly _angular_core.Signal<Date>",
+        "dateDisabled": "readonly _angular_core.InputSignal<DateDisabled>",
+        "days": "readonly _angular_core.Signal<CalendarDay[]>",
+        "dir": "readonly _angular_core.InputSignal<\"ltr\" | \"rtl\">",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "displayedMonth": "readonly _angular_core.ModelSignal<Date>",
+        "end": "readonly _angular_core.Signal<Date>",
+        "endDate": "readonly _angular_core.ModelSignal<Date>",
+        "firstDayOfWeek": "readonly _angular_core.InputSignal<number>",
+        "focused": "readonly _angular_core.Signal<Date>",
+        "focusedDate": "readonly _angular_core.ModelSignal<Date>",
+        "isDateDisabled": "(value: Date) => boolean",
+        "isDateFocused": "(value: Date) => boolean",
+        "isDateSelected": "(value: Date) => boolean",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isFocused": "(date: Date) => boolean",
+        "isInRange": "(value: Date) => boolean",
+        "isSelectingEnd": "readonly _angular_core.Signal<boolean>",
+        "locale": "readonly _angular_core.InputSignal<string>",
+        "max": "readonly _angular_core.InputSignal<Date>",
+        "min": "readonly _angular_core.InputSignal<Date>",
+        "month": "readonly _angular_core.Signal<Date>",
+        "monthLabel": "readonly _angular_core.Signal<string>",
+        "moveFocus": "(value: Date) => void",
+        "nextMonth": "() => void",
+        "onDateButtonKeydown": "(date: Date, event: KeyboardEvent) => void",
+        "previewDate": "readonly _angular_core.WritableSignal<Date>",
+        "previousMonth": "() => void",
+        "range": "readonly _angular_core.Signal<DateRange>",
+        "rangeChangeCommitted": "readonly _angular_core.OutputEmitterRef<DateRange>",
+        "setFormDisabled": "(value: boolean) => void",
+        "setPreview": "(value: Date | null) => void",
+        "start": "readonly _angular_core.Signal<Date>",
+        "startDate": "readonly _angular_core.ModelSignal<Date>",
+        "today": "readonly _angular_core.InputSignal<Date>",
+        "weekdays": "readonly _angular_core.Signal<string[]>",
+        "weeks": "readonly _angular_core.Signal<CalendarDay[][]>",
+        "writeFormValue": "(value: DateRange | null | undefined) => void"
+      }
+    },
+    "DEFAULT_ACCORDION_CONFIG": {
+      "kind": "const",
+      "type": "AccordionConfig<unknown>"
+    },
+    "DEFAULT_COMBOBOX_CONFIG": {
+      "kind": "const",
+      "type": "ComboboxConfig<unknown>"
+    },
+    "DEFAULT_DATE_PICKER_CONFIG": {
+      "kind": "const",
+      "type": "DatePickerConfig"
+    },
+    "DEFAULT_DIALOG_CONFIG": {
+      "kind": "const",
+      "type": "DialogConfig"
+    },
+    "DEFAULT_DRAWER_CONFIG": {
+      "kind": "const",
+      "type": "DrawerConfig"
+    },
+    "DEFAULT_LISTBOX_CONFIG": {
+      "kind": "const",
+      "type": "ListboxConfig"
+    },
+    "DEFAULT_MENU_CONFIG": {
+      "kind": "const",
+      "type": "MenuConfig"
+    },
+    "DEFAULT_NAVBAR_CONFIG": {
+      "kind": "const",
+      "type": "NavbarConfig"
+    },
+    "DEFAULT_NAVIGATION_MENU_CONFIG": {
+      "kind": "const",
+      "type": "NavigationMenuConfig"
+    },
+    "DEFAULT_PAGINATION_CONFIG": {
+      "kind": "const",
+      "type": "PaginationConfig"
+    },
+    "DEFAULT_POPOVER_CONFIG": {
+      "kind": "const",
+      "type": "PopoverConfig"
+    },
+    "DEFAULT_RADIO_GROUP_CONFIG": {
+      "kind": "const",
+      "type": "RadioGroupConfig<unknown>"
+    },
+    "DEFAULT_RANGE_SLIDER_CONFIG": {
+      "kind": "const",
+      "type": "RangeSliderConfig"
+    },
+    "DEFAULT_SELECT_CONFIG": {
+      "kind": "const",
+      "type": "SelectConfig<unknown>"
+    },
+    "DEFAULT_SIDEBAR_CONFIG": {
+      "kind": "const",
+      "type": "SidebarConfig"
+    },
+    "DEFAULT_SLIDER_CONFIG": {
+      "kind": "const",
+      "type": "SliderConfig"
+    },
+    "DEFAULT_STEPPER_CONFIG": {
+      "kind": "const",
+      "type": "StepperConfig<unknown>"
+    },
+    "DEFAULT_TABS_CONFIG": {
+      "kind": "const",
+      "type": "TabsConfig<unknown>"
+    },
+    "DEFAULT_TOAST_OPTIONS": {
+      "kind": "const",
+      "type": "Required<Omit<ToastOptions, \"title\" | \"message\" | \"content\" | \"actions\">>"
+    },
+    "DEFAULT_TOGGLE_GROUP_CONFIG": {
+      "kind": "const",
+      "type": "ToggleGroupConfig<unknown>"
+    },
+    "DEFAULT_TOOLBAR_CONFIG": {
+      "kind": "const",
+      "type": "ToolbarConfig"
+    },
+    "DEFAULT_TOOLTIP_CONFIG": {
+      "kind": "const",
+      "type": "TooltipConfig"
+    },
+    "DEFAULT_TREE_CONFIG": {
+      "kind": "const",
+      "type": "TreeConfig"
+    },
+    "DialogConfig": {
+      "kind": "interface",
+      "members": {
+        "ariaDescribedBy": "string | undefined",
+        "ariaLabel": "string | undefined",
+        "ariaLabelledBy": "string | undefined",
+        "backdrop": "boolean",
+        "backdropClass": "string | string[] | undefined",
+        "closeOnBackdropClick": "boolean",
+        "closeOnEscape": "boolean",
+        "height": "string | undefined",
+        "panelAttributes": "Record<string, string> | undefined",
+        "panelClass": "string | string[] | undefined",
+        "position": "DialogPosition",
+        "presence": "boolean | undefined",
+        "width": "string | undefined"
+      }
+    },
+    "DialogPosition": {
+      "kind": "type",
+      "type": "DialogPosition"
+    },
+    "DialogRef": {
+      "kind": "class",
+      "members": {
+        "close": "() => void",
+        "closed$": "readonly rxjs.Observable<void>",
+        "state": "readonly _angular_core.Signal<DialogState>"
+      }
+    },
+    "DialogService": {
+      "kind": "class",
+      "members": {
+        "open": "(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, config?: Partial<DialogConfig>) => DialogRef"
+      }
+    },
+    "DialogState": {
+      "kind": "type",
+      "type": "DialogState"
+    },
+    "DrawerConfig": {
+      "kind": "interface",
+      "members": {
+        "ariaDescribedBy": "string | undefined",
+        "ariaLabel": "string | undefined",
+        "ariaLabelledBy": "string | undefined",
+        "backdrop": "boolean",
+        "backdropClass": "string | string[] | undefined",
+        "closeOnBackdropClick": "boolean",
+        "closeOnEscape": "boolean",
+        "height": "string | undefined",
+        "panelAttributes": "Record<string, string> | undefined",
+        "panelClass": "string | string[] | undefined",
+        "presence": "boolean | undefined",
+        "side": "DrawerSide",
+        "width": "string | undefined"
+      }
+    },
+    "DrawerPhysicalSide": {
+      "kind": "type",
+      "type": "DrawerPhysicalSide"
+    },
+    "DrawerService": {
+      "kind": "class",
+      "members": {
+        "open": "(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, config?: Partial<DrawerConfig>) => DialogRef"
+      }
+    },
+    "DrawerSide": {
+      "kind": "type",
+      "type": "DrawerSide"
+    },
+    "FileDropzoneDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFileDropzone]",
+        "exportAs": "[\"qzFileDropzone\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "dragActive": "readonly _angular_core.WritableSignal<boolean>",
+        "fileUpload": "readonly _angular_core.Signal<FileUploadDirective>",
+        "onDragEnter": "(event: DragEvent) => void",
+        "onDragLeave": "(event: DragEvent) => void",
+        "onDragOver": "(event: DragEvent) => void",
+        "onDrop": "(event: DragEvent) => void",
+        "openPicker": "() => void"
+      }
+    },
+    "FileUploadDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "input[type=\"file\"][qzFileUpload]",
+        "exportAs": "[\"qzFileUpload\"]",
+        "inputs": {
+          "accept": "{ \"alias\": \"accept\"; \"required\": false; \"isSignal\": true; }",
+          "directory": "{ \"alias\": \"directory\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "cancelled": "\"cancelled\"",
+          "filesChange": "\"filesChange\"",
+          "rejected": "\"rejected\""
+        }
+      },
+      "members": {
+        "accept": "readonly _angular_core.InputSignal<string>",
+        "acceptDroppedFiles": "(files: readonly File[]) => void",
+        "cancelled": "readonly _angular_core.OutputEmitterRef<void>",
+        "directory": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "dragActive": "readonly _angular_core.WritableSignal<boolean>",
+        "files": "readonly _angular_core.WritableSignal<readonly File[]>",
+        "filesChange": "readonly _angular_core.OutputEmitterRef<readonly File[]>",
+        "isDisabled": "() => boolean",
+        "onChange": "() => void",
+        "onDragEnter": "() => void",
+        "onDragLeave": "(event: DragEvent) => void",
+        "onDragOver": "(event: DragEvent) => void",
+        "onDrop": "(event: DragEvent) => void",
+        "openPicker": "() => void",
+        "rejected": "readonly _angular_core.OutputEmitterRef<readonly RejectedFile[]>"
+      }
+    },
+    "FormFieldControlDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormFieldControl]",
+        "exportAs": null,
+        "inputs": {
+          "id": "{ \"alias\": \"id\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "field": "readonly FormFieldDirective",
+        "id": "readonly _angular_core.InputSignal<string>"
+      }
+    },
+    "FormFieldDescriptionDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormFieldDescription]",
+        "exportAs": null,
+        "inputs": {
+          "id": "{ \"alias\": \"id\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "id": "readonly _angular_core.InputSignal<string>",
+        "resolvedId": "readonly _angular_core.Signal<string>"
+      }
+    },
+    "FormFieldDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormField]",
+        "exportAs": "[\"qzFormField\"]",
+        "inputs": {
+          "dirty": "{ \"alias\": \"dirty\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "id": "{ \"alias\": \"id\"; \"required\": true; \"isSignal\": true; }",
+          "invalid": "{ \"alias\": \"invalid\"; \"required\": false; \"isSignal\": true; }",
+          "required": "{ \"alias\": \"required\"; \"required\": false; \"isSignal\": true; }",
+          "touched": "{ \"alias\": \"touched\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "describedBy": "readonly _angular_core.Signal<string>",
+        "descriptionIds": "readonly _angular_core.Signal<any[]>",
+        "descriptions": "readonly _angular_core.Signal<readonly any[]>",
+        "dirty": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "errors": "readonly _angular_core.Signal<readonly any[]>",
+        "id": "readonly _angular_core.InputSignal<string>",
+        "invalid": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDirty": "readonly _angular_core.Signal<boolean>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isInvalid": "readonly _angular_core.Signal<boolean>",
+        "isPending": "readonly _angular_core.Signal<boolean>",
+        "isTouched": "readonly _angular_core.Signal<boolean>",
+        "labelIds": "readonly _angular_core.Signal<any[]>",
+        "labelledBy": "readonly _angular_core.Signal<string>",
+        "labels": "readonly _angular_core.Signal<readonly any[]>",
+        "required": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "setFormState": "(state: FormFieldControlState | null) => void",
+        "touched": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>"
+      }
+    },
+    "FormFieldErrorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormFieldError]",
+        "exportAs": null,
+        "inputs": {
+          "id": "{ \"alias\": \"id\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "id": "readonly _angular_core.InputSignal<string>",
+        "invalid": "readonly _angular_core.Signal<boolean>",
+        "resolvedId": "readonly _angular_core.Signal<string>"
+      }
+    },
+    "FormFieldLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzFormFieldLabel]",
+        "exportAs": null,
+        "inputs": {
+          "id": "{ \"alias\": \"id\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "id": "readonly _angular_core.InputSignal<string>",
+        "resolvedId": "readonly _angular_core.Signal<string>"
+      }
+    },
+    "InputOtpComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-input-otp",
+        "exportAs": "[\"qzInputOtp\"]",
+        "inputs": {
+          "ariaLabel": "{ \"alias\": \"ariaLabel\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "inputMode": "{ \"alias\": \"inputMode\"; \"required\": false; \"isSignal\": true; }",
+          "labelledBy": "{ \"alias\": \"labelledBy\"; \"required\": false; \"isSignal\": true; }",
+          "length": "{ \"alias\": \"length\"; \"required\": false; \"isSignal\": true; }",
+          "pattern": "{ \"alias\": \"pattern\"; \"required\": false; \"isSignal\": true; }",
+          "readonly": "{ \"alias\": \"readonly\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "completed": "\"completed\"",
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeSlot": "readonly _angular_core.WritableSignal<number>",
+        "ariaLabel": "readonly _angular_core.InputSignal<string>",
+        "completed": "readonly _angular_core.OutputEmitterRef<string>",
+        "composing": "readonly _angular_core.WritableSignal<boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "inputMode": "readonly _angular_core.InputSignal<\"search\" | \"text\" | \"email\" | \"tel\" | \"numeric\" | \"decimal\" | \"url\">",
+        "isComplete": "readonly _angular_core.Signal<boolean>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "labelledBy": "readonly _angular_core.InputSignal<string>",
+        "length": "readonly _angular_core.InputSignal<number>",
+        "onCompositionEnd": "(event: CompositionEvent) => void",
+        "onInput": "(event: Event) => void",
+        "onPaste": "(event: ClipboardEvent) => void",
+        "pattern": "readonly _angular_core.InputSignal<RegExp>",
+        "readonly": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "slots": "readonly _angular_core.Signal<InputOtpSlot[]>",
+        "updateActive": "(event: Event) => void",
+        "value": "readonly _angular_core.ModelSignal<string>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<string>"
+      }
+    },
+    "InputOtpSlot": {
+      "kind": "interface",
+      "members": {
+        "active": "boolean",
+        "filled": "boolean",
+        "index": "number",
+        "value": "string"
+      }
+    },
+    "LatestRequest": {
+      "kind": "interface",
+      "members": {
+        "cancel": "() => void",
+        "run": "<R>(task: (signal: AbortSignal) => Promise<R>) => Promise<R | undefined>"
+      }
+    },
+    "ListboxConfig": {
+      "kind": "interface",
+      "members": {
+        "typeaheadTimeoutMs": "number"
+      }
+    },
+    "ListboxDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListbox]",
+        "exportAs": "[\"qzListbox\"]",
+        "inputs": {
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "multiple": "{ \"alias\": \"multiple\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeOption": "readonly _angular_core.Signal<ListboxOptionDirective<T>>",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "config": "readonly _angular_core.InputSignal<Partial<ListboxConfig>>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isSelected": "(option: ListboxOptionDirective<T>) => boolean",
+        "multiple": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "orientation": "readonly _angular_core.InputSignal<ListboxOrientation>",
+        "register": "(option: ListboxOptionDirective<T>) => void",
+        "select": "(option: ListboxOptionDirective<T>) => void",
+        "setActive": "(option: ListboxOptionDirective<T>) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "unregister": "(option: ListboxOptionDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T | T[]>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<T | T[]>"
+      }
+    },
+    "ListboxGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListboxGroup]",
+        "exportAs": "[\"qzListboxGroup\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "labelId": "readonly string"
+      }
+    },
+    "ListboxGroupLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListboxGroupLabel]",
+        "exportAs": "[\"qzListboxGroupLabel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "ListboxOptionDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListboxOption]",
+        "exportAs": "[\"qzListboxOption\"]",
+        "inputs": {
+          "qzListboxOption": "{ \"alias\": \"qzListboxOption\"; \"required\": true; \"isSignal\": true; }",
+          "qzListboxOptionDisabled": "{ \"alias\": \"qzListboxOptionDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "active": "readonly _angular_core.Signal<boolean>",
+        "disabled": "readonly () => boolean",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "label": "readonly _angular_core.Signal<any>",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "() => void",
+        "optionDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "qzListboxOption": "readonly _angular_core.InputSignal<T>",
+        "qzListboxOptionDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "ListboxOrientation": {
+      "kind": "type",
+      "type": "ListboxOrientation"
+    },
+    "ListboxSeparatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzListboxSeparator]",
+        "exportAs": "[\"qzListboxSeparator\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "ListboxService": {
+      "kind": "class",
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeOption": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>>",
+        "configure": "(options: { orientation: \"vertical\" | \"horizontal\"; typeaheadTimeoutMs: number; }) => void",
+        "destroy": "() => void",
+        "enabledOptions": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>[]>",
+        "first": "() => void",
+        "last": "() => void",
+        "next": "() => void",
+        "options": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>[]>",
+        "previous": "() => void",
+        "register": "(option: ListboxOptionDirective<unknown>) => void",
+        "setActive": "(id: string | null) => void",
+        "typeahead": "(character: string) => void",
+        "unregister": "(option: ListboxOptionDirective<unknown>) => void"
+      }
+    },
+    "MenuCheckboxItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuCheckboxItem]",
+        "exportAs": "[\"qzMenuCheckboxItem\"]",
+        "inputs": {
+          "checked": "{ \"alias\": \"checked\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnSelect": "{ \"alias\": \"closeOnSelect\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "checked": "\"checkedChange\"",
+          "selected": "\"selected\""
+        }
+      },
+      "members": {
+        "activate": "() => void",
+        "checked": "readonly _angular_core.ModelSignal<boolean>",
+        "closeOnSelect": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "highlighted": "readonly _angular_core.Signal<boolean>",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "selected": "readonly _angular_core.OutputEmitterRef<void>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+      }
+    },
+    "MenuCollectionEntry": {
+      "kind": "interface",
+      "members": {
+        "activate": "() => void",
+        "closeSubmenu": "((restoreFocus?: boolean) => void) | undefined",
+        "disabled": "boolean | (() => boolean) | undefined",
+        "element": "HTMLElement | (() => HTMLElement | null | undefined) | null | undefined",
+        "hasSubmenu": "(() => boolean) | undefined",
+        "id": "string",
+        "label": "string | (() => string) | undefined",
+        "openSubmenu": "((options?: { focusFirst?: boolean; }) => void) | undefined"
+      }
+    },
+    "MenuConfig": {
+      "kind": "interface",
+      "members": {
+        "submenuOpenDelayMs": "number",
+        "typeaheadTimeoutMs": "number",
+        "wrap": "boolean"
+      }
+    },
+    "MenuDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenu]",
+        "exportAs": "[\"qzMenu\"]",
+        "inputs": {
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "config": "readonly _angular_core.InputSignal<Partial<MenuConfig>>",
+        "ngOnDestroy": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "service": "readonly MenuService"
+      }
+    },
+    "MenuGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuGroup]",
+        "exportAs": "[\"qzMenuGroup\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "registerLabel": "(id: string) => void",
+        "unregisterLabel": "(id: string) => void"
+      }
+    },
+    "MenuItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuItem]",
+        "exportAs": "[\"qzMenuItem\"]",
+        "inputs": {
+          "closeOnSelect": "{ \"alias\": \"closeOnSelect\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "submenu": "{ \"alias\": \"submenu\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "selected": "\"selected\""
+        }
+      },
+      "members": {
+        "activate": "() => void",
+        "closeOnSelect": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeSubmenu": "(restoreFocus?: boolean) => void",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "hasSubmenu": "() => boolean",
+        "highlighted": "readonly _angular_core.Signal<boolean>",
+        "id": "readonly string",
+        "isSubmenuOpen": "readonly _angular_core.Signal<boolean>",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "onPointerEnter": "() => void",
+        "onPointerLeave": "() => void",
+        "openSubmenu": "(options?: { focusFirst?: boolean; }) => void",
+        "selected": "readonly _angular_core.OutputEmitterRef<void>",
+        "submenu": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "submenuPanelId": "readonly _angular_core.Signal<string>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+      }
+    },
+    "MenuLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuLabel]",
+        "exportAs": "[\"qzMenuLabel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "id": "readonly string"
+      }
+    },
+    "MenuRadioGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuRadioGroup]",
+        "exportAs": "[\"qzMenuRadioGroup\"]",
+        "inputs": {
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\""
+        }
+      },
+      "members": {
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "isChecked": "(value: T) => boolean",
+        "registerLabel": "(id: string) => void",
+        "select": "(value: T) => void",
+        "unregisterLabel": "(id: string) => void",
+        "value": "readonly _angular_core.ModelSignal<T>"
+      }
+    },
+    "MenuRadioItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuRadioItem]",
+        "exportAs": "[\"qzMenuRadioItem\"]",
+        "inputs": {
+          "closeOnSelect": "{ \"alias\": \"closeOnSelect\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "selected": "\"selected\""
+        }
+      },
+      "members": {
+        "activate": "() => void",
+        "checked": "readonly _angular_core.Signal<boolean>",
+        "closeOnSelect": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "highlighted": "readonly _angular_core.Signal<boolean>",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "selected": "readonly _angular_core.OutputEmitterRef<void>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "MenuSeparatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuSeparator]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "MenuService": {
+      "kind": "class",
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeItem": "readonly _angular_core.Signal<MenuCollectionEntry>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "closeAll": "(restoreFocus?: boolean) => void",
+        "closeOpenSubmenu": "() => void",
+        "config": "readonly _angular_core.Signal<MenuConfig>",
+        "configure": "(config: Partial<MenuConfig>) => void",
+        "destroy": "() => void",
+        "focusActive": "() => void",
+        "focusFirst": "() => void",
+        "focusLast": "() => void",
+        "handleKeydown": "(event: KeyboardEvent, host: HTMLElement) => void",
+        "isRoot": "readonly boolean",
+        "items": "readonly _angular_core.Signal<MenuCollectionEntry[]>",
+        "ngOnDestroy": "() => void",
+        "openSubmenuId": "readonly _angular_core.Signal<string>",
+        "register": "(item: MenuCollectionEntry) => void",
+        "registerLevelClose": "(fn: (restoreFocus: boolean) => void) => void",
+        "registerPanel": "(el: HTMLElement) => void",
+        "registerRootClose": "(fn: (restoreFocus: boolean) => void) => void",
+        "requestOpenSubmenu": "(ownerId: string, open: () => void, close: () => void) => void",
+        "root": "readonly MenuService",
+        "setActive": "(id: string | null, options?: { focus?: boolean; }) => void",
+        "unregister": "(item: MenuCollectionEntry) => void",
+        "unregisterLevelClose": "(fn: (restoreFocus: boolean) => void) => void",
+        "unregisterPanel": "(el: HTMLElement) => void",
+        "unregisterRootClose": "(fn: (restoreFocus: boolean) => void) => void"
+      }
+    },
+    "MenuTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMenuTrigger]",
+        "exportAs": "[\"qzMenuTrigger\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "matchAnchorWidth": "{ \"alias\": \"matchAnchorWidth\"; \"required\": false; \"isSignal\": true; }",
+          "menu": "{ \"alias\": \"menu\"; \"required\": true; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "closed": "\"closed\"",
+          "opened": "\"opened\""
+        }
+      },
+      "members": {
+        "close": "(restoreFocus?: boolean) => void",
+        "closed": "readonly _angular_core.OutputEmitterRef<void>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "matchAnchorWidth": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "menu": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "open": "(options?: { focus?: \"first\" | \"last\"; }) => void",
+        "opened": "readonly _angular_core.OutputEmitterRef<void>",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
+        "toggle": "() => void"
+      }
+    },
+    "MeterDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMeter]",
+        "exportAs": "[\"qzMeter\"]",
+        "inputs": {
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }",
+          "valueText": "{ \"alias\": \"valueText\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "bounds": "readonly _angular_core.Signal<{ min: number; max: number; }>",
+        "max": "readonly _angular_core.InputSignal<number>",
+        "min": "readonly _angular_core.InputSignal<number>",
+        "normalizedValue": "readonly _angular_core.Signal<number>",
+        "percentage": "readonly _angular_core.Signal<number>",
+        "value": "readonly _angular_core.InputSignal<number>",
+        "valueText": "readonly _angular_core.InputSignal<string>"
+      }
+    },
+    "MeterIndicatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMeterIndicator]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "MeterTrackDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzMeterTrack]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "NavbarBreakpoint": {
+      "kind": "type",
+      "type": "NavbarBreakpoint"
+    },
+    "NavbarConfig": {
+      "kind": "interface",
+      "members": {
+        "breakpoint": "NavbarBreakpoint",
+        "closeMenuOnDesktop": "boolean",
+        "directionThreshold": "number",
+        "reveal": "NavbarRevealMode",
+        "scrollThreshold": "number",
+        "sticky": "boolean",
+        "top": "string"
+      }
+    },
+    "NavbarDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavbar]",
+        "exportAs": "[\"qzNavbar\"]",
+        "inputs": {
+          "breakpoint": "{ \"alias\": \"breakpoint\"; \"required\": false; \"isSignal\": true; }",
+          "closeMenuOnDesktop": "{ \"alias\": \"closeMenuOnDesktop\"; \"required\": false; \"isSignal\": true; }",
+          "directionThreshold": "{ \"alias\": \"directionThreshold\"; \"required\": false; \"isSignal\": true; }",
+          "menuOpen": "{ \"alias\": \"menuOpen\"; \"required\": false; \"isSignal\": true; }",
+          "reveal": "{ \"alias\": \"reveal\"; \"required\": false; \"isSignal\": true; }",
+          "scrollLock": "{ \"alias\": \"scrollLock\"; \"required\": false; \"isSignal\": true; }",
+          "scrollThreshold": "{ \"alias\": \"scrollThreshold\"; \"required\": false; \"isSignal\": true; }",
+          "sticky": "{ \"alias\": \"sticky\"; \"required\": false; \"isSignal\": true; }",
+          "top": "{ \"alias\": \"top\"; \"required\": false; \"isSignal\": true; }",
+          "trapFocus": "{ \"alias\": \"trapFocus\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "menuOpen": "\"menuOpenChange\""
+        }
+      },
+      "members": {
+        "breakpoint": "readonly _angular_core.InputSignal<NavbarBreakpoint>",
+        "closeMenu": "() => void",
+        "closeMenuOnDesktop": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "directionThreshold": "readonly _angular_core.InputSignal<number>",
+        "handleMenuKeydown": "(event: KeyboardEvent) => void",
+        "isDesktop": "readonly _angular_core.Signal<boolean>",
+        "menuId": "readonly _angular_core.Signal<string>",
+        "menuOpen": "readonly _angular_core.ModelSignal<boolean>",
+        "ngOnDestroy": "() => void",
+        "openMenu": "() => void",
+        "registerMenu": "(menu: NavbarMenuDirective) => void",
+        "registerTrigger": "(trigger: NavbarTriggerDirective) => void",
+        "reveal": "readonly _angular_core.InputSignal<NavbarRevealMode>",
+        "scrollDirection": "readonly _angular_core.WritableSignal<NavbarScrollDirection>",
+        "scrolled": "readonly _angular_core.WritableSignal<boolean>",
+        "scrollLock": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "scrollThreshold": "readonly _angular_core.InputSignal<number>",
+        "sticky": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "stuck": "readonly _angular_core.Signal<boolean>",
+        "toggleMenu": "() => void",
+        "top": "readonly _angular_core.InputSignal<string>",
+        "trapFocus": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "unregisterMenu": "(menu: NavbarMenuDirective) => void",
+        "unregisterTrigger": "(trigger: NavbarTriggerDirective) => void",
+        "visible": "readonly _angular_core.Signal<boolean>"
+      }
+    },
+    "NavbarMenuDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavbarMenu]",
+        "exportAs": "[\"qzNavbarMenu\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "element": "() => HTMLElement",
+        "id": "readonly string",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void"
+      }
+    },
+    "NavbarRevealMode": {
+      "kind": "type",
+      "type": "NavbarRevealMode"
+    },
+    "NavbarScrollDirection": {
+      "kind": "type",
+      "type": "NavbarScrollDirection"
+    },
+    "NavbarTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavbarTrigger]",
+        "exportAs": "[\"qzNavbarTrigger\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzNavbarTriggerDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "() => HTMLElement",
+        "menuId": "readonly _angular_core.Signal<string>",
+        "ngOnDestroy": "() => void",
+        "setControlledMenuId": "(id: string | null) => void",
+        "toggle": "(event: MouseEvent) => void"
+      }
+    },
+    "NavigationMenuConfig": {
+      "kind": "interface",
+      "members": {
+        "flip": "boolean",
+        "flipAxis": "_quartz_headless_core.OverlayFlipAxis",
+        "hideDelay": "number",
+        "offset": "number",
+        "orientation": "NavigationMenuOrientation",
+        "placement": "_quartz_headless_core.OverlayPlacement",
+        "showDelay": "number"
+      }
+    },
+    "NavigationMenuContentDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "ng-template[qzNavigationMenuContent]",
+        "exportAs": "[\"qzNavigationMenuContent\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnDestroy": "() => void"
+      }
+    },
+    "NavigationMenuDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavigationMenu]",
+        "exportAs": "[\"qzNavigationMenu\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "hideDelay": "{ \"alias\": \"hideDelay\"; \"required\": false; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }",
+          "showDelay": "{ \"alias\": \"showDelay\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\""
+        }
+      },
+      "members": {
+        "activeItem": "readonly _angular_core.WritableSignal<NavigationMenuItemDirective>",
+        "cancelTimers": "() => void",
+        "close": "(restoreFocus: boolean) => void",
+        "contentChanged": "(item: NavigationMenuItemDirective, available: boolean) => void",
+        "controlsId": "(item: NavigationMenuItemDirective) => string | null",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
+        "focusTrigger": "(item: NavigationMenuItemDirective) => void",
+        "handleTriggerKeydown": "(item: NavigationMenuItemDirective, event: KeyboardEvent) => void",
+        "hideDelay": "readonly _angular_core.InputSignal<number>",
+        "isActive": "(item: NavigationMenuItemDirective) => boolean",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onPanelPointerEnter": "() => void",
+        "onPanelPointerLeave": "() => void",
+        "open": "(item: NavigationMenuItemDirective, focusPanel?: boolean) => void",
+        "orientation": "readonly _angular_core.InputSignal<NavigationMenuOrientation>",
+        "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
+        "refreshOrder": "() => void",
+        "registerItem": "(item: NavigationMenuItemDirective) => void",
+        "scheduleHide": "() => void",
+        "scheduleShow": "(item: NavigationMenuItemDirective) => void",
+        "setTrigger": "(item: NavigationMenuItemDirective, trigger: NavigationMenuTriggerDirective | null) => void",
+        "showDelay": "readonly _angular_core.InputSignal<number>",
+        "toggle": "(item: NavigationMenuItemDirective) => void",
+        "unregisterItem": "(item: NavigationMenuItemDirective) => void",
+        "value": "readonly _angular_core.ModelSignal<string>"
+      }
+    },
+    "NavigationMenuItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavigationMenuItem]",
+        "exportAs": "[\"qzNavigationMenuItem\"]",
+        "inputs": {
+          "qzNavigationMenuItem": "{ \"alias\": \"qzNavigationMenuItem\"; \"required\": true; \"isSignal\": true; }",
+          "qzNavigationMenuItemDisabled": "{ \"alias\": \"qzNavigationMenuItemDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "content": "() => TemplateRef<unknown> | null",
+        "disabled": "readonly () => boolean",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "itemDisabled": "readonly _angular_core.Signal<boolean>",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "qzNavigationMenuItem": "readonly _angular_core.InputSignal<string>",
+        "qzNavigationMenuItemDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "setContent": "(template: TemplateRef<unknown> | null) => void",
+        "setTrigger": "(trigger: NavigationMenuTriggerDirective | null) => void",
+        "trigger": "() => NavigationMenuTriggerDirective | null",
+        "value": "() => string"
+      }
+    },
+    "NavigationMenuLinkDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavigationMenuLink]",
+        "exportAs": "[\"qzNavigationMenuLink\"]",
+        "inputs": {
+          "current": "{ \"alias\": \"qzNavigationMenuLinkCurrent\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "current": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "onClick": "() => void"
+      }
+    },
+    "NavigationMenuListDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzNavigationMenuList]",
+        "exportAs": "[\"qzNavigationMenuList\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "NavigationMenuOrientation": {
+      "kind": "type",
+      "type": "NavigationMenuOrientation"
+    },
+    "NavigationMenuTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzNavigationMenuTrigger]",
+        "exportAs": "[\"qzNavigationMenuTrigger\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "element": "readonly () => any",
+        "item": "readonly NavigationMenuItemDirective",
+        "ngOnDestroy": "() => void",
+        "onClick": "() => void",
+        "onFocus": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "onPointerEnter": "(event: PointerEvent) => void",
+        "onPointerLeave": "() => void",
+        "viewContainer": "readonly () => ViewContainerRef"
+      }
+    },
+    "PaginationConfig": {
+      "kind": "interface",
+      "members": {
+        "page": "number",
+        "pageCount": "number"
+      }
+    },
+    "PaginationDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzPagination]",
+        "exportAs": "[\"qzPagination\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "page": "{ \"alias\": \"page\"; \"required\": false; \"isSignal\": true; }",
+          "pageCount": "{ \"alias\": \"pageCount\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "page": "\"pageChange\""
+        }
+      },
+      "members": {
+        "controlDisabled": "(action: \"first\" | \"previous\" | \"next\" | \"last\") => boolean",
+        "currentPage": "readonly _angular_core.Signal<number>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "first": "(event?: Event) => void",
+        "isCurrent": "(page: number) => boolean",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "last": "(event?: Event) => void",
+        "next": "(event?: Event) => void",
+        "ngOnDestroy": "() => void",
+        "page": "readonly _angular_core.ModelSignal<number>",
+        "pageCount": "readonly _angular_core.InputSignalWithTransform<number, number>",
+        "pageDisabled": "() => boolean",
+        "previous": "(event?: Event) => void",
+        "setPage": "(page: number, action?: \"first\" | \"previous\" | \"next\" | \"last\", event?: Event) => void"
+      }
+    },
+    "PaginationFirstDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzPaginationFirst]",
+        "exportAs": "[\"qzPaginationFirst\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "PaginationLastDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzPaginationLast]",
+        "exportAs": "[\"qzPaginationLast\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "PaginationNextDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzPaginationNext]",
+        "exportAs": "[\"qzPaginationNext\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "PaginationPageDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzPaginationPage]",
+        "exportAs": "[\"qzPaginationPage\"]",
+        "inputs": {
+          "page": "{ \"alias\": \"qzPaginationPage\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "page": "readonly _angular_core.InputSignal<number>",
+        "pageLabel": "() => string"
+      }
+    },
+    "PaginationPreviousDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzPaginationPrevious]",
+        "exportAs": "[\"qzPaginationPrevious\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "PopoverConfig": {
+      "kind": "interface",
+      "members": {
+        "arrowPadding": "number | undefined",
+        "arrowSize": "number | undefined",
+        "autoFocus": "boolean",
+        "closeOnClickOutside": "boolean",
+        "closeOnEscape": "boolean",
+        "flip": "boolean",
+        "flipAxis": "_quartz_headless_core.OverlayFlipAxis",
+        "matchAnchorWidth": "boolean",
+        "offset": "number",
+        "placement": "_quartz_headless_core.OverlayPlacement"
+      }
+    },
+    "PopoverContext": {
+      "kind": "interface",
+      "members": {
+        "arrow": "readonly _angular_core.Signal<_quartz_headless_core.OverlayArrowGeometry | null>",
+        "open": "readonly _angular_core.Signal<boolean>",
+        "placement": "readonly _angular_core.Signal<_quartz_headless_core.OverlayPlacement | null>"
+      }
+    },
+    "PopoverDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzPopover]",
+        "exportAs": "[\"qzPopover\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "PopoverTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzPopoverTrigger]",
+        "exportAs": "[\"qzPopoverTrigger\"]",
+        "inputs": {
+          "arrowPadding": "{ \"alias\": \"arrowPadding\"; \"required\": false; \"isSignal\": true; }",
+          "arrowSize": "{ \"alias\": \"arrowSize\"; \"required\": false; \"isSignal\": true; }",
+          "autoFocus": "{ \"alias\": \"autoFocus\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnClickOutside": "{ \"alias\": \"closeOnClickOutside\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnEscape": "{ \"alias\": \"closeOnEscape\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "matchAnchorWidth": "{ \"alias\": \"matchAnchorWidth\"; \"required\": false; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "openState": "{ \"alias\": \"open\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }",
+          "popover": "{ \"alias\": \"popover\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "closed": "\"closed\"",
+          "opened": "\"opened\"",
+          "openState": "\"openChange\""
+        }
+      },
+      "members": {
+        "arrow": "readonly _angular_core.Signal<_quartz_headless_core.OverlayArrowGeometry | null>",
+        "arrowPadding": "readonly _angular_core.InputSignal<number>",
+        "arrowSize": "readonly _angular_core.InputSignal<number | undefined>",
+        "autoFocus": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "close": "(restoreFocus?: boolean) => void",
+        "closed": "readonly _angular_core.OutputEmitterRef<void>",
+        "closeOnClickOutside": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnEscape": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "context": "readonly PopoverContext",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "matchAnchorWidth": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "open": "() => void",
+        "opened": "readonly _angular_core.OutputEmitterRef<void>",
+        "openState": "readonly _angular_core.ModelSignal<boolean>",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
+        "popover": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "resolvedPlacement": "readonly _angular_core.Signal<_quartz_headless_core.OverlayPlacement | null>",
+        "toggle": "() => void"
+      }
+    },
+    "ProgressDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzProgress]",
+        "exportAs": "[\"qzProgress\"]",
+        "inputs": {
+          "ariaValueText": "{ \"alias\": \"ariaValueText\"; \"required\": false; \"isSignal\": true; }",
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "ariaValueText": "readonly _angular_core.InputSignal<string>",
+        "bounds": "readonly _angular_core.Signal<{ min: number; max: number; }>",
+        "indeterminate": "readonly _angular_core.Signal<boolean>",
+        "max": "readonly _angular_core.InputSignal<number>",
+        "min": "readonly _angular_core.InputSignal<number>",
+        "normalizedValue": "readonly _angular_core.Signal<number>",
+        "percentage": "readonly _angular_core.Signal<number>",
+        "value": "readonly _angular_core.InputSignal<number>"
+      }
+    },
+    "ProgressIndicatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzProgressIndicator]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "ProgressTrackDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzProgressTrack]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "RadioDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRadio]",
+        "exportAs": "[\"qzRadio\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzRadioDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzRadio\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "radioDisabled": "readonly _angular_core.Signal<boolean>",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "RadioGroupConfig": {
+      "kind": "interface",
+      "members": {
+        "compareWith": "(a: T, b: T) => boolean",
+        "loop": "boolean",
+        "orientation": "RadioGroupOrientation"
+      }
+    },
+    "RadioGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRadioGroup]",
+        "exportAs": "[\"qzRadioGroup\"]",
+        "inputs": {
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "loop": "{ \"alias\": \"loop\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeRadio": "readonly _angular_core.Signal<RadioDirective<T> & _quartz_headless_core.CollectionItem>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isSelected": "(radio: RadioDirective<T>) => boolean",
+        "loop": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "orientation": "readonly _angular_core.InputSignal<RadioGroupOrientation>",
+        "register": "(radio: RadioDirective<T>) => void",
+        "select": "(radio: RadioDirective<T>, options?: { focus?: boolean; }) => void",
+        "setActive": "(radio: RadioDirective<T>, options?: { focus?: boolean; }) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "unregister": "(radio: RadioDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<T>"
+      }
+    },
+    "RadioGroupOrientation": {
+      "kind": "type",
+      "type": "RadioGroupOrientation"
+    },
+    "RangeSliderConfig": {
+      "kind": "interface",
+      "members": {
+        "max": "number",
+        "min": "number",
+        "minDistance": "number",
+        "orientation": "SliderOrientation",
+        "step": "number"
+      }
+    },
+    "RangeSliderDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRangeSlider]",
+        "exportAs": "[\"qzRangeSlider\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "dragging": "{ \"alias\": \"dragging\"; \"required\": false; \"isSignal\": true; }",
+          "high": "{ \"alias\": \"high\"; \"required\": false; \"isSignal\": true; }",
+          "low": "{ \"alias\": \"low\"; \"required\": false; \"isSignal\": true; }",
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "minDistance": "{ \"alias\": \"minDistance\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "step": "{ \"alias\": \"step\"; \"required\": false; \"isSignal\": true; }",
+          "valueText": "{ \"alias\": \"valueText\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "dragging": "\"draggingChange\"",
+          "high": "\"highChange\"",
+          "low": "\"lowChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeThumb": "readonly _angular_core.WritableSignal<RangeSliderThumbName>",
+        "bounds": "readonly _angular_core.Signal<{ min: number; max: number; }>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "distance": "readonly _angular_core.Signal<number>",
+        "dragging": "readonly _angular_core.ModelSignal<boolean>",
+        "high": "readonly _angular_core.ModelSignal<number>",
+        "highMin": "readonly _angular_core.Signal<number>",
+        "highPercent": "readonly _angular_core.Signal<number>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "low": "readonly _angular_core.ModelSignal<number>",
+        "lowMax": "readonly _angular_core.Signal<number>",
+        "lowPercent": "readonly _angular_core.Signal<number>",
+        "max": "readonly _angular_core.InputSignal<number>",
+        "min": "readonly _angular_core.InputSignal<number>",
+        "minDistance": "readonly _angular_core.InputSignal<number>",
+        "ngOnDestroy": "() => void",
+        "onPointerDown": "(event: PointerEvent) => void",
+        "onPointerEnd": "(event: PointerEvent) => void",
+        "onPointerMove": "(event: PointerEvent) => void",
+        "orientation": "readonly _angular_core.InputSignal<SliderOrientation>",
+        "range": "readonly _angular_core.Signal<RangeSliderValue>",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "setThumb": "(thumb: RangeSliderThumbName, value: number) => void",
+        "step": "readonly _angular_core.InputSignal<number>",
+        "thumbValue": "(thumb: RangeSliderThumbName) => number",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<RangeSliderValue>",
+        "valueText": "readonly _angular_core.InputSignal<(value: number, thumb: RangeSliderThumbName) => string>",
+        "writeFormValue": "(value: RangeSliderValue | null | undefined) => void"
+      }
+    },
+    "RangeSliderOrientation": {
+      "kind": "type",
+      "type": "SliderOrientation"
+    },
+    "RangeSliderRangeDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRangeSliderRange]",
+        "exportAs": "[\"qzRangeSliderRange\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "RangeSliderThumbDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRangeSliderThumb]",
+        "exportAs": "[\"qzRangeSliderThumb\"]",
+        "inputs": {
+          "thumb": "{ \"alias\": \"qzRangeSliderThumb\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "thumb": "readonly _angular_core.InputSignal<RangeSliderThumbName>"
+      }
+    },
+    "RangeSliderThumbName": {
+      "kind": "type",
+      "type": "RangeSliderThumbName"
+    },
+    "RangeSliderTrackDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzRangeSliderTrack]",
+        "exportAs": "[\"qzRangeSliderTrack\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "RangeSliderValue": {
+      "kind": "interface",
+      "members": {
+        "high": "number",
+        "low": "number"
+      }
+    },
+    "RejectedFile": {
+      "kind": "interface",
+      "members": {
+        "file": "File",
+        "reason": "\"multiple\" | \"type\""
+      }
+    },
+    "resolveDrawerSide": {
+      "kind": "function",
+      "signatures": ["(side: DrawerSide, direction: Direction): DrawerPhysicalSide"]
+    },
+    "SelectCloseReason": {
+      "kind": "type",
+      "type": "SelectCloseReason"
+    },
+    "SelectConfig": {
+      "kind": "interface",
+      "members": {
+        "closeOnEscape": "boolean",
+        "closeOnFocusOutside": "boolean",
+        "closeOnOutsidePointer": "boolean",
+        "closeOnScroll": "boolean",
+        "compareWith": "(a: T, b: T) => boolean",
+        "displayWith": "(value: T) => string",
+        "flip": "boolean",
+        "flipAxis": "_quartz_headless_core.OverlayFlipAxis",
+        "matchAnchorWidth": "boolean",
+        "offset": "number",
+        "placement": "_quartz_headless_core.OverlayPlacement",
+        "typeaheadTimeoutMs": "number"
+      }
+    },
+    "SelectContentDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "ng-template[qzSelectContent]",
+        "exportAs": "[\"qzSelectContent\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "templateRef": "readonly _angular_core.TemplateRef<any>"
+      }
+    },
+    "SelectDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelect]",
+        "exportAs": "[\"qzSelect\"]",
+        "inputs": {
+          "closeOnEscape": "{ \"alias\": \"closeOnEscape\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnFocusOutside": "{ \"alias\": \"closeOnFocusOutside\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnOutsidePointer": "{ \"alias\": \"closeOnOutsidePointer\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnScroll": "{ \"alias\": \"closeOnScroll\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnSelect": "{ \"alias\": \"closeOnSelect\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "content": "{ \"alias\": \"content\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "displayWith": "{ \"alias\": \"displayWith\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "matchAnchorWidth": "{ \"alias\": \"matchAnchorWidth\"; \"required\": false; \"isSignal\": true; }",
+          "multiple": "{ \"alias\": \"multiple\"; \"required\": false; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "open": "{ \"alias\": \"open\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }",
+          "values": "{ \"alias\": \"values\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "closed": "\"closed\"",
+          "open": "\"openChange\"",
+          "opened": "\"opened\"",
+          "selected": "\"selected\"",
+          "touched": "\"touched\"",
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\"",
+          "values": "\"valuesChange\"",
+          "valuesChangeCommitted": "\"valuesChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeOption": "readonly _angular_core.Signal<SelectOptionDirective<T> & _quartz_headless_core.CollectionItem>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "closed": "readonly _angular_core.OutputEmitterRef<void>",
+        "closeOnEscape": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnFocusOutside": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnOutsidePointer": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnScroll": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "closeOnSelect": "readonly _angular_core.InputSignal<boolean>",
+        "closePopup": "(reason: SelectCloseReason, restoreFocus?: boolean) => void",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "config": "readonly _angular_core.InputSignal<Partial<SelectConfig<T>>>",
+        "content": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "displayWith": "readonly _angular_core.InputSignal<(value: T) => string>",
+        "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
+        "handleListboxKeydown": "(event: KeyboardEvent) => void",
+        "handleTriggerKeydown": "(event: KeyboardEvent) => void",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isEmpty": "readonly _angular_core.Signal<boolean>",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "isSelected": "(option: SelectOptionDirective<T>) => boolean",
+        "matchAnchorWidth": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "multiple": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "nameListbox": "(listbox: HTMLElement) => void",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onTriggerBlur": "() => void",
+        "open": "readonly _angular_core.ModelSignal<boolean>",
+        "opened": "readonly _angular_core.OutputEmitterRef<void>",
+        "openPopup": "(reason: SelectOpenReason, options?: { activate?: \"selected\" | \"first\" | \"last\"; }) => void",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
+        "register": "(option: SelectOptionDirective<T>) => void",
+        "selected": "readonly _angular_core.OutputEmitterRef<T>",
+        "selectedLabel": "readonly _angular_core.Signal<string>",
+        "selectedLabels": "readonly _angular_core.Signal<string[]>",
+        "selectedOption": "readonly _angular_core.Signal<SelectOptionDirective<T> & _quartz_headless_core.CollectionItem>",
+        "selectedValues": "readonly _angular_core.Signal<readonly T[]>",
+        "selectOption": "(option: SelectOptionDirective<T>) => void",
+        "setActive": "(option: SelectOptionDirective<T>, options?: { focus?: boolean; }) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "setListboxElement": "(element: HTMLElement | null) => void",
+        "setTriggerElement": "(element: HTMLElement | null) => void",
+        "touched": "readonly _angular_core.OutputEmitterRef<void>",
+        "unregister": "(option: SelectOptionDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<T>",
+        "values": "readonly _angular_core.ModelSignal<readonly T[]>",
+        "valuesChangeCommitted": "readonly _angular_core.OutputEmitterRef<readonly T[]>",
+        "writeFormValue": "(value: unknown) => void"
+      }
+    },
+    "SelectGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectGroup]",
+        "exportAs": "[\"qzSelectGroup\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "labelId": "readonly string"
+      }
+    },
+    "SelectGroupLabelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectGroupLabel]",
+        "exportAs": "[\"qzSelectGroupLabel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "SelectListboxDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectListbox]",
+        "exportAs": "[\"qzSelectListbox\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnDestroy": "() => void"
+      }
+    },
+    "SelectOpenReason": {
+      "kind": "type",
+      "type": "SelectOpenReason"
+    },
+    "SelectOptionDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectOption]",
+        "exportAs": "[\"qzSelectOption\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzSelectOptionDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "qzSelectOptionLabel": "{ \"alias\": \"qzSelectOptionLabel\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzSelectOption\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "highlighted": "readonly _angular_core.Signal<boolean>",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "onPointerEnter": "() => void",
+        "optionDisabled": "readonly _angular_core.Signal<boolean>",
+        "qzSelectOptionLabel": "readonly _angular_core.InputSignal<string>",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "SelectSeparatorDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectSeparator]",
+        "exportAs": "[\"qzSelectSeparator\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "SelectTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSelectTrigger]",
+        "exportAs": "[\"qzSelectTrigger\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void"
+      }
+    },
+    "SidebarBreakpoint": {
+      "kind": "type",
+      "type": "SidebarBreakpoint"
+    },
+    "SidebarConfig": {
+      "kind": "interface",
+      "members": {
+        "autoCloseOnMobile": "boolean",
+        "breakpoint": "SidebarBreakpoint",
+        "desktopMode": "SidebarMode",
+        "focusMode": "SidebarFocusMode",
+        "mobileMode": "SidebarMode",
+        "scrollLock": "boolean",
+        "side": "SidebarSide"
+      }
+    },
+    "SidebarContentDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSidebarContent]",
+        "exportAs": "[\"qzSidebarContent\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "gridColumn": "readonly _angular_core.Signal<\"1\" | \"2\">"
+      }
+    },
+    "SidebarDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSidebar]",
+        "exportAs": "[\"qzSidebar\"]",
+        "inputs": {
+          "autoCloseOnMobile": "{ \"alias\": \"autoCloseOnMobile\"; \"required\": false; \"isSignal\": true; }",
+          "breakpoint": "{ \"alias\": \"breakpoint\"; \"required\": false; \"isSignal\": true; }",
+          "collapsed": "{ \"alias\": \"collapsed\"; \"required\": false; \"isSignal\": true; }",
+          "desktopMode": "{ \"alias\": \"desktopMode\"; \"required\": false; \"isSignal\": true; }",
+          "focusMode": "{ \"alias\": \"focusMode\"; \"required\": false; \"isSignal\": true; }",
+          "mobileMode": "{ \"alias\": \"mobileMode\"; \"required\": false; \"isSignal\": true; }",
+          "mode": "{ \"alias\": \"mode\"; \"required\": false; \"isSignal\": true; }",
+          "open": "{ \"alias\": \"open\"; \"required\": false; \"isSignal\": true; }",
+          "scrollLock": "{ \"alias\": \"scrollLock\"; \"required\": false; \"isSignal\": true; }",
+          "side": "{ \"alias\": \"side\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "collapsed": "\"collapsedChange\"",
+          "open": "\"openChange\""
+        }
+      },
+      "members": {
+        "autoCloseOnMobile": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "breakpoint": "readonly _angular_core.InputSignal<SidebarBreakpoint>",
+        "close": "() => void",
+        "collapse": "() => void",
+        "collapsed": "readonly _angular_core.ModelSignal<boolean>",
+        "currentMode": "readonly _angular_core.Signal<SidebarMode>",
+        "desktopMode": "readonly _angular_core.InputSignal<SidebarMode>",
+        "expand": "() => void",
+        "focusMode": "readonly _angular_core.InputSignal<SidebarFocusMode>",
+        "gridTemplateColumns": "readonly _angular_core.Signal<string>",
+        "handlePanelKeydown": "(event: KeyboardEvent) => void",
+        "isDesktop": "readonly _angular_core.Signal<boolean>",
+        "isOverlayOpen": "readonly _angular_core.Signal<boolean>",
+        "mobileMode": "readonly _angular_core.InputSignal<SidebarMode>",
+        "mode": "readonly _angular_core.InputSignal<SidebarMode>",
+        "ngOnDestroy": "() => void",
+        "open": "readonly _angular_core.ModelSignal<boolean>",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "registerPanel": "(panel: SidebarPanelDirective) => void",
+        "registerTrigger": "(trigger: SidebarTriggerDirective) => void",
+        "scrollLock": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "side": "readonly _angular_core.InputSignal<SidebarSide>",
+        "state": "readonly _angular_core.Signal<SidebarState>",
+        "toggle": "() => void",
+        "unregisterPanel": "(panel: SidebarPanelDirective) => void",
+        "unregisterTrigger": "(trigger: SidebarTriggerDirective) => void"
+      }
+    },
+    "SidebarFocusMode": {
+      "kind": "type",
+      "type": "SidebarFocusMode"
+    },
+    "SidebarMode": {
+      "kind": "type",
+      "type": "SidebarMode"
+    },
+    "SidebarPanelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSidebarPanel]",
+        "exportAs": "[\"qzSidebarPanel\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "element": "() => HTMLElement",
+        "gridColumn": "readonly _angular_core.Signal<\"1\" | \"2\">",
+        "id": "readonly string",
+        "inlineSize": "readonly _angular_core.Signal<\"0px\" | \"var(--qz-sidebar-collapsed-size, 4rem)\" | \"var(--qz-sidebar-size, 16rem)\">",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "physicalSide": "readonly _angular_core.Signal<_quartz_headless_core.PhysicalHorizontal>"
+      }
+    },
+    "SidebarSide": {
+      "kind": "type",
+      "type": "SidebarSide"
+    },
+    "SidebarState": {
+      "kind": "type",
+      "type": "SidebarState"
+    },
+    "SidebarTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSidebarTrigger]",
+        "exportAs": "[\"qzSidebarTrigger\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzSidebarTriggerDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "() => HTMLElement",
+        "ngOnDestroy": "() => void",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "setControlledPanelId": "(id: string | null) => void",
+        "toggle": "(event: MouseEvent) => void"
+      }
+    },
+    "SliderConfig": {
+      "kind": "interface",
+      "members": {
+        "max": "number",
+        "min": "number",
+        "orientation": "SliderOrientation",
+        "step": "number"
+      }
+    },
+    "SliderDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSlider]",
+        "exportAs": "[\"qzSlider\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "dragging": "{ \"alias\": \"dragging\"; \"required\": false; \"isSignal\": true; }",
+          "max": "{ \"alias\": \"max\"; \"required\": false; \"isSignal\": true; }",
+          "min": "{ \"alias\": \"min\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "step": "{ \"alias\": \"step\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }",
+          "valueText": "{ \"alias\": \"valueText\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "dragging": "\"draggingChange\"",
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "ariaValueText": "readonly _angular_core.Signal<string>",
+        "bounds": "readonly _angular_core.Signal<{ min: number; max: number; }>",
+        "currentValue": "readonly _angular_core.Signal<number>",
+        "decrement": "(multiplier?: number) => void",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "dragging": "readonly _angular_core.ModelSignal<boolean>",
+        "increment": "(multiplier?: number) => void",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "max": "readonly _angular_core.InputSignal<number>",
+        "min": "readonly _angular_core.InputSignal<number>",
+        "ngOnDestroy": "() => void",
+        "onPointerDown": "(event: PointerEvent) => void",
+        "onPointerEnd": "(event: PointerEvent) => void",
+        "onPointerMove": "(event: PointerEvent) => void",
+        "orientation": "readonly _angular_core.InputSignal<SliderOrientation>",
+        "percent": "readonly _angular_core.Signal<number>",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "setValue": "(value: number) => void",
+        "step": "readonly _angular_core.InputSignal<number>",
+        "value": "readonly _angular_core.ModelSignal<number>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<number>",
+        "valueText": "readonly _angular_core.InputSignal<(value: number) => string>"
+      }
+    },
+    "SliderOrientation": {
+      "kind": "type",
+      "type": "SliderOrientation"
+    },
+    "SliderRangeDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSliderRange]",
+        "exportAs": "[\"qzSliderRange\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "SliderThumbDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSliderThumb]",
+        "exportAs": "[\"qzSliderThumb\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "onKeydown": "(event: KeyboardEvent) => void"
+      }
+    },
+    "SliderTrackDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSliderTrack]",
+        "exportAs": "[\"qzSliderTrack\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "StepDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStep]",
+        "exportAs": "[\"qzStep\"]",
+        "inputs": {
+          "completed": "{ \"alias\": \"qzStepCompleted\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"qzStepDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzStep\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "completed": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "state": "() => string",
+        "stepValue": "() => T",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "StepPanelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStepPanel]",
+        "exportAs": "[\"qzStepPanel\"]",
+        "inputs": {
+          "value": "{ \"alias\": \"qzStepPanel\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "active": "readonly _angular_core.Signal<boolean>",
+        "id": "readonly string",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "stepValue": "() => T",
+        "triggerId": "readonly _angular_core.Signal<string>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "StepperActivationMode": {
+      "kind": "type",
+      "type": "StepperActivationMode"
+    },
+    "StepperConfig": {
+      "kind": "interface",
+      "members": {
+        "activationMode": "StepperActivationMode",
+        "compareWith": "(a: T, b: T) => boolean",
+        "linear": "boolean",
+        "orientation": "StepperOrientation"
+      }
+    },
+    "StepperDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStepper]",
+        "exportAs": "[\"qzStepper\"]",
+        "inputs": {
+          "activationMode": "{ \"alias\": \"activationMode\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "linear": "{ \"alias\": \"linear\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\""
+        }
+      },
+      "members": {
+        "activate": "(trigger: StepTriggerDirective<T>, options?: { focus?: boolean; }) => void",
+        "activationMode": "readonly _angular_core.InputSignal<StepperActivationMode>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTrigger": "readonly _angular_core.Signal<StepTriggerDirective<T> & _quartz_headless_core.CollectionItem>",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "goTo": "(value: T, options?: { focus?: boolean; }) => boolean",
+        "handleKeydown": "(event: KeyboardEvent) => void",
+        "isActiveValue": "(value: T) => boolean",
+        "isCompletedValue": "(value: T) => boolean",
+        "isDisabledValue": "(value: T) => boolean",
+        "linear": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "next": "(options?: { focus?: boolean; }) => boolean",
+        "ngOnDestroy": "() => void",
+        "orientation": "readonly _angular_core.InputSignal<StepperOrientation>",
+        "panelIdFor": "(trigger: StepTriggerDirective<T>) => string",
+        "previous": "(options?: { focus?: boolean; }) => boolean",
+        "registerPanel": "(panel: StepPanelDirective<T>) => void",
+        "registerStep": "(step: StepDirective<T>) => void",
+        "registerTrigger": "(trigger: StepTriggerDirective<T>) => void",
+        "setActive": "(trigger: StepTriggerDirective<T>, options?: { focus?: boolean; }) => void",
+        "triggerIdFor": "(panel: StepPanelDirective<T>) => string | null",
+        "unregisterPanel": "(panel: StepPanelDirective<T>) => void",
+        "unregisterStep": "(step: StepDirective<T>) => void",
+        "unregisterTrigger": "(trigger: StepTriggerDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T>"
+      }
+    },
+    "StepperNextDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStepperNext]",
+        "exportAs": "[\"qzStepperNext\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzStepperNextDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "onClick": "(event: MouseEvent) => void"
+      }
+    },
+    "StepperOrientation": {
+      "kind": "type",
+      "type": "StepperOrientation"
+    },
+    "StepperPreviousDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStepperPrevious]",
+        "exportAs": "[\"qzStepperPrevious\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzStepperPreviousDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "onClick": "(event: MouseEvent) => void"
+      }
+    },
+    "StepState": {
+      "kind": "type",
+      "type": "StepState"
+    },
+    "StepTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzStepTrigger]",
+        "exportAs": "[\"qzStepTrigger\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzStepTriggerDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzStepTrigger\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "active": "readonly _angular_core.Signal<boolean>",
+        "completed": "readonly _angular_core.Signal<boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "state": "() => string",
+        "stepDisabled": "readonly _angular_core.Signal<boolean>",
+        "stepValue": "() => T",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "SwitchDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzSwitch]",
+        "exportAs": "[\"qzSwitch\"]",
+        "inputs": {
+          "checked": "{ \"alias\": \"checked\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "checked": "\"checkedChange\"",
+          "checkedChangeCommitted": "\"checkedChangeCommitted\""
+        }
+      },
+      "members": {
+        "checked": "readonly _angular_core.ModelSignal<boolean>",
+        "checkedChangeCommitted": "readonly _angular_core.OutputEmitterRef<boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "toggle": "(event?: Event) => void"
+      }
+    },
+    "TabDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzTab]",
+        "exportAs": "[\"qzTab\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzTabDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzTab\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "panelId": "readonly _angular_core.Signal<string>",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "tabDisabled": "readonly _angular_core.Signal<boolean>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "TabListDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzTabList]",
+        "exportAs": "[\"qzTabList\"]",
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {}
+    },
+    "TabPanelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzTabPanel]",
+        "exportAs": "[\"qzTabPanel\"]",
+        "inputs": {
+          "value": "{ \"alias\": \"qzTabPanel\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "id": "readonly string",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "selected": "readonly _angular_core.Signal<boolean>",
+        "tabId": "readonly _angular_core.Signal<string>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "TabsActivationMode": {
+      "kind": "type",
+      "type": "TabsActivationMode"
+    },
+    "TabsConfig": {
+      "kind": "interface",
+      "members": {
+        "activationMode": "TabsActivationMode",
+        "compareWith": "(a: T, b: T) => boolean",
+        "orientation": "TabsOrientation"
+      }
+    },
+    "TabsDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzTabs]",
+        "exportAs": "[\"qzTabs\"]",
+        "inputs": {
+          "activationMode": "{ \"alias\": \"activationMode\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\""
+        }
+      },
+      "members": {
+        "activate": "(tab: TabDirective<T>, options?: { focus?: boolean; }) => void",
+        "activationMode": "readonly _angular_core.InputSignal<TabsActivationMode>",
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeTab": "readonly _angular_core.Signal<TabDirective<T> & _quartz_headless_core.CollectionItem>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "config": "readonly _angular_core.InputSignal<Partial<TabsConfig<T>>>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "handleListKeydown": "(event: KeyboardEvent) => void",
+        "isPanelSelected": "(panel: TabPanelDirective<T>) => boolean",
+        "isSelected": "(tab: TabDirective<T>) => boolean",
+        "ngOnDestroy": "() => void",
+        "orientation": "readonly _angular_core.InputSignal<TabsOrientation>",
+        "panelIdFor": "(tab: TabDirective<T>) => string | null",
+        "registerPanel": "(panel: TabPanelDirective<T>) => void",
+        "registerTab": "(tab: TabDirective<T>) => void",
+        "setActive": "(tab: TabDirective<T>, options?: { focus?: boolean; }) => void",
+        "tabIdFor": "(panel: TabPanelDirective<T>) => string | null",
+        "unregisterPanel": "(panel: TabPanelDirective<T>) => void",
+        "unregisterTab": "(tab: TabDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T>"
+      }
+    },
+    "TabsOrientation": {
+      "kind": "type",
+      "type": "TabsOrientation"
+    },
+    "Toast": {
+      "kind": "interface",
+      "members": {
+        "actions": "readonly ToastAction[]",
+        "closable": "boolean",
+        "content": "_angular_core.TemplateRef<ToastTemplateContext> | _angular_core.Type<ToastContentComponent> | undefined",
+        "createdAt": "Date",
+        "duration": "number",
+        "id": "string",
+        "isPaused": "boolean",
+        "maxVisible": "number",
+        "message": "string",
+        "pauseOnHover": "boolean",
+        "position": "ToastPosition",
+        "remainingTime": "number",
+        "showProgress": "boolean",
+        "title": "string | undefined",
+        "type": "ToastType"
+      }
+    },
+    "ToastAction": {
+      "kind": "interface",
+      "members": {
+        "dismiss": "boolean | undefined",
+        "label": "string",
+        "run": "() => void"
+      }
+    },
+    "ToastComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-toast",
+        "exportAs": null,
+        "inputs": {
+          "dismissContext": "{ \"alias\": \"dismissContext\"; \"required\": true; \"isSignal\": true; }",
+          "progress": "{ \"alias\": \"progress\"; \"required\": false; \"isSignal\": true; }",
+          "toast": "{ \"alias\": \"toast\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "action": "\"action\"",
+          "dismiss": "\"dismiss\"",
+          "paused": "\"paused\"",
+          "resumed": "\"resumed\""
+        }
+      },
+      "members": {
+        "action": "readonly _angular_core.OutputEmitterRef<ToastAction>",
+        "activate": "(action: ToastAction) => void",
+        "componentInputs": "readonly _angular_core.Signal<{ context: { toast: Toast; dismiss: () => void; }; }>",
+        "dismiss": "readonly _angular_core.OutputEmitterRef<void>",
+        "dismissContext": "readonly _angular_core.InputSignal<() => void>",
+        "isTemplate": "(content: unknown) => boolean",
+        "onFocusIn": "() => void",
+        "onFocusOut": "(event: FocusEvent) => void",
+        "onMouseEnter": "() => void",
+        "onMouseLeave": "() => void",
+        "paused": "readonly _angular_core.OutputEmitterRef<void>",
+        "progress": "readonly _angular_core.InputSignal<number>",
+        "resumed": "readonly _angular_core.OutputEmitterRef<void>",
+        "templateContext": "readonly _angular_core.Signal<{ $implicit: Toast; toast: Toast; dismiss: () => void; }>",
+        "toast": "readonly _angular_core.InputSignal<Toast>"
+      }
+    },
+    "ToastContainerComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-toast-container",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "calculateProgress": "(toast: { duration: number; remainingTime: number; }) => number",
+        "onAction": "(toast: { id: string; }, action: { dismiss?: boolean; }) => void",
+        "positions": "readonly ToastPosition[]"
+      }
+    },
+    "ToastContentComponent": {
+      "kind": "interface",
+      "members": {
+        "context": "ToastContentContext"
+      }
+    },
+    "ToastContentContext": {
+      "kind": "interface",
+      "members": {
+        "dismiss": "() => void",
+        "toast": "Toast"
+      }
+    },
+    "ToastOptions": {
+      "kind": "interface",
+      "members": {
+        "actions": "readonly ToastAction[] | undefined",
+        "closable": "boolean | undefined",
+        "content": "_angular_core.TemplateRef<ToastTemplateContext> | _angular_core.Type<ToastContentComponent> | undefined",
+        "duration": "number | undefined",
+        "maxVisible": "number | undefined",
+        "message": "string | undefined",
+        "pauseOnHover": "boolean | undefined",
+        "position": "ToastPosition | undefined",
+        "showProgress": "boolean | undefined",
+        "title": "string | undefined",
+        "type": "ToastType | undefined"
+      }
+    },
+    "ToastPosition": {
+      "kind": "type",
+      "type": "ToastPosition"
+    },
+    "ToastService": {
+      "kind": "class",
+      "members": {
+        "dismiss": "(id: string) => void",
+        "dismissAll": "() => void",
+        "error": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
+        "info": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
+        "ngOnDestroy": "() => void",
+        "pause": "(id: string) => void",
+        "resume": "(id: string) => void",
+        "show": "(options: ToastOptions) => string",
+        "success": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
+        "toasts": "readonly _angular_core.Signal<Toast[]>",
+        "toastsByPosition": "readonly _angular_core.Signal<Map<ToastPosition, Toast[]>>",
+        "warning": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string"
+      }
+    },
+    "ToastTemplateContext": {
+      "kind": "interface",
+      "members": {
+        "$implicit": "Toast",
+        "dismiss": "() => void",
+        "toast": "Toast"
+      }
+    },
+    "ToastType": {
+      "kind": "type",
+      "type": "ToastType"
+    },
+    "ToggleDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzToggle]",
+        "exportAs": "[\"qzToggle\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "pressed": "{ \"alias\": \"pressed\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "pressed": "\"pressedChange\"",
+          "pressedChangeCommitted": "\"pressedChangeCommitted\""
+        }
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "pressed": "readonly _angular_core.ModelSignal<boolean>",
+        "pressedChangeCommitted": "readonly _angular_core.OutputEmitterRef<boolean>",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "toggle": "(event?: Event) => void"
+      }
+    },
+    "ToggleGroupConfig": {
+      "kind": "interface",
+      "members": {
+        "allowDeselection": "boolean",
+        "compareWith": "(a: T, b: T) => boolean",
+        "loop": "boolean",
+        "orientation": "ToggleGroupOrientation",
+        "type": "ToggleGroupType"
+      }
+    },
+    "ToggleGroupDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzToggleGroup]",
+        "exportAs": "[\"qzToggleGroup\"]",
+        "inputs": {
+          "allowDeselection": "{ \"alias\": \"allowDeselection\"; \"required\": false; \"isSignal\": true; }",
+          "compareWith": "{ \"alias\": \"compareWith\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "loop": "{ \"alias\": \"loop\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "type": "{ \"alias\": \"type\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"value\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "value": "\"valueChange\"",
+          "valueChangeCommitted": "\"valueChangeCommitted\""
+        }
+      },
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeItem": "readonly _angular_core.Signal<ToggleItemDirective<T> & _quartz_headless_core.CollectionItem>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "allowDeselection": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isPressed": "(item: ToggleItemDirective<T>) => boolean",
+        "loop": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "ngOnDestroy": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "orientation": "readonly _angular_core.InputSignal<ToggleGroupOrientation>",
+        "register": "(item: ToggleItemDirective<T>) => void",
+        "setActive": "(item: ToggleItemDirective<T>, options?: { focus?: boolean; }) => void",
+        "setFormDisabled": "(disabled: boolean) => void",
+        "toggle": "(item: ToggleItemDirective<T>, options?: { focus?: boolean; }) => void",
+        "type": "readonly _angular_core.InputSignal<ToggleGroupType>",
+        "unregister": "(item: ToggleItemDirective<T>) => void",
+        "value": "readonly _angular_core.ModelSignal<T | readonly T[]>",
+        "valueChangeCommitted": "readonly _angular_core.OutputEmitterRef<T | readonly T[]>"
+      }
+    },
+    "ToggleGroupOrientation": {
+      "kind": "type",
+      "type": "ToggleGroupOrientation"
+    },
+    "ToggleGroupType": {
+      "kind": "type",
+      "type": "ToggleGroupType"
+    },
+    "ToggleItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "button[qzToggleItem]",
+        "exportAs": "[\"qzToggleItem\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzToggleItemDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "value": "{ \"alias\": \"qzToggleItem\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "id": "readonly string",
+        "itemDisabled": "readonly _angular_core.Signal<boolean>",
+        "label": "readonly () => any",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "pressed": "readonly _angular_core.Signal<boolean>",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "value": "readonly _angular_core.InputSignal<T>"
+      }
+    },
+    "ToolbarConfig": {
+      "kind": "interface",
+      "members": {
+        "orientation": "ToolbarOrientation"
+      }
+    },
+    "ToolbarDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzToolbar]",
+        "exportAs": "[\"qzToolbar\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "handleItemKeydown": "(item: ToolbarItemDirective, event: KeyboardEvent) => void",
+        "ngOnDestroy": "() => void",
+        "orientation": "readonly _angular_core.InputSignal<ToolbarOrientation>",
+        "refreshOrder": "() => void",
+        "register": "(item: ToolbarItemDirective) => void",
+        "setActive": "(item: ToolbarItemDirective) => void",
+        "unregister": "(item: ToolbarItemDirective) => void"
+      }
+    },
+    "ToolbarItemDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzToolbarItem]",
+        "exportAs": "[\"qzToolbarItem\"]",
+        "inputs": {
+          "disabled": "{ \"alias\": \"qzToolbarItemDisabled\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "element": "readonly () => any",
+        "hasFocus": "boolean",
+        "id": "readonly string",
+        "itemDisabled": "readonly _angular_core.Signal<any>",
+        "ngOnDestroy": "() => void",
+        "ngOnInit": "() => void",
+        "onBlur": "() => void",
+        "onClick": "(event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+      }
+    },
+    "ToolbarOrientation": {
+      "kind": "type",
+      "type": "ToolbarOrientation"
+    },
+    "TooltipConfig": {
+      "kind": "interface",
+      "members": {
+        "arrowPadding": "number | undefined",
+        "arrowSize": "number | undefined",
+        "disabled": "boolean",
+        "hideDelay": "number",
+        "offset": "number",
+        "placement": "_quartz_headless_core.OverlayPlacement",
+        "showDelay": "number"
+      }
+    },
+    "TooltipContext": {
+      "kind": "interface",
+      "members": {
+        "arrow": "readonly _angular_core.Signal<_quartz_headless_core.OverlayArrowGeometry | null>",
+        "placement": "readonly _angular_core.Signal<_quartz_headless_core.OverlayPlacement | null>"
+      }
+    },
+    "TooltipDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzTooltip]",
+        "exportAs": "[\"qzTooltip\"]",
+        "inputs": {
+          "qzTooltip": "{ \"alias\": \"qzTooltip\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipArrowPadding": "{ \"alias\": \"tooltipArrowPadding\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipArrowSize": "{ \"alias\": \"tooltipArrowSize\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipDelay": "{ \"alias\": \"tooltipDelay\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipDisabled": "{ \"alias\": \"tooltipDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipHideDelay": "{ \"alias\": \"tooltipHideDelay\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipOffset": "{ \"alias\": \"tooltipOffset\"; \"required\": false; \"isSignal\": true; }",
+          "tooltipPlacement": "{ \"alias\": \"tooltipPlacement\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "arrow": "readonly _angular_core.Signal<_quartz_headless_core.OverlayArrowGeometry | null>",
+        "context": "readonly TooltipContext",
+        "hide": "() => void",
+        "ngOnDestroy": "() => void",
+        "onBlur": "() => void",
+        "onFocus": "() => void",
+        "onMouseEnter": "() => void",
+        "onMouseLeave": "() => void",
+        "qzTooltip": "readonly _angular_core.InputSignal<string | _angular_core.TemplateRef<unknown>>",
+        "resolvedPlacement": "readonly _angular_core.Signal<_quartz_headless_core.OverlayPlacement | null>",
+        "show": "() => void",
+        "tooltipArrowPadding": "readonly _angular_core.InputSignal<number>",
+        "tooltipArrowSize": "readonly _angular_core.InputSignal<number | undefined>",
+        "tooltipDelay": "readonly _angular_core.InputSignal<number>",
+        "tooltipDisabled": "readonly _angular_core.InputSignal<boolean>",
+        "tooltipHideDelay": "readonly _angular_core.InputSignal<number>",
+        "tooltipId": "readonly _angular_core.WritableSignal<string>",
+        "tooltipOffset": "readonly _angular_core.InputSignal<number>",
+        "tooltipPlacement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>"
+      }
+    },
+    "TooltipPlacement": {
+      "kind": "type",
+      "type": "_quartz_headless_core.OverlayPlacement"
+    },
+    "TooltipService": {
+      "kind": "class",
+      "members": {
+        "create": "(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, anchorEl: HTMLElement, config?: Partial<TooltipConfig>, context?: object) => OverlayRef",
+        "createTextElement": "(text: string) => HTMLElement"
+      }
+    },
+    "TreeComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-tree",
+        "exportAs": null,
+        "inputs": {
+          "config": "{ \"alias\": \"config\"; \"required\": false; \"isSignal\": true; }",
+          "loadChildren": "{ \"alias\": \"loadChildren\"; \"required\": false; \"isSignal\": true; }",
+          "nodes": "{ \"alias\": \"nodes\"; \"required\": true; \"isSignal\": true; }",
+          "nodeTemplate": "{ \"alias\": \"nodeTemplate\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "config": "readonly _angular_core.InputSignal<Partial<TreeConfig>>",
+        "loadChildren": "readonly _angular_core.InputSignal<TreeLoadChildrenFn<unknown>>",
+        "nodes": "readonly _angular_core.InputSignal<TreeNode<unknown>[]>",
+        "nodeTemplate": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<TreeNodeContext>>",
+        "treeService": "readonly TreeService"
+      }
+    },
+    "TreeConfig": {
+      "kind": "interface",
+      "members": {
+        "expandAll": "boolean",
+        "multiSelect": "boolean",
+        "toggleOnClick": "boolean"
+      }
+    },
+    "TreeLoadChildrenFn": {
+      "kind": "type",
+      "type": "TreeLoadChildrenFn<T>"
+    },
+    "TreeNode": {
+      "kind": "interface",
+      "members": {
+        "children": "TreeNode<T>[] | undefined",
+        "data": "T | undefined",
+        "disabled": "boolean | undefined",
+        "expanded": "boolean | undefined",
+        "hasChildren": "boolean | undefined",
+        "id": "string",
+        "label": "string"
+      }
+    },
+    "TreeNodeComponent": {
+      "kind": "class",
+      "angular": {
+        "type": "component",
+        "selector": "qz-tree-node",
+        "exportAs": null,
+        "inputs": {
+          "isFirst": "{ \"alias\": \"isFirst\"; \"required\": false; \"isSignal\": true; }",
+          "level": "{ \"alias\": \"level\"; \"required\": false; \"isSignal\": true; }",
+          "node": "{ \"alias\": \"node\"; \"required\": true; \"isSignal\": true; }",
+          "posinset": "{ \"alias\": \"posinset\"; \"required\": false; \"isSignal\": true; }",
+          "setsize": "{ \"alias\": \"setsize\"; \"required\": false; \"isSignal\": true; }",
+          "template": "{ \"alias\": \"template\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "getContext": "() => TreeNodeContext",
+        "hasChildren": "readonly _angular_core.Signal<boolean>",
+        "isExpanded": "readonly _angular_core.Signal<boolean>",
+        "isFirst": "readonly _angular_core.InputSignal<boolean>",
+        "isLoading": "readonly _angular_core.Signal<boolean>",
+        "isSelected": "readonly _angular_core.Signal<boolean>",
+        "level": "readonly _angular_core.InputSignal<number>",
+        "loadError": "readonly _angular_core.Signal<unknown>",
+        "loadState": "readonly _angular_core.Signal<TreeNodeLoadState>",
+        "node": "readonly _angular_core.InputSignal<TreeNode<unknown>>",
+        "onClick": "(_event: MouseEvent) => void",
+        "onFocus": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "onToggleClick": "(event: MouseEvent) => void",
+        "posinset": "readonly _angular_core.InputSignal<number>",
+        "setsize": "readonly _angular_core.InputSignal<number>",
+        "tabindex": "readonly _angular_core.Signal<0 | -1>",
+        "template": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<TreeNodeContext>>",
+        "toggleGlyph": "readonly _angular_core.Signal<\"⋯\" | \"↻\" | \"▼\" | \"▶\">"
+      }
+    },
+    "TreeNodeContext": {
+      "kind": "interface",
+      "members": {
+        "$implicit": "TreeNode<unknown>",
+        "error": "_angular_core.Signal<unknown>",
+        "expanded": "boolean",
+        "hasChildren": "boolean",
+        "level": "number",
+        "loading": "_angular_core.Signal<boolean>",
+        "loadState": "_angular_core.Signal<TreeNodeLoadState>",
+        "node": "TreeNode<unknown>",
+        "retry": "() => void",
+        "select": "() => void",
+        "selected": "boolean",
+        "toggle": "() => void"
+      }
+    },
+    "TreeNodeLoadState": {
+      "kind": "type",
+      "type": "TreeNodeLoadState"
+    },
+    "TreeService": {
+      "kind": "class",
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "clearSelection": "() => void",
+        "collapse": "(id: string) => void",
+        "collapseAll": "() => void",
+        "config": "readonly _angular_core.Signal<TreeConfig>",
+        "deselect": "(id: string) => void",
+        "expand": "(id: string) => void",
+        "expandAll": "() => void",
+        "expandedIds": "readonly _angular_core.Signal<Set<string>>",
+        "findNode": "(id: string) => TreeNode | null",
+        "focusFirst": "() => void",
+        "focusFirstChild": "(id: string) => void",
+        "focusLast": "() => void",
+        "focusNext": "(id: string) => void",
+        "focusParent": "(id: string) => void",
+        "focusPrevious": "(id: string) => void",
+        "hasChildren": "(node: TreeNode) => boolean",
+        "init": "(nodes: TreeNode[], config?: Partial<TreeConfig>) => void",
+        "isExpanded": "(id: string) => boolean",
+        "isLoading": "(nodeOrId: TreeNode | string) => boolean",
+        "isSelected": "(id: string) => boolean",
+        "loadError": "(nodeOrId: TreeNode | string) => unknown",
+        "loadState": "(nodeOrId: TreeNode | string) => TreeNodeLoadState",
+        "loadStates": "readonly _angular_core.Signal<ReadonlyMap<string, TreeNodeLoadState>>",
+        "nodes": "readonly _angular_core.Signal<TreeNode<unknown>[]>",
+        "retry": "(nodeOrId: TreeNode | string) => void",
+        "select": "(id: string) => void",
+        "selectedIds": "readonly _angular_core.Signal<Set<string>>",
+        "selectedNodes": "readonly _angular_core.Signal<TreeNode<unknown>[]>",
+        "setActive": "(id: string) => void",
+        "setLoadChildren": "(fn: TreeLoadChildrenFn | null) => void",
+        "toggle": "(id: string) => void",
+        "toggleSelection": "(id: string) => void",
+        "typeahead": "(char: string, currentId: string | null) => void",
+        "visibleNodes": "readonly _angular_core.Signal<FlatTreeNode[]>"
+      }
+    }
+  },
+  "defaults": {
+    "DEFAULT_ACCORDION_CONFIG": {
+      "type": "single",
+      "collapsible": false,
+      "region": true,
+      "orientation": "vertical"
+    },
+    "DEFAULT_COMBOBOX_CONFIG": {
+      "placement": "bottom-start",
+      "offset": 4,
+      "flip": true,
+      "flipAxis": "main",
+      "matchAnchorWidth": true,
+      "autocomplete": "list",
+      "openOnFocus": false,
+      "openOnTyping": true,
+      "closeOnSelect": true,
+      "closeOnEscape": true,
+      "closeOnOutsidePointer": true,
+      "closeOnFocusOutside": true,
+      "closeOnScroll": false,
+      "allowFreeform": false,
+      "resetActiveOnClose": true
+    },
+    "DEFAULT_DATE_PICKER_CONFIG": {
+      "firstDayOfWeek": 0,
+      "locale": "en"
+    },
+    "DEFAULT_DIALOG_CONFIG": {
+      "position": "center",
+      "backdrop": true,
+      "closeOnBackdropClick": true,
+      "closeOnEscape": true
+    },
+    "DEFAULT_DRAWER_CONFIG": {
+      "side": "inline-end",
+      "backdrop": true,
+      "closeOnBackdropClick": true,
+      "closeOnEscape": true,
+      "presence": true
+    },
+    "DEFAULT_LISTBOX_CONFIG": {
+      "typeaheadTimeoutMs": 500
+    },
+    "DEFAULT_MENU_CONFIG": {
+      "wrap": true,
+      "typeaheadTimeoutMs": 500,
+      "submenuOpenDelayMs": 100
+    },
+    "DEFAULT_NAVBAR_CONFIG": {
+      "sticky": false,
+      "top": "0px",
+      "scrollThreshold": 8,
+      "directionThreshold": 4,
+      "reveal": "always",
+      "breakpoint": "md",
+      "closeMenuOnDesktop": true
+    },
+    "DEFAULT_NAVIGATION_MENU_CONFIG": {
+      "orientation": "horizontal",
+      "showDelay": 150,
+      "hideDelay": 150,
+      "placement": "bottom-start",
+      "offset": 4,
+      "flip": true,
+      "flipAxis": "main"
+    },
+    "DEFAULT_PAGINATION_CONFIG": {
+      "page": 1,
+      "pageCount": 0
+    },
+    "DEFAULT_POPOVER_CONFIG": {
+      "placement": "bottom-start",
+      "offset": 4,
+      "flip": true,
+      "flipAxis": "main",
+      "matchAnchorWidth": false,
+      "closeOnEscape": true,
+      "closeOnClickOutside": true,
+      "autoFocus": false
+    },
+    "DEFAULT_RADIO_GROUP_CONFIG": {
+      "orientation": "vertical",
+      "loop": true
+    },
+    "DEFAULT_RANGE_SLIDER_CONFIG": {
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "minDistance": 0,
+      "orientation": "horizontal"
+    },
+    "DEFAULT_SELECT_CONFIG": {
+      "placement": "bottom-start",
+      "offset": 4,
+      "flip": true,
+      "flipAxis": "both",
+      "matchAnchorWidth": true,
+      "closeOnEscape": true,
+      "closeOnOutsidePointer": true,
+      "closeOnFocusOutside": true,
+      "closeOnScroll": true,
+      "typeaheadTimeoutMs": 500
+    },
+    "DEFAULT_SIDEBAR_CONFIG": {
+      "desktopMode": "push",
+      "mobileMode": "overlay",
+      "breakpoint": "md",
+      "side": "inline-start",
+      "scrollLock": true,
+      "focusMode": "initial",
+      "autoCloseOnMobile": true
+    },
+    "DEFAULT_SLIDER_CONFIG": {
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "orientation": "horizontal"
+    },
+    "DEFAULT_STEPPER_CONFIG": {
+      "orientation": "horizontal",
+      "activationMode": "manual",
+      "linear": false
+    },
+    "DEFAULT_TABS_CONFIG": {
+      "orientation": "horizontal",
+      "activationMode": "automatic"
+    },
+    "DEFAULT_TOAST_OPTIONS": {
+      "type": "info",
+      "duration": 5000,
+      "position": "bottom-right",
+      "closable": true,
+      "pauseOnHover": true,
+      "showProgress": true,
+      "maxVisible": 5
+    },
+    "DEFAULT_TOGGLE_GROUP_CONFIG": {
+      "type": "single",
+      "orientation": "horizontal",
+      "loop": true,
+      "allowDeselection": true
+    },
+    "DEFAULT_TOOLBAR_CONFIG": {
+      "orientation": "horizontal"
+    },
+    "DEFAULT_TOOLTIP_CONFIG": {
+      "placement": "top",
+      "offset": 8,
+      "showDelay": 300,
+      "hideDelay": 100,
+      "disabled": false
+    },
+    "DEFAULT_TREE_CONFIG": {
+      "multiSelect": false,
+      "toggleOnClick": true,
+      "expandAll": false
+    }
   }
 }

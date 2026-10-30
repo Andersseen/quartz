@@ -56,3 +56,6 @@ Thumbs.db
 
 # Consumer evidence is recorded in docs/releases/0.17-acceptance.md
 /consumer/results
+
+# Release artifacts (packed tarballs + manifest) are CI/local outputs, never committed
+/release-artifacts
