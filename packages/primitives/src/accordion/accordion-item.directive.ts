@@ -26,6 +26,8 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
   private readonly accordion = inject(AccordionDirective<T>);
   private triggerElement: HTMLElement | null = null;
   hasFocus = false;
+  /** True until the end of the task in which the trigger blurred (see `setFocused`). */
+  blurredThisTask = false;
 
   readonly value = input.required<T>({ alias: 'qzAccordionItem' });
   readonly disabled = input(false, {
@@ -55,6 +57,13 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
 
   setFocused(focused: boolean): void {
     this.hasFocus = focused;
+    if (!focused) {
+      // Chromium fires `blur` (with <body> already active) when the focused element is REMOVED,
+      // before Angular runs ngOnDestroy in the same task. Remember it so teardown still knows the
+      // trigger held focus and can move focus to a surviving trigger.
+      this.blurredThisTask = true;
+      queueMicrotask(() => (this.blurredThisTask = false));
+    }
   }
 
   activeTabIndex(): 0 | -1 {

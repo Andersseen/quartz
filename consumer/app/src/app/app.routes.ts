@@ -7,6 +7,7 @@ export const routes: Routes = [
     path: 'overlays',
     loadComponent: () => import('./pages/overlays.page').then((m) => m.OverlaysPage),
   },
+  { path: 'parity', loadComponent: () => import('./pages/parity.page').then((m) => m.ParityPage) },
   {
     path: 'navigation',
     loadComponent: () => import('./pages/navigation.page').then((m) => m.NavigationPage),

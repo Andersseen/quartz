@@ -113,3 +113,22 @@ textarea {
 [qzSplitterPanel] {
   overflow: hidden;
 }
+@keyframes qz-autofill-start {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.af.simulate {
+  animation-name: qz-autofill-start;
+  animation-duration: 1ms;
+}
+.drop {
+  border: 2px dashed #595959;
+  padding: 1rem;
+}
+.drop[data-drag-active] {
+  background: #ffe9a8;
+}

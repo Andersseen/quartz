@@ -88,6 +88,17 @@ try {
     filter: (src) => !/node_modules|\/dist(\/|$)|\.angular/.test(src),
   });
   cpSync(join(fixtureDir, 'package.json'), join(app, 'package.json'));
+  const metaFile = join(fixtureDir, 'meta.json');
+  if (
+    existsSync(metaFile) &&
+    JSON.parse(readFileSync(metaFile, 'utf8')).supportsAllowedHosts === false
+  ) {
+    // Early 21.0 builders predate the SSRF host allow-list option (and its enforcement).
+    const angularJson = join(app, 'angular.json');
+    const config = JSON.parse(readFileSync(angularJson, 'utf8'));
+    delete config.projects.consumer.architect.build.options.security;
+    writeFileSync(angularJson, JSON.stringify(config, null, 2));
+  }
   const lock = join(fixtureDir, 'package-lock.json');
   const hasLock = existsSync(lock);
   if (hasLock) cpSync(lock, join(app, 'package-lock.json'));
@@ -121,6 +132,30 @@ try {
   console.log('  versions', evidence.versions);
 
   if (stage === 'install') process.exit(0);
+
+  // Negative proof: strict AOT must be able to REJECT a bad template, otherwise a green build
+  // would say nothing. The mutation happens only in the throwaway copy and is reverted.
+  console.log('→ negative AOT check (an invalid binding must fail the build)');
+  const page = join(app, 'src/app/pages/forms.page.ts');
+  const original = readFileSync(page, 'utf8');
+  writeFileSync(page, original.replace('[length]="6"', '[length]="\'six\'" [bogusInput]="1"'));
+  try {
+    execFileSync('npx', ['ng', 'build', '--configuration', 'production'], {
+      cwd: app,
+      encoding: 'utf8',
+      stdio: 'pipe',
+      env: { ...process.env, CI: '1', NG_CLI_ANALYTICS: 'false', NO_COLOR: '1' },
+    });
+    fail('negative fixture compiled: strict AOT is not detecting invalid bindings');
+  } catch (error) {
+    const output = String(error.stdout ?? '') + String(error.stderr ?? '');
+    if (!/NG8002|NG2|is not assignable to type/.test(output)) {
+      fail('negative fixture failed for an unexpected reason:\n' + output.slice(0, 1500));
+    }
+    evidence.negativeAot = 'rejected';
+  } finally {
+    writeFileSync(page, original);
+  }
 
   console.log('→ ng build (production, AOT, strictTemplates, SSR)');
   run('npx', ['ng', 'build', '--configuration', 'production'], { cwd: app });

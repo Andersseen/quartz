@@ -146,4 +146,45 @@ describe('Accordion', () => {
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Two' }));
     expect(host.value()).toBe('Two');
   });
+
+  it('recovers focus when the focused open trigger of a COLLAPSIBLE accordion is removed', async () => {
+    // Nothing is re-opened here (collapsible), so the removed item's slot must fall back to the
+    // first enabled trigger instead of dropping focus to <body> (found by the 0.17 browser suite).
+    const { fixture } = await render(AccordionHost);
+    const host = fixture.componentInstance;
+    host.collapsible.set(true);
+    host.value.set('One');
+    fixture.detectChanges();
+    screen.getByRole('button', { name: 'One' }).focus();
+    host.items.set(['Two', 'Three']);
+    fixture.detectChanges();
+    await Promise.resolve();
+    fixture.detectChanges();
+    expect(host.value()).toBeNull();
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Two' }));
+  });
+
+  it('treats the blur a browser fires while removing the focused trigger as "had focus" for recovery', async () => {
+    // Chromium order: blur (active element already <body>) -> ngOnDestroy, all in one task.
+    const { fixture } = await render(AccordionHost);
+    const host = fixture.componentInstance;
+    host.collapsible.set(true);
+    host.value.set('One');
+    fixture.detectChanges();
+    const button = screen.getByRole('button', { name: 'One' });
+    button.focus();
+    const wrapper = button.parentElement as HTMLElement;
+    const detach = wrapper.remove.bind(wrapper);
+    // Emulate the browser: detaching the focused node blurs it first (nothing is focused after).
+    wrapper.remove = () => {
+      (document.activeElement as HTMLElement | null)?.blur();
+      detach();
+    };
+
+    host.items.set(['Two', 'Three']);
+    fixture.detectChanges();
+    await Promise.resolve();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Two' }));
+  });
 });

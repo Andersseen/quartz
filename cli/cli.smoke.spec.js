@@ -182,13 +182,7 @@ describe('CLI smoke — quartz add', () => {
   });
 
   it('should copy 0.3.0 controls with correct peer boundaries', () => {
-    const outDir = runAdd(tmpDir, [
-      'checkbox',
-      'radio-group',
-      'toggle',
-      'toggle-group',
-      'slider',
-    ]);
+    const outDir = runAdd(tmpDir, ['checkbox', 'radio-group', 'toggle', 'toggle-group', 'slider']);
     const copied = readFiles(outDir);
 
     expect(Object.keys(copied).sort()).toEqual([

@@ -6,7 +6,10 @@
  *    `_redirects` rule, and `#fragment` links point to an existing id in the target page;
  *  - every page has one <title>, one meta description, and docs pages exactly one <h1>;
  *  - no page declares more than one canonical URL, and no two pages share a canonical URL;
- *  - every `_redirects` target exists (no redirect to a 404, no redirect loops).
+ *  - every `_redirects` target exists (no redirect to a 404, no redirect loops);
+ *  - no shipped JavaScript contains an application component that skipped AOT compilation (a raw
+ *    `selector:`/`template:` decorator). Such a component only fails at runtime with "JIT compiler
+ *    unavailable"; this is the deterministic guard for the 0.16 intermittent home-route failure.
  *
  * Usage: node scripts/check-docs-output.mjs [siteDir]
  */
@@ -45,6 +48,27 @@ const fileFor = (pathname) => {
   }
   return null;
 };
+
+// AOT output defines components with `selectors:[[...]]`; a component left as a decorator literal still
+// has the singular `selector:` next to its `template:`. Our own selectors all start with app-.
+function jsFiles(dir) {
+  const out = [];
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) out.push(...jsFiles(path));
+    else if (name.endsWith('.js') || name.endsWith('.mjs')) out.push(path);
+  }
+  return out;
+}
+const JIT_COMPONENT = /\bselector:\s*[`'"]app-[a-z0-9-]+[`'"]/;
+for (const file of jsFiles(root)) {
+  if (file.includes(`${join(root, 'pagefind')}`)) continue;
+  if (JIT_COMPONENT.test(readFileSync(file, 'utf8'))) {
+    fail(
+      `${relative(root, file)}: contains a component that was not AOT-compiled (would throw "JIT compiler unavailable")`,
+    );
+  }
+}
 
 const pages = htmlFiles(root).filter((file) => !file.includes(`${join(root, 'pagefind')}`));
 const idsCache = new Map();

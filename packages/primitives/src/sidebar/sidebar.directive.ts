@@ -169,6 +169,14 @@ export class SidebarDirective implements OnDestroy {
       return;
     }
 
+    if (this.previousResponsive === null && responsive === 'mobile') {
+      // First render on a mobile viewport (e.g. hydrating server HTML, which always renders the
+      // desktop default). Treat it like a desktop→mobile transition: the off-canvas overlay must
+      // not open on page load, but the requested open state is remembered for a later desktop width.
+      this.desktopOpen.set(this.open());
+      if (this.autoCloseOnMobile() && this.currentMode() === 'overlay') this.open.set(false);
+    }
+
     if (this.previousResponsive === 'desktop' && responsive === 'mobile') {
       this.desktopOpen.set(this.open());
       if (this.autoCloseOnMobile() && this.currentMode() === 'overlay') this.open.set(false);

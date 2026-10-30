@@ -53,3 +53,6 @@ Thumbs.db
 
 # Consumer fixture runtime output
 /test-results-consumer
+
+# Consumer evidence is recorded in docs/releases/0.17-acceptance.md
+/consumer/results

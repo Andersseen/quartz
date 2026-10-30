@@ -1,0 +1,51 @@
+{
+  "A-empty": {
+    "description": "Empty zoneless Angular application (baseline)",
+    "main": "import { Component, provideZonelessChangeDetection } from '@angular/core';\nimport { bootstrapApplication } from '@angular/platform-browser';\n\n@Component({ selector: 'app-root', template: '<p>empty</p>' })\nclass App {}\n\nbootstrapApplication(App, { providers: [provideZonelessChangeDetection()] });\n",
+    "absent": [
+      "data-qz-overlay-container",
+      "data-qz-dialog-wrapper",
+      "qzProgressTrack",
+      "qz-toast-container",
+      "qzSplitterHandle"
+    ]
+  },
+  "A2-local-directive": {
+    "description": "Baseline with a trivial LOCAL directive (signal input + host bindings): isolates Angular's own directive runtime from Quartz's cost",
+    "main": "import { Component, Directive, computed, input, provideZonelessChangeDetection } from '@angular/core';\nimport { bootstrapApplication } from '@angular/platform-browser';\n\n@Directive({ selector: '[appBar]', host: { role: 'progressbar', '[attr.aria-valuenow]': 'value()', '[attr.data-state]': 'state()' } })\nclass Bar {\n  readonly value = input<number | null>(null);\n  readonly state = computed(() => (this.value() === null ? 'indeterminate' : 'loading'));\n}\n\n@Component({ selector: 'app-root', imports: [Bar], template: '<div appBar [value]=\"40\"></div>' })\nclass App {}\n\nbootstrapApplication(App, { providers: [provideZonelessChangeDetection()] });\n",
+    "absent": [
+      "data-qz-overlay-container",
+      "data-qz-dialog-wrapper",
+      "qzProgressTrack",
+      "qz-toast-container",
+      "qzSplitterHandle"
+    ]
+  },
+  "B-core-utility": {
+    "description": "One small Core utility (calculateArrowGeometry) imported from the package root",
+    "main": "import { Component, provideZonelessChangeDetection } from '@angular/core';\nimport { bootstrapApplication } from '@angular/platform-browser';\nimport { calculateArrowGeometry } from '@quartz-headless/core';\n\n@Component({ selector: 'app-root', template: '<p>{{ side }}</p>' })\nclass App {\n  readonly side = String(\n    calculateArrowGeometry({ left: 0, top: 0, width: 10, height: 10 }, { left: 0, top: 10, width: 100, height: 40 }, 'bottom', { size: 8, padding: 2 }).available,\n  );\n}\n\nbootstrapApplication(App, { providers: [provideZonelessChangeDetection()] });\n",
+    "absent": [
+      "data-qz-dialog-wrapper",
+      "qzProgressTrack",
+      "qz-toast-container",
+      "qzSplitterHandle",
+      "data-qz-overlay-container"
+    ]
+  },
+  "C-simple-primitive": {
+    "description": "One simple primitive (Progress) imported from the package root",
+    "main": "import { Component, provideZonelessChangeDetection } from '@angular/core';\nimport { bootstrapApplication } from '@angular/platform-browser';\nimport { ProgressDirective, ProgressIndicatorDirective, ProgressTrackDirective } from '@quartz-headless/primitives';\n\n@Component({\n  selector: 'app-root',\n  imports: [ProgressDirective, ProgressTrackDirective, ProgressIndicatorDirective],\n  template: '<div qzProgress [value]=\"40\" aria-label=\"Load\"><div qzProgressTrack><div qzProgressIndicator></div></div></div>',\n})\nclass App {}\n\nbootstrapApplication(App, { providers: [provideZonelessChangeDetection()] });\n",
+    "absent": [
+      "data-qz-dialog-wrapper",
+      "qz-toast-container",
+      "qzSplitterHandle",
+      "data-qz-overlay-container",
+      "qzTooltip"
+    ]
+  },
+  "D-dialog-flow": {
+    "description": "Floating Overlay/Dialog flow (DialogService + OverlayTrigger)",
+    "main": "import { Component, TemplateRef, ViewContainerRef, inject, provideZonelessChangeDetection, viewChild } from '@angular/core';\nimport { bootstrapApplication } from '@angular/platform-browser';\nimport { OverlayTriggerDirective } from '@quartz-headless/core';\nimport { DialogService } from '@quartz-headless/primitives';\n\n@Component({\n  selector: 'app-root',\n  imports: [OverlayTriggerDirective],\n  template: '<button (click)=\"open()\">Open</button><button qzOverlayTrigger [overlayTemplate]=\"panel\">Pop</button><ng-template #panel><div>Panel</div></ng-template><ng-template #tpl let-ref><button (click)=\"ref.close()\">Close</button></ng-template>',\n})\nclass App {\n  private readonly dialogs = inject(DialogService);\n  private readonly vcr = inject(ViewContainerRef);\n  readonly tpl = viewChild.required<TemplateRef<unknown>>('tpl');\n  open() { this.dialogs.open(this.tpl(), this.vcr); }\n}\n\nbootstrapApplication(App, { providers: [provideZonelessChangeDetection()] });\n",
+    "absent": ["qz-toast-container", "qzSplitterHandle", "qzProgressTrack", "qzTooltip"]
+  }
+}
