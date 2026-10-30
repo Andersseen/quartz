@@ -9,7 +9,12 @@ import {
   input,
   model,
 } from '@angular/core';
-import { CollectionStore, resolveDirection, type CollectionItem } from '@quartz-headless/core';
+import {
+  CollectionStore,
+  resolveDirection,
+  type CollectionItem,
+  QzIdGenerator,
+} from '@quartz-headless/core';
 import type { StepDirective } from './step.directive';
 import type { StepPanelDirective } from './step-panel.directive';
 import type { StepTriggerDirective } from './step-trigger.directive';
@@ -18,8 +23,6 @@ import {
   type StepperActivationMode,
   type StepperOrientation,
 } from './stepper.types';
-
-let stepperId = 0;
 
 @Directive({
   selector: '[qzStepper]',
@@ -33,9 +36,10 @@ let stepperId = 0;
   },
 })
 export class StepperDirective<T> implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly generatedId = `qz-stepper-${++stepperId}`;
+  private readonly generatedId = this.ids.next('qz-stepper');
   private readonly collection = new CollectionStore<StepTriggerDirective<T> & CollectionItem>(
     { focusStrategy: 'roving-tabindex', orientation: 'horizontal' },
     this.document,

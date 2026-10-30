@@ -1,6 +1,5 @@
 import { Directive, inject } from '@angular/core';
-
-let comboboxGroupId = 0;
+import { QzIdGenerator } from '@quartz-headless/core';
 
 /** Labelled group of options: `role="group"` named by a `qzComboboxGroupLabel` child. */
 @Directive({
@@ -13,7 +12,8 @@ let comboboxGroupId = 0;
   },
 })
 export class ComboboxGroupDirective {
-  readonly labelId = `qz-combobox-group-${++comboboxGroupId}-label`;
+  private readonly ids = inject(QzIdGenerator);
+  readonly labelId = `${this.ids.next('qz-combobox-group')}-label`;
 }
 
 /** Visible label of a `qzComboboxGroup`. Not an option: skipped by keyboard navigation and typeahead. */

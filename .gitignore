@@ -50,3 +50,6 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 /.playwright-mcp
+
+# Consumer fixture runtime output
+/test-results-consumer

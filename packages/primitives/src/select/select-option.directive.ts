@@ -8,9 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { SelectDirective } from './select.directive';
-
-let selectOptionId = 0;
 
 @Directive({
   selector: '[qzSelectOption]',
@@ -31,6 +30,7 @@ let selectOptionId = 0;
   },
 })
 export class SelectOptionDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly select = inject(SelectDirective<T>);
 
@@ -42,7 +42,7 @@ export class SelectOptionDirective<T> implements OnInit, OnDestroy {
   /** Explicit typeahead label; defaults to the option's text content. */
   readonly qzSelectOptionLabel = input<string | null>(null);
 
-  readonly id = `qz-select-option-${++selectOptionId}`;
+  readonly id = this.ids.next('qz-select-option');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () =>
     this.qzSelectOptionLabel() ?? this.elementRef.nativeElement.textContent?.trim() ?? '';

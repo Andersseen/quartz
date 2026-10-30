@@ -70,6 +70,13 @@ class NavigationMenuHost {
 afterEach(() => vi.useRealTimers());
 
 describe('NavigationMenu', () => {
+  it('does not put aria-orientation on the plain list (not allowed for its implicit role)', async () => {
+    const { container } = await render(NavigationMenuHost);
+    const list = container.querySelector('[qzNavigationMenuList]')!;
+    expect(list.hasAttribute('aria-orientation')).toBe(false);
+    expect(list.getAttribute('data-qz-orientation')).toBe('horizontal');
+  });
+
   it('uses navigation disclosure semantics and only references mounted content', async () => {
     const { fixture } = await render(NavigationMenuHost);
     const nav = screen.getByRole('navigation', { name: 'Main navigation' });

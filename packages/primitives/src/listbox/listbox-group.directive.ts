@@ -1,6 +1,5 @@
 import { Directive, inject } from '@angular/core';
-
-let listboxGroupId = 0;
+import { QzIdGenerator } from '@quartz-headless/core';
 
 /** Labelled group of options: `role="group"` named by a `qzListboxGroupLabel` child. */
 @Directive({
@@ -13,7 +12,8 @@ let listboxGroupId = 0;
   },
 })
 export class ListboxGroupDirective {
-  readonly labelId = `qz-listbox-group-${++listboxGroupId}-label`;
+  private readonly ids = inject(QzIdGenerator);
+  readonly labelId = `${this.ids.next('qz-listbox-group')}-label`;
 }
 
 /** Visible label of a `qzListboxGroup`. Not an option: skipped by keyboard navigation and typeahead. */

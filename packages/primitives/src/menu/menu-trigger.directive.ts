@@ -21,11 +21,10 @@ import {
   type FocusRestorer,
   type OverlayFlipAxis,
   type OverlayPlacement,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { MenuService } from './menu.service';
 import { QZ_MENU_SERVICE_PROPERTY } from './menu.directive';
-
-let menuTriggerId = 0;
 
 @Directive({
   selector: '[qzMenuTrigger]',
@@ -41,6 +40,7 @@ let menuTriggerId = 0;
   },
 })
 export class MenuTriggerDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly overlayService = inject(OverlayService);
@@ -89,7 +89,7 @@ export class MenuTriggerDirective implements OnDestroy {
       },
     );
     this.mountedSubscription = this.overlayRef.mounted$.subscribe((panel) => {
-      const id = panel.id || `qz-menu-panel-${++menuTriggerId}`;
+      const id = panel.id || this.ids.next('qz-menu-panel');
       panel.id = id;
       this.#panelId.set(id);
       this.menuService = getMenuService(panel);

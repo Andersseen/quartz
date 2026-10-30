@@ -8,9 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { TabsDirective } from './tabs.directive';
-
-let tabId = 0;
 
 @Directive({
   selector: '[qzTab]',
@@ -32,13 +31,14 @@ let tabId = 0;
   },
 })
 export class TabDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly tabs = inject(TabsDirective<T>);
 
   readonly value = input.required<T>({ alias: 'qzTab' });
   readonly disabled = input(false, { alias: 'qzTabDisabled', transform: booleanAttribute });
 
-  readonly id = `qz-tab-${++tabId}`;
+  readonly id = this.ids.next('qz-tab');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly tabDisabled = computed(() => this.disabled());

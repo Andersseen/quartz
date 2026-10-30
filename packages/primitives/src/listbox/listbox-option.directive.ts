@@ -8,9 +8,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { ListboxDirective } from './listbox.directive';
-
-let optionId = 0;
 
 @Directive({
   selector: '[qzListboxOption]',
@@ -28,12 +27,13 @@ let optionId = 0;
   },
 })
 export class ListboxOptionDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly listbox = inject<ListboxDirective<T>>(ListboxDirective);
 
   readonly qzListboxOption = input.required<T>();
   readonly qzListboxOptionDisabled = input(false, { transform: booleanAttribute });
-  readonly id = `qz-listbox-option-${++optionId}`;
+  readonly id = this.ids.next('qz-listbox-option');
   readonly selected = computed(() => this.listbox.isSelected(this));
   readonly active = computed(() => this.listbox.activeId() === this.id);
   readonly label = computed(() => this.elementRef.nativeElement.textContent?.trim() ?? '');

@@ -1,8 +1,7 @@
 import { Directive, OnDestroy, OnInit, computed, inject, input } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { StepDirective } from './step.directive';
 import { StepperDirective } from './stepper.directive';
-
-let stepPanelId = 0;
 
 @Directive({
   selector: '[qzStepPanel]',
@@ -19,11 +18,12 @@ let stepPanelId = 0;
   },
 })
 export class StepPanelDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly step = inject(StepDirective<T>, { optional: true });
   protected readonly stepper = inject(StepperDirective<T>);
 
   readonly value = input<T | null>(null, { alias: 'qzStepPanel' });
-  readonly id = `qz-step-panel-${++stepPanelId}`;
+  readonly id = this.ids.next('qz-step-panel');
   readonly active = computed(() => this.stepper.isActiveValue(this.stepValue()));
   readonly triggerId = computed(() => this.stepper.triggerIdFor(this));
 

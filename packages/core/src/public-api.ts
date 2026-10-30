@@ -108,3 +108,6 @@ export type { VirtualScrollConfig, VirtualScrollRow } from './virtual-scroll';
 // Viewport
 export { ViewportService, ViewportMatchDirective, DEFAULT_BREAKPOINTS } from './viewport';
 export type { ViewportBreakpoint, ViewportBreakpoints, ViewportMatchResult } from './viewport';
+
+// Ids (application-scoped, SSR-safe)
+export { QzIdGenerator } from './id';

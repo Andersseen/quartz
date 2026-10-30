@@ -1,7 +1,6 @@
 import { Directive, OnDestroy, OnInit, computed, inject, input } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { TabsDirective } from './tabs.directive';
-
-let tabPanelId = 0;
 
 @Directive({
   selector: '[qzTabPanel]',
@@ -17,10 +16,11 @@ let tabPanelId = 0;
   },
 })
 export class TabPanelDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   protected readonly tabs = inject(TabsDirective<T>);
 
   readonly value = input.required<T>({ alias: 'qzTabPanel' });
-  readonly id = `qz-tab-panel-${++tabPanelId}`;
+  readonly id = this.ids.next('qz-tab-panel');
   readonly selected = computed(() => this.tabs.isPanelSelected(this));
   readonly tabId = computed(() => this.tabs.tabIdFor(this));
 

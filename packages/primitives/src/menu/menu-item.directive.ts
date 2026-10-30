@@ -22,12 +22,11 @@ import {
   inlineToPhysical,
   resolveDirection,
   type FocusRestorer,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { MenuService } from './menu.service';
 import { DEFAULT_MENU_CONFIG, type MenuCollectionEntry } from './menu.types';
 import { QZ_MENU_SERVICE_PROPERTY } from './menu.directive';
-
-let menuItemId = 0;
 
 @Directive({
   selector: '[qzMenuItem]',
@@ -51,6 +50,7 @@ let menuItemId = 0;
   },
 })
 export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry {
+  private readonly ids = inject(QzIdGenerator);
   protected readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly menuService = inject(MenuService);
   protected readonly overlayService = inject(OverlayService);
@@ -69,7 +69,7 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
   readonly closeOnSelect = input(true, { transform: booleanAttribute });
   readonly selected = output<void>();
 
-  readonly id = `qz-menu-item-${++menuItemId}`;
+  readonly id = this.ids.next('qz-menu-item');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly #isSubmenuOpen = signal(false);
@@ -213,7 +213,7 @@ export class MenuItemDirective implements OnInit, OnDestroy, MenuCollectionEntry
       },
     );
     this.mountedSubscription = this.overlayRef.mounted$.subscribe((panel) => {
-      const id = panel.id || `qz-menu-panel-${++menuItemId}`;
+      const id = panel.id || this.ids.next('qz-menu-panel');
       panel.id = id;
       this.#submenuPanelId.set(id);
       this.childMenuService = getMenuService(panel);

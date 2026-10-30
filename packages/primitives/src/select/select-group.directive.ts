@@ -1,6 +1,5 @@
 import { Directive, inject } from '@angular/core';
-
-let selectGroupId = 0;
+import { QzIdGenerator } from '@quartz-headless/core';
 
 /** Labelled group of options: `role="group"` named by a `qzSelectGroupLabel` child. */
 @Directive({
@@ -13,7 +12,8 @@ let selectGroupId = 0;
   },
 })
 export class SelectGroupDirective {
-  readonly labelId = `qz-select-group-${++selectGroupId}-label`;
+  private readonly ids = inject(QzIdGenerator);
+  readonly labelId = `${this.ids.next('qz-select-group')}-label`;
 }
 
 /** Visible label of a `qzSelectGroup`. Not an option: skipped by keyboard navigation and typeahead. */

@@ -25,6 +25,7 @@ import {
   type DismissController,
   type OverlayFlipAxis,
   type OverlayPlacement,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { Subscription } from 'rxjs';
 import { SelectContentDirective } from './select-content.directive';
@@ -36,14 +37,13 @@ import {
   type SelectOpenReason,
 } from './select.types';
 
-let selectId = 0;
-
 @Directive({
   selector: '[qzSelect]',
   exportAs: 'qzSelect',
   standalone: true,
 })
 export class SelectDirective<T> implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly overlayService = inject(OverlayService);
   private readonly document = inject(DOCUMENT);
@@ -52,7 +52,7 @@ export class SelectDirective<T> implements OnDestroy {
     this.document,
   );
   private readonly projectedContent = contentChild(SelectContentDirective);
-  private readonly generatedId = `qz-select-${++selectId}`;
+  private readonly generatedId = this.ids.next('qz-select');
   private readonly generatedPanelId = `${this.generatedId}-listbox`;
   private readonly internalOpenSync = signal(false);
   private readonly openState = signal(false);

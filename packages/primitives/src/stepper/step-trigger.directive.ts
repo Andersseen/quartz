@@ -8,10 +8,9 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { StepDirective } from './step.directive';
 import { StepperDirective } from './stepper.directive';
-
-let stepTriggerId = 0;
 
 @Directive({
   selector: '[qzStepTrigger]',
@@ -34,6 +33,7 @@ let stepTriggerId = 0;
   },
 })
 export class StepTriggerDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly step = inject(StepDirective<T>, { optional: true });
   protected readonly stepper = inject(StepperDirective<T>);
@@ -41,7 +41,7 @@ export class StepTriggerDirective<T> implements OnInit, OnDestroy {
   readonly value = input<T | null>(null, { alias: 'qzStepTrigger' });
   readonly disabled = input(false, { alias: 'qzStepTriggerDisabled', transform: booleanAttribute });
 
-  readonly id = `qz-step-trigger-${++stepTriggerId}`;
+  readonly id = this.ids.next('qz-step-trigger');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly active = computed(() => this.stepper.isActiveValue(this.stepValue()));

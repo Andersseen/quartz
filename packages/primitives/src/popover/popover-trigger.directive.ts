@@ -28,10 +28,9 @@ import {
   type OverlayArrowGeometry,
   type OverlayFlipAxis,
   type OverlayPlacement,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { DEFAULT_POPOVER_CONFIG, type PopoverContext } from './popover.types';
-
-let popoverId = 0;
 
 @Directive({
   selector: '[qzPopoverTrigger]',
@@ -46,6 +45,7 @@ let popoverId = 0;
   },
 })
 export class PopoverTriggerDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly overlayService = inject(OverlayService);
@@ -151,7 +151,7 @@ export class PopoverTriggerDirective implements OnDestroy {
       this.#arrow.set(pos.arrow ?? null);
     });
     this.mountedSubscription = this.overlayRef.mounted$.subscribe((panel) => {
-      const id = panel.id || `qz-popover-${++popoverId}`;
+      const id = panel.id || this.ids.next('qz-popover');
       panel.id = id;
       this.#panelId.set(id);
       if (this.autoFocus()) {

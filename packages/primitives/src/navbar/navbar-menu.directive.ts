@@ -1,7 +1,6 @@
 import { Directive, ElementRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { NavbarDirective } from './navbar.directive';
-
-let navbarMenuId = 0;
 
 @Directive({
   selector: '[qzNavbarMenu]',
@@ -17,10 +16,11 @@ let navbarMenuId = 0;
   },
 })
 export class NavbarMenuDirective implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly navbar = inject(NavbarDirective);
 
-  readonly id = `qz-navbar-menu-${++navbarMenuId}`;
+  readonly id = this.ids.next('qz-navbar-menu');
 
   element(): HTMLElement {
     return this.elementRef.nativeElement;

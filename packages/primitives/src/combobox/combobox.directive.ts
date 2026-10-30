@@ -26,6 +26,7 @@ import {
   type DismissController,
   type OverlayFlipAxis,
   type OverlayPlacement,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { Subscription } from 'rxjs';
 import { ComboboxContentDirective } from './combobox-content.directive';
@@ -43,14 +44,13 @@ import {
   type ComboboxOpenReason,
 } from './combobox.types';
 
-let comboboxId = 0;
-
 @Directive({
   selector: '[qzCombobox]',
   exportAs: 'qzCombobox',
   standalone: true,
 })
 export class ComboboxDirective<T> implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly overlayService = inject(OverlayService);
@@ -74,7 +74,7 @@ export class ComboboxDirective<T> implements OnDestroy {
   private readonly composing = signal(false);
   private readonly openState = signal(false);
   private readonly projectedContent = contentChild(ComboboxContentDirective);
-  private readonly generatedId = `qz-combobox-${++comboboxId}`;
+  private readonly generatedId = this.ids.next('qz-combobox');
   private readonly generatedPanelId = `${this.generatedId}-listbox`;
 
   readonly #formDisabled = signal(false);

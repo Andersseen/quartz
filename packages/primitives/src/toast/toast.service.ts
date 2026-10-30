@@ -1,4 +1,5 @@
 import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { DOCUMENT } from '@angular/common';
 import {
   Toast,
@@ -8,15 +9,9 @@ import {
   DEFAULT_TOAST_OPTIONS,
 } from './toast.types';
 
-let toastIdCounter = 0;
-
-/** Monotonic ids: `track toast.id` breaks if two live toasts ever collide. */
-function generateId(): string {
-  return `qz-toast-${++toastIdCounter}`;
-}
-
 @Injectable({ providedIn: 'root' })
 export class ToastService implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private document = inject(DOCUMENT);
 
   #toasts = signal<Toast[]>([]);
@@ -39,7 +34,7 @@ export class ToastService implements OnDestroy {
   private timerId: number | null = null;
 
   show(options: ToastOptions): string {
-    const id = generateId();
+    const id = this.ids.next('qz-toast');
     const mergedOptions = { ...DEFAULT_TOAST_OPTIONS, ...options };
     const maxVisible = Number.isFinite(mergedOptions.maxVisible)
       ? Math.max(1, Math.floor(mergedOptions.maxVisible))

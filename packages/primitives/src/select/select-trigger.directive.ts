@@ -1,7 +1,6 @@
 import { Directive, ElementRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { SelectDirective } from './select.directive';
-
-let selectTriggerId = 0;
 
 @Directive({
   selector: '[qzSelectTrigger]',
@@ -22,6 +21,7 @@ let selectTriggerId = 0;
   },
 })
 export class SelectTriggerDirective implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly select = inject(SelectDirective);
 
@@ -32,7 +32,7 @@ export class SelectTriggerDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     const element = this.elementRef.nativeElement;
     // Keep a consumer-provided id; otherwise generate one so the popup can reference the trigger.
-    if (!element.id) element.id = `qz-select-trigger-${++selectTriggerId}`;
+    if (!element.id) element.id = this.ids.next('qz-select-trigger');
   }
 
   onClick(event: MouseEvent): void {

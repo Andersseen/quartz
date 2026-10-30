@@ -9,11 +9,10 @@ import {
   input,
   output,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { MenuRadioGroupDirective } from './menu-radio-group.directive';
 import { MenuService } from './menu.service';
 import type { MenuCollectionEntry } from './menu.types';
-
-let radioItemId = 0;
 
 @Directive({
   selector: '[qzMenuRadioItem]',
@@ -33,6 +32,7 @@ let radioItemId = 0;
   },
 })
 export class MenuRadioItemDirective<T> implements OnInit, OnDestroy, MenuCollectionEntry {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly menuService = inject(MenuService);
   private readonly group = inject<MenuRadioGroupDirective<T>>(MenuRadioGroupDirective);
@@ -42,7 +42,7 @@ export class MenuRadioItemDirective<T> implements OnInit, OnDestroy, MenuCollect
   readonly closeOnSelect = input(false, { transform: booleanAttribute });
   readonly selected = output<void>();
 
-  readonly id = `qz-menu-radio-item-${++radioItemId}`;
+  readonly id = this.ids.next('qz-menu-radio-item');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly checked = computed(() => this.group.isChecked(this.value()));

@@ -8,9 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { RadioGroupDirective } from './radio-group.directive';
-
-let radioId = 0;
 
 @Directive({
   selector: '[qzRadio]',
@@ -31,13 +30,14 @@ let radioId = 0;
   },
 })
 export class RadioDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly group = inject(RadioGroupDirective<T>);
 
   readonly value = input.required<T>({ alias: 'qzRadio' });
   readonly disabled = input(false, { alias: 'qzRadioDisabled', transform: booleanAttribute });
 
-  readonly id = `qz-radio-${++radioId}`;
+  readonly id = this.ids.next('qz-radio');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly radioDisabled = computed(() => this.disabled() || this.group.isDisabled());
