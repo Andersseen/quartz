@@ -3,7 +3,7 @@
 title: OverlayArrowGeometry
 description: Geometry for a consumer-rendered arrow.
 group: "API: Core"
-order: 1054
+order: 1055
 generated: doq-api
 category: interface
 ---

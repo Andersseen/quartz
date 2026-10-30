@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzMenuRadioItem`
-- **Source:** [packages/primitives/src/menu/menu-radio-item.directive.ts:35](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-radio-item.directive.ts#L35)
+- **Source:** [packages/primitives/src/menu/menu-radio-item.directive.ts:34](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-radio-item.directive.ts#L34)
 
 ## Selector
 

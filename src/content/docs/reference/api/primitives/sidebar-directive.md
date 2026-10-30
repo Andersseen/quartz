@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzSidebar`
-- **Source:** [packages/primitives/src/sidebar/sidebar.directive.ts:56](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/sidebar/sidebar.directive.ts#L56)
+- **Source:** [packages/primitives/src/sidebar/sidebar.directive.ts:55](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/sidebar/sidebar.directive.ts#L55)
 
 ## Selector
 

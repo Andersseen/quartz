@@ -3,7 +3,7 @@
 title: placementSide
 description: Function reference for placementSide.
 group: "API: Core"
-order: 1039
+order: 1040
 generated: doq-api
 category: function
 ---

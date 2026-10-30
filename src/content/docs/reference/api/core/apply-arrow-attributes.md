@@ -3,7 +3,7 @@
 title: applyArrowAttributes
 description: "Mirrors arrow geometry onto a surface element so consumers can style an arrow in plain CSS: data-side, data-placement and --qz-arrow-x/--qz-arrow-y (px; remove…"
 group: "API: Core"
-order: 1014
+order: 1015
 generated: doq-api
 category: function
 ---

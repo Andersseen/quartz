@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzToolbarItem`
-- **Source:** [packages/primitives/src/toolbar/toolbar-item.directive.ts:30](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toolbar/toolbar-item.directive.ts#L30)
+- **Source:** [packages/primitives/src/toolbar/toolbar-item.directive.ts:29](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toolbar/toolbar-item.directive.ts#L29)
 
 ## Selector
 

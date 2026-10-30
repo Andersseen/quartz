@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzSelectOption`
-- **Source:** [packages/primitives/src/select/select-option.directive.ts:33](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/select/select-option.directive.ts#L33)
+- **Source:** [packages/primitives/src/select/select-option.directive.ts:32](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/select/select-option.directive.ts#L32)
 
 ## Selector
 

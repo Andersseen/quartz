@@ -3,7 +3,7 @@
 title: calculateArrowGeometry
 description: Computes the arrow position for a surface already positioned at surface.
 group: "API: Core"
-order: 1015
+order: 1016
 generated: doq-api
 category: function
 ---

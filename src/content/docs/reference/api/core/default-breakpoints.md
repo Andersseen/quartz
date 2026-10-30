@@ -3,7 +3,7 @@
 title: DEFAULT_BREAKPOINTS
 description: Default breakpoints following Tailwind conventions.
 group: "API: Core"
-order: 1083
+order: 1084
 generated: doq-api
 category: constant
 ---

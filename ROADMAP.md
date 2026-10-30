@@ -222,6 +222,8 @@ de la clasificación en `docs/api/volt-parity.md` solo con evidencia.
 
 ### 0.17.0 — Compatibilidad y consumo fuera del repositorio (antes 0.10)
 
+> **Estado:** implementado en rama, **no aceptado**. Peers `^21.2.0 \|\| ^22.0.0` verificados (21.0 falla: el template de Toast usa funciones flecha, Angular ≥ 21.2). Puertas abiertas: `autofill` real y revisión manual con lector de pantalla. Ver `docs/releases/0.17-acceptance.md`.
+
 **Scopes:** `compat`, `testing`, `cli`. Entrada: **todas** las familias de paridad (0.9–0.16) cerradas.
 
 - **COMPAT-01:** evolucionar el smoke de tarballs a una app Angular externa: AOT con

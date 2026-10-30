@@ -294,6 +294,24 @@ test.describe('input-otp', () => {
     await expect(page.getByTestId('otp')).toHaveAttribute('data-complete', '');
   });
 
+  test('real keyboard paste (Ctrl/Cmd+V from the OS clipboard) distributes the code', async ({
+    page,
+    context,
+    browserName,
+  }) => {
+    test.skip(
+      browserName !== 'chromium',
+      'only Chromium lets automation grant clipboard permissions',
+    );
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await boot(page, '/parity');
+    await page.evaluate(() => navigator.clipboard.writeText('31 41-59'));
+    await field(page).click();
+    await page.keyboard.press('ControlOrMeta+V');
+    await expect(page.getByTestId('otp-value')).toHaveText('314159');
+    await expect(page.getByTestId('otp-completed')).toHaveText('314159');
+  });
+
   test('IME: composition text is not committed until compositionend (synthetic composition events)', async ({
     page,
   }) => {

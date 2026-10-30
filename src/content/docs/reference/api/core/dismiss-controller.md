@@ -3,7 +3,7 @@
 title: DismissController
 description: Interface reference for DismissController.
 group: "API: Core"
-order: 1049
+order: 1050
 generated: doq-api
 category: interface
 ---

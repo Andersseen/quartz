@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzListboxOption`
-- **Source:** [packages/primitives/src/listbox/listbox-option.directive.ts:30](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/listbox/listbox-option.directive.ts#L30)
+- **Source:** [packages/primitives/src/listbox/listbox-option.directive.ts:29](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/listbox/listbox-option.directive.ts#L29)
 
 ## Selector
 

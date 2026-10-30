@@ -3,7 +3,7 @@
 title: CollectionStore
 description: Class reference for CollectionStore.
 group: "API: Core"
-order: 1043
+order: 1044
 generated: doq-api
 category: class
 ---

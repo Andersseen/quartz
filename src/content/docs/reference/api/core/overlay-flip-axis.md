@@ -3,7 +3,7 @@
 title: OverlayFlipAxis
 description: Type alias reference for OverlayFlipAxis.
 group: "API: Core"
-order: 1077
+order: 1078
 generated: doq-api
 category: type
 ---

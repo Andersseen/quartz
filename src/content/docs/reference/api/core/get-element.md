@@ -3,7 +3,7 @@
 title: getElement
 description: Function reference for getElement.
 group: "API: Core"
-order: 1027
+order: 1028
 generated: doq-api
 category: function
 ---

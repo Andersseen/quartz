@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzPopoverTrigger`
-- **Source:** [packages/primitives/src/popover/popover-trigger.directive.ts:48](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover-trigger.directive.ts#L48)
+- **Source:** [packages/primitives/src/popover/popover-trigger.directive.ts:47](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/popover/popover-trigger.directive.ts#L47)
 
 ## Selector
 

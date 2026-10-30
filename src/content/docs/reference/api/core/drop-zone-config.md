@@ -3,7 +3,7 @@
 title: DropZoneConfig
 description: Interface reference for DropZoneConfig.
 group: "API: Core"
-order: 1051
+order: 1052
 generated: doq-api
 category: interface
 ---

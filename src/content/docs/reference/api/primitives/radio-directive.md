@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzRadio`
-- **Source:** [packages/primitives/src/radio-group/radio.directive.ts:33](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/radio-group/radio.directive.ts#L33)
+- **Source:** [packages/primitives/src/radio-group/radio.directive.ts:32](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/radio-group/radio.directive.ts#L32)
 
 ## Selector
 

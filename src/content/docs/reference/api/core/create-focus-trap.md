@@ -3,7 +3,7 @@
 title: createFocusTrap
 description: Function reference for createFocusTrap.
 group: "API: Core"
-order: 1020
+order: 1021
 generated: doq-api
 category: function
 ---

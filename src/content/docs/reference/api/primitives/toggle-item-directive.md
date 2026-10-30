@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzToggleItem`
-- **Source:** [packages/primitives/src/toggle-group/toggle-item.directive.ts:36](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-item.directive.ts#L36)
+- **Source:** [packages/primitives/src/toggle-group/toggle-item.directive.ts:35](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toggle-group/toggle-item.directive.ts#L35)
 
 ## Selector
 

@@ -57,25 +57,25 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
-| V    | Implemented and verified        |     26 |           26 |
-| C    | Implemented, missing coverage   |      4 |            4 |
-| P    | Partial behavioural equivalence |      2 |            2 |
+| V    | Implemented and verified        |     31 |           31 |
+| C    | Implemented, missing coverage   |      1 |            1 |
+| P    | Partial behavioural equivalence |      0 |            0 |
 | M    | Missing                         |      0 |            0 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **26 of 46** rows are verified-equivalent after the 0.16 implementation (Checkbox, RadioGroup, Switch, Tabs, Dialog, Select, Listbox, Combobox, Slider, RangeSlider, Toggle, ToggleGroup, DatePicker, DateRangePicker, NavigationMenu, Pagination, Toolbar, Progress, Meter, Avatar, Toast, Drawer, Resizable, Tooltip, Popover, DropdownMenu); the summary counts were recomputed from the row headings in 0.16 (the 0.9-era table had drifted). The 1.0 prerequisite is every row V or N: six rows remain (`accordion` P, `sidebar` P, `autofill` C, `form-field` C, `input-otp` C, `file-upload` C); Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet. Remaining non-N/non-V rows have an owning milestone below.
+Reading the numbers: **31 of 46** rows are verified-equivalent after the 0.17 consumer gate (the 26 closed by 0.16 plus Accordion, Sidebar, FormField, InputOTP and FileUpload, whose evidence is the installed-tarball consumer suite `consumer/e2e/parity.spec.ts` in Chromium, Firefox and WebKit on Angular 21.2, the 21.2.0 minimum and Angular 22 — see `docs/releases/0.17-acceptance.md`); 14 are N. **One row remains open: `autofill` (C).** Its detection mechanism is verified in all three engines with a real CSS animation, but genuine browser autofill cannot be produced by automation (Playwright's Chromium exposes no DevTools `Autofill` domain; Firefox and WebKit offer no hook), so the exact blocker is recorded on the row and in the manual matrix (`docs/releases/0.17-manual-a11y.md`). The 1.0 prerequisite is every row V or N: Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet.
 
 ### Rows by owning milestone (non-N, non-V)
 
-| Milestone                                                                                                                              | Rows                                                                             |
-| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**                                  | `select` (V), `combobox` (V), `listbox` (V)                                      |
-| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**                             | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)               |
-| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                                          | `date-picker` (V), `date-range-picker` (V)                                       |
-| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps)                                       | `accordion` (P), `sidebar` (P)                                                   |
-| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe)                               | `autofill` (C), `form-field` (C), `input-otp` (C), `file-upload` (C)             |
-| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) — **closed in 0.16.0** | `tooltip` (V), `drawer` (V), `popover` (V), `dropdown-menu` (V), `resizable` (V) |
+| Milestone                                                                                                                                       | Rows                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| 0.10 — Advanced selection (Combobox, Select multiple/groups, Listbox sections) — **closed in 0.10.0**                                           | `select` (V), `combobox` (V), `listbox` (V)                                      |
+| 0.11 — Range and toggle controls (RangeSlider, Slider, Toggle, ToggleGroup + Forms) — **closed in 0.11.0**                                      | `toggle` (V), `slider` (V), `range-slider` (V), `toggle-group` (V)               |
+| 0.12 — Date and date-range interaction — **closed in 0.12.0**                                                                                   | `date-picker` (V), `date-range-picker` (V)                                       |
+| 0.13 — Navigation and roving focus (NavigationMenu, Toolbar, Pagination, Accordion/Sidebar gaps) — **closed in 0.17.0**                         | `accordion` (V), `sidebar` (V)                                                   |
+| 0.14 — Text, file input and form-field wiring (InputOTP, Autofill, FileUpload, FormField, Search recipe) — **closed in 0.17.0 except Autofill** | `form-field` (V), `input-otp` (V), `file-upload` (V), `autofill` (C)             |
+| 0.16 — Drawer, resizable and floating API completeness (Drawer, Resizable, Tooltip/Popover arrows, Menu groups) — **closed in 0.16.0**          | `tooltip` (V), `drawer` (V), `popover` (V), `dropdown-menu` (V), `resizable` (V) |
 
 Rows also carrying a _later_ gate (e.g. hydration proof in 0.17) keep their evidence code; 0.17 is a
 cross-cutting gate applied to **every** row, see §5.
@@ -144,11 +144,11 @@ cross-cutting gate applied to **every** row, see §5.
 - **Behavioural dependency:** ng-primitives `autofill`
 - **Observable headless contract required:** Detects browser autofill (via `:-webkit-autofill` animation start/`animationstart` hook) and exposes `data-autofill` + an `autofilled` output.
 - **Quartz equivalent:** `AutofillDirective` detects configured animation-start/end events, maintains `data-autofilled` and emits state transitions. If autofill changes the host value without `input`, it dispatches a bubbling input event for Forms.
-- **Current evidence:** Unit transition and value-notification tests; genuine browser autofill and complete cross-engine limitations are still unverified.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts` in Chromium, Firefox and WebKit: a real CSS `animationstart` with the configured name sets `data-autofilled`, emits `autofilledChange`, and dispatches the missing `input` event so Forms receives the value; teardown while active is error-free; SSR renders no autofill state. This proves the directive's detection pipeline in each engine. It does **not** prove genuine browser autofill.
 - **Accessibility:** None directly (styling signal).
 - **Forms:** Autofill fires no `input` event in some browsers; the value must reach the control.
 - **Angular / SSR:** Browser-only observer; must be a no-op on the server and not run at import.
-- **Remaining work:** SSR and teardown tests; genuine supported-engine evidence; document engine limitations.
+- **Remaining work:** **Blocker (exact):** automation cannot put a field into the browser's autofill state — the DevTools `Autofill` domain is absent from Playwright's Chromium build (`Autofill.trigger` → "wasn't found"), and Firefox/WebKit offer no hook. Detection relies on `:-webkit-autofill` (Chromium, WebKit) / `:autofill` (Firefox) triggering a CSS animation and is best-effort: Quartz does not claim universal autofill support, and some engines/credential managers set values without any observable event. Genuine autofill stays on the manual matrix; the row is promoted to V only when that evidence exists.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: animation-start toggles state; E2E (Chromium) with autofilled field style hook; SSR no-op.
 
@@ -236,17 +236,17 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.11 (closed in 0.11.0)
 - **Acceptance tests needed:** Done (see evidence).
 
-### `form-field` — Implemented, missing coverage (**C**)
+### `form-field` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-form-field`, `volt-label`, `volt-hint`, `volt-error`
 - **Behavioural dependency:** ng-primitives `form-field`
 - **Observable headless contract required:** Generates ids and wires `aria-labelledby`/`aria-describedby` between label/hint/error and the projected control; mirrors invalid/touched/dirty/disabled from `NgControl` as data attributes; error shown per control state.
 - **Quartz equivalent:** Structural root, control, label, description and error directives; stable consumer-provided root ID; optional Forms state observer.
-- **Current evidence:** Focused native-control association tests and optional Forms state test. SSR/hydration, Checkbox/Switch composition, async validators and teardown evidence remain incomplete.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts`, `forms.spec.ts`: native input and textarea, Quartz Checkbox and Switch as controls, label/hint/error wiring with multiple `aria-describedby` references, `aria-invalid`, conditional errors, touched/dirty/invalid/disabled/pending mirrored as data attributes, async validator transitions (pending → invalid → valid), reset, no dangling ARIA references, consumer-provided field ids identical between SSR and hydrated DOM, axe in the error and disabled states. Run on Angular 21.2.25, 21.2.0 (declared minimum) and 22.2.4; Chromium, Firefox and WebKit; real SSR server and hydration.
 - **Accessibility:** Dangling-reference-free ids; error announced (`role=alert`/describedby) when shown.
 - **Forms:** Reads `NgControl` state of the projected control — requires the optional `/forms` entry point.
 - **Angular / SSR:** Ids must be deterministic across server/client.
-- **Remaining work:** Complete control-family, dynamic validation, reset/async-validator and SSR/hydration coverage.
+- **Remaining work:** None for the Volt contract.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: ids/ARIA for native input and Quartz Switch; invalid/touched mirroring; e2e submit-error flow; SSR id stability.
 
@@ -292,17 +292,17 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a
 - **Acceptance tests needed:** None.
 
-### `accordion` — Partial behavioural equivalence (**P**)
+### `accordion` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-accordion`, `-item`, `-trigger`, `-content`
 - **Behavioural dependency:** ng-primitives `accordion`
 - **Observable headless contract required:** Single/multiple, collapsible, container `disabled`, `orientation`, roving trigger focus, `aria-expanded/controls`, hidden content out of tab order.
 - **Quartz equivalent:** `AccordionDirective` family.
-- **Current evidence:** Partial behavioural equivalence.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts` (horizontal Left/Right with Up/Down inert, RTL mapping, non-collapsible `aria-disabled` open item, container `disabled` blocking click and keyboard, multiple mode with closed panels out of the tab order, dynamic removal of the focused open item), `consumer/e2e/navigation.spec.ts`, SSR output with `hidden` closed panels, hydration of `/parity` and `/navigation` with no replaced nodes or id drift; unit coverage in `accordion.directive.spec.ts`. The browser run found and fixed one defect: Chromium blurs a trigger that is being removed, which cleared the focus flag before teardown and dropped focus to `<body>` (regression tests: the blur-order unit test and the dynamic-removal browser test). Run on Angular 21.2.25, 21.2.0 (declared minimum) and 22.2.4; Chromium, Firefox and WebKit; real SSR server and hydration.
 - **Accessibility:** Verified: expanded/controls, hidden panels, trigger arrows/Home/End; teardown no longer rewrites the bound value (0.9).
 - **Forms:** n/a (Volt: none).
 - **Angular / SSR:** Panels render `hidden` markup; hydration proof 0.17.
-- **Remaining work:** Container `disabled`; `orientation` (horizontal arrows + RTL); non-collapsible open item `aria-disabled` per APG.
+- **Remaining work:** None for the Volt contract.
 - **Owning milestone:** 0.13
 - **Acceptance tests needed:** Unit + e2e: container disabled blocks all triggers; horizontal/RTL arrow mapping.
 
@@ -530,31 +530,31 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.15
 - **Acceptance tests needed:** Complete (unit coverage, three-engine template/component/action browser checks, stack-limit playground, and installed-consumer AOT).
 
-### `input-otp` — Implemented, missing coverage (**C**)
+### `input-otp` — Implemented and verified (**V**)
 
 - **Volt public surface:** `volt-input-otp`, `volt-input-otp-slot` (CVA)
 - **Behavioural dependency:** ng-primitives `input-otp`
 - **Observable headless contract required:** N slots over one hidden input: typing advances, Backspace retreats, paste distributes and filters by pattern, per-slot active/caret state, `autocomplete=one-time-code`, completion output.
 - **Quartz equivalent:** `InputOtpComponent` with one real text input, presentational slots, string model, pattern filtering, completion and optional Forms adapter.
-- **Current evidence:** Focused typing/filtering/completion, IME and Forms tests. Browser keyboard, paste and accessibility evidence remains incomplete.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts`, `forms.spec.ts`: typing and pattern filtering, Backspace/Delete, selection replacement, paste (synthetic `ClipboardEvent` in all engines; a real Ctrl/Cmd+V from the OS clipboard in Chromium), IME composition guard (synthetic composition events), dynamic length, disabled, reset, completion output, the Angular Forms adapter, one named input with presentational slots, axe, SSR and hydration. Limitation: a physical IME (OS input method) and a real OS-clipboard paste in Firefox/WebKit cannot be automated; both are on the manual matrix. Run on Angular 21.2.25, 21.2.0 (declared minimum) and 22.2.4; Chromium, Firefox and WebKit; real SSR server and hydration.
 - **Accessibility:** One accessible input (named); slots are presentational; announces progress sensibly.
 - **Forms:** String value, writeValue silent, onChange per change, touched on blur, disabled, reset → `''`.
 - **Angular / SSR:** Hidden input renders on the server; slots hydrate from value.
-- **Remaining work:** Expand keyboard, deletion, dynamic length, paste and three-engine browser contracts; verify completion and IME edge cases.
+- **Remaining work:** Physical IME and non-Chromium OS-clipboard paste are manual-pending (see `docs/releases/0.17-manual-a11y.md`); no known defect.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: type/delete/paste/pattern; e2e mobile-like paste and IME; Forms harness; axe.
 
-### `file-upload` — Implemented, missing coverage (**C**)
+### `file-upload` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltFileUpload`, `volt-file-dropzone` (outputs, no CVA)
 - **Behavioural dependency:** ng-primitives `file-upload`; native `<input type=file>`
 - **Observable headless contract required:** File picker trigger, `accept`/`multiple`/`directory`, drag-and-drop zone (dragenter/leave counting, drop → files), disabled, selected-files output.
 - **Quartz equivalent:** Core drag-drop is element-to-element pointer DnD, not OS file drop. Picker: native input suffices (N).
-- **Current evidence:** Unit coverage for filtering, drop, disabled behavior, nested drag state and excess files; live docs demo includes native picker and dropzone. Wrapper drop, directory fallback, keyboard picker and three-engine evidence remain incomplete.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts`: native picker opened from the keyboard through the real file-chooser, `accept` filtering by extension and MIME wildcard, single-mode `multiple` rejection, a real `DataTransfer` drop on the wrapper, nested `dragenter`/`dragleave` keeping the drag state, disabled input ignoring drops, `webkitdirectory` attribute, surfaced `cancel` (synthetic: engines cannot dismiss the native dialog), axe, SSR and hydration. Directory contents are intentionally not traversed and file contents are never read or uploaded. Run on Angular 21.2.25, 21.2.0 (declared minimum) and 22.2.4; Chromium, Firefox and WebKit; real SSR server and hydration.
 - **Accessibility:** Dropzone must remain keyboard-operable via the native picker; dragover state is cosmetic.
 - **Forms:** Output-based in Volt (no CVA). Requirement: files output; optionally a `File[]` adapter.
 - **Angular / SSR:** No file APIs at import.
-- **Remaining work:** Complete three-engine wrapper-drop, directory fallback, keyboard picker, cancellation and accessibility coverage. Directory trees are not traversed; filtering is UX-only.
+- **Remaining work:** None for the Volt contract. Directory trees are not traversed by design.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** E2E with a real `DataTransfer` drop in 3 engines; unit accept filtering; keyboard picker path.
 
@@ -714,17 +714,17 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** n/a
 - **Acceptance tests needed:** None.
 
-### `sidebar` — Partial behavioural equivalence (**P**)
+### `sidebar` — Implemented and verified (**V**)
 
 - **Volt public surface:** layout: `volt-sidebar`, `-header`, `-content`, `-group`, `-item`, `-footer`, `SidebarService`
 - **Behavioural dependency:** Volt-owned (router links, Escape, collapse state); uses tooltip for collapsed labels
 - **Observable headless contract required:** Collapsible navigation rail: collapsed/expanded width, Escape handling, router-link active state, collapsed-item tooltips, mobile off-canvas.
 - **Quartz equivalent:** `SidebarDirective` family (responsive modes, scroll lock, focus modes) — conditional since 0.6.
-- **Current evidence:** Partial behavioural equivalence.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts`: desktop expanded → collapsed rail → closed are distinct states with a named rail, push-mode Escape is inert, mobile off-canvas locks scroll, focus moves in, Escape closes and restores focus to the trigger and releases the lock, crossing the breakpoint restores the desktop state, SSR renders the desktop default, hydrating at a mobile viewport settles to closed with no replaced nodes. Router-active state and host layout stay consumer-owned (documented boundary; the sidebar renders no router link). The browser run found and fixed one defect: first render at a mobile width opened the off-canvas overlay (scroll lock, focus capture) because only desktop→mobile transitions auto-closed (regression: unit test `does not open the off-canvas overlay on first render at a mobile width`). Run on Angular 21.2.25, 21.2.0 (declared minimum) and 22.2.4; Chromium, Firefox and WebKit; real SSR server and hydration.
 - **Accessibility:** Quartz sidebar has focus/scroll-lock modes; collapsed-rail labelling and router-active semantics are Volt-owned.
 - **Forms:** n/a
 - **Angular / SSR:** Breakpoint state is client-only; server renders the desktop default.
-- **Remaining work:** Browser proof of responsive/focus/scroll-lock; collapsed-state contract (rail vs off-canvas) and Escape.
+- **Remaining work:** None for the Volt contract.
 - **Owning milestone:** 0.13
 - **Acceptance tests needed:** E2E resize across the breakpoint, Escape, focus return, scroll lock cleanup; SSR default state.
 

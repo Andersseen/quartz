@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzStepTrigger`
-- **Source:** [packages/primitives/src/stepper/step-trigger.directive.ts:36](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/stepper/step-trigger.directive.ts#L36)
+- **Source:** [packages/primitives/src/stepper/step-trigger.directive.ts:35](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/stepper/step-trigger.directive.ts#L35)
 
 ## Selector
 

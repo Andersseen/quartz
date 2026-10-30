@@ -14,7 +14,7 @@ Labelled group of options: `role="group"` named by a `qzComboboxGroupLabel` chil
 
 - **Kind:** Directive
 - **Export as:** `qzComboboxGroup`
-- **Source:** [packages/primitives/src/combobox/combobox-group.directive.ts:15](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/combobox/combobox-group.directive.ts#L15)
+- **Source:** [packages/primitives/src/combobox/combobox-group.directive.ts:14](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/combobox/combobox-group.directive.ts#L14)
 
 ## Selector
 

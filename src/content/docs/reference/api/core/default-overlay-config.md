@@ -3,7 +3,7 @@
 title: DEFAULT_OVERLAY_CONFIG
 description: Constant reference for DEFAULT_OVERLAY_CONFIG.
 group: "API: Core"
-order: 1085
+order: 1086
 generated: doq-api
 category: constant
 ---

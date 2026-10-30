@@ -3,7 +3,7 @@
 title: OverlayVirtualAnchor
 description: Interface reference for OverlayVirtualAnchor.
 group: "API: Core"
-order: 1058
+order: 1059
 generated: doq-api
 category: interface
 ---

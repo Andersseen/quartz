@@ -3,7 +3,7 @@
 title: createFocusRestorer
 description: Captures the currently focused element and returns a restorer for it.
 group: "API: Core"
-order: 1019
+order: 1020
 generated: doq-api
 category: function
 ---

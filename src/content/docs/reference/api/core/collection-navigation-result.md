@@ -3,7 +3,7 @@
 title: CollectionNavigationResult
 description: Interface reference for CollectionNavigationResult.
 group: "API: Core"
-order: 1047
+order: 1048
 generated: doq-api
 category: interface
 ---

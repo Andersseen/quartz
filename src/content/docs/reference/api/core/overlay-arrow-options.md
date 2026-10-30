@@ -3,7 +3,7 @@
 title: OverlayArrowOptions
 description: Interface reference for OverlayArrowOptions.
 group: "API: Core"
-order: 1055
+order: 1056
 generated: doq-api
 category: interface
 ---

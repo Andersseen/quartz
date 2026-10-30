@@ -3,7 +3,7 @@
 title: oppositeDirection
 description: The other direction.
 group: "API: Core"
-order: 1037
+order: 1038
 generated: doq-api
 category: function
 ---

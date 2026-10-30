@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { boot, expectHealthy, replacedNodes } from './helpers';
 
-const routes = ['/forms', '/overlays', '/navigation', '/parity'];
+const routes = ['/forms', '/overlays', '/navigation', '/parity', '/controls'];
 const idsOf = (html: string) => [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 
 for (const route of routes) {

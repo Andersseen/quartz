@@ -14,6 +14,10 @@ test.describe('forms (hydrated)', () => {
     await expect(page.locator('#email-field-error')).toHaveAttribute('role', 'alert');
     await expect(email).toHaveAttribute('aria-invalid', 'true');
     await expect(email).toHaveAttribute('aria-describedby', 'email-field-hint email-field-error');
+    // Native textarea gets the same wiring: labelled, described by its error, marked invalid.
+    const message = page.getByLabel('Message');
+    await expect(message).toHaveAttribute('aria-invalid', 'true');
+    await expect(message).toHaveAttribute('aria-describedby', 'message-field-error');
     await axe(page, 'form'); // validation errors state
 
     await email.fill('a@b.co');
@@ -39,6 +43,21 @@ test.describe('forms (hydrated)', () => {
     await notify.focus();
     await page.keyboard.press('Space');
     await expect(notify).toHaveAttribute('aria-checked', 'false');
+  });
+
+  test('radio group: roving arrows move the selection; one tab stop', async ({ page }) => {
+    await boot(page, '/forms');
+    const group = page.getByRole('radiogroup', { name: 'Plan' });
+    await group.getByRole('radio', { name: 'Free' }).focus();
+    await page.keyboard.press('Space');
+    await expect(group.getByRole('radio', { name: 'Free' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await page.keyboard.press('ArrowDown');
+    await expect(group.getByRole('radio', { name: 'Pro' })).toBeFocused();
+    await expect(group.getByRole('radio', { name: 'Pro' })).toHaveAttribute('aria-checked', 'true');
+    await expect(group.locator('[role="radio"][tabindex="0"]')).toHaveCount(1);
   });
 
   test('select opens, picks a value with the keyboard and closes', async ({ page }) => {

@@ -3,7 +3,7 @@
 title: ViewportBreakpoints
 description: Map of breakpoint names to pixel widths.
 group: "API: Core"
-order: 1066
+order: 1067
 generated: doq-api
 category: interface
 ---

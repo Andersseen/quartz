@@ -3,7 +3,7 @@
 title: OverlayPosition
 description: Interface reference for OverlayPosition.
 group: "API: Core"
-order: 1057
+order: 1058
 generated: doq-api
 category: interface
 ---

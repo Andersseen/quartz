@@ -1,5 +1,17 @@
 # STATE — Current Project Status
 
+# 0.17 Consumer compatibility — implemented on branch, NOT accepted (2026-10-30)
+
+Branch `feat/quartz-0.17-consumer-compatibility` (from main `07783ee`, 0.16.0). Package versions are deliberately still `0.16.0`: the bump to `0.17.0` (and the `^0.17.0` Core peer) happens only when the release is accepted. Full record, commands and results: [0.17 acceptance](../releases/0.17-acceptance.md).
+
+What exists: `consumer/` (Angular app installed from packed tarballs, three fixtures with their own lockfiles: Angular 21.2.0 minimum, 21.2.25, 22.2.4), `scripts/consumer/{run,cli,bundle-size,evidence-matrix}.mjs`, Playwright suites `consumer/e2e` (ssr, hydration, forms, overlays, navigation, controls, parity) and `consumer/e2e-cli`, hardened `quartz add`, bundle budgets, CI jobs `consumer-smoke` / `consumer-matrix` / `cli-consumer`, `docs/compatibility.md`, Doqs guides (compatibility, consumer testing, CLI).
+
+Defects found by the consumer evidence and fixed: SSR id counters leaked across requests (`QzIdGenerator`), NavigationMenu list `aria-orientation`, Accordion focus loss on removal in Chromium, Sidebar opening an overlay on first mobile render, and the intermittent "JIT compiler unavailable" docs build (parallel Vite environments sharing one Analog AOT map; `vite.config.ts` now serialises them and `docs:check` scans for un-compiled components). Angular 21.0 does not build (Toast arrow function) so the peer range is `^21.2.0 || ^22.0.0`.
+
+Volt parity: 31 V / 1 C / 14 N. **Open gates:** `autofill` stays C (automation cannot trigger genuine browser autofill) and the manual screen-reader matrix (`docs/releases/0.17-manual-a11y.md`) is pending. Do not merge or publish as 0.17.0 until both are resolved or explicitly waived by the maintainer.
+
+Not covered by 0.17 evidence: touch input, physical IME, Firefox/WebKit OS-clipboard paste, Node 20/24 locally (CI-only), Angular 21.1.
+
 # 0.16 Drawer, Resizable & Floating — implementation complete (2026-10-29)
 
 Branch `feat/quartz-0.16-drawer-resizable-floating` (from main `ab0d56b`). `DrawerService` + Dialog exit presence, Core Splitter fixes for Resizable (RTL, `lostpointercapture`, `disabled`, `resizing`, WAI-ARIA orientation, sanitized bounds), Core overlay arrow geometry with Tooltip/Popover arrows and template contexts, Menu groups/labels, CLI (`drawer`, `resizable` alias), docs/demos/playgrounds, `e2e/floating-016.spec.ts` and consumer fixture. Rows drawer/resizable/tooltip/popover/dropdown-menu → V. Evidence and release-chain status: `docs/releases/0.16-acceptance.md`. Merge/publish only after 0.13–0.15 are published from their source snapshots.

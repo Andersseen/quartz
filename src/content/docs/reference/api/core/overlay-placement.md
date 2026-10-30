@@ -3,7 +3,7 @@
 title: OverlayPlacement
 description: Type alias reference for OverlayPlacement.
 group: "API: Core"
-order: 1078
+order: 1079
 generated: doq-api
 category: type
 ---

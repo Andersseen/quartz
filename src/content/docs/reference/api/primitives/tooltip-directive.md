@@ -27,7 +27,7 @@ Usage with template:
 
 - **Kind:** Directive
 - **Export as:** `qzTooltip`
-- **Source:** [packages/primitives/src/tooltip/tooltip.directive.ts:60](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.directive.ts#L60)
+- **Source:** [packages/primitives/src/tooltip/tooltip.directive.ts:59](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tooltip/tooltip.directive.ts#L59)
 
 ## Selector
 

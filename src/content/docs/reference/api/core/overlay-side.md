@@ -3,7 +3,7 @@
 title: OverlaySide
 description: A physical side of a rectangle.
 group: "API: Core"
-order: 1079
+order: 1080
 generated: doq-api
 category: type
 ---

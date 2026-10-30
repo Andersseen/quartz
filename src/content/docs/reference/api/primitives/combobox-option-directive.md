@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzComboboxOption`
-- **Source:** [packages/primitives/src/combobox/combobox-option.directive.ts:32](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/combobox/combobox-option.directive.ts#L32)
+- **Source:** [packages/primitives/src/combobox/combobox-option.directive.ts:30](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/combobox/combobox-option.directive.ts#L30)
 
 ## Selector
 

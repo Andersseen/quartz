@@ -3,7 +3,7 @@
 title: resolveDirection
 description: "Resolves the effective direction for an element by walking up to the nearest ancestor (including itself) that carries a dir attribute — the same resolution <ht…"
 group: "API: Core"
-order: 1040
+order: 1041
 generated: doq-api
 category: function
 ---

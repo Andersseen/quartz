@@ -2,7 +2,7 @@
 
 # 🪨 Quartz Headless
 
-### Unstyled, accessible Angular 21 UI primitives.
+### Unstyled, accessible Angular 21 & 22 UI primitives.
 
 **You own the styles — Quartz owns the behaviour.**
 
@@ -10,7 +10,7 @@
 [![primitives npm version](https://img.shields.io/npm/v/@quartz-headless/primitives?style=flat-square&color=7c3aed&label=primitives)](https://www.npmjs.com/package/@quartz-headless/primitives)
 [![CI/CD](https://img.shields.io/github/actions/workflow/status/Andersseen/quartz/deploy.yml?branch=main&style=flat-square&color=7c3aed&label=ci%2Fcd)](https://github.com/Andersseen/quartz/actions/workflows/deploy.yml)
 [![core size](https://img.shields.io/bundlephobia/minzip/@quartz-headless/core?style=flat-square&color=7c3aed&label=core%20min%2Bgzip)](https://bundlephobia.com/package/@quartz-headless/core)
-[![Angular](https://img.shields.io/badge/angular-21-dd0031?style=flat-square)](https://angular.dev)
+[![Angular](https://img.shields.io/badge/angular-21.2%20%7C%2022-dd0031?style=flat-square)](https://angular.dev)
 [![license](https://img.shields.io/github/license/Andersseen/quartz?style=flat-square&color=7c3aed)](LICENSE)
 
 **[🌐 Live docs & demos](https://quartz-headless.pages.dev)** · [📦 Core](https://www.npmjs.com/package/@quartz-headless/core) · [📦 Primitives](https://www.npmjs.com/package/@quartz-headless/primitives) · [🐛 Report a bug](https://github.com/Andersseen/quartz/issues)
@@ -159,11 +159,15 @@ export class Example {
 
 ## 📋 Requirements
 
-| Dependency        | Version              |
-| ----------------- | -------------------- |
-| `@angular/core`   | `^21.0.0` (zoneless) |
-| `@angular/common` | `^21.0.0`            |
-| Node.js           | `>= 20`              |
+| Dependency        | Version                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `@angular/core`   | `^21.2.0 \|\| ^22.0.0` (zoneless)                                                        |
+| `@angular/common` | `^21.2.0 \|\| ^22.0.0`                                                                   |
+| `@angular/forms`  | same range, **optional** (`/forms`)                                                      |
+| `rxjs`            | `^7.8.0`                                                                                 |
+| Node.js           | whatever your Angular version requires ([table](https://angular.dev/reference/versions)) |
+
+Verified against installed tarballs (strict AOT, real SSR, hydration, three browser engines) on Angular 21.2.0, 21.2.x and 22.x — see [docs/compatibility.md](docs/compatibility.md) for the evidence and the known limits.
 
 No runtime dependencies beyond `@angular/*`, `rxjs` and `tslib`.
 

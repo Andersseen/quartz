@@ -3,7 +3,7 @@
 title: focusInitialElement
 description: Function reference for focusInitialElement.
 group: "API: Core"
-order: 1025
+order: 1026
 generated: doq-api
 category: function
 ---

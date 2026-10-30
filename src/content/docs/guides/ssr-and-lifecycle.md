@@ -12,7 +12,11 @@ Primitives are standalone directives with no DOM work at import time. Anything t
 This documentation site is itself prerendered statically and hydrated; its live examples are lazy `@defer (on idle)` blocks: the examples' code is a separate chunk, the server renders only a placeholder, and the example is created in the browser after hydration. Examples that look up `<ng-template>` queries therefore never take part in hydration.
 
 > [!NOTE]
-> Real SSR/hydration of every primitive across an Angular version matrix is scheduled for the 0.17 consumer-compatibility milestone; today's evidence is the prerendered documentation site and the unit suite.
+> Since 0.17 every interactive inventory row is server-rendered by a real Angular SSR server and hydrated in Chromium, Firefox and WebKit on Angular 21.2 and 22 from installed tarballs. See [Compatibility](/docs/guides/compatibility) for what that proves and what it does not.
+
+## Ids
+
+Generated ids come from `QzIdGenerator`, which is provided in root: each Angular application (each SSR request) numbers from 1 per prefix, so identical requests render identical markup and the client reuses the server's ids. Give `qzFormField` an explicit `id`.
 
 ## Lifecycle
 

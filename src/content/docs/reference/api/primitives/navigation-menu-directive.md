@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzNavigationMenu`
-- **Source:** [packages/primitives/src/navigation-menu/navigation-menu.directive.ts:44](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/navigation-menu/navigation-menu.directive.ts#L44)
+- **Source:** [packages/primitives/src/navigation-menu/navigation-menu.directive.ts:43](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/navigation-menu/navigation-menu.directive.ts#L43)
 
 ## Selector
 

@@ -12,7 +12,7 @@ category: service
 
 - **Kind:** Service
 - **Provided in:** `root`
-- **Source:** [packages/primitives/src/dialog/dialog.service.ts:48](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.service.ts#L48)
+- **Source:** [packages/primitives/src/dialog/dialog.service.ts:47](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/dialog/dialog.service.ts#L47)
 
 ## Public methods
 
