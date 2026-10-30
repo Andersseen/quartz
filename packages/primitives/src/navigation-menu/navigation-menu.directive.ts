@@ -21,6 +21,7 @@ import {
   type CollectionItem,
   type DismissController,
   type OverlayRef,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import { Subscription } from 'rxjs';
 import type { NavigationMenuItemDirective } from './navigation-menu-item.directive';
@@ -29,8 +30,6 @@ import {
   DEFAULT_NAVIGATION_MENU_CONFIG,
   type NavigationMenuOrientation,
 } from './navigation-menu.types';
-
-let navigationMenuId = 0;
 
 @Directive({
   selector: '[qzNavigationMenu]',
@@ -42,6 +41,7 @@ let navigationMenuId = 0;
   },
 })
 export class NavigationMenuDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly overlayService = inject(OverlayService);
@@ -62,7 +62,7 @@ export class NavigationMenuDirective implements OnDestroy {
   private timerGeneration = 0;
   private focusPanelValue: string | null = null;
   private destroyed = false;
-  private readonly generatedId = `qz-navigation-menu-${++navigationMenuId}`;
+  private readonly generatedId = this.ids.next('qz-navigation-menu');
 
   /** Empty string means no flyout is open; item values should be nonempty. */
   readonly value = model('');
@@ -350,7 +350,7 @@ export class NavigationMenuDirective implements OnDestroy {
   exportAs: 'qzNavigationMenuList',
   standalone: true,
   host: {
-    '[attr.aria-orientation]': 'navigationMenu.orientation()',
+    // No aria-orientation: the list has no role that supports it (axe aria-allowed-attr).
     '[attr.data-qz-orientation]': 'navigationMenu.orientation()',
     '[attr.data-qz-navigation-menu-list]': '""',
   },

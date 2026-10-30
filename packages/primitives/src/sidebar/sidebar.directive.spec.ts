@@ -149,4 +149,41 @@ describe('Sidebar', () => {
     );
     expect(host.collapsed()).toBe(true);
   });
+
+  it('does not open the off-canvas overlay on first render at a mobile width, and restores on desktop', async () => {
+    const original = window.innerWidth;
+    window.innerWidth = 500;
+    try {
+      const { fixture } = await render(MobileFirstHost);
+      const host = fixture.nativeElement.querySelector('[data-qz-sidebar]') as HTMLElement;
+      expect(host.getAttribute('data-qz-responsive')).toBe('mobile');
+      expect(host.getAttribute('data-qz-state')).toBe('closed');
+      expect(document.body.style.overflow).not.toBe('hidden');
+
+      window.innerWidth = 1200;
+      window.dispatchEvent(new Event('resize'));
+      await fixture.whenStable();
+      fixture.detectChanges();
+      expect(host.getAttribute('data-qz-responsive')).toBe('desktop');
+      expect(host.getAttribute('data-qz-state')).toBe('expanded');
+    } finally {
+      window.innerWidth = original;
+      window.dispatchEvent(new Event('resize'));
+    }
+  });
 });
+
+@Component({
+  standalone: true,
+  imports: SIDEBAR_IMPORTS,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div qzSidebar [(open)]="open" [breakpoint]="768">
+      <aside qzSidebarPanel aria-label="Navigation"><button>Link</button></aside>
+      <main qzSidebarContent><button qzSidebarTrigger>Toggle</button></main>
+    </div>
+  `,
+})
+class MobileFirstHost {
+  readonly open = signal(true);
+}

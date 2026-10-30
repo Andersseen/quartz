@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzMenuTrigger`
-- **Source:** [packages/primitives/src/menu/menu-trigger.directive.ts:43](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-trigger.directive.ts#L43)
+- **Source:** [packages/primitives/src/menu/menu-trigger.directive.ts:42](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-trigger.directive.ts#L42)
 
 ## Selector
 

@@ -3,7 +3,7 @@
 title: getFocusableElements
 description: Function reference for getFocusableElements.
 group: "API: Core"
-order: 1028
+order: 1029
 generated: doq-api
 category: function
 ---

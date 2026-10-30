@@ -7,7 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### 0.17 consumer compatibility (in progress — not yet released; see `docs/releases/0.17-acceptance.md`)
+
+#### Added
+
+- Real-consumer validation (`consumer/`, `scripts/consumer/`): an Angular standalone, zoneless app installed from packed tarballs outside the workspace, with strict AOT (`strictTemplates`, `skipLibCheck: false`, a negative invalid-binding proof), a real Angular SSR server, hydration checks (no errors, no replaced server nodes, no duplicate ids, no dangling ARIA) and a 271-test Playwright suite in Chromium, Firefox and WebKit, run on three fixtures with their own lockfiles: Angular 21.2.0 (declared minimum), 21.2.25 and 22.2.4.
+- `QzIdGenerator` (`@quartz-headless/core`): application-scoped DOM id generator.
+- CLI source-copy consumer (`pnpm verify:consumer:cli`), bundle-size/tree-shaking measurement with regression budgets (`pnpm verify:bundle`, `docs/releases/0.17-bundle-size.md`) and a generated parity evidence matrix (`pnpm verify:evidence`, `docs/releases/0.17-evidence-matrix.md`).
+- CI: fast `consumer-smoke` PR gate and a release `consumer-matrix` / `cli-consumer` that publication depends on.
+- `docs/compatibility.md`, a manual assistive-technology matrix (pending) and Doqs guides for compatibility, consumer testing and the CLI.
+- `docs:check` fails when a shipped chunk contains an application component that skipped AOT compilation.
+
+#### Changed
+
+- Angular peers are `^21.2.0 || ^22.0.0` (was `^21.0.0`). Angular 21.0 fails to build: the Toast template uses an arrow function, which needs Angular 21.2.
+- `quartz add` now plans before it writes, refuses to overwrite modified files without `--force`, is repeatable, rolls back on write failure, supports `--dry-run` and `--output=<dir>`, rejects unknown flags and missing values, and uses documented exit codes (2 usage, 3 unknown component, 4 conflict, 5 missing source, 6 I/O).
+- Volt parity: `accordion`, `sidebar`, `form-field`, `input-otp` and `file-upload` are now V (31 V / 1 C / 14 N). `autofill` stays C: genuine browser autofill cannot be produced by automation.
+
+#### Fixed
+
+- SSR: the 33 module-level id counters leaked across requests (identical requests rendered `qz-radio-3` then `qz-radio-7`) and never matched the client; ids now come from `QzIdGenerator`.
+- NavigationMenu: the plain `<ul>` list no longer carries `aria-orientation` (axe `aria-allowed-attr`).
+- Accordion: removing the focused open trigger no longer drops focus to `<body>` in Chromium (it blurs the trigger before teardown).
+- Sidebar: the off-canvas overlay no longer opens on first render at a mobile width (hydrated pages opened a scroll-locked overlay on load).
+- Docs site build: the client and SSR environments are built sequentially. Parallel builds shared one Analog AOT output map that the first finishing environment cleared, so lazily transformed pages shipped un-compiled and failed with "JIT compiler unavailable" (roughly every second warm build).
+
+### Added (0.16)
 
 - 0.16 Drawer, Resizable and floating API completeness (`docs/releases/0.16-acceptance.md`):
   - `DrawerService` (`@quartz-headless/primitives`): a side-anchored modal on `DialogService` with physical (`left|right|top|bottom`) and writing-direction-aware (`inline-start|inline-end`) sides, `resolveDrawerSide`, `DEFAULT_DRAWER_CONFIG`.

@@ -3,7 +3,7 @@
 title: OverlayAnchor
 description: Type alias reference for OverlayAnchor.
 group: "API: Core"
-order: 1076
+order: 1077
 generated: doq-api
 category: type
 ---

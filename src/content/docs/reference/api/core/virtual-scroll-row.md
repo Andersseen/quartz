@@ -3,7 +3,7 @@
 title: VirtualScrollRow
 description: Represents a single visible row in the virtual viewport.
 group: "API: Core"
-order: 1069
+order: 1070
 generated: doq-api
 category: interface
 ---

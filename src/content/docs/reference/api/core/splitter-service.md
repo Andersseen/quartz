@@ -3,7 +3,7 @@
 title: SplitterService
 description: Service reference for SplitterService.
 group: "API: Core"
-order: 1012
+order: 1013
 generated: doq-api
 category: service
 ---

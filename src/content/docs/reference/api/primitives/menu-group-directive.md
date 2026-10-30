@@ -22,7 +22,7 @@ Groups are structural only — they are never menu items and never take focus.
 
 - **Kind:** Directive
 - **Export as:** `qzMenuGroup`
-- **Source:** [packages/primitives/src/menu/menu-group.directive.ts:58](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-group.directive.ts#L58)
+- **Source:** [packages/primitives/src/menu/menu-group.directive.ts:59](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-group.directive.ts#L59)
 
 ## Selector
 

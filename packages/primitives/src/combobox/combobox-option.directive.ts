@@ -8,10 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
-import type { CollectionItem } from '@quartz-headless/core';
+import { QzIdGenerator, type CollectionItem } from '@quartz-headless/core';
 import { ComboboxDirective } from './combobox.directive';
-
-let optionId = 0;
 
 @Directive({
   selector: '[qzComboboxOption]',
@@ -30,13 +28,14 @@ let optionId = 0;
   },
 })
 export class ComboboxOptionDirective<T> implements OnInit, OnDestroy, CollectionItem {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly combobox = inject<ComboboxDirective<T>>(ComboboxDirective);
 
   readonly qzComboboxOption = input.required<T>();
   readonly qzComboboxOptionDisabled = input(false, { transform: booleanAttribute });
   readonly qzComboboxOptionLabel = input<string | null>(null);
-  readonly id = `qz-combobox-option-${++optionId}`;
+  readonly id = this.ids.next('qz-combobox-option');
   readonly value = this.qzComboboxOption;
   readonly optionDisabled = this.qzComboboxOptionDisabled;
   readonly active = computed(() => this.combobox.activeId() === this.id);

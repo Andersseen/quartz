@@ -3,7 +3,7 @@
 title: findByTypeahead
 description: Function reference for findByTypeahead.
 group: "API: Core"
-order: 1022
+order: 1023
 generated: doq-api
 category: function
 ---

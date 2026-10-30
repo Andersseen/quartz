@@ -1,0 +1,26 @@
+{
+  "measuredWith": "angular-21.2",
+  "headroom": "10% over the measured gzip size",
+  "budgets": {
+    "A-empty": {
+      "gzip": 33700,
+      "incrementGzip": 0
+    },
+    "A2-local-directive": {
+      "gzip": 35900,
+      "incrementGzip": 2300
+    },
+    "B-core-utility": {
+      "gzip": 34600,
+      "incrementGzip": 900
+    },
+    "C-simple-primitive": {
+      "gzip": 42000,
+      "incrementGzip": 8400
+    },
+    "D-dialog-flow": {
+      "gzip": 54700,
+      "incrementGzip": 21100
+    }
+  }
+}

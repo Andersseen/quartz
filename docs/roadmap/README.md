@@ -145,18 +145,18 @@ cerrados no se reutilizan. Un fallo posterior abre regresión enlazada con su ta
 
 ## 10. Estado inicial de las fases
 
-| Fase            | Estado                                                   | Condición para iniciar implementación                                                                |
-| --------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 0.7             | Implementada                                             | Ver `docs/releases/0.7-acceptance.md`                                                                |
-| 0.8             | Implementada                                             | Ver `docs/releases/0.8-acceptance.md`                                                                |
-| 0.9             | Implementada                                             | Ver `docs/releases/0.9-acceptance.md`                                                                |
-| 0.10            | Implementada                                             | Ver `docs/releases/0.10-acceptance.md`                                                               |
-| 0.11            | Implementada                                             | Ver `docs/releases/0.11-acceptance.md`                                                               |
-| 0.12            | Publicada como 0.12.0 con discrepancia de fuente         | Evidencia en [`0.12-acceptance.md`](../releases/0.12-acceptance.md); no republicar versión inmutable |
-| 0.13            | Implementación integrada; versión reconciliada en PR #44 | [`0.13-acceptance.md`](../releases/0.13-acceptance.md); verificar paquetes, release y Pages 0.13.0   |
-| 0.14            | Desarrollo aislado iniciado                              | No merge/publicar hasta verificar el cierre de la cadena 0.13                                        |
-| 0.15            | Implementada e integrada (PR #46)                        | [`0.15-acceptance.md`](../releases/0.15-acceptance.md); versión 0.15.0 desde su snapshot de fuente   |
-| 0.16            | Implementada (PR de feature abierto)                     | [`0.16-acceptance.md`](../releases/0.16-acceptance.md); no integrar hasta cerrar la cadena 0.13–0.15 |
-| 0.17            | No iniciada                                              | Todas las familias de paridad (0.9–0.16) aceptadas                                                   |
-| 0.18            | No iniciada                                              | Matriz de consumo/compatibilidad (0.17) aceptada                                                     |
-| Beta / RC / 1.0 | No iniciada                                              | API congelada, **inventario Volt sin filas C/P/M** y autorización de la release                      |
+| Fase            | Estado                                                   | Condición para iniciar implementación                                                                                                  |
+| --------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.7             | Implementada                                             | Ver `docs/releases/0.7-acceptance.md`                                                                                                  |
+| 0.8             | Implementada                                             | Ver `docs/releases/0.8-acceptance.md`                                                                                                  |
+| 0.9             | Implementada                                             | Ver `docs/releases/0.9-acceptance.md`                                                                                                  |
+| 0.10            | Implementada                                             | Ver `docs/releases/0.10-acceptance.md`                                                                                                 |
+| 0.11            | Implementada                                             | Ver `docs/releases/0.11-acceptance.md`                                                                                                 |
+| 0.12            | Publicada como 0.12.0 con discrepancia de fuente         | Evidencia en [`0.12-acceptance.md`](../releases/0.12-acceptance.md); no republicar versión inmutable                                   |
+| 0.13            | Implementación integrada; versión reconciliada en PR #44 | [`0.13-acceptance.md`](../releases/0.13-acceptance.md); verificar paquetes, release y Pages 0.13.0                                     |
+| 0.14            | Desarrollo aislado iniciado                              | No merge/publicar hasta verificar el cierre de la cadena 0.13                                                                          |
+| 0.15            | Implementada e integrada (PR #46)                        | [`0.15-acceptance.md`](../releases/0.15-acceptance.md); versión 0.15.0 desde su snapshot de fuente                                     |
+| 0.16            | Implementada (PR de feature abierto)                     | [`0.16-acceptance.md`](../releases/0.16-acceptance.md); no integrar hasta cerrar la cadena 0.13–0.15                                   |
+| 0.17            | Implementada en rama; **no aceptada** (puertas abiertas) | Autofill real (fila C) y revisión manual con lector de pantalla pendientes; ver [`0.17-acceptance.md`](../releases/0.17-acceptance.md) |
+| 0.18            | No iniciada                                              | Matriz de consumo/compatibilidad (0.17) aceptada                                                                                       |
+| Beta / RC / 1.0 | No iniciada                                              | API congelada, **inventario Volt sin filas C/P/M** y autorización de la release                                                        |

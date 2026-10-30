@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzStepPanel`
-- **Source:** [packages/primitives/src/stepper/step-panel.directive.ts:21](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/stepper/step-panel.directive.ts#L21)
+- **Source:** [packages/primitives/src/stepper/step-panel.directive.ts:20](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/stepper/step-panel.directive.ts#L20)
 
 ## Selector
 

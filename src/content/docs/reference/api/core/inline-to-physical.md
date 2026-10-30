@@ -3,7 +3,7 @@
 title: inlineToPhysical
 description: Converts a logical inline position to the physical side it renders on for direction.
 group: "API: Core"
-order: 1033
+order: 1034
 generated: doq-api
 category: function
 ---

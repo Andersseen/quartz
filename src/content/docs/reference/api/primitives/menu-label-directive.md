@@ -16,7 +16,7 @@ roving-focus destination, and is skipped by arrow keys, Home/End and typeahead.
 
 - **Kind:** Directive
 - **Export as:** `qzMenuLabel`
-- **Source:** [packages/primitives/src/menu/menu-group.directive.ts:86](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-group.directive.ts#L86)
+- **Source:** [packages/primitives/src/menu/menu-group.directive.ts:85](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/menu/menu-group.directive.ts#L85)
 
 ## Selector
 

@@ -3,7 +3,7 @@
 title: firstItem
 description: Function reference for firstItem.
 group: "API: Core"
-order: 1024
+order: 1025
 generated: doq-api
 category: function
 ---

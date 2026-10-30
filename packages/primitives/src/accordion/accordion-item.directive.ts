@@ -8,9 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { AccordionDirective } from './accordion.directive';
-
-let accordionItemId = 0;
 
 @Directive({
   selector: '[qzAccordionItem]',
@@ -22,10 +21,13 @@ let accordionItemId = 0;
   },
 })
 export class AccordionItemDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly accordion = inject(AccordionDirective<T>);
   private triggerElement: HTMLElement | null = null;
   hasFocus = false;
+  /** True until the end of the task in which the trigger blurred (see `setFocused`). */
+  blurredThisTask = false;
 
   readonly value = input.required<T>({ alias: 'qzAccordionItem' });
   readonly disabled = input(false, {
@@ -33,8 +35,8 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
     transform: booleanAttribute,
   });
 
-  readonly id = `qz-accordion-trigger-${++accordionItemId}`;
-  readonly panelId = `qz-accordion-panel-${accordionItemId}`;
+  readonly id = this.ids.next('qz-accordion-trigger');
+  readonly panelId = `qz-accordion-panel-${this.id.slice('qz-accordion-trigger-'.length)}`;
   readonly itemDisabled = computed(() => this.accordion.disabled() || this.disabled());
   readonly open = computed(() => this.accordion.isOpen(this));
   readonly element = () => this.triggerElement ?? this.host.nativeElement;
@@ -55,6 +57,13 @@ export class AccordionItemDirective<T> implements OnInit, OnDestroy {
 
   setFocused(focused: boolean): void {
     this.hasFocus = focused;
+    if (!focused) {
+      // Chromium fires `blur` (with <body> already active) when the focused element is REMOVED,
+      // before Angular runs ngOnDestroy in the same task. Remember it so teardown still knows the
+      // trigger held focus and can move focus to a surviving trigger.
+      this.blurredThisTask = true;
+      queueMicrotask(() => (this.blurredThisTask = false));
+    }
   }
 
   activeTabIndex(): 0 | -1 {

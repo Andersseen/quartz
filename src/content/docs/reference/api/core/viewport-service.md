@@ -3,7 +3,7 @@
 title: ViewportService
 description: Root-level service that tracks viewport dimensions and media-query matches using reactive signals.
 group: "API: Core"
-order: 1013
+order: 1014
 generated: doq-api
 category: service
 ---

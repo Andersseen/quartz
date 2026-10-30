@@ -3,7 +3,7 @@
 title: OverlayConfig
 description: Interface reference for OverlayConfig.
 group: "API: Core"
-order: 1056
+order: 1057
 generated: doq-api
 category: interface
 ---

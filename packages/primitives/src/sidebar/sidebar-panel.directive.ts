@@ -1,8 +1,6 @@
 import { Directive, ElementRef, OnDestroy, OnInit, computed, inject } from '@angular/core';
-import { inlineToPhysical, resolveDirection } from '@quartz-headless/core';
+import { inlineToPhysical, resolveDirection, QzIdGenerator } from '@quartz-headless/core';
 import { SidebarDirective } from './sidebar.directive';
-
-let sidebarPanelId = 0;
 
 @Directive({
   selector: '[qzSidebarPanel]',
@@ -38,10 +36,11 @@ let sidebarPanelId = 0;
   },
 })
 export class SidebarPanelDirective implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly sidebar = inject(SidebarDirective);
 
-  readonly id = `qz-sidebar-panel-${++sidebarPanelId}`;
+  readonly id = this.ids.next('qz-sidebar-panel');
   readonly gridColumn = computed(() => {
     if (this.sidebar.currentMode() !== 'push') return null;
     return this.sidebar.side() === 'inline-start' ? '1' : '2';

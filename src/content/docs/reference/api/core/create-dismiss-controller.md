@@ -3,7 +3,7 @@
 title: createDismissController
 description: Function reference for createDismissController.
 group: "API: Core"
-order: 1018
+order: 1019
 generated: doq-api
 category: function
 ---

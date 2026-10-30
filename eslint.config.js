@@ -16,7 +16,10 @@ module.exports = [
       // Deliberately isolated fixture for scripts/consumer-smoke.js: type-checked on its
       // own via its own local tsconfig.json (tsc --noEmit against the installed packages,
       // outside the workspace), not part of any of the monorepo's own tsconfig `include`s.
-      "scripts/consumer-smoke/fixture/**/*"
+      "scripts/consumer-smoke/fixture/**/*",
+      // 0.17 runtime consumer (consumer/): compiled by its own Angular build against the INSTALLED
+      // tarballs in a throwaway directory; its specs run under playwright.consumer.config.ts.
+      "consumer/**/*"
     ],
   },
   {

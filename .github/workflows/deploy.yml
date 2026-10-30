@@ -62,6 +62,10 @@ jobs:
           pnpm docs:content:check
           pnpm docs:doctor
 
+      # Every V/C/P parity row must still be backed by a real consumer test (see consumer/evidence-map.json).
+      - name: Consumer Evidence Matrix
+        run: pnpm verify:evidence
+
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -102,6 +106,144 @@ jobs:
         with:
           name: coverage-reports
           path: coverage/
+
+  # Fast PR gate: the critical external paths on ONE toolchain (Angular 21.2, Chromium) — strict AOT of
+  # the installed tarballs incl. the negative-template proof, real SSR, hydration, interaction, axe, the
+  # CLI source-copy consumer and the bundle budgets. The full declared matrix runs in consumer-matrix.
+  consumer-smoke:
+    name: Consumer Smoke (Angular 21.2 / Chromium)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build Library
+        run: pnpm build:lib
+
+      - name: Installed-tarball consumer (AOT, SSR, hydration, interaction, axe)
+        run: pnpm verify:consumer:runtime -- --fixture angular-21.2 --project chromium
+
+      - name: CLI source-copy consumer
+        run: pnpm verify:consumer:cli -- --project chromium
+
+      - name: Bundle size and tree-shaking budgets
+        run: pnpm verify:bundle
+
+  # Full declared support matrix. Each fixture has its OWN dependency tree + lockfile and runs on a
+  # Node version its Angular release supports (https://angular.dev/reference/versions): Angular 21
+  # accepts ^20.19 || ^22.12 || ^24, Angular 22 requires ^22.22.3 || ^24.15 || ^26. A failing cell
+  # blocks publication; nothing here retries.
+  consumer-matrix:
+    name: Consumer ${{ matrix.fixture }} / Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { fixture: angular-21.2-min, node: '20.19.0' }
+          - { fixture: angular-21.2, node: '24' }
+          - { fixture: angular-22, node: '22' }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node (repository toolchain)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build Library
+        run: pnpm build:lib
+
+      - name: Setup Node (consumer toolchain)
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Report toolchain
+        run: |
+          echo "fixture=${{ matrix.fixture }}"
+          node --version
+          if [ "${{ matrix.fixture }}" = "angular-22" ]; then
+            node -e "const [a,b,c]=process.versions.node.split('.').map(Number); if (a===22 ? (b<22||(b===22&&c<3)) : a<24) { console.error('Angular 22 requires Node ^22.22.3 || ^24.15 || ^26'); process.exit(1); }"
+          fi
+
+      - name: Installed-tarball consumer in Chromium, Firefox and WebKit
+        run: pnpm verify:consumer:runtime -- --fixture ${{ matrix.fixture }}
+
+      - name: Upload consumer evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: consumer-${{ matrix.fixture }}
+          path: |
+            consumer/results/
+            test-results-consumer/
+
+  # Angular 21.2 CLI consumer across all three engines (release only; the PR gate covers Chromium).
+  cli-consumer:
+    name: CLI source-copy consumer (3 engines)
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build Library
+        run: pnpm build:lib
+
+      - name: CLI source-copy consumer
+        run: pnpm verify:consumer:cli
 
   e2e-tests:
     name: E2E Tests
@@ -146,7 +288,7 @@ jobs:
   deploy:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
-    needs: [unit-tests, e2e-tests]
+    needs: [unit-tests, e2e-tests, consumer-smoke]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -199,7 +341,7 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
-    needs: [unit-tests, e2e-tests]
+    needs: [unit-tests, e2e-tests, consumer-smoke, consumer-matrix, cli-consumer]
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     outputs:
       core-published: ${{ steps.version-core.outputs.published }}

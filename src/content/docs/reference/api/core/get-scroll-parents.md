@@ -3,7 +3,7 @@
 title: getScrollParents
 description: Function reference for getScrollParents.
 group: "API: Core"
-order: 1030
+order: 1031
 generated: doq-api
 category: function
 ---

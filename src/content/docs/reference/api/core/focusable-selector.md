@@ -3,7 +3,7 @@
 title: FOCUSABLE_SELECTOR
 description: Constant reference for FOCUSABLE_SELECTOR.
 group: "API: Core"
-order: 1087
+order: 1088
 generated: doq-api
 category: constant
 ---

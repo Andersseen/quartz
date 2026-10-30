@@ -3,7 +3,7 @@
 title: focusSafely
 description: Function reference for focusSafely.
 group: "API: Core"
-order: 1026
+order: 1027
 generated: doq-api
 category: function
 ---

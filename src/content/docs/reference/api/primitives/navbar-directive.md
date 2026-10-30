@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzNavbar`
-- **Source:** [packages/primitives/src/navbar/navbar.directive.ts:54](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/navbar/navbar.directive.ts#L54)
+- **Source:** [packages/primitives/src/navbar/navbar.directive.ts:53](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/navbar/navbar.directive.ts#L53)
 
 ## Selector
 

@@ -3,7 +3,7 @@
 title: isFocusable
 description: Whether element can receive programmatic focus (element.focus()) right now.
 group: "API: Core"
-order: 1035
+order: 1036
 generated: doq-api
 category: function
 ---

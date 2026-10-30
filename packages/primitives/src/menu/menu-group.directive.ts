@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 
 /**
  * Anything that can be named by a {@link MenuLabelDirective} (menu groups and radio groups).
@@ -67,8 +68,6 @@ export class MenuGroupDirective implements MenuLabelHost {
   }
 }
 
-let menuLabelId = 0;
-
 /**
  * Visible heading of a {@link MenuGroupDirective} or `qzMenuRadioGroup`. It names the group via
  * `aria-labelledby` and is not interactive: it is never registered as a menu item, never the
@@ -84,11 +83,11 @@ let menuLabelId = 0;
   },
 })
 export class MenuLabelDirective {
+  private readonly ids = inject(QzIdGenerator);
   private readonly group = inject(QZ_MENU_LABEL_HOST, { optional: true });
   /** The element's own `id` when it has one, otherwise a generated id. */
   readonly id: string =
-    inject<ElementRef<HTMLElement>>(ElementRef).nativeElement.id ||
-    `qz-menu-label-${++menuLabelId}`;
+    inject<ElementRef<HTMLElement>>(ElementRef).nativeElement.id || this.ids.next('qz-menu-label');
 
   constructor() {
     this.group?.registerLabel(this.id);

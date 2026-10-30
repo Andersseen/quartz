@@ -9,9 +9,8 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { ToolbarDirective } from './toolbar.directive';
-
-let toolbarItemId = 0;
 
 @Directive({
   selector: '[qzToolbarItem]',
@@ -28,6 +27,7 @@ let toolbarItemId = 0;
   },
 })
 export class ToolbarItemDirective implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly toolbar = inject(ToolbarDirective);
   private readonly nativeDisabled = signal(this.elementRef.nativeElement.hasAttribute('disabled'));
@@ -37,7 +37,7 @@ export class ToolbarItemDirective implements OnInit, OnDestroy {
     alias: 'qzToolbarItemDisabled',
     transform: booleanAttribute,
   });
-  readonly id = `qz-toolbar-item-${++toolbarItemId}`;
+  readonly id = this.ids.next('qz-toolbar-item');
   hasFocus = false;
   readonly element = () => this.elementRef.nativeElement;
   readonly itemDisabled = computed(

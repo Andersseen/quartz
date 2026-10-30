@@ -3,7 +3,7 @@
 title: LogicalInlineDirection
 description: A logical position along the inline (reading) axis.
 group: "API: Core"
-order: 1075
+order: 1076
 generated: doq-api
 category: type
 ---

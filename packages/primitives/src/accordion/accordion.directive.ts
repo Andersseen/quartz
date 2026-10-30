@@ -63,7 +63,8 @@ export class AccordionDirective<T> implements OnDestroy {
 
   unregisterItem(item: AccordionItemDirective<T>): void {
     const wasOpen = this.isOpen(item);
-    const wasFocused = this.document.activeElement === item.element() || item.hasFocus;
+    const wasFocused =
+      this.document.activeElement === item.element() || item.hasFocus || item.blurredThisTask;
     this.collection.unregister(item as AccordionItemDirective<T> & CollectionItem);
     // Settle first: the accordion may be torn down as a whole (the bound value must survive) or
     // the item re-created with the same value (@for), in which case nothing was really removed.

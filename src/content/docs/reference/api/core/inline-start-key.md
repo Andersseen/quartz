@@ -3,7 +3,7 @@
 title: inlineStartKey
 description: "The arrow key that moves toward inline-start (the reading direction's beginning) for direction."
 group: "API: Core"
-order: 1032
+order: 1033
 generated: doq-api
 category: function
 ---

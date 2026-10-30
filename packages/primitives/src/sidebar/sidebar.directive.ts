@@ -22,6 +22,7 @@ import {
   type DismissController,
   type FocusRestorer,
   type FocusTrap,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import {
   DEFAULT_SIDEBAR_CONFIG,
@@ -33,8 +34,6 @@ import {
 } from './sidebar.types';
 import type { SidebarPanelDirective } from './sidebar-panel.directive';
 import type { SidebarTriggerDirective } from './sidebar-trigger.directive';
-
-let sidebarId = 0;
 
 @Directive({
   selector: '[qzSidebar]',
@@ -54,10 +53,11 @@ let sidebarId = 0;
   },
 })
 export class SidebarDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly document = inject(DOCUMENT);
   private readonly viewport = inject(ViewportService);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly generatedId = `qz-sidebar-${++sidebarId}`;
+  private readonly generatedId = this.ids.next('qz-sidebar');
   private readonly scrollLockController = createScrollLock(this.document);
   private readonly desktopOpen = signal(true);
 
@@ -167,6 +167,14 @@ export class SidebarDirective implements OnDestroy {
     if (this.previousResponsive === responsive) {
       if (responsive === 'desktop') this.desktopOpen.set(this.open());
       return;
+    }
+
+    if (this.previousResponsive === null && responsive === 'mobile') {
+      // First render on a mobile viewport (e.g. hydrating server HTML, which always renders the
+      // desktop default). Treat it like a desktop→mobile transition: the off-canvas overlay must
+      // not open on page load, but the requested open state is remembered for a later desktop width.
+      this.desktopOpen.set(this.open());
+      if (this.autoCloseOnMobile() && this.currentMode() === 'overlay') this.open.set(false);
     }
 
     if (this.previousResponsive === 'desktop' && responsive === 'mobile') {

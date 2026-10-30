@@ -22,6 +22,7 @@ import {
   type DismissController,
   type FocusRestorer,
   type FocusTrap,
+  QzIdGenerator,
 } from '@quartz-headless/core';
 import {
   DEFAULT_NAVBAR_CONFIG,
@@ -31,8 +32,6 @@ import {
 } from './navbar.types';
 import type { NavbarMenuDirective } from './navbar-menu.directive';
 import type { NavbarTriggerDirective } from './navbar-trigger.directive';
-
-let navbarId = 0;
 
 @Directive({
   selector: '[qzNavbar]',
@@ -52,10 +51,11 @@ let navbarId = 0;
   },
 })
 export class NavbarDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly document = inject(DOCUMENT);
   private readonly viewport = inject(ViewportService);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly generatedId = `qz-navbar-${++navbarId}`;
+  private readonly generatedId = this.ids.next('qz-navbar');
   private readonly scrollLockController = createScrollLock(this.document);
 
   private readonly menu = signal<NavbarMenuDirective | null>(null);

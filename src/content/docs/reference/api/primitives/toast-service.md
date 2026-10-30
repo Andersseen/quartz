@@ -12,7 +12,7 @@ category: service
 
 - **Kind:** Service
 - **Provided in:** `root`
-- **Source:** [packages/primitives/src/toast/toast.service.ts:19](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.service.ts#L19)
+- **Source:** [packages/primitives/src/toast/toast.service.ts:13](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/toast/toast.service.ts#L13)
 
 ## Properties
 

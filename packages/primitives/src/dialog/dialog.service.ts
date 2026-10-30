@@ -19,9 +19,8 @@ import {
   createFocusTrap,
   focusInitialElement,
   type FocusTrap,
+  QzIdGenerator,
 } from '@quartz-headless/core';
-
-let dialogId = 0;
 
 interface ExitWait {
   finishNow(): void;
@@ -46,6 +45,7 @@ function maxTiming(durations: string, delays: string): number {
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
+  private readonly ids = inject(QzIdGenerator);
   private document = inject(DOCUMENT);
   #openDialogs = new Set<DialogRef>();
   #scrollLock = createScrollLock(this.document);
@@ -65,7 +65,7 @@ export class DialogService {
       return noOpRef;
     }
 
-    const instanceId = ++dialogId;
+    const instanceId = this.ids.next('qz-dialog').slice('qz-dialog-'.length);
     const ariaLabelledBy = resolvedConfig.ariaLabelledBy ?? `qz-dialog-title-${instanceId}`;
     const ariaDescribedBy = resolvedConfig.ariaDescribedBy ?? `qz-dialog-desc-${instanceId}`;
 

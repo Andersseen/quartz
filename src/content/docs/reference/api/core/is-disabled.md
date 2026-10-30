@@ -3,7 +3,7 @@
 title: isDisabled
 description: Function reference for isDisabled.
 group: "API: Core"
-order: 1034
+order: 1035
 generated: doq-api
 category: function
 ---

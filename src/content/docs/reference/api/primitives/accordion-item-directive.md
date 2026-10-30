@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzAccordionItem`
-- **Source:** [packages/primitives/src/accordion/accordion-item.directive.ts:24](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion-item.directive.ts#L24)
+- **Source:** [packages/primitives/src/accordion/accordion-item.directive.ts:23](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/accordion/accordion-item.directive.ts#L23)
 
 ## Selector
 
@@ -32,6 +32,7 @@ category: directive
 | Name | Type | Description |
 | --- | --- | --- |
 | `hasFocus` | `boolean` |  |
+| `blurredThisTask` | `boolean` | True until the end of the task in which the trigger blurred (see `setFocused`). |
 | `readonly id` | `string` |  |
 | `readonly panelId` | `string` |  |
 | `readonly itemDisabled` | `Signal<boolean>` |  |

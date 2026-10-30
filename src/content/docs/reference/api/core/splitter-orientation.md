@@ -3,7 +3,7 @@
 title: SplitterOrientation
 description: Type alias reference for SplitterOrientation.
 group: "API: Core"
-order: 1081
+order: 1082
 generated: doq-api
 category: type
 ---

@@ -3,7 +3,7 @@
 title: sortByDomOrder
 description: Function reference for sortByDomOrder.
 group: "API: Core"
-order: 1042
+order: 1043
 generated: doq-api
 category: function
 ---

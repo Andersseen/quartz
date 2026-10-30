@@ -9,11 +9,9 @@ import {
   input,
 } from '@angular/core';
 import type { TemplateRef } from '@angular/core';
-import type { CollectionItem } from '@quartz-headless/core';
+import { QzIdGenerator, type CollectionItem } from '@quartz-headless/core';
 import { NavigationMenuDirective } from './navigation-menu.directive';
 import type { NavigationMenuTriggerDirective } from './navigation-menu-trigger.directive';
-
-let navigationMenuItemId = 0;
 
 @Directive({
   selector: '[qzNavigationMenuItem]',
@@ -25,6 +23,7 @@ let navigationMenuItemId = 0;
   },
 })
 export class NavigationMenuItemDirective implements OnInit, OnDestroy, CollectionItem {
+  private readonly ids = inject(QzIdGenerator);
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly navigationMenu = inject(NavigationMenuDirective);
   private triggerDirective: NavigationMenuTriggerDirective | null = null;
@@ -32,7 +31,7 @@ export class NavigationMenuItemDirective implements OnInit, OnDestroy, Collectio
 
   readonly qzNavigationMenuItem = input.required<string>();
   readonly qzNavigationMenuItemDisabled = input(false, { transform: booleanAttribute });
-  readonly id = `qz-navigation-menu-item-${++navigationMenuItemId}`;
+  readonly id = this.ids.next('qz-navigation-menu-item');
   readonly disabled = () => this.itemDisabled();
   readonly itemDisabled = computed(
     () => this.navigationMenu.disabled() || this.qzNavigationMenuItemDisabled(),

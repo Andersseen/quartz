@@ -33,3 +33,7 @@ Closing a popup by Escape or selection returns focus to the trigger; Tab hands f
 ## What is verified
 
 Automated: axe-core scans of representative open/active states in Chromium, Firefox and WebKit, and unit/E2E tests for keyboard and ARIA state. **Not verified:** manual screen-reader output and formal WCAG conformance.
+
+## Automated and manual verification
+
+The consumer suite runs axe-core on meaningful states (modal open, nested popup, menu expanded, validation errors, disabled controls, drawer/sidebar, OTP, dropzone, toast, separator) and asserts names, ARIA relationships, focus order, focus restoration and keyboard dismissal independently of axe. A manual screen-reader matrix (`docs/releases/0.17-manual-a11y.md`) is **pending**: automated checks do not replace it.

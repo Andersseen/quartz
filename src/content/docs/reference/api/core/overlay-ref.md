@@ -3,7 +3,7 @@
 title: OverlayRef
 description: Class reference for OverlayRef.
 group: "API: Core"
-order: 1044
+order: 1045
 generated: doq-api
 category: class
 ---

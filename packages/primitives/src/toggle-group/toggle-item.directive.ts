@@ -8,9 +8,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { ToggleGroupDirective } from './toggle-group.directive';
-
-let toggleItemId = 0;
 
 @Directive({
   // Button-first only (see docs/ai/STABILITY_AUDIT.md): relies on native tabindex,
@@ -34,12 +33,13 @@ let toggleItemId = 0;
   },
 })
 export class ToggleItemDirective<T> implements OnInit, OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly group = inject(ToggleGroupDirective<T>);
 
   readonly value = input.required<T>({ alias: 'qzToggleItem' });
   readonly disabled = input(false, { alias: 'qzToggleItemDisabled', transform: booleanAttribute });
-  readonly id = `qz-toggle-item-${++toggleItemId}`;
+  readonly id = this.ids.next('qz-toggle-item');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly itemDisabled = computed(() => this.disabled() || this.group.isDisabled());

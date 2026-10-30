@@ -3,7 +3,7 @@
 title: PhysicalHorizontal
 description: A physical horizontal side.
 group: "API: Core"
-order: 1080
+order: 1081
 generated: doq-api
 category: type
 ---

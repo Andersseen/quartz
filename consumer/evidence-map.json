@@ -1,0 +1,218 @@
+{
+  "checkbox": {
+    "page": "forms",
+    "spec": "forms.spec.ts",
+    "titles": ["checkbox and switch toggle from the keyboard"],
+    "a11y": true
+  },
+  "radio": {
+    "page": "forms",
+    "spec": "forms.spec.ts",
+    "titles": ["radio group: roving arrows"],
+    "a11y": true
+  },
+  "switch": {
+    "page": "forms",
+    "spec": "forms.spec.ts",
+    "titles": ["checkbox and switch toggle from the keyboard"],
+    "a11y": true
+  },
+  "toggle": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["toggle: Space toggles aria-pressed"],
+    "a11y": false
+  },
+  "tooltip": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["tooltip shows on focus"],
+    "a11y": false
+  },
+  "avatar": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["progress, meter and avatar expose their semantics"],
+    "a11y": true
+  },
+  "tabs": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["tabs: arrows move and activate"],
+    "a11y": true
+  },
+  "select": {
+    "page": "forms",
+    "spec": "forms.spec.ts",
+    "titles": ["select opens, picks a value"],
+    "a11y": true
+  },
+  "navigation-menu": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["navigation menu: trigger expands"],
+    "a11y": true
+  },
+  "dialog": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["dialog containing a select", "dialog traps focus"],
+    "a11y": true
+  },
+  "drawer": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["drawer opens, is a named dialog"],
+    "a11y": true
+  },
+  "popover": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["popover opens, reports expanded state"],
+    "a11y": true
+  },
+  "dropdown-menu": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["menu opens from the keyboard"],
+    "a11y": true
+  },
+  "progress": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["progress, meter and avatar expose their semantics"],
+    "a11y": true
+  },
+  "slider": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["slider: arrows/Home/End"],
+    "a11y": true
+  },
+  "range-slider": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["range slider: two named thumbs"],
+    "a11y": true
+  },
+  "toggle-group": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["toggle group (single, no deselection)"],
+    "a11y": true
+  },
+  "meter": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["progress, meter and avatar expose their semantics"],
+    "a11y": true
+  },
+  "pagination": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["pagination: next/last/first/page buttons"],
+    "a11y": true
+  },
+  "toast": {
+    "page": "overlays",
+    "spec": "overlays.spec.ts",
+    "titles": ["toast with an action"],
+    "a11y": true
+  },
+  "combobox": {
+    "page": "forms",
+    "spec": "forms.spec.ts",
+    "titles": ["combobox filters and commits an option"],
+    "a11y": false
+  },
+  "date-picker": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["date picker: grid navigation"],
+    "a11y": true
+  },
+  "date-range-picker": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["date range picker: two selections"],
+    "a11y": true
+  },
+  "listbox": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["listbox: keyboard selection"],
+    "a11y": true
+  },
+  "toolbar": {
+    "page": "controls",
+    "spec": "controls.spec.ts",
+    "titles": ["toolbar: one tab stop"],
+    "a11y": true
+  },
+  "resizable": {
+    "page": "navigation",
+    "spec": "navigation.spec.ts",
+    "titles": ["resizable separator"],
+    "a11y": true
+  },
+  "accordion": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": [
+      "horizontal orientation",
+      "RTL horizontal",
+      "container disabled blocks",
+      "dynamic removal"
+    ],
+    "a11y": true
+  },
+  "sidebar": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": [
+      "collapsed rail is distinct from closed",
+      "mobile: off-canvas overlay",
+      "hydrating at a mobile viewport"
+    ],
+    "a11y": true
+  },
+  "form-field": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": [
+      "native input: ids",
+      "Quartz Checkbox: named by its label",
+      "Quartz Switch: named by its label"
+    ],
+    "a11y": true
+  },
+  "input-otp": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": [
+      "typing, pattern filtering",
+      "selection replacement",
+      "paste distributes",
+      "IME: composition",
+      "dynamic length"
+    ],
+    "a11y": true
+  },
+  "autofill": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": ["a real engine animationstart", "teardown while active"],
+    "a11y": false
+  },
+  "file-upload": {
+    "page": "parity",
+    "spec": "parity.spec.ts",
+    "titles": [
+      "native picker via keyboard",
+      "real DataTransfer drop",
+      "nested dragenter/dragleave",
+      "disabled input ignores drops"
+    ],
+    "a11y": true
+  }
+}

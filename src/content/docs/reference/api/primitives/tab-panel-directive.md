@@ -12,7 +12,7 @@ category: directive
 
 - **Kind:** Directive
 - **Export as:** `qzTabPanel`
-- **Source:** [packages/primitives/src/tabs/tab-panel.directive.ts:19](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tabs/tab-panel.directive.ts#L19)
+- **Source:** [packages/primitives/src/tabs/tab-panel.directive.ts:18](https://github.com/Andersseen/quartz/blob/main/packages/primitives/src/tabs/tab-panel.directive.ts#L18)
 
 ## Selector
 

@@ -3,7 +3,7 @@
 title: QzDragInfo
 description: Interface reference for QzDragInfo.
 group: "API: Core"
-order: 1060
+order: 1061
 generated: doq-api
 category: interface
 ---

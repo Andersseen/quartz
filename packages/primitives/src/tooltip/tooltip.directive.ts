@@ -26,9 +26,8 @@ import {
   resolveDirection,
   type DismissController,
   type OverlayArrowGeometry,
+  QzIdGenerator,
 } from '@quartz-headless/core';
-
-let tooltipIdCounter = 0;
 
 /**
  * Headless tooltip directive. Attach to any element to show a tooltip on hover/focus.
@@ -58,6 +57,7 @@ let tooltipIdCounter = 0;
   },
 })
 export class TooltipDirective implements OnDestroy {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly tooltipService = inject(TooltipService);
@@ -369,7 +369,7 @@ export class TooltipDirective implements OnDestroy {
   }
 
   private generateId(): string {
-    return `qz-tooltip-${++tooltipIdCounter}`;
+    return this.ids.next('qz-tooltip');
   }
 
   /** Schedules `callback` for the next frame and returns a function that cancels it. */

@@ -3,7 +3,7 @@
 title: ViewportMatchResult
 description: Result of matching all predefined breakpoints.
 group: "API: Core"
-order: 1067
+order: 1068
 generated: doq-api
 category: interface
 ---

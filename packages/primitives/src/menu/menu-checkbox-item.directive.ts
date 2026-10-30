@@ -10,10 +10,9 @@ import {
   model,
   output,
 } from '@angular/core';
+import { QzIdGenerator } from '@quartz-headless/core';
 import { MenuService } from './menu.service';
 import type { MenuCollectionEntry } from './menu.types';
-
-let checkboxItemId = 0;
 
 @Directive({
   selector: '[qzMenuCheckboxItem]',
@@ -33,6 +32,7 @@ let checkboxItemId = 0;
   },
 })
 export class MenuCheckboxItemDirective implements OnInit, OnDestroy, MenuCollectionEntry {
+  private readonly ids = inject(QzIdGenerator);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly menuService = inject(MenuService);
 
@@ -41,7 +41,7 @@ export class MenuCheckboxItemDirective implements OnInit, OnDestroy, MenuCollect
   readonly closeOnSelect = input(false, { transform: booleanAttribute });
   readonly selected = output<void>();
 
-  readonly id = `qz-menu-checkbox-item-${++checkboxItemId}`;
+  readonly id = this.ids.next('qz-menu-checkbox-item');
   readonly element = () => this.elementRef.nativeElement;
   readonly label = () => this.elementRef.nativeElement.textContent?.trim() ?? '';
   readonly highlighted = computed(() => this.menuService.activeId() === this.id);

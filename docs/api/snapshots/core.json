@@ -237,6 +237,9 @@
   "QzDropInfo": {
     "kind": "interface"
   },
+  "QzIdGenerator": {
+    "kind": "class"
+  },
   "resolveDirection": {
     "kind": "function",
     "signatures": ["(element: Element | null | undefined): Direction"]
