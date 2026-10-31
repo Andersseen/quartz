@@ -13,7 +13,7 @@ Use Core when you build your own widget and need the hard parts: positioned port
 
 ## Primitives: `@quartz-headless/primitives`
 
-Accessible UI patterns built on Core: Dialog, Tooltip, Toast, Popover, Menu, Select, Listbox, Combobox, Tabs, Accordion, Switch, Checkbox, RadioGroup, Toggle, ToggleGroup, Slider, Tree, Sidebar, Navbar and Stepper.
+Accessible UI patterns built on Core: overlays (Dialog, Drawer, Popover, Tooltip, Menu), selection and forms (Select, Listbox, Combobox, Checkbox, Switch, Slider, DatePicker, FormField, InputOTP, FileUpload and more), navigation and layout (Tabs, Accordion, Sidebar, NavigationMenu, Pagination, Tree, Stepper) and feedback (Toast, Progress, Meter, Avatar). The [component catalogue](/components) lists every one with search, filters and links to its page.
 
 Primitives are directives (and `ToastContainerComponent`) with no CSS. They expose state through `data-qz-*` attributes and ARIA, and values through signals.
 

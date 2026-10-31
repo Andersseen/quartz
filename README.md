@@ -171,6 +171,8 @@ Verified against installed tarballs (strict AOT, real SSR, hydration, three brow
 
 **Project status.** The latest published version is `0.16.0`. Features through 0.18 are on `main` but 0.17, 0.18 and 0.19 are not accepted or published yet, the public API is a _freeze candidate_ (not frozen) and no 1.0 beta exists; see [docs/releases/0.19-acceptance.md](docs/releases/0.19-acceptance.md) for what is verified and what is blocked.
 
+The official website (landing page, searchable [component catalogue](https://quartz-headless.pages.dev/components) and documentation) is a separate engineering track from the npm releases; see [docs/roadmap/0.20-website-experience.md](docs/roadmap/0.20-website-experience.md).
+
 No runtime dependencies beyond `@angular/*`, `rxjs` and `tslib`.
 
 ## 💻 Local development

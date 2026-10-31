@@ -2,3 +2,99 @@
 @import '@voltui/components/themes/presets/dusk-sharp.css';
 @import '@doqs/analog/styles.css';
 @import './docs-theme.css';
+
+/*
+ * Website design tokens (landing, catalogue, header, footer). Semantic roles instead of one-off
+ * hex values; text roles are chosen for >= 4.5:1 contrast on the surface they sit on. The Quartz
+ * packages themselves ship no CSS: these tokens belong to the demo/docs site only.
+ */
+@theme {
+  --color-surface-0: #0a0a0c;
+  --color-surface-1: #0f1116;
+  --color-surface-2: #151923;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-line-strong: rgb(255 255 255 / 0.2);
+  --color-fg: #f4f6fa;
+  --color-fg-muted: #b4bccb;
+  --color-fg-subtle: #94a0b3;
+  --color-brand: #34d399;
+  --color-brand-deep: #10b981;
+  --color-signal: #67e8f9;
+  --color-accent: #a78bfa;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+}
+
+/* Skip link, shared by the landing, catalogue and documentation shells. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  background: var(--color-surface-2);
+  color: var(--color-fg);
+  border: 1px solid var(--color-line-strong);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Visible, consistent keyboard focus for the site chrome. */
+.site-focus:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+/* Code panels: horizontally scrollable, never clip, focusable so keyboard users can scroll. */
+.code-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  tab-size: 2;
+}
+
+/* Prism token colours for the website's own code blocks. */
+.code-tokens .token.comment {
+  color: #8b97ab;
+}
+.code-tokens .token.keyword,
+.code-tokens .token.operator {
+  color: #c4b5fd;
+}
+.code-tokens .token.string,
+.code-tokens .token.template-string {
+  color: #86efac;
+}
+.code-tokens .token.function,
+.code-tokens .token.class-name {
+  color: #67e8f9;
+}
+.code-tokens .token.number,
+.code-tokens .token.boolean {
+  color: #fcd34d;
+}
+.code-tokens .token.punctuation {
+  color: #94a0b3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe-transition {
+    transition: none !important;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+.menu-in {
+  animation: menu-in 160ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-in {
+    animation: none;
+  }
+}

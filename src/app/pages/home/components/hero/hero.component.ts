@@ -1,131 +1,102 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { VoltBadge, VoltButton, VoltCard, VoltCardContent } from '@voltui/components';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
-import { version } from '../../../../../../packages/core/package.json';
+import { ANGULAR_SUPPORT, LATEST_NPM_VERSION } from '../../../../site/site-config';
+import volumeDemoSource from '../../demos/volume-demo.component.ts?raw';
+import { VolumeDemoComponent } from '../../demos/volume-demo.component';
+import { DemoShowcaseComponent } from '../demo-showcase/demo-showcase.component';
 
 @Component({
   selector: 'app-home-hero',
-  imports: [RouterLink, VoltBadge, VoltButton, VoltCard, VoltCardContent, ...MOVEMENT_DIRECTIVES],
+  imports: [RouterLink, DemoShowcaseComponent, VolumeDemoComponent, ...MOVEMENT_DIRECTIVES],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <main
-      class="relative z-10 px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 md:px-10 md:pt-44 lg:pb-32"
+    <section
+      aria-labelledby="hero-title"
+      class="relative z-10 px-4 pt-32 pb-16 sm:px-6 sm:pb-20 md:px-10 md:pt-40 lg:pb-28"
     >
-      <div class="mx-auto grid max-w-6xl items-center gap-10 sm:gap-16 lg:grid-cols-[1.05fr_.95fr]">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_.95fr] lg:gap-16">
         <div class="text-center lg:text-left">
-          <div
+          <p
             [move]="'fade-up'"
             [moveDelay]="40"
-            class="mb-5 flex justify-center sm:mb-7 lg:justify-start"
+            class="mx-auto mb-6 inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-brand/25 bg-brand/10 px-3.5 py-1.5 text-xs font-medium text-brand lg:mx-0"
           >
-            <volt-badge
-              variant="secondary"
-              class="border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-emerald-200"
-            >
-              <span
-                class="mr-2 inline-block size-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399]"
-              ></span>
-              v{{ version }} · Angular 21
-            </volt-badge>
-          </div>
+            <span class="size-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+            <span>npm {{ npmVersion }}</span>
+            <span class="text-fg-subtle" aria-hidden="true">·</span>
+            <span>{{ angularSupport }}</span>
+          </p>
           <h1
+            id="hero-title"
             [move]="'fade-up'"
             [moveDelay]="100"
-            class="mx-auto max-w-3xl text-[clamp(2.75rem,12vw,4rem)] leading-[0.98] font-black tracking-[-0.055em] text-white sm:text-6xl md:text-7xl lg:mx-0 lg:text-7xl"
+            class="mx-auto max-w-3xl text-[clamp(2.5rem,10.5vw,4rem)] leading-[1.02] font-black tracking-[-0.05em] text-fg sm:text-6xl md:text-7xl lg:mx-0 lg:text-7xl"
           >
             Behaviour for the
             <span
-              class="bg-gradient-to-r from-emerald-300 via-cyan-300 to-violet-400 bg-clip-text text-transparent"
+              class="bg-gradient-to-r from-brand via-signal to-accent bg-clip-text text-transparent"
               >interfaces you own.</span
             >
           </h1>
           <p
             [move]="'fade-up'"
             [moveDelay]="160"
-            class="mx-auto mt-6 max-w-xl text-base leading-7 text-slate-400 sm:mt-7 sm:text-lg sm:leading-8 lg:mx-0"
+            class="mx-auto mt-6 max-w-xl text-base leading-7 text-fg-muted sm:text-lg sm:leading-8 lg:mx-0"
           >
-            Quartz gives Angular design systems accessible interaction primitives — not another
-            visual language to undo.
+            Quartz is a set of unstyled, accessible Angular primitives: focus, keyboard, ARIA,
+            overlays and state, shipped as two npm packages. You write the markup and the styles;
+            Quartz owns the behaviour.
           </p>
           <div
             [move]="'fade-up'"
             [moveDelay]="220"
-            class="mt-7 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row lg:justify-start"
+            class="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start"
           >
-            <a routerLink="/docs" class="w-full sm:w-auto"
-              ><volt-button variant="solid" class="w-full sm:w-auto"
-                >Start building <span slot="trailing">→</span></volt-button
-              ></a
+            <a
+              routerLink="/docs/getting-started/installation"
+              class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 text-sm font-semibold text-surface-0 transition-colors hover:bg-brand-deep"
+              >Start building →</a
             >
-            <a routerLink="/components" class="w-full sm:w-auto"
-              ><volt-button variant="outline" class="w-full sm:w-auto"
-                >Browse primitives</volt-button
-              ></a
+            <a
+              routerLink="/components"
+              class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg border border-line-strong px-5 text-sm font-semibold text-fg transition-colors hover:border-brand/60"
+              >Browse the catalogue</a
             >
           </div>
-          <div
+          <ul
             [move]="'fade-up'"
             [moveDelay]="280"
-            class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[0.65rem] font-medium uppercase tracking-[0.12em] text-slate-500 sm:mt-10 sm:gap-6 sm:text-xs sm:tracking-[0.16em] lg:justify-start"
+            class="mt-9 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium tracking-wide text-fg-subtle uppercase lg:justify-start"
+            aria-label="Key properties"
           >
-            <span>Signals first</span><span class="size-1 rounded-full bg-slate-700"></span
-            ><span>SSR safe</span><span class="size-1 rounded-full bg-slate-700"></span
-            ><span>Unstyled</span>
-          </div>
+            <li>Signals-first</li>
+            <li>Zoneless</li>
+            <li>SSR-safe</li>
+            <li>No CSS shipped</li>
+          </ul>
         </div>
 
-        <volt-card
-          [move]="'fade-up'"
-          [moveDelay]="140"
-          class="relative overflow-hidden border border-white/10 bg-slate-950/70 shadow-[0_24px_100px_rgba(16,185,129,0.12)] backdrop-blur"
-        >
-          <div
-            class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent"
-          ></div>
-          <volt-card-content class="block p-4 sm:p-7">
-            <div class="mb-4 flex items-center justify-between sm:mb-6">
-              <span class="font-mono text-xs text-slate-500">behaviour.preview.ts</span
-              ><span
-                class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300"
-                >Live</span
-              >
-            </div>
-            <div
-              class="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-slate-300 sm:p-5 sm:text-sm sm:leading-7"
-            >
-              <p>
-                <span class="text-violet-300">const</span> volume =
-                <span class="text-cyan-300">signal</span>(50);
-              </p>
-              <p class="mt-3 text-slate-500">// keyboard, pointer, RTL and ARIA</p>
-              <p>&lt;div <span class="text-emerald-300">qzSlider</span> [(value)]="volume"&gt;</p>
-              <p class="mt-4 text-slate-500">// headless hooks, consumer visuals</p>
-              <p>
-                &lt;button <span class="text-emerald-300">qzSliderThumb</span>
-                aria-label="Volume"&gt;&lt;/button&gt;
-              </p>
-            </div>
-            <div class="mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
-              <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
-                <p class="text-base font-bold text-white sm:text-lg">17</p>
-                <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Primitives</p>
-              </div>
-              <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
-                <p class="text-base font-bold text-white sm:text-lg">10</p>
-                <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Core APIs</p>
-              </div>
-              <div class="rounded-lg border border-white/8 bg-white/[0.03] p-2 sm:p-3">
-                <p class="text-base font-bold text-white sm:text-lg">A11y</p>
-                <p class="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Built in</p>
-              </div>
-            </div>
-          </volt-card-content>
-        </volt-card>
+        <div [move]="'fade-up'" [moveDelay]="140" class="min-w-0">
+          <app-demo-showcase
+            label="Volume control"
+            filename="volume-demo.component.ts"
+            [code]="source"
+          >
+            <app-volume-demo />
+          </app-demo-showcase>
+          <p class="mt-3 text-sm leading-6 text-fg-subtle">
+            Real Quartz <code class="font-mono text-fg-muted">Slider</code> and
+            <code class="font-mono text-fg-muted">Switch</code>: drag, use the arrow keys, Home and
+            End, or mute. State is a signal; the look is Tailwind classes in the file under Code.
+          </p>
+        </div>
       </div>
-    </main>
+    </section>
   `,
 })
 export class HomeHeroComponent {
-  readonly version = version;
+  protected readonly npmVersion = LATEST_NPM_VERSION;
+  protected readonly angularSupport = ANGULAR_SUPPORT;
+  protected readonly source = volumeDemoSource;
 }

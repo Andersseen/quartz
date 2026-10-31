@@ -6,7 +6,7 @@
     "start": "vite",
     "dev": "vite",
     "build:lib": "ng build quartz-core && cp README.md packages/core/dist/ && cp LICENSE packages/core/dist/ && ng build quartz-primitives && cp README.md packages/primitives/dist/ && cp LICENSE packages/primitives/dist/",
-    "build:demo": "vite build && node scripts/prepare-search.mjs && doq-search index dist/analog/public",
+    "build:demo": "vite build && node scripts/generate-sitemap.mjs && node scripts/prepare-search.mjs && doq-search index dist/analog/public",
     "docs:api": "node scripts/docs-api.mjs generate",
     "docs:api:check": "node scripts/docs-api.mjs check",
     "docs:content": "doq content generate",

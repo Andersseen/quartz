@@ -124,6 +124,8 @@ The `dist.integrity` values must equal the manifest; `dist.attestations.url` mus
 Then install in a clean project: `npm install @quartz-headless/core@$V @quartz-headless/primitives@$V` (always the exact version for a pre-release) and
 build it. Record the run id, tarball sha256 values, GitHub Release URL and npm integrity in the acceptance record.
 
+After a verified publication, update `LATEST_NPM_VERSION` in `src/app/site/site-config.ts` so the website's version badge, install section and footer name the new npm release. It is deliberately a constant, not read from the package manifests, so the site never calls an unpublished version released.
+
 ## 6. GitHub Release [AUTO]
 
 The `release` job runs after a verified publication (also on a re-run). It creates `vX.Y.Z[-pre]` at the **validated source commit**, uploads both tarballs,

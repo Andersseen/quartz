@@ -31,7 +31,7 @@ test('client-side navigation activates lazily loaded route components', async ({
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
-  await page.getByRole('link', { name: 'Browse primitives' }).click();
+  await page.getByRole('link', { name: 'Browse the catalogue' }).click();
   await expect(page).toHaveURL(/\/components$/);
   await expect(page.locator('h1').first()).toBeVisible();
   expect(errors).toEqual([]);

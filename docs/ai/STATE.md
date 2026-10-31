@@ -1,5 +1,11 @@
 # STATE — Current Project Status
 
+# 0.20 Website experience — website engineering milestone, NOT an npm release (2026-10-31)
+
+Branch `feat/quartz-0.20-website-experience` (from main `005aacb`). **No package version changed (still `0.16.0`), nothing was published, the API is a freeze candidate (not frozen), no 1.0 beta exists, and the manual screen-reader matrix is still pending.** "0.20" names this website milestone only; there is no `@quartz-headless/*@0.20.0`. Record: [roadmap](../roadmap/0.20-website-experience.md), [website acceptance](../releases/0.20-website-acceptance.md).
+
+What exists: redesigned landing page (hero with a real Slider + Switch demo and Preview/Code tabs whose code is the demo's own source via `?raw`, a lazy Dialog + Select composition demo, Core-vs-Primitives, use cases, DX, install with npm/pnpm and honest clipboard handling, accurate footer), a searchable/filterable catalogue at `/components` covering every documented Core and Primitives page (`src/app/site/catalogue.ts`, validated against docs and the API snapshots), an accessible header/mobile menu, per-route metadata (`PageSeoService`), `robots.txt` + `sitemap.xml` (`scripts/generate-sitemap.mjs`), website design tokens in `src/tailwind.css`, and extended E2E (`home`, `components`, `docs` specs). `LATEST_NPM_VERSION` in `src/app/site/site-config.ts` must be updated only after a real publish.
+
 # 0.19 Acceptance & pre-beta stabilization — engineering on branch, NOT accepted (2026-10-31)
 
 Branch `feat/quartz-0.19-acceptance-beta-readiness` (from main `6e00da2`, PR #51 merge, whose main workflow `41189480447` passed every job; publish/release jobs skipped by design). Package versions are still `0.16.0`; nothing was published; the real publication path has never run; **0.17 and 0.18 are not accepted; the API is a freeze candidate, NOT frozen; no 1.0 beta exists.** Full record and blocker list: [0.19 acceptance](../releases/0.19-acceptance.md).

@@ -60,7 +60,9 @@ function jsFiles(dir) {
   }
   return out;
 }
-const JIT_COMPONENT = /\bselector:\s*[`'"]app-[a-z0-9-]+[`'"]/;
+// A literal `@Component({` immediately before it is source text shown on the website (the demos
+// render their own `?raw` source in a Code tab), not an executable decorator.
+const JIT_COMPONENT = /(?<!@Component\(\{\s*)\bselector:\s*[`'"]app-[a-z0-9-]+[`'"]/;
 for (const file of jsFiles(root)) {
   if (file.includes(`${join(root, 'pagefind')}`)) continue;
   if (JIT_COMPONENT.test(readFileSync(file, 'utf8'))) {
@@ -132,6 +134,42 @@ for (const [from, to] of redirects) {
   if (redirects.has(to.replace(/\/$/, '')))
     fail(`_redirects: ${from} → ${to} chains into another redirect`);
   if (!fileFor(to)) fail(`_redirects: ${from} → ${to} target does not exist`);
+}
+
+// Landing and catalogue: route-specific metadata, social defaults, robots and sitemap.
+const ORIGIN = 'https://quartz-headless.pages.dev';
+for (const [path, file] of [
+  ['/', 'index.html'],
+  ['/components', 'components/index.html'],
+]) {
+  const html = existsSync(join(root, file)) ? readFileSync(join(root, file), 'utf8') : '';
+  const expectedUrl = `${ORIGIN}${path}`;
+  if (!html.includes(`rel="canonical" href="${expectedUrl}"`))
+    fail(`${path}: missing canonical ${expectedUrl}`);
+  if (!html.includes(`property="og:url" content="${expectedUrl}"`))
+    fail(`${path}: missing og:url ${expectedUrl}`);
+  for (const needle of ['property="og:title"', 'property="og:description"', 'name="twitter:card"'])
+    if (!html.includes(needle)) fail(`${path}: missing ${needle}`);
+  if (!/<h1[\s>]/.test(html)) fail(`${path}: missing <h1>`);
+  if (!html.includes('<main')) fail(`${path}: missing <main> landmark`);
+}
+const robotsFile = join(root, 'robots.txt');
+const sitemapFile = join(root, 'sitemap.xml');
+if (!existsSync(robotsFile) || !readFileSync(robotsFile, 'utf8').includes(`${ORIGIN}/sitemap.xml`))
+  fail('robots.txt: missing or does not reference the sitemap');
+if (!existsSync(sitemapFile)) fail('sitemap.xml: missing');
+else {
+  const locs = [...readFileSync(sitemapFile, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+    (m) => m[1],
+  );
+  if (new Set(locs).size !== locs.length) fail('sitemap.xml: duplicate URLs');
+  for (const loc of locs) {
+    if (!loc.startsWith(ORIGIN)) fail(`sitemap.xml: ${loc} is not on ${ORIGIN}`);
+    else if (!fileFor(loc.slice(ORIGIN.length) || '/')) fail(`sitemap.xml: ${loc} does not exist`);
+    if (loc.includes('/e2e-')) fail(`sitemap.xml: fixture page listed: ${loc}`);
+  }
+  for (const required of ['/', '/components', '/docs', '/docs/primitives/select'])
+    if (!locs.includes(`${ORIGIN}${required}`)) fail(`sitemap.xml: missing ${required}`);
 }
 
 if (errors.length) {
