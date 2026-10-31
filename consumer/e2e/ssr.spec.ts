@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 /** Raw server output: no browser, no hydration. Exercises sequential and concurrent requests. */
 
-const routes = ['/forms', '/overlays', '/navigation', '/parity', '/controls'];
+const routes = ['/forms', '/overlays', '/navigation', '/parity', '/controls', '/autofill'];
 
 const idsOf = (html: string) => [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 const strip = (html: string) => html.replace(/ng-server-context="[^"]*"/, '');

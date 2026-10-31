@@ -1,0 +1,118 @@
+{
+  "engine": "chrome",
+  "version": "156.0.8078.80",
+  "url": "http://localhost:4690",
+  "checks": {
+    "1 precondition: empty form, no autofill state": {
+      "ok": true
+    },
+    "1 the browser filled the fields": {
+      "ok": true,
+      "detail": {
+        "name": "Ada Example",
+        "email": "ada@example.test",
+        "tel": "+15555550100",
+        "street": "1 Test Street",
+        "postal": "00000"
+      }
+    },
+    "2+3 Quartz detected it: data-autofilled on every filled field": {
+      "ok": true,
+      "detail": ["name", "email", "tel", "street", "postal"]
+    },
+    "4 autofilledChange emitted exactly once per field (true)": {
+      "ok": true,
+      "detail": [
+        "#1 name → true",
+        "#2 email → true",
+        "#3 tel → true",
+        "#4 street → true",
+        "#5 postal → true"
+      ]
+    },
+    "5 Angular Forms received the browser-written values": {
+      "ok": true,
+      "detail": {
+        "name": "Ada Example",
+        "email": "ada@example.test",
+        "tel": "+15555550100",
+        "street": "1 Test Street",
+        "postal": "00000"
+      }
+    },
+    "6 no live region was introduced by the directive": {
+      "ok": true,
+      "detail": 0
+    },
+    "6 re-triggering the same autofill emits no duplicate": {
+      "ok": true,
+      "detail": 5
+    },
+    "7 reset clears the Forms values and DOM values": {
+      "ok": true,
+      "detail": {
+        "name": "",
+        "email": "",
+        "tel": "",
+        "street": "",
+        "postal": ""
+      }
+    },
+    "8 destroy/recreate starts clean": {
+      "ok": true,
+      "detail": []
+    },
+    "8 navigating away and back starts clean": {
+      "ok": true,
+      "detail": {
+        "count": 0,
+        "log": ["none yet"],
+        "form": {
+          "name": "",
+          "email": "",
+          "tel": "",
+          "street": "",
+          "postal": ""
+        },
+        "live": 0,
+        "marked": [],
+        "values": {
+          "name": "",
+          "email": "",
+          "tel": "",
+          "street": "",
+          "postal": ""
+        }
+      }
+    },
+    "no console or page errors, no failed requests": {
+      "ok": true,
+      "detail": {
+        "errors": [],
+        "unexpected": []
+      }
+    }
+  },
+  "afterReset": {
+    "marked": [],
+    "count": 10,
+    "log": [
+      "#1 name → true",
+      "#2 email → true",
+      "#3 tel → true",
+      "#4 street → true",
+      "#5 postal → true",
+      "#6 name → false",
+      "#7 email → false",
+      "#8 tel → false",
+      "#9 street → false",
+      "#10 postal → false"
+    ]
+  },
+  "afterUserClear": {
+    "marked": ["name", "tel", "street", "postal"],
+    "count": 16
+  },
+  "ok": true,
+  "recordedAt": "2026-10-31T11:56:29.028Z"
+}

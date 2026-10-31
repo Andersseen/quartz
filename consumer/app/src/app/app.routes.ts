@@ -11,6 +11,10 @@ export const routes: Routes = [
     path: 'controls',
     loadComponent: () => import('./pages/controls.page').then((m) => m.ControlsPage),
   },
+  {
+    path: 'autofill',
+    loadComponent: () => import('./pages/autofill.page').then((m) => m.AutofillPage),
+  },
   { path: 'parity', loadComponent: () => import('./pages/parity.page').then((m) => m.ParityPage) },
   {
     path: 'navigation',

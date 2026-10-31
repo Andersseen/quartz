@@ -465,12 +465,26 @@ test.describe('health', () => {
   ];
 
   test('no console errors, warnings or hydration mismatches', async ({ page }) => {
+    // Visits 20 routes in sequence (~19 s alone in Firefox), so the default 30 s budget is exhausted under parallel load.
+    test.slow();
     const problems = trackConsole(page);
     for (const route of routes) {
       await go(page, route);
       await page.waitForLoadState('networkidle');
     }
     expect(problems).toEqual([]);
+  });
+
+  test('a demo chunk that fails to load shows a fallback instead of an unhandled NG0750 error', async ({
+    page,
+  }) => {
+    // Reproduces the cause of the intermittent Firefox "ERROR Error": aborting the lazy chunk of a
+    // `@defer (on idle)` demo (what happens when a navigation interrupts it) rejects the dynamic import.
+    await page.route(/\/assets\/select\.demo-[^/]+\.js$/, (route) => route.abort('failed'));
+    const problems = trackConsole(page);
+    await go(page, '/docs/primitives/select');
+    await expect(page.getByText('This demo could not be loaded').first()).toBeVisible();
+    expect(problems.filter((problem) => /NG0750|^error: ERROR/.test(problem))).toEqual([]);
   });
 
   test('every internal link on key pages resolves', async ({ page, request }) => {

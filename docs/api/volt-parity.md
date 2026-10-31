@@ -57,14 +57,14 @@ classified N inside the `select` row. The inventory therefore has **46 rows** co
 
 | Code | Meaning                         |   Rows | Barrels only |
 | ---- | ------------------------------- | -----: | -----------: |
-| V    | Implemented and verified        |     31 |           31 |
-| C    | Implemented, missing coverage   |      1 |            1 |
+| V    | Implemented and verified        |     32 |           32 |
+| C    | Implemented, missing coverage   |      0 |            0 |
 | P    | Partial behavioural equivalence |      0 |            0 |
 | M    | Missing                         |      0 |            0 |
 | N    | Native / composition sufficient |     14 |           14 |
 |      | **Total**                       | **46** |       **45** |
 
-Reading the numbers: **31 of 46** rows are verified-equivalent after the 0.17 consumer gate (the 26 closed by 0.16 plus Accordion, Sidebar, FormField, InputOTP and FileUpload, whose evidence is the installed-tarball consumer suite `consumer/e2e/parity.spec.ts` in Chromium, Firefox and WebKit on Angular 21.2, the 21.2.0 minimum and Angular 22 — see `docs/releases/0.17-acceptance.md`); 14 are N. **One row remains open: `autofill` (C).** Its detection mechanism is verified in all three engines with a real CSS animation, but genuine browser autofill cannot be produced by automation (Playwright's Chromium exposes no DevTools `Autofill` domain; Firefox and WebKit offer no hook), so the exact blocker is recorded on the row and in the manual matrix (`docs/releases/0.17-manual-a11y.md`). The 1.0 prerequisite is every row V or N: Quartz as a whole is **not** v1-ready and is **not** Volt-compatible yet.
+Reading the numbers: **32 of 46** rows are verified-equivalent (the 26 closed by 0.16, Accordion, Sidebar, FormField, InputOTP and FileUpload from the 0.17 consumer gate, and `autofill` from the 0.19 genuine-browser evidence); 14 are N. No row is open, but the classification of `autofill` is **scoped**: genuine autofill is verified in real Google Chrome only (see the row); Firefox and Safari/WebKit detection is unverified and is documented as best-effort. The 1.0 prerequisite is every row V or N (met on paper); Quartz as a whole is still **not** declared v1-ready — see `docs/releases/0.19-acceptance.md` for the remaining blockers.
 
 ### Rows by owning milestone (non-N, non-V)
 
@@ -138,17 +138,19 @@ cross-cutting gate applied to **every** row, see §5.
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** E2E recipe: clear empties the model, focus returns to the input, button hidden when empty.
 
-### `autofill` — Implemented, missing coverage (**C**)
+### `autofill` — Implemented and verified (**V**)
 
 - **Volt public surface:** `voltAutofill`; re-exports `injectAutofillState`, `ngpAutofill`, `provideAutofillState`, `NgpAutofillProps`, `NgpAutofillState`
 - **Behavioural dependency:** ng-primitives `autofill`
 - **Observable headless contract required:** Detects browser autofill (via `:-webkit-autofill` animation start/`animationstart` hook) and exposes `data-autofill` + an `autofilled` output.
 - **Quartz equivalent:** `AutofillDirective` detects configured animation-start/end events, maintains `data-autofilled` and emits state transitions. If autofill changes the host value without `input`, it dispatches a bubbling input event for Forms.
-- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts` in Chromium, Firefox and WebKit: a real CSS `animationstart` with the configured name sets `data-autofilled`, emits `autofilledChange`, and dispatches the missing `input` event so Forms receives the value; teardown while active is error-free; SSR renders no autofill state. This proves the directive's detection pipeline in each engine. It does **not** prove genuine browser autofill.
+- **Current evidence (0.17):** `consumer/e2e/parity.spec.ts` in Chromium, Firefox and WebKit: a real CSS `animationstart` with the configured name sets `data-autofilled`, emits `autofilledChange`, and dispatches the missing `input` event so Forms receives the value; teardown while active is error-free; SSR renders no autofill state. This proves the directive's detection pipeline in each engine; by itself it does **not** prove genuine browser autofill.
+- **Genuine browser evidence (0.19, Chrome only):** `node scripts/consumer/autofill-real-browser.mjs` drives **real Google Chrome 156.0.8078.80** (Playwright `channel: 'chrome'`, which — unlike the bundled Chromium — exposes the DevTools `Autofill` domain) in a throwaway empty profile with a synthetic address. Chrome's own autofill engine filled five fields of the installed-tarball consumer's `/autofill` lab; Quartz marked all five `data-autofilled`, emitted `autofilledChange(true)` exactly once per field, and the Angular Forms values matched the browser-written values; re-triggering the same autofill emitted nothing more; no live region was added; `form.reset()` removed the state (one `false` emission per field) and cleared the values; clearing one field by hand removed only that field's state; destroying/recreating the fields and navigating away and back started clean; no console errors or failed requests. Evidence file `consumer/results/autofill-chrome.json`; procedure `docs/releases/0.19-autofill-verification.md`.
+- **Scope of that evidence:** the fill was initiated through the DevTools protocol (`Autofill.trigger`), not by a person choosing a suggestion from the popup, and only for address fields in Chrome. Password-manager and credit-card autofill, Firefox, Safari/WebKit and Chrome on other platforms are **not** verified. Firefox and WebKit have no automation hook for autofill; they stay on the manual procedure and manual matrix row 14.
 - **Accessibility:** None directly (styling signal).
 - **Forms:** Autofill fires no `input` event in some browsers; the value must reach the control.
 - **Angular / SSR:** Browser-only observer; must be a no-op on the server and not run at import.
-- **Remaining work:** **Blocker (exact):** automation cannot put a field into the browser's autofill state — the DevTools `Autofill` domain is absent from Playwright's Chromium build (`Autofill.trigger` → "wasn't found"), and Firefox/WebKit offer no hook. Detection relies on `:-webkit-autofill` (Chromium, WebKit) / `:autofill` (Firefox) triggering a CSS animation and is best-effort: Quartz does not claim universal autofill support, and some engines/credential managers set values without any observable event. Genuine autofill stays on the manual matrix; the row is promoted to V only when that evidence exists.
+- **Remaining work:** none to hold the row at V for the documented scope. Quartz still does not claim universal autofill support: detection relies on `:-webkit-autofill` (Chromium, WebKit) / `:autofill` (Firefox) triggering a CSS animation and is best-effort, and some engines/credential managers set values without any observable event. Human confirmation on a real device and in Firefox/Safari remains on the manual matrix (row 14).
 - **Owning milestone:** 0.14
 - **Acceptance tests needed:** Unit: animation-start toggles state; E2E (Chromium) with autofilled field style hook; SSR no-op.
 

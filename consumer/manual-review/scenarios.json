@@ -1,0 +1,178 @@
+{
+  "$comment": "Source for the generated manual review index. The record of truth for outcomes stays docs/releases/0.17-manual-a11y.md; scripts/consumer/manual-review.mjs --check fails if the two disagree on ids or pages. Expectations are copied from that matrix, not invented here.",
+  "scenarios": [
+    {
+      "id": 1,
+      "title": "Dialog",
+      "page": "/overlays",
+      "control": "Open dialog",
+      "keys": "Enter or Space on the button; Tab / Shift+Tab inside; Escape",
+      "steps": [
+        "Activate \"Open dialog\"",
+        "Read the dialog",
+        "Tab through its content",
+        "Press Escape"
+      ],
+      "expectedFocus": "Moves into the dialog and stays inside it; on close returns to \"Open dialog\"",
+      "expectedAnnouncement": "A dialog named \"Pick a fruit\" with its description; the background is not reachable"
+    },
+    {
+      "id": 2,
+      "title": "Drawer",
+      "page": "/overlays",
+      "control": "Open drawer",
+      "keys": "Enter or Space on the button; Escape",
+      "steps": ["Activate \"Open drawer\"", "Read the drawer", "Press Escape"],
+      "expectedFocus": "Moves into the drawer; Escape closes it and focus returns to the opener",
+      "expectedAnnouncement": "A dialog named \"Drawer\""
+    },
+    {
+      "id": 3,
+      "title": "Select",
+      "page": "/forms",
+      "control": "Fruit: apple",
+      "keys": "Enter to open; Up/Down arrows; Enter to choose",
+      "steps": ["Focus \"Fruit: apple\"", "Press Enter", "Move with the arrow keys", "Press Enter"],
+      "expectedFocus": "Trigger keeps focus; the active option follows the arrows; after choosing, focus is on the trigger",
+      "expectedAnnouncement": "Button with a listbox popup and expanded state; each option with selected state and position; the chosen value"
+    },
+    {
+      "id": 4,
+      "title": "Menu",
+      "page": "/overlays",
+      "control": "Menu",
+      "keys": "Enter to open; Up/Down arrows; Enter to choose",
+      "steps": ["Focus \"Menu\"", "Press Enter", "Move with the arrow keys", "Press Enter"],
+      "expectedFocus": "Moves to the first item; selection closes the menu and focus returns to the trigger",
+      "expectedAnnouncement": "A menu with item names and positions"
+    },
+    {
+      "id": 5,
+      "title": "Combobox",
+      "page": "/forms",
+      "control": "City",
+      "keys": "Type; Down arrow; Enter",
+      "steps": ["Focus \"City\"", "Type \"Pra\"", "Press Down arrow", "Press Enter"],
+      "expectedFocus": "DOM focus stays in the input; the active option is exposed through aria-activedescendant",
+      "expectedAnnouncement": "A combobox; options announced as they become active; the filtered count is perceivable; the value",
+      "reviewTarget": "Result-count announcement is a suspected gap, not a confirmed defect. Record exactly what is (or is not) announced after typing."
+    },
+    {
+      "id": 6,
+      "title": "FormField",
+      "page": "/forms",
+      "control": "Email, Message",
+      "keys": "Enter on the submit button; Tab between fields",
+      "steps": ["Submit the empty form", "Move through Email and Message"],
+      "expectedFocus": "Natural Tab order; no focus trap",
+      "expectedAnnouncement": "Each field with label, hint, \"invalid\" and its error (the error is role=alert and announced once on appearing); required state",
+      "reviewTarget": "Validation feedback: confirm each error is announced once, not repeated."
+    },
+    {
+      "id": 7,
+      "title": "FormField (async validation, Checkbox, Switch)",
+      "page": "/parity",
+      "control": "Username",
+      "keys": "Type; Tab; Space on Checkbox/Switch",
+      "steps": [
+        "Type \"taken\" in Username",
+        "Wait for validation",
+        "Read the field",
+        "Move to the Checkbox and Switch"
+      ],
+      "expectedFocus": "Focus is not moved by validation",
+      "expectedAnnouncement": "Pending validation is not announced noisily; the \"taken\" error is announced; Checkbox and Switch with label, hint and state"
+    },
+    {
+      "id": 8,
+      "title": "Sidebar",
+      "page": "/parity",
+      "control": "Toggle sidebar",
+      "keys": "Enter on the toggle; Tab through items; Escape on the off-canvas sidebar",
+      "steps": [
+        "Collapse the rail",
+        "Navigate the items",
+        "Narrow the window to phone width",
+        "Open and close the off-canvas sidebar"
+      ],
+      "expectedFocus": "Off-canvas sidebar is entered with focus inside; Escape returns focus to \"Toggle sidebar\"",
+      "expectedAnnouncement": "Rail items by name; collapsed versus closed is distinguishable"
+    },
+    {
+      "id": 9,
+      "title": "NavigationMenu",
+      "page": "/navigation",
+      "control": "Products",
+      "keys": "Enter; Tab into the revealed link; Escape",
+      "steps": ["Focus \"Products\"", "Press Enter", "Read the content", "Press Escape"],
+      "expectedFocus": "Revealed link is reachable; Escape collapses and returns focus to \"Products\"",
+      "expectedAnnouncement": "A button with expanded state"
+    },
+    {
+      "id": 10,
+      "title": "Toast",
+      "page": "/overlays",
+      "control": "Show toast",
+      "keys": "Enter on the button; Tab to \"Undo\"",
+      "steps": [
+        "Activate \"Show toast\"",
+        "Do not move focus; listen",
+        "Tab to \"Undo\"",
+        "Dismiss the toast"
+      ],
+      "expectedFocus": "Focus is not moved by the toast; \"Undo\" is reachable; dismissal does not strand focus",
+      "expectedAnnouncement": "\"File archived\" announced without moving focus",
+      "reviewTarget": "Toast live-region behaviour is unverified. Record whether it is announced, and how many times."
+    },
+    {
+      "id": 11,
+      "title": "Resizable",
+      "page": "/navigation",
+      "control": "Resize panels",
+      "keys": "Left / Right arrows; Home; End",
+      "steps": ["Focus \"Resize panels\"", "Press Left and Right", "Press Home and End"],
+      "expectedFocus": "Handle keeps focus",
+      "expectedAnnouncement": "A separator with orientation, name and value; value changes are announced"
+    },
+    {
+      "id": 12,
+      "title": "InputOTP",
+      "page": "/parity",
+      "control": "Verification code",
+      "keys": "Type digits; Backspace; paste",
+      "steps": [
+        "Type a code",
+        "Press Backspace",
+        "Paste a code",
+        "On a device, use the OS one-time-code suggestion"
+      ],
+      "expectedFocus": "Focus stays in the single text field",
+      "expectedAnnouncement": "One text field \"Verification code\"; slot digits not read as separate controls; completion perceivable",
+      "reviewTarget": "Also covers physical IME and OS clipboard paste in Firefox/WebKit."
+    },
+    {
+      "id": 13,
+      "title": "FileUpload",
+      "page": "/parity",
+      "control": "Browse",
+      "keys": "Tab to \"Browse\"; Enter; choose a file in the OS dialog",
+      "steps": ["Tab to \"Browse\"", "Press Enter", "Choose a file"],
+      "expectedFocus": "Returns to the page after the OS dialog without being stranded",
+      "expectedAnnouncement": "Button and input named; the chosen file name perceivable; the dropzone is not the only way in"
+    },
+    {
+      "id": 14,
+      "title": "Autofill",
+      "page": "/autofill",
+      "control": "Email",
+      "keys": "Browser autofill (see docs/releases/0.19-autofill-verification.md); Tab",
+      "steps": [
+        "Follow the Autofill verification procedure with a throwaway browser profile and synthetic data",
+        "Trigger the browser's autofill into a field",
+        "Read the page's \"Observed state\" section"
+      ],
+      "expectedFocus": "Autofill does not move focus by itself",
+      "expectedAnnouncement": "No duplicate announcements; data-autofilled appears, the Forms value updates; record which engines emit an observable event"
+    }
+  ]
+}

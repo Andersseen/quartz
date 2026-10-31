@@ -184,6 +184,10 @@ test.describe('form-field', () => {
   test('native input: ids, labelledby/describedby, async validator transitions, reset', async ({
     page,
   }) => {
+    // Hold the pending state open: a 150 ms window can pass between two polls on a loaded machine.
+    await page.addInitScript(() => {
+      (globalThis as { __qzValidatorDelayMs?: number }).__qzValidatorDelayMs = 1500;
+    });
     const health = await boot(page, '/parity');
     await expect(input(page)).toHaveAttribute('aria-labelledby', 'ff-name-label');
     await expect(input(page)).toHaveAttribute('aria-describedby', 'ff-name-hint');

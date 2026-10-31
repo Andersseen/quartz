@@ -5,9 +5,10 @@ verified. Every claim below is backed by a command you can run (see
 [Reproduce](#reproduce-the-matrix)); anything not proven is listed under
 [Known limitations](#known-limitations).
 
-> Status: the 0.17 consumer gate is **in progress** — see `docs/releases/0.17-acceptance.md` for the
-> recorded results and the gates that remain open (manual screen-reader review, genuine browser
-> autofill). Until `0.17.0` is published, the peer ranges below are what the branch declares.
+> Status: the 0.17 consumer gate is merged but **not accepted** — see `docs/releases/0.17-acceptance.md` and
+> `docs/releases/0.19-acceptance.md` for the recorded results and the gate that remains open (manual
+> screen-reader review). Genuine browser autofill was verified in Chrome in 0.19. Until `0.17.0` is
+> published, the peer ranges below are what `main` declares; the latest published version is `0.16.0`.
 
 ## Supported versions
 
@@ -131,11 +132,12 @@ workspace, a destination path containing a space, strict AOT, and a browser inte
 
 ## Known limitations
 
-- **Genuine browser autofill is not verified.** Automation cannot put an input into the browser's autofill
-  state (Playwright's Chromium exposes no DevTools `Autofill` domain; Firefox and WebKit offer no hook).
-  `AutofillDirective` detection is best-effort and relies on `:-webkit-autofill` / `:autofill`
-  triggering a CSS animation; do not assume every browser or credential manager emits an observable
-  event. The `autofill` parity row therefore stays **C**.
+- **Genuine browser autofill is verified in Chrome only** (0.19, `docs/releases/0.19-autofill-verification.md`):
+  Chrome's own autofill engine filled a form in a throwaway profile (synthetic address, triggered through the
+  DevTools `Autofill` domain, which Playwright's bundled Chromium lacks) and the directive detected it. Firefox and
+  WebKit offer no automation hook and are **unverified**. `AutofillDirective` detection is best-effort and relies on
+  `:-webkit-autofill` / `:autofill` triggering a CSS animation; do not assume every browser or credential manager
+  emits an observable event.
 - **Physical IME and real clipboard (Firefox/WebKit).** InputOTP composition is verified with synthetic
   composition events and paste with a synthetic `ClipboardEvent` (plus a real Ctrl/Cmd+V in Chromium).
   A physical input method and an OS-clipboard paste in Firefox/WebKit are manual-pending.

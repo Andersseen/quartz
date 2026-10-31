@@ -7,7 +7,7 @@ order: 182
 
 ## At a glance
 
-`AutofillDirective` observes supported autofill CSS animation transitions on native `input` and `textarea` elements. It does not replace native input behavior or promise universal browser detection.
+`AutofillDirective` observes supported autofill CSS animation transitions on native `input` and `textarea` elements. It does not replace native input behavior or promise universal browser detection. Genuine browser autofill has been verified in Chrome only (see the compatibility guide); Firefox and Safari are unverified.
 
 ## Install and import
 

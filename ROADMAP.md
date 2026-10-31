@@ -102,23 +102,24 @@ Estos scopes organizan issues y PRs; no obligan a crear nuevos paquetes ni entry
 
 ## 4. Secuencia de entregas
 
-| Versión objetivo | Resultado principal                                              | Dependencia                       | Puerta de salida                                                         |
-| ---------------- | ---------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------ |
-| `0.7.0`          | Core consolidado                                                 | Contratos de 0.6 cerrados         | Ciclo de vida, foco, capas y geometría verificados                       |
-| `0.8.0`          | Flotantes y feedback consolidados                                | Core de 0.7                       | Dialog, Tooltip, Popover, Menu y Toast funcionan también compuestos      |
-| `0.9.0`          | Selección, controles, Forms e inventario de paridad Volt         | 0.7 y contratos de 0.8            | Contratos comprobados + `volt-parity.md` completo con hito por hueco     |
-| `0.10.0`         | Selección avanzada (Combobox, Select múltiple/grupos)            | 0.9                               | Filas `select`, `combobox`, `listbox` en V                               |
-| `0.11.0`         | Controles de rango y alternancia (Slider, RangeSlider, Toggle\*) | 0.10                              | Filas `slider`, `range-slider`, `toggle`, `toggle-group` en V            |
-| `0.12.0`         | Fecha y rango de fechas                                          | 0.11                              | Filas `date-picker`, `date-range-picker` en V                            |
-| `0.13.0`         | Navegación y foco rodante (NavigationMenu, Toolbar, Pagination…) | 0.12                              | Filas `navigation-menu`, `toolbar`, `pagination`, `accordion`, `sidebar` |
-| `0.14.0`         | Entradas de texto, archivos y form-field                         | 0.13                              | Filas `input-otp`, `autofill`, `file-upload`, `form-field`               |
-| `0.15.0`         | Feedback e indicadores de valor                                  | 0.14                              | Filas `progress`, `meter`, `avatar`, `toast`                             |
-| `0.16.0`         | Drawer, resizable y completitud flotante                         | 0.15                              | Filas `drawer`, `resizable`, `tooltip`, `popover`, `dropdown-menu`       |
-| `0.17.0`         | Consumo real, Angular 21.2/22, SSR e hidratación (antes 0.10)    | **Todas las familias de paridad** | Tarballs en Angular 21.2 y 22; SSR→hidratación→interacción por fila      |
-| `0.18.0`         | Distribución, documentación y API congelada (antes 0.11)         | Matriz de 0.17                    | Publicación ensayada y migración completa                                |
-| `1.0.0-beta.N`   | Validación en proyectos consumidores                             | Congelación de 0.18               | Dos integraciones independientes (una es el adaptador de Volt UI 2.0)    |
-| `1.0.0-rc.N`     | Candidato exacto verificable                                     | Beta aceptada                     | Matriz completa en verde sobre el artefacto candidato                    |
-| `1.0.0`          | Promesa de estabilidad                                           | RC aceptada                       | Mismos contratos y checklist final firmado                               |
+| Versión objetivo | Resultado principal                                                            | Dependencia                       | Puerta de salida                                                                              |
+| ---------------- | ------------------------------------------------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `0.7.0`          | Core consolidado                                                               | Contratos de 0.6 cerrados         | Ciclo de vida, foco, capas y geometría verificados                                            |
+| `0.8.0`          | Flotantes y feedback consolidados                                              | Core de 0.7                       | Dialog, Tooltip, Popover, Menu y Toast funcionan también compuestos                           |
+| `0.9.0`          | Selección, controles, Forms e inventario de paridad Volt                       | 0.7 y contratos de 0.8            | Contratos comprobados + `volt-parity.md` completo con hito por hueco                          |
+| `0.10.0`         | Selección avanzada (Combobox, Select múltiple/grupos)                          | 0.9                               | Filas `select`, `combobox`, `listbox` en V                                                    |
+| `0.11.0`         | Controles de rango y alternancia (Slider, RangeSlider, Toggle\*)               | 0.10                              | Filas `slider`, `range-slider`, `toggle`, `toggle-group` en V                                 |
+| `0.12.0`         | Fecha y rango de fechas                                                        | 0.11                              | Filas `date-picker`, `date-range-picker` en V                                                 |
+| `0.13.0`         | Navegación y foco rodante (NavigationMenu, Toolbar, Pagination…)               | 0.12                              | Filas `navigation-menu`, `toolbar`, `pagination`, `accordion`, `sidebar`                      |
+| `0.14.0`         | Entradas de texto, archivos y form-field                                       | 0.13                              | Filas `input-otp`, `autofill`, `file-upload`, `form-field`                                    |
+| `0.15.0`         | Feedback e indicadores de valor                                                | 0.14                              | Filas `progress`, `meter`, `avatar`, `toast`                                                  |
+| `0.16.0`         | Drawer, resizable y completitud flotante                                       | 0.15                              | Filas `drawer`, `resizable`, `tooltip`, `popover`, `dropdown-menu`                            |
+| `0.17.0`         | Consumo real, Angular 21.2/22, SSR e hidratación (antes 0.10)                  | **Todas las familias de paridad** | Tarballs en Angular 21.2 y 22; SSR→hidratación→interacción por fila                           |
+| `0.18.0`         | Distribución, documentación y API congelada (antes 0.11)                       | Matriz de 0.17                    | Publicación ensayada y migración completa                                                     |
+| `0.19.0`         | Aceptación y estabilización pre-beta (minor adicional, sin componentes nuevos) | 0.17 y 0.18 implementadas         | Puertas manuales cerradas o exceptuadas por el maintainer; pipeline probado; candidato de API |
+| `1.0.0-beta.N`   | Validación en proyectos consumidores                                           | Congelación de 0.18               | Dos integraciones independientes (una es el adaptador de Volt UI 2.0)                         |
+| `1.0.0-rc.N`     | Candidato exacto verificable                                                   | Beta aceptada                     | Matriz completa en verde sobre el artefacto candidato                                         |
+| `1.0.0`          | Promesa de estabilidad                                                         | RC aceptada                       | Mismos contratos y checklist final firmado                                                    |
 
 **Reglas de la secuencia.** No se congela API mientras falte una capacidad exigida por Volt. La beta
 **no puede empezar** mientras alguna fila del inventario siga en C, P o M. 1.0 no se declara por
@@ -222,7 +223,7 @@ de la clasificación en `docs/api/volt-parity.md` solo con evidencia.
 
 ### 0.17.0 — Compatibilidad y consumo fuera del repositorio (antes 0.10)
 
-> **Estado:** implementado en rama, **no aceptado**. Peers `^21.2.0 \|\| ^22.0.0` verificados (21.0 falla: el template de Toast usa funciones flecha, Angular ≥ 21.2). Puertas abiertas: `autofill` real y revisión manual con lector de pantalla. Ver `docs/releases/0.17-acceptance.md`.
+> **Estado:** implementado en rama, **no aceptado**. Peers `^21.2.0 \|\| ^22.0.0` verificados (21.0 falla: el template de Toast usa funciones flecha, Angular ≥ 21.2). Puertas: `autofill` real quedó verificado en Chrome (0.19, `docs/releases/0.19-autofill-verification.md`); la revisión manual con lector de pantalla sigue **pendiente**. Ver `docs/releases/0.17-acceptance.md`.
 
 **Scopes:** `compat`, `testing`, `cli`. Entrada: **todas** las familias de paridad (0.9–0.16) cerradas.
 

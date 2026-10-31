@@ -22,6 +22,8 @@
     "release:plan": "node scripts/release/release.mjs plan --dir release-artifacts",
     "verify:consumer": "node scripts/consumer-smoke.js",
     "verify:consumer:runtime": "node scripts/consumer/run.mjs",
+    "review:manual": "node scripts/consumer/run.mjs --fixture angular-21.2 --stage serve",
+    "review:manual:check": "node scripts/consumer/manual-review.mjs --check",
     "verify:consumer:cli": "node scripts/consumer/cli.mjs",
     "verify:bundle": "node scripts/consumer/bundle-size.mjs --check",
     "verify:evidence": "node scripts/consumer/evidence-matrix.mjs",

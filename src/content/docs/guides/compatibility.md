@@ -33,6 +33,6 @@ Peers: `@angular/core` and `@angular/common` `^21.2.0 || ^22.0.0`, `@angular/for
 
 ## Known limits
 
-- **Genuine browser autofill is not verified** — automation cannot trigger it. `AutofillDirective` is best-effort and depends on the browser exposing `:-webkit-autofill` / `:autofill`; do not assume universal support.
+- **Genuine browser autofill is verified in Chrome only.** In 0.19 Chrome's own autofill engine filled a form (synthetic address, throwaway profile) and the directive detected it, emitted `autofilledChange` once per field and updated Angular Forms. The fill was triggered through the DevTools protocol, not a popup selection. Firefox and Safari/WebKit could not be exercised by automation and are unverified; `AutofillDirective` stays best-effort and depends on the browser exposing `:-webkit-autofill` / `:autofill`, so do not assume universal support.
 - A physical IME and an OS-clipboard paste in Firefox/WebKit are manual-pending for `qz-input-otp`.
 - No real screen-reader pass has been recorded yet; automated checks do not replace it.
