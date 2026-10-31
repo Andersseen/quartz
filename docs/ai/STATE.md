@@ -1,5 +1,13 @@
 # STATE — Current Project Status
 
+# 0.18 Distribution, release engineering & API freeze candidate — implemented on branch, NOT accepted (2026-10-30)
+
+Branch `feat/quartz-0.18-release-api-freeze` (from main `bdb27f8`). Package versions are still `0.16.0`: nothing was published and **0.17.0 is not published** (npm `latest` = 0.16.0). The 0.17 implementation is merged (PR #50) and its post-merge workflow `41037315289` passed every job (Node 20.19/24/22 consumer cells included) and deployed to Cloudflare Pages, but 0.17 acceptance is still open: manual screen-reader matrix and genuine browser Autofill are PENDING and no maintainer waiver was supplied. Full record: [0.18 acceptance](../releases/0.18-acceptance.md).
+
+What exists: `scripts/release/` (semver policy, fail-closed registry lookups, artifact pack/verify with sha256 + npm integrity + source commit, publish planning/recovery, GitHub release metadata, rehearsal suite against a fake registry — project `quartz-release`), a rewritten `deploy.yml` (`package` job builds and packs once; consumer jobs install those tarballs; `publish` downloads the same files, concurrency-guarded, provenance; `release` binds the tag to the validated commit), the extended API guard (selectors/inputs/outputs/members/defaults, field-level BREAKING/ADDITIVE report, `--baseline`), generated `docs/api/API_INVENTORY.md`, `docs/api/FREEZE_POLICY.md`, `docs/releases/RELEASE_RUNBOOK.md`, the 0.5→1.0 migration page, the recipes guide (verified against the consumer fixture), SUPPORT/SECURITY/CONTRIBUTING and issue/PR templates. `pnpm publish:lib` is disabled.
+
+**The API is NOT frozen.** Open items needing the maintainer: 0.17 manual a11y + Autofill decision/waiver, first guarded publication of 0.17.0, freeze decision (see FREEZE_POLICY.md).
+
 # 0.17 Consumer compatibility — implemented on branch, NOT accepted (2026-10-30)
 
 Branch `feat/quartz-0.17-consumer-compatibility` (from main `07783ee`, 0.16.0). Package versions are deliberately still `0.16.0`: the bump to `0.17.0` (and the `^0.17.0` Core peer) happens only when the release is accepted. Full record, commands and results: [0.17 acceptance](../releases/0.17-acceptance.md).

@@ -44,19 +44,22 @@ pnpm quartz list
 
 Pre-commit hook runs `lint-staged` (ESLint + Prettier on staged files), `typecheck`, and `pnpm test` — all three must pass.
 
-# Publish to npm
+# Release and publish to npm
+
+Publishing happens **only** through the guarded `CI / CD` GitHub workflow (`workflow_dispatch` with `publish=true` and an exact `confirm_version`). Never run
+`npm publish`, `pnpm publish:lib` (disabled) or hand-built tarballs from a workstation. The workflow builds and packs **once**, installs those exact tarballs in the consumer
+matrix (Angular 21.2 minimum / 21.2 / 22, Chromium + Firefox + WebKit, SSR, hydration, axe, CLI consumer), then publishes the same files with provenance; the API guard, artifact
+manifest (sha256 + npm integrity + source commit) and fail-closed registry checks block publication. Full procedure, partial-failure recovery and hotfix steps:
+`docs/releases/RELEASE_RUNBOOK.md`. Local rehearsal without publishing:
 
 ```bash
-# One-shot: build both libs then publish each to npm
-pnpm publish:lib
-
-# Or manually (core first — primitives declares it as a peer dependency):
-pnpm build:lib
-npm publish ./packages/core/dist --access public
-npm publish ./packages/primitives/dist --access public
+pnpm build:lib && pnpm verify:build        # package contract + public API guard
+pnpm release:pack && pnpm release:verify   # tarballs + release-manifest.json in ./release-artifacts
+pnpm release:plan                          # read-only registry reconciliation (fails closed)
+pnpm exec vitest run --project quartz-release   # release rehearsal suite against a fake registry
 ```
 
-Requires being logged in to npm (`npm login`) with access to the `@quartz-headless` org. The published packages are `packages/core/dist/` (`@quartz-headless/core`) and `packages/primitives/dist/` (`@quartz-headless/primitives`) — the monorepo root is never published (`"private": true`). The old unscoped `quartz-headless` package is **frozen** at its last published version; don't resurrect a publish path for it.
+The published packages are `packages/core/dist/` (`@quartz-headless/core`) and `packages/primitives/dist/` (`@quartz-headless/primitives`) — the monorepo root is never published (`"private": true`). The old unscoped `quartz-headless` package is **frozen** at its last published version; don't resurrect a publish path for it. Manual acceptance gates (screen reader, genuine Autofill) and the API freeze decision belong to the maintainer: an agent records evidence but cannot waive a gate or declare the API frozen.
 
 ## Architecture
 
@@ -113,4 +116,4 @@ The `quartz add` CLI copies raw TypeScript source files from `packages/core/src/
 
 Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. Each library's vitest config (`packages/core/vite.config.ts`, `packages/primitives/vite.config.ts`) and the app's config (`vitest.app.config.ts`) are registered as Vitest workspaces in the root `vitest.config.ts`. Primitives' vitest project resolves `@quartz-headless/core` via `node_modules` too, so `packages/core` must be built before running primitives' unit tests in isolation.
 
-E2E tests in `e2e/` use Playwright against a running dev server (auto-started by `webServer` config). Tests target `localhost:5173`.
+E2E tests in `e2e/` use Playwright against a running dev server (auto-started by `webServer` config). Tests target `localhost:5173`. Behavior that must hold in a real installed, AOT-compiled, SSR-hydrated application is tested in `consumer/` (`pnpm verify:consumer:runtime -- --fixture <angular-21.2-min|angular-21.2|angular-22>`, `pnpm verify:consumer:cli`); `docs/compatibility.md` describes the matrix.

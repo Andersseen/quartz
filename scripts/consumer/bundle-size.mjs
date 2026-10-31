@@ -25,6 +25,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTarballs } from './tarballs.mjs';
 import { brotliCompressSync, gzipSync } from 'node:zlib';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -38,14 +39,6 @@ const run = (cmd, a, o = {}) => execFileSync(cmd, a, { stdio: 'inherit', env, ..
 const work = mkdtempSync(join(tmpdir(), 'quartz-bundle-'));
 const app = join(work, 'app');
 
-function pack(dist) {
-  const out = execFileSync('npm', ['pack', '--json', '--pack-destination', work], {
-    cwd: dist,
-    encoding: 'utf8',
-  });
-  return join(work, JSON.parse(out)[0].filename);
-}
-
 function jsFiles(dir) {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.js'))
@@ -53,13 +46,8 @@ function jsFiles(dir) {
 }
 
 try {
-  for (const p of ['core', 'primitives'])
-    if (!existsSync(join(ROOT, `packages/${p}/dist/package.json`)))
-      throw new Error('run `pnpm build:lib` first');
-  const tarballs = [
-    pack(join(ROOT, 'packages/core/dist')),
-    pack(join(ROOT, 'packages/primitives/dist')),
-  ];
+  const resolved = resolveTarballs(work);
+  const tarballs = [resolved.core, resolved.primitives];
 
   cpSync(join(ROOT, 'consumer/cli-app'), app, {
     recursive: true,

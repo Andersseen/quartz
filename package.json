@@ -15,6 +15,11 @@
     "docs:doctor": "doq doctor --strict",
     "docs:preview": "node scripts/preview-static.mjs dist/analog/public",
     "verify:build": "node scripts/verify-build.js",
+    "api:inventory": "node scripts/api-inventory.mjs",
+    "api:inventory:check": "node scripts/api-inventory.mjs --check",
+    "release:pack": "node scripts/release/release.mjs pack --out release-artifacts",
+    "release:verify": "node scripts/release/release.mjs verify --dir release-artifacts",
+    "release:plan": "node scripts/release/release.mjs plan --dir release-artifacts",
     "verify:consumer": "node scripts/consumer-smoke.js",
     "verify:consumer:runtime": "node scripts/consumer/run.mjs",
     "verify:consumer:cli": "node scripts/consumer/cli.mjs",
@@ -34,7 +39,7 @@
     "format:check": "prettier --check \"**/*.{ts,html,scss,json,md}\"",
     "quartz": "node cli/bin/quartz.js",
     "prepare": "husky",
-    "publish:lib": "pnpm build:lib && npm publish ./packages/core/dist --access public && npm publish ./packages/primitives/dist --access public"
+    "publish:lib": "echo 'Direct publishing is disabled. Publish only through the guarded GitHub workflow (see docs/releases/RELEASE_RUNBOOK.md).' && exit 1"
   },
   "lint-staged": {
     "*.{ts,html}": [

@@ -1,0 +1,32 @@
+name: Bug report
+description: Something in @quartz-headless/core or /primitives behaves incorrectly
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Package versions
+      description: Output of `npm ls @quartz-headless/core @quartz-headless/primitives @angular/core`
+    validations: { required: true }
+  - type: input
+    id: env
+    attributes:
+      label: Browser, OS and Node version
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: A StackBlitz or a repository created with `ng new` that contains only what is needed. Issues without a reproduction may be closed.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations: { required: true }
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Rendering mode
+      options: [Client only, SSR, SSR with hydration]
+    validations: { required: true }

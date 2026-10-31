@@ -4,7 +4,9 @@
 
 ```
 1. SPEC    → copy docs/ai/specs/_TEMPLATE.md to docs/ai/specs/<feature>.md, fill it in
-2. REVIEW  → the user approves/edits the spec (STOP and show it before coding)
+2. REVIEW  → the milestone prompt or the maintainer approves the spec; when the task itself
+             already is the approved milestone, record the spec and proceed — stop and ask only
+             for genuinely maintainer-owned decisions (waivers, freeze, publication)
 3. BUILD   → implement exactly what the spec says, smallest diff that satisfies it
 4. VERIFY  → pnpm typecheck && pnpm test (+ pnpm e2e if user-visible), demo page by hand
 5. RECORD  → mark spec status Done; update docs/ai/STATE.md; update CLAUDE.md if
@@ -15,7 +17,7 @@ Rules for weaker models, be strict with yourself:
 
 - **Never start coding without reading** `CONTEXT.md`, `STATE.md`, and the relevant part of
   `ARCHITECTURE.md`. It takes 2 minutes and prevents 80% of wasted work.
-- **One spec = one branch = one PR.** Branch naming: `feature/<topic>`.
+- **One spec = one branch = one PR.** Branch naming: `feat/…`, `fix/…`, `chore/…` — always branch-first, never develop on `main`.
 - **If the spec and reality conflict mid-build**, stop and update the spec — don't
   improvise silently.
 - **If you're unsure whether something belongs in the library or the demo app**: styling,
@@ -25,7 +27,7 @@ Rules for weaker models, be strict with yourself:
 
 Copy this into your working notes and tick every box:
 
-- [ ] Spec written in `docs/ai/specs/<name>.md` and approved
+- [ ] Spec written in `docs/ai/specs/<name>.md` and approved (or the milestone prompt is the spec)
 - [ ] Decide the layer first: low-level infrastructure → `packages/core/src/<name>/`;
       accessible UI pattern built on Core → `packages/primitives/src/<name>/`. Follow the
       anatomy in ARCHITECTURE.md: `<name>.types.ts` (+ `DEFAULT_<NAME>_CONFIG`),
@@ -71,14 +73,14 @@ Copy this into your working notes and tick every box:
 
 ## Checklist: release / publish
 
-- [ ] All tests green on `main`
-- [ ] Bump `version` in `packages/core/package.json` AND `packages/primitives/package.json`
-      (kept in lockstep — NOT the root package.json)
-- [ ] `pnpm publish:lib` (builds both, copies README/LICENSE into each dist, publishes
-      `packages/core/dist` then `packages/primitives/dist`) — requires `npm login` with
-      access to the `@quartz-headless` org
-- [ ] Deploy docs if demo changed: `pnpm pages:deploy`
-- [ ] Update version in `docs/ai/STATE.md`
+Follow `docs/releases/RELEASE_RUNBOOK.md` — it is the only supported procedure. Summary of the rules:
+
+- [ ] Release PR bumps **both** manifests (lockstep), the Core peer in Primitives (`^X.Y.Z`; exact for `-beta.N`/`-rc.N`), the lockfile, CHANGELOG and the acceptance record
+- [ ] CI is green on the merge commit: quality, unit/coverage, E2E, `package`, consumer smoke/matrix, CLI consumer
+- [ ] Manual gates (screen reader, genuine Autofill, API freeze) are evidenced or **waived in writing by the maintainer** — an agent cannot grant a waiver
+- [ ] Publish with `gh workflow run "CI / CD" --ref main -f source_ref=<full sha> -f publish=true -f confirm_version=<version>` (irreversible); **never** `pnpm publish:lib` or `npm publish` locally
+- [ ] Verify npm integrity vs `release-manifest.json`, provenance, GitHub Release at the source SHA, Cloudflare deploy, and a clean consumer install
+- [ ] Update `docs/ai/STATE.md` and the acceptance record with actual (not intended) state
 
 ## Verification commands (memorize)
 

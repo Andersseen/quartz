@@ -20,6 +20,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTarballs } from './tarballs.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -43,13 +44,7 @@ const cli = (cliArgs) =>
   spawnSync('node', [join(ROOT, 'cli/bin/quartz.js'), ...cliArgs], { cwd: app, encoding: 'utf8' });
 
 try {
-  if (!existsSync(join(ROOT, 'packages/core/dist/package.json')))
-    fail('run `pnpm build:lib` first');
-  const out = execFileSync('npm', ['pack', '--json', '--pack-destination', work], {
-    cwd: join(ROOT, 'packages/core/dist'),
-    encoding: 'utf8',
-  });
-  const coreTarball = join(work, JSON.parse(out)[0].filename);
+  const coreTarball = resolveTarballs(work).core;
 
   mkdirSync(app, { recursive: true });
   cpSync(join(ROOT, 'consumer/cli-app'), app, {

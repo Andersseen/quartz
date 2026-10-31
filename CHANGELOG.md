@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 0.18 distribution, release engineering and API freeze candidate (in progress — not released; see `docs/releases/0.18-acceptance.md`)
+
+#### Added
+
+- Build-once release pipeline: a `package` job packs both tarballs and writes `release-manifest.json` (sha256, npm integrity, source commit, toolchain, exports, peers); the consumer matrix installs those exact tarballs (`QUARTZ_RELEASE_ARTIFACTS`) and the publish job uploads the same files with npm provenance. `scripts/release/` implements packaging-contract checks, semver/pre-release policy (`latest` for stable, `next` for `-beta.N`/`-rc.N`, exact Core pin for pre-releases), fail-closed registry lookups, partial-publication reconciliation and GitHub Release metadata bound to the validated commit; a rehearsal suite exercises it against a fake registry.
+- API guard now snapshots selectors, `exportAs`, inputs/models/outputs, public members, type aliases and `DEFAULT_*` values, reports field-level `BREAKING`/`ADDITIVE` changes and supports `--baseline <dir>`. Generated `docs/api/API_INVENTORY.md` (`pnpm api:inventory[:check]`), `docs/api/FREEZE_POLICY.md`.
+- `docs/releases/RELEASE_RUNBOOK.md`, 0.5→1.0 migration page, "Recipes for real applications" guide verified against the consumer fixture, `SUPPORT.md`, `SECURITY.md`, `CONTRIBUTING.md`, issue and PR templates.
+- `consumer/run.mjs --stage serve` for the manual screen-reader matrix.
+
+#### Changed
+
+- `pnpm publish:lib` is disabled; publication happens only through the guarded workflow. Repository instructions (AGENTS.md, CLAUDE.md, `docs/ai/*`) updated to the branch-first, artifact-based release process.
+- Publish concurrency: one publisher at a time (`quartz-npm-release`), re-runs verify and skip versions already published with identical integrity and stop on any difference.
+
 ### 0.17 consumer compatibility (in progress — not yet released; see `docs/releases/0.17-acceptance.md`)
 
 #### Added

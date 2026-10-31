@@ -1,303 +1,819 @@
 {
-  "applyArrowAttributes": {
-    "kind": "function",
-    "signatures": ["(el: HTMLElement, arrow: OverlayArrowGeometry): void"]
-  },
-  "calculateArrowGeometry": {
-    "kind": "function",
-    "signatures": [
-      "(anchor: { left: number; top: number; width: number; height: number; }, surface: { left: number; top: number; width: number; height: number; }, placement: OverlayPlacement, options?: OverlayArrowOptions): OverlayArrowGeometry"
-    ]
-  },
-  "calculatePosition": {
-    "kind": "function",
-    "signatures": [
-      "(anchorRect: DOMRect, overlayEl: HTMLElement, placement: OverlayPlacement, offset: number, flip: boolean, flipAxis?: OverlayFlipAxis, viewport?: { width: number; height: number; }, direction?: Direction): OverlayPosition"
-    ]
-  },
-  "CollectionConfig": {
-    "kind": "interface"
-  },
-  "CollectionFocusStrategy": {
-    "kind": "type"
-  },
-  "CollectionItem": {
-    "kind": "interface"
-  },
-  "CollectionNavigationResult": {
-    "kind": "interface"
-  },
-  "CollectionOrientation": {
-    "kind": "type"
-  },
-  "CollectionStore": {
-    "kind": "class"
-  },
-  "compareDomOrder": {
-    "kind": "function",
-    "signatures": ["(a: HTMLElement | null, b: HTMLElement | null): number"]
-  },
-  "createDismissController": {
-    "kind": "function",
-    "signatures": ["(config: DismissConfig): DismissController"]
-  },
-  "createFocusRestorer": {
-    "kind": "function",
-    "signatures": ["(document: Document): FocusRestorer"]
-  },
-  "createFocusTrap": {
-    "kind": "function",
-    "signatures": ["(container: HTMLElement, document: Document): FocusTrap"]
-  },
-  "createScrollLock": {
-    "kind": "function",
-    "signatures": ["(document: Document | null | undefined): ScrollLock"]
-  },
-  "DEFAULT_BREAKPOINTS": {
-    "kind": "const"
-  },
-  "DEFAULT_COLLECTION_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_OVERLAY_CONFIG": {
-    "kind": "const"
-  },
-  "DEFAULT_SPLITTER_CONFIG": {
-    "kind": "const"
-  },
-  "Direction": {
-    "kind": "type"
-  },
-  "DirectionalityService": {
-    "kind": "class"
-  },
-  "DismissConfig": {
-    "kind": "interface"
-  },
-  "DismissController": {
-    "kind": "interface"
-  },
-  "DismissReason": {
-    "kind": "type"
-  },
-  "DragDropConfig": {
-    "kind": "interface"
-  },
-  "DragDropService": {
-    "kind": "class"
-  },
-  "DraggableDirective": {
-    "kind": "class"
-  },
-  "DropZoneConfig": {
-    "kind": "interface"
-  },
-  "DropZoneDirective": {
-    "kind": "class"
-  },
-  "findByTypeahead": {
-    "kind": "function",
-    "signatures": [
-      "<T extends CollectionItem>(items: readonly T[], activeId: string | null, query: string): CollectionNavigationResult<T>"
-    ]
-  },
-  "findRelativeItem": {
-    "kind": "function",
-    "signatures": [
-      "<T extends CollectionItem>(items: readonly T[], activeId: string | null, direction: 1 | -1, options?: { wrap?: boolean; }): CollectionNavigationResult<T>"
-    ]
-  },
-  "firstItem": {
-    "kind": "function",
-    "signatures": ["<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"]
-  },
-  "FOCUSABLE_SELECTOR": {
-    "kind": "const"
-  },
-  "focusInitialElement": {
-    "kind": "function",
-    "signatures": ["(container: HTMLElement): HTMLElement | null"]
-  },
-  "FocusRestorer": {
-    "kind": "interface"
-  },
-  "focusSafely": {
-    "kind": "function",
-    "signatures": ["(element: HTMLElement | null | undefined): HTMLElement | null"]
-  },
-  "FocusTrap": {
-    "kind": "interface"
-  },
-  "getElement": {
-    "kind": "function",
-    "signatures": ["(item: CollectionItem | null): HTMLElement | null"]
-  },
-  "getFocusableElements": {
-    "kind": "function",
-    "signatures": ["(container: HTMLElement): HTMLElement[]"]
-  },
-  "getLabel": {
-    "kind": "function",
-    "signatures": ["(item: CollectionItem | null): string"]
-  },
-  "getScrollParents": {
-    "kind": "function",
-    "signatures": ["(anchor: OverlayAnchor, document: Document): (Element | Document)[]"]
-  },
-  "InlineArrowKey": {
-    "kind": "type"
-  },
-  "inlineEndKey": {
-    "kind": "function",
-    "signatures": ["(direction: Direction): InlineArrowKey"]
-  },
-  "inlineStartKey": {
-    "kind": "function",
-    "signatures": ["(direction: Direction): InlineArrowKey"]
-  },
-  "inlineToPhysical": {
-    "kind": "function",
-    "signatures": ["(direction: Direction, logical: LogicalInlineDirection): PhysicalHorizontal"]
-  },
-  "isDisabled": {
-    "kind": "function",
-    "signatures": ["(item: CollectionItem | null): boolean"]
-  },
-  "isFocusable": {
-    "kind": "function",
-    "signatures": ["(element: HTMLElement): boolean"]
-  },
-  "lastItem": {
-    "kind": "function",
-    "signatures": ["<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"]
-  },
-  "LogicalInlineDirection": {
-    "kind": "type"
-  },
-  "oppositeDirection": {
-    "kind": "function",
-    "signatures": ["(direction: Direction): Direction"]
-  },
-  "OverlayAnchor": {
-    "kind": "type"
-  },
-  "OverlayArrowGeometry": {
-    "kind": "interface"
-  },
-  "OverlayArrowOptions": {
-    "kind": "interface"
-  },
-  "OverlayConfig": {
-    "kind": "interface"
-  },
-  "OverlayFlipAxis": {
-    "kind": "type"
-  },
-  "OverlayPlacement": {
-    "kind": "type"
-  },
-  "OverlayPosition": {
-    "kind": "interface"
-  },
-  "OverlayRef": {
-    "kind": "class"
-  },
-  "OverlayService": {
-    "kind": "class"
-  },
-  "OverlaySide": {
-    "kind": "type"
-  },
-  "OverlayTriggerDirective": {
-    "kind": "class"
-  },
-  "OverlayVirtualAnchor": {
-    "kind": "interface"
-  },
-  "PhysicalHorizontal": {
-    "kind": "type"
-  },
-  "physicalToInline": {
-    "kind": "function",
-    "signatures": ["(direction: Direction, physical: PhysicalHorizontal): LogicalInlineDirection"]
-  },
-  "placementSide": {
-    "kind": "function",
-    "signatures": ["(placement: OverlayPlacement): OverlaySide"]
-  },
-  "QzDragEndInfo": {
-    "kind": "interface"
-  },
-  "QzDragInfo": {
-    "kind": "interface"
-  },
-  "QzDragOverInfo": {
-    "kind": "interface"
-  },
-  "QzDropInfo": {
-    "kind": "interface"
-  },
-  "QzIdGenerator": {
-    "kind": "class"
-  },
-  "resolveDirection": {
-    "kind": "function",
-    "signatures": ["(element: Element | null | undefined): Direction"]
-  },
-  "resolveInlineArrowKey": {
-    "kind": "function",
-    "signatures": ["(direction: Direction, key: string): LogicalInlineDirection | null"]
-  },
-  "ScrollLock": {
-    "kind": "interface"
-  },
-  "sortByDomOrder": {
-    "kind": "function",
-    "signatures": ["<T extends CollectionItem>(items: readonly T[]): T[]"]
-  },
-  "SplitterConfig": {
-    "kind": "interface"
-  },
-  "SplitterContainerDirective": {
-    "kind": "class"
-  },
-  "SplitterHandleDirective": {
-    "kind": "class"
-  },
-  "SplitterOrientation": {
-    "kind": "type"
-  },
-  "SplitterPanelDirective": {
-    "kind": "class"
-  },
-  "SplitterService": {
-    "kind": "class"
-  },
-  "SplitterState": {
-    "kind": "interface"
-  },
-  "ViewportBreakpoint": {
-    "kind": "type"
-  },
-  "ViewportBreakpoints": {
-    "kind": "interface"
-  },
-  "ViewportMatchDirective": {
-    "kind": "class"
-  },
-  "ViewportMatchResult": {
-    "kind": "interface"
-  },
-  "ViewportService": {
-    "kind": "class"
-  },
-  "VirtualScrollConfig": {
-    "kind": "interface"
-  },
-  "VirtualScrollDirective": {
-    "kind": "class"
-  },
-  "VirtualScrollRow": {
-    "kind": "interface"
+  "exports": {
+    "applyArrowAttributes": {
+      "kind": "function",
+      "signatures": ["(el: HTMLElement, arrow: OverlayArrowGeometry): void"]
+    },
+    "calculateArrowGeometry": {
+      "kind": "function",
+      "signatures": [
+        "(anchor: { left: number; top: number; width: number; height: number; }, surface: { left: number; top: number; width: number; height: number; }, placement: OverlayPlacement, options?: OverlayArrowOptions): OverlayArrowGeometry"
+      ]
+    },
+    "calculatePosition": {
+      "kind": "function",
+      "signatures": [
+        "(anchorRect: DOMRect, overlayEl: HTMLElement, placement: OverlayPlacement, offset: number, flip: boolean, flipAxis?: OverlayFlipAxis, viewport?: { width: number; height: number; }, direction?: Direction): OverlayPosition"
+      ]
+    },
+    "CollectionConfig": {
+      "kind": "interface",
+      "members": {
+        "direction": "Direction",
+        "focusStrategy": "CollectionFocusStrategy",
+        "orientation": "CollectionOrientation",
+        "typeaheadTimeoutMs": "number",
+        "wrap": "boolean"
+      }
+    },
+    "CollectionFocusStrategy": {
+      "kind": "type",
+      "type": "CollectionFocusStrategy"
+    },
+    "CollectionItem": {
+      "kind": "interface",
+      "members": {
+        "disabled": "boolean | (() => boolean) | undefined",
+        "element": "HTMLElement | (() => HTMLElement | null | undefined) | null | undefined",
+        "id": "string",
+        "label": "string | (() => string) | undefined"
+      }
+    },
+    "CollectionNavigationResult": {
+      "kind": "interface",
+      "members": {
+        "index": "number",
+        "item": "T | null"
+      }
+    },
+    "CollectionOrientation": {
+      "kind": "type",
+      "type": "CollectionOrientation"
+    },
+    "CollectionStore": {
+      "kind": "class",
+      "members": {
+        "activeId": "readonly _angular_core.Signal<string>",
+        "activeItem": "readonly _angular_core.Signal<T>",
+        "activeTabIndex": "(id: string) => 0 | -1",
+        "configure": "(config: Partial<CollectionConfig>) => void",
+        "destroy": "() => void",
+        "enabledItems": "readonly _angular_core.Signal<T[]>",
+        "first": "(options?: { focus?: boolean; }) => T | null",
+        "focusActive": "() => void",
+        "handleKeydown": "(event: KeyboardEvent, options?: { focus?: boolean; }) => boolean",
+        "items": "readonly _angular_core.Signal<T[]>",
+        "last": "(options?: { focus?: boolean; }) => T | null",
+        "next": "(options?: { focus?: boolean; wrap?: boolean; }) => T | null",
+        "previous": "(options?: { focus?: boolean; wrap?: boolean; }) => T | null",
+        "refreshOrder": "() => void",
+        "register": "(item: T) => void",
+        "setActive": "(id: string | null, options?: { focus?: boolean; }) => void",
+        "typeahead": "(character: string, options?: { focus?: boolean; }) => T | null",
+        "unregister": "(item: T) => void"
+      }
+    },
+    "compareDomOrder": {
+      "kind": "function",
+      "signatures": ["(a: HTMLElement | null, b: HTMLElement | null): number"]
+    },
+    "createDismissController": {
+      "kind": "function",
+      "signatures": ["(config: DismissConfig): DismissController"]
+    },
+    "createFocusRestorer": {
+      "kind": "function",
+      "signatures": ["(document: Document): FocusRestorer"]
+    },
+    "createFocusTrap": {
+      "kind": "function",
+      "signatures": ["(container: HTMLElement, document: Document): FocusTrap"]
+    },
+    "createScrollLock": {
+      "kind": "function",
+      "signatures": ["(document: Document | null | undefined): ScrollLock"]
+    },
+    "DEFAULT_BREAKPOINTS": {
+      "kind": "const",
+      "type": "ViewportBreakpoints"
+    },
+    "DEFAULT_COLLECTION_CONFIG": {
+      "kind": "const",
+      "type": "CollectionConfig"
+    },
+    "DEFAULT_OVERLAY_CONFIG": {
+      "kind": "const",
+      "type": "OverlayConfig"
+    },
+    "DEFAULT_SPLITTER_CONFIG": {
+      "kind": "const",
+      "type": "SplitterConfig"
+    },
+    "Direction": {
+      "kind": "type",
+      "type": "Direction"
+    },
+    "DirectionalityService": {
+      "kind": "class",
+      "members": {
+        "direction": "readonly _angular_core.Signal<Direction>",
+        "refresh": "() => void",
+        "resolve": "(element?: Element | null) => Direction",
+        "set": "(direction: Direction) => void"
+      }
+    },
+    "DismissConfig": {
+      "kind": "interface",
+      "members": {
+        "document": "Document",
+        "enabled": "boolean | undefined",
+        "escape": "boolean | undefined",
+        "excludeElements": "(() => readonly (HTMLElement | null | undefined)[]) | undefined",
+        "focusOutside": "boolean | undefined",
+        "onDismiss": "(reason: DismissReason, event: Event) => void",
+        "outsidePointer": "boolean | undefined",
+        "rootElements": "() => readonly (HTMLElement | null | undefined)[]",
+        "scroll": "boolean | undefined",
+        "scrollTargets": "(() => readonly EventTarget[]) | undefined"
+      }
+    },
+    "DismissController": {
+      "kind": "interface",
+      "members": {
+        "destroy": "() => void"
+      }
+    },
+    "DismissReason": {
+      "kind": "type",
+      "type": "DismissReason"
+    },
+    "DragDropConfig": {
+      "kind": "interface",
+      "members": {
+        "data": "unknown",
+        "disabled": "boolean | undefined",
+        "handle": "string | undefined"
+      }
+    },
+    "DragDropService": {
+      "kind": "class",
+      "members": {
+        "dragData": "readonly _angular_core.Signal<unknown>",
+        "dragType": "readonly _angular_core.Signal<string>",
+        "endDrag": "(_dropped: boolean) => void",
+        "getDragData": "<T>() => T | null",
+        "isDragging": "readonly _angular_core.Signal<boolean>",
+        "sourceElement": "readonly _angular_core.Signal<HTMLElement>",
+        "startDrag": "(data: unknown, sourceElement: HTMLElement, dragType?: string) => void"
+      }
+    },
+    "DraggableDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDraggable]",
+        "exportAs": null,
+        "inputs": {
+          "qzDraggable": "{ \"alias\": \"qzDraggable\"; \"required\": false; \"isSignal\": true; }",
+          "qzDraggableData": "{ \"alias\": \"qzDraggableData\"; \"required\": false; \"isSignal\": true; }",
+          "qzDraggableDisabled": "{ \"alias\": \"qzDraggableDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "qzDraggableHandle": "{ \"alias\": \"qzDraggableHandle\"; \"required\": false; \"isSignal\": true; }",
+          "qzDraggableType": "{ \"alias\": \"qzDraggableType\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "qzDragEnd": "\"qzDragEnd\"",
+          "qzDragStart": "\"qzDragStart\""
+        }
+      },
+      "members": {
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isDragging": "readonly _angular_core.WritableSignal<boolean>",
+        "onDragEnd": "(event: DragEvent) => void",
+        "onDragStart": "(event: DragEvent) => void",
+        "qzDragEnd": "readonly _angular_core.OutputEmitterRef<QzDragEndInfo>",
+        "qzDraggable": "readonly _angular_core.InputSignal<string | DragDropConfig>",
+        "qzDraggableData": "readonly _angular_core.InputSignal<unknown>",
+        "qzDraggableDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "qzDraggableHandle": "readonly _angular_core.InputSignal<string>",
+        "qzDraggableType": "readonly _angular_core.InputSignal<string>",
+        "qzDragStart": "readonly _angular_core.OutputEmitterRef<QzDragInfo>"
+      }
+    },
+    "DropZoneConfig": {
+      "kind": "interface",
+      "members": {
+        "accept": "string[] | undefined",
+        "disabled": "boolean | undefined",
+        "orientation": "\"vertical\" | \"horizontal\" | undefined",
+        "sortable": "boolean | undefined"
+      }
+    },
+    "DropZoneDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzDropZone]",
+        "exportAs": null,
+        "inputs": {
+          "accept": "{ \"alias\": \"qzDropZoneAccept\"; \"required\": false; \"isSignal\": true; }",
+          "config": "{ \"alias\": \"qzDropZone\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"qzDropZoneDisabled\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"qzDropZoneOrientation\"; \"required\": false; \"isSignal\": true; }",
+          "sortable": "{ \"alias\": \"qzDropZoneSortable\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "qzDragEnter": "\"qzDragEnter\"",
+          "qzDragLeave": "\"qzDragLeave\"",
+          "qzDragOver": "\"qzDragOver\"",
+          "qzDrop": "\"qzDrop\""
+        }
+      },
+      "members": {
+        "accept": "readonly _angular_core.InputSignal<string[]>",
+        "canDrop": "readonly _angular_core.Signal<boolean>",
+        "config": "readonly _angular_core.InputSignal<string | DropZoneConfig>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "isDisabled": "readonly _angular_core.Signal<boolean>",
+        "isDragOver": "readonly _angular_core.Signal<boolean>",
+        "isSortable": "readonly _angular_core.Signal<boolean>",
+        "onDragEnter": "(event: DragEvent) => void",
+        "onDragLeave": "(_event: DragEvent) => void",
+        "onDragOver": "(event: DragEvent) => void",
+        "onDrop": "(event: unknown) => void",
+        "orientation": "readonly _angular_core.InputSignal<\"vertical\" | \"horizontal\">",
+        "qzDragEnter": "readonly _angular_core.OutputEmitterRef<QzDragOverInfo>",
+        "qzDragLeave": "readonly _angular_core.OutputEmitterRef<void>",
+        "qzDragOver": "readonly _angular_core.OutputEmitterRef<QzDragOverInfo>",
+        "qzDrop": "readonly _angular_core.OutputEmitterRef<QzDropInfo>",
+        "sortable": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>"
+      }
+    },
+    "findByTypeahead": {
+      "kind": "function",
+      "signatures": [
+        "<T extends CollectionItem>(items: readonly T[], activeId: string | null, query: string): CollectionNavigationResult<T>"
+      ]
+    },
+    "findRelativeItem": {
+      "kind": "function",
+      "signatures": [
+        "<T extends CollectionItem>(items: readonly T[], activeId: string | null, direction: 1 | -1, options?: { wrap?: boolean; }): CollectionNavigationResult<T>"
+      ]
+    },
+    "firstItem": {
+      "kind": "function",
+      "signatures": [
+        "<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"
+      ]
+    },
+    "FOCUSABLE_SELECTOR": {
+      "kind": "const",
+      "type": "string"
+    },
+    "focusInitialElement": {
+      "kind": "function",
+      "signatures": ["(container: HTMLElement): HTMLElement | null"]
+    },
+    "FocusRestorer": {
+      "kind": "interface",
+      "members": {
+        "restore": "() => void"
+      }
+    },
+    "focusSafely": {
+      "kind": "function",
+      "signatures": ["(element: HTMLElement | null | undefined): HTMLElement | null"]
+    },
+    "FocusTrap": {
+      "kind": "interface",
+      "members": {
+        "destroy": "() => void",
+        "handleKeydown": "(event: KeyboardEvent) => void"
+      }
+    },
+    "getElement": {
+      "kind": "function",
+      "signatures": ["(item: CollectionItem | null): HTMLElement | null"]
+    },
+    "getFocusableElements": {
+      "kind": "function",
+      "signatures": ["(container: HTMLElement): HTMLElement[]"]
+    },
+    "getLabel": {
+      "kind": "function",
+      "signatures": ["(item: CollectionItem | null): string"]
+    },
+    "getScrollParents": {
+      "kind": "function",
+      "signatures": ["(anchor: OverlayAnchor, document: Document): (Element | Document)[]"]
+    },
+    "InlineArrowKey": {
+      "kind": "type",
+      "type": "InlineArrowKey"
+    },
+    "inlineEndKey": {
+      "kind": "function",
+      "signatures": ["(direction: Direction): InlineArrowKey"]
+    },
+    "inlineStartKey": {
+      "kind": "function",
+      "signatures": ["(direction: Direction): InlineArrowKey"]
+    },
+    "inlineToPhysical": {
+      "kind": "function",
+      "signatures": ["(direction: Direction, logical: LogicalInlineDirection): PhysicalHorizontal"]
+    },
+    "isDisabled": {
+      "kind": "function",
+      "signatures": ["(item: CollectionItem | null): boolean"]
+    },
+    "isFocusable": {
+      "kind": "function",
+      "signatures": ["(element: HTMLElement): boolean"]
+    },
+    "lastItem": {
+      "kind": "function",
+      "signatures": [
+        "<T extends CollectionItem>(items: readonly T[]): CollectionNavigationResult<T>"
+      ]
+    },
+    "LogicalInlineDirection": {
+      "kind": "type",
+      "type": "LogicalInlineDirection"
+    },
+    "oppositeDirection": {
+      "kind": "function",
+      "signatures": ["(direction: Direction): Direction"]
+    },
+    "OverlayAnchor": {
+      "kind": "type",
+      "type": "OverlayAnchor"
+    },
+    "OverlayArrowGeometry": {
+      "kind": "interface",
+      "members": {
+        "alignment": "\"start\" | \"center\" | \"end\"",
+        "available": "boolean",
+        "axis": "\"x\" | \"y\"",
+        "centerOffset": "number | null",
+        "edge": "OverlaySide",
+        "offset": "number | null",
+        "placement": "OverlayPlacement",
+        "side": "OverlaySide"
+      }
+    },
+    "OverlayArrowOptions": {
+      "kind": "interface",
+      "members": {
+        "padding": "number | undefined",
+        "size": "number | undefined"
+      }
+    },
+    "OverlayConfig": {
+      "kind": "interface",
+      "members": {
+        "arrowPadding": "number | undefined",
+        "arrowSize": "number | undefined",
+        "closeOnClickOutside": "boolean",
+        "closeOnEscape": "boolean",
+        "closeOnScroll": "boolean",
+        "context": "object | undefined",
+        "flip": "boolean",
+        "flipAxis": "OverlayFlipAxis",
+        "matchAnchorWidth": "boolean",
+        "offset": "number",
+        "placement": "OverlayPlacement"
+      }
+    },
+    "OverlayFlipAxis": {
+      "kind": "type",
+      "type": "OverlayFlipAxis"
+    },
+    "OverlayPlacement": {
+      "kind": "type",
+      "type": "OverlayPlacement"
+    },
+    "OverlayPosition": {
+      "kind": "interface",
+      "members": {
+        "arrow": "OverlayArrowGeometry | undefined",
+        "left": "number",
+        "placement": "OverlayPlacement",
+        "top": "number"
+      }
+    },
+    "OverlayRef": {
+      "kind": "class",
+      "members": {
+        "close": "() => void",
+        "closed$": "readonly rxjs.Observable<void>",
+        "destroy": "() => void",
+        "isOpen": "boolean",
+        "mounted$": "readonly rxjs.Observable<HTMLElement>",
+        "open": "() => void",
+        "position": "OverlayPosition | null",
+        "position$": "readonly rxjs.Observable<OverlayPosition>",
+        "setAnchor": "(anchor: OverlayAnchor) => void",
+        "setVirtualAnchor": "(anchor: OverlayVirtualAnchor) => void",
+        "toggle": "() => void",
+        "updatePosition": "() => void"
+      }
+    },
+    "OverlayService": {
+      "kind": "class",
+      "members": {
+        "create": "(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, anchor: OverlayAnchor, config?: Partial<OverlayConfig>) => OverlayRef",
+        "createAt": "(templateRef: TemplateRef<unknown>, viewContainerRef: ViewContainerRef, anchor: OverlayVirtualAnchor, config?: Partial<OverlayConfig>) => OverlayRef"
+      }
+    },
+    "OverlaySide": {
+      "kind": "type",
+      "type": "OverlaySide"
+    },
+    "OverlayTriggerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzOverlayTrigger]",
+        "exportAs": "[\"qzOverlay\"]",
+        "inputs": {
+          "closeOnClickOutside": "{ \"alias\": \"closeOnClickOutside\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnEscape": "{ \"alias\": \"closeOnEscape\"; \"required\": false; \"isSignal\": true; }",
+          "closeOnScroll": "{ \"alias\": \"closeOnScroll\"; \"required\": false; \"isSignal\": true; }",
+          "flip": "{ \"alias\": \"flip\"; \"required\": false; \"isSignal\": true; }",
+          "flipAxis": "{ \"alias\": \"flipAxis\"; \"required\": false; \"isSignal\": true; }",
+          "matchAnchorWidth": "{ \"alias\": \"matchAnchorWidth\"; \"required\": false; \"isSignal\": true; }",
+          "offset": "{ \"alias\": \"offset\"; \"required\": false; \"isSignal\": true; }",
+          "overlayTemplate": "{ \"alias\": \"overlayTemplate\"; \"required\": false; \"isSignal\": true; }",
+          "placement": "{ \"alias\": \"placement\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "closed": "\"closed\"",
+          "opened": "\"opened\""
+        }
+      },
+      "members": {
+        "close": "() => void",
+        "closed": "readonly _angular_core.OutputEmitterRef<void>",
+        "closeOnClickOutside": "readonly _angular_core.InputSignal<boolean>",
+        "closeOnEscape": "readonly _angular_core.InputSignal<boolean>",
+        "closeOnScroll": "readonly _angular_core.InputSignal<boolean>",
+        "flip": "readonly _angular_core.InputSignal<boolean>",
+        "flipAxis": "readonly _angular_core.InputSignal<OverlayFlipAxis>",
+        "isOpen": "readonly _angular_core.Signal<boolean>",
+        "matchAnchorWidth": "readonly _angular_core.InputSignal<boolean>",
+        "ngOnDestroy": "() => void",
+        "offset": "readonly _angular_core.InputSignal<number>",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "open": "() => void",
+        "opened": "readonly _angular_core.OutputEmitterRef<void>",
+        "overlayTemplate": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
+        "placement": "readonly _angular_core.InputSignal<OverlayPlacement>",
+        "toggle": "() => void",
+        "updatePosition": "() => void"
+      }
+    },
+    "OverlayVirtualAnchor": {
+      "kind": "interface",
+      "members": {
+        "height": "number | undefined",
+        "width": "number | undefined",
+        "x": "number",
+        "y": "number"
+      }
+    },
+    "PhysicalHorizontal": {
+      "kind": "type",
+      "type": "PhysicalHorizontal"
+    },
+    "physicalToInline": {
+      "kind": "function",
+      "signatures": ["(direction: Direction, physical: PhysicalHorizontal): LogicalInlineDirection"]
+    },
+    "placementSide": {
+      "kind": "function",
+      "signatures": ["(placement: OverlayPlacement): OverlaySide"]
+    },
+    "QzDragEndInfo": {
+      "kind": "interface",
+      "members": {
+        "data": "unknown",
+        "dropped": "boolean",
+        "element": "HTMLElement",
+        "event": "DragEvent"
+      }
+    },
+    "QzDragInfo": {
+      "kind": "interface",
+      "members": {
+        "data": "unknown",
+        "element": "HTMLElement",
+        "event": "DragEvent"
+      }
+    },
+    "QzDragOverInfo": {
+      "kind": "interface",
+      "members": {
+        "data": "unknown",
+        "element": "HTMLElement",
+        "event": "DragEvent",
+        "position": "\"before\" | \"after\" | \"inside\""
+      }
+    },
+    "QzDropInfo": {
+      "kind": "interface",
+      "members": {
+        "data": "unknown",
+        "event": "DragEvent",
+        "index": "number | undefined",
+        "source": "HTMLElement",
+        "target": "HTMLElement"
+      }
+    },
+    "QzIdGenerator": {
+      "kind": "class",
+      "members": {
+        "next": "(prefix: string) => string"
+      }
+    },
+    "resolveDirection": {
+      "kind": "function",
+      "signatures": ["(element: Element | null | undefined): Direction"]
+    },
+    "resolveInlineArrowKey": {
+      "kind": "function",
+      "signatures": ["(direction: Direction, key: string): LogicalInlineDirection | null"]
+    },
+    "ScrollLock": {
+      "kind": "interface",
+      "members": {
+        "destroy": "() => void",
+        "lock": "() => void",
+        "locked": "readonly boolean",
+        "unlock": "() => void"
+      }
+    },
+    "sortByDomOrder": {
+      "kind": "function",
+      "signatures": ["<T extends CollectionItem>(items: readonly T[]): T[]"]
+    },
+    "SplitterConfig": {
+      "kind": "interface",
+      "members": {
+        "defaultPosition": "number",
+        "maxSize": "number",
+        "minSize": "number",
+        "step": "number"
+      }
+    },
+    "SplitterContainerDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSplitterContainer]",
+        "exportAs": null,
+        "inputs": {
+          "defaultPosition": "{ \"alias\": \"defaultPosition\"; \"required\": false; \"isSignal\": true; }",
+          "disabled": "{ \"alias\": \"disabled\"; \"required\": false; \"isSignal\": true; }",
+          "maxSize": "{ \"alias\": \"maxSize\"; \"required\": false; \"isSignal\": true; }",
+          "minSize": "{ \"alias\": \"minSize\"; \"required\": false; \"isSignal\": true; }",
+          "orientation": "{ \"alias\": \"orientation\"; \"required\": false; \"isSignal\": true; }",
+          "step": "{ \"alias\": \"step\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {
+          "dragEnd": "\"dragEnd\"",
+          "dragStart": "\"dragStart\"",
+          "positionChange": "\"positionChange\""
+        }
+      },
+      "members": {
+        "defaultPosition": "readonly _angular_core.InputSignal<number>",
+        "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
+        "dragEnd": "readonly _angular_core.OutputRef<void>",
+        "dragStart": "readonly _angular_core.OutputRef<void>",
+        "maxSize": "readonly _angular_core.InputSignal<number>",
+        "minSize": "readonly _angular_core.InputSignal<number>",
+        "orientation": "readonly _angular_core.InputSignal<SplitterOrientation>",
+        "positionChange": "readonly _angular_core.OutputRef<number>",
+        "splitterService": "readonly SplitterService",
+        "step": "readonly _angular_core.InputSignal<number>",
+        "updateContainerRect": "() => void"
+      }
+    },
+    "SplitterHandleDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSplitterHandle]",
+        "exportAs": null,
+        "inputs": {},
+        "outputs": {}
+      },
+      "members": {
+        "ngOnDestroy": "() => void",
+        "onKeydown": "(event: KeyboardEvent) => void",
+        "onPointerDown": "(event: PointerEvent) => void",
+        "onPointerEnd": "(event: PointerEvent) => void",
+        "onPointerMove": "(event: PointerEvent) => void"
+      }
+    },
+    "SplitterOrientation": {
+      "kind": "type",
+      "type": "SplitterOrientation"
+    },
+    "SplitterPanelDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzSplitterPanel]",
+        "exportAs": null,
+        "inputs": {
+          "isPrimary": "{ \"alias\": \"qzSplitterPanel\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "heightStyle": "_angular_core.Signal<string>",
+        "isPrimary": "_angular_core.InputSignalWithTransform<boolean, string | boolean>",
+        "widthStyle": "_angular_core.Signal<string>"
+      }
+    },
+    "SplitterService": {
+      "kind": "class",
+      "members": {
+        "calculatePositionFromEvent": "(clientX: number, clientY: number) => number",
+        "calculatePositionFromTouch": "(touch: Touch) => number",
+        "containerRect": "readonly _angular_core.Signal<DOMRect>",
+        "direction": "readonly _angular_core.Signal<Direction>",
+        "disabled": "readonly _angular_core.Signal<boolean>",
+        "isDragging": "readonly _angular_core.Signal<boolean>",
+        "isHorizontal": "readonly _angular_core.Signal<boolean>",
+        "isVertical": "readonly _angular_core.Signal<boolean>",
+        "maxSize": "readonly _angular_core.Signal<number>",
+        "minSize": "readonly _angular_core.Signal<number>",
+        "orientation": "readonly _angular_core.Signal<SplitterOrientation>",
+        "position": "readonly _angular_core.Signal<number>",
+        "resizing": "readonly _angular_core.Signal<boolean>",
+        "setContainerRect": "(rect: DOMRect) => void",
+        "setDirection": "(direction: Direction) => void",
+        "setDisabled": "(disabled: boolean) => void",
+        "setOrientation": "(orientation: SplitterOrientation) => void",
+        "setPosition": "(position: number) => void",
+        "startDragging": "() => void",
+        "step": "readonly _angular_core.Signal<number>",
+        "stopDragging": "() => void",
+        "updateConfig": "(config: Partial<SplitterConfig>) => void"
+      }
+    },
+    "SplitterState": {
+      "kind": "interface",
+      "members": {
+        "isDragging": "boolean",
+        "orientation": "SplitterOrientation",
+        "position": "number"
+      }
+    },
+    "ViewportBreakpoint": {
+      "kind": "type",
+      "type": "ViewportBreakpoint"
+    },
+    "ViewportBreakpoints": {
+      "kind": "interface",
+      "members": {
+        "lg": "number",
+        "md": "number",
+        "sm": "number",
+        "xl": "number",
+        "xs": "number"
+      }
+    },
+    "ViewportMatchDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzViewportMatch]",
+        "exportAs": "[\"qzViewportMatch\"]",
+        "inputs": {
+          "maxWidth": "{ \"alias\": \"maxWidth\"; \"required\": false; \"isSignal\": true; }",
+          "minWidth": "{ \"alias\": \"minWidth\"; \"required\": false; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "height": "readonly _angular_core.Signal<number>",
+        "isDesktop": "readonly _angular_core.Signal<boolean>",
+        "isMobile": "readonly _angular_core.Signal<boolean>",
+        "isTablet": "readonly _angular_core.Signal<boolean>",
+        "matches": "readonly _angular_core.Signal<boolean>",
+        "matchesMax": "readonly _angular_core.Signal<boolean>",
+        "matchesMin": "readonly _angular_core.Signal<boolean>",
+        "maxWidth": "readonly _angular_core.InputSignal<number>",
+        "minWidth": "readonly _angular_core.InputSignal<number>",
+        "width": "readonly _angular_core.Signal<number>"
+      }
+    },
+    "ViewportMatchResult": {
+      "kind": "interface",
+      "members": {
+        "lg": "boolean",
+        "md": "boolean",
+        "sm": "boolean",
+        "xl": "boolean",
+        "xs": "boolean"
+      }
+    },
+    "ViewportService": {
+      "kind": "class",
+      "members": {
+        "aspectRatio": "readonly _angular_core.Signal<number>",
+        "between": "(min: number, max: number) => Signal<boolean>",
+        "destroy": "() => void",
+        "height": "readonly _angular_core.Signal<number>",
+        "isDesktop": "readonly _angular_core.Signal<boolean>",
+        "isMobile": "readonly _angular_core.Signal<boolean>",
+        "isTablet": "readonly _angular_core.Signal<boolean>",
+        "match": "readonly _angular_core.Signal<ViewportMatchResult>",
+        "maxWidth": "(px: number) => Signal<boolean>",
+        "minWidth": "(px: number) => Signal<boolean>",
+        "ngOnDestroy": "() => void",
+        "observe": "(query: string) => Signal<boolean>",
+        "setSize": "(width: number, height: number) => void",
+        "width": "readonly _angular_core.Signal<number>"
+      }
+    },
+    "VirtualScrollConfig": {
+      "kind": "interface",
+      "members": {
+        "buffer": "number | undefined",
+        "itemSize": "number"
+      }
+    },
+    "VirtualScrollDirective": {
+      "kind": "class",
+      "angular": {
+        "type": "directive",
+        "selector": "[qzVirtualScroll]",
+        "exportAs": "[\"qzVirtualScroll\"]",
+        "inputs": {
+          "buffer": "{ \"alias\": \"buffer\"; \"required\": false; \"isSignal\": true; }",
+          "items": "{ \"alias\": \"items\"; \"required\": true; \"isSignal\": true; }",
+          "itemSize": "{ \"alias\": \"itemSize\"; \"required\": true; \"isSignal\": true; }"
+        },
+        "outputs": {}
+      },
+      "members": {
+        "buffer": "readonly _angular_core.InputSignal<number>",
+        "contentHeight": "readonly _angular_core.Signal<number>",
+        "count": "readonly _angular_core.Signal<number>",
+        "endIndex": "readonly _angular_core.Signal<number>",
+        "items": "readonly _angular_core.InputSignal<T[]>",
+        "itemSize": "readonly _angular_core.InputSignal<number>",
+        "ngOnDestroy": "() => void",
+        "scrollToIndex": "(index: number, behavior?: ScrollBehavior) => void",
+        "scrollToOffset": "(offset: number, behavior?: ScrollBehavior) => void",
+        "startIndex": "readonly _angular_core.Signal<number>",
+        "visibleItems": "readonly _angular_core.Signal<VirtualScrollRow<T>[]>"
+      }
+    },
+    "VirtualScrollRow": {
+      "kind": "interface",
+      "members": {
+        "index": "number",
+        "item": "T",
+        "offset": "number"
+      }
+    }
+  },
+  "defaults": {
+    "DEFAULT_BREAKPOINTS": {
+      "xs": 0,
+      "sm": 640,
+      "md": 768,
+      "lg": 1024,
+      "xl": 1280
+    },
+    "DEFAULT_COLLECTION_CONFIG": {
+      "orientation": "vertical",
+      "wrap": true,
+      "focusStrategy": "aria-activedescendant",
+      "typeaheadTimeoutMs": 500,
+      "direction": "ltr"
+    },
+    "DEFAULT_OVERLAY_CONFIG": {
+      "placement": "bottom-start",
+      "offset": 4,
+      "flip": true,
+      "flipAxis": "main",
+      "closeOnClickOutside": true,
+      "closeOnEscape": true,
+      "closeOnScroll": true,
+      "matchAnchorWidth": false
+    },
+    "DEFAULT_SPLITTER_CONFIG": {
+      "minSize": 0,
+      "maxSize": 100,
+      "step": 1,
+      "defaultPosition": 50
+    }
   }
 }
