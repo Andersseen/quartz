@@ -49,12 +49,13 @@ A breaking change is never released as a patch. `node scripts/api-guard.js --upd
 
 ## Freeze candidate record
 
-| Field               | Value                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------- |
-| Candidate commit    | **not yet recorded** — set when the 0.18 PR is merged (record the merge commit SHA) |
-| Date                | not yet recorded                                                                    |
-| Snapshot hash       | `sha256sum docs/api/snapshots/*.json` at the candidate commit                       |
-| Maintainer decision | **PENDING** — no maintainer freeze decision has been supplied                       |
+| Field                  | Value                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Candidate commit       | `6e00da25b70df51fe6f7e1d2ec0c9b83ea70f522` (merge of PR #51, `origin/main` on 2026-10-31). 0.19 changes no public API, so the snapshots below also describe the 0.19 branch                                                                                                                                                                                                                          |
+| Date                   | 2026-10-31                                                                                                                                                                                                                                                                                                                                                                                           |
+| Snapshot hash (sha256) | `core.json` `1186c286694a10920aaec6b55726019676bb267926ccaeec06a7c6480d2f6546` · `primitives.json` `5132f1a1520883c1784ba77a3c276f2ea6d5c02846e410e7f88b853422a8ff3a` · `primitives-forms.json` `c9b9cbc61d6980506ad5250ba16682fb3b38cc91782a980866c1eaa0a5385e24`                                                                                                                                   |
+| Compared against       | the **published** npm `0.16.0` tarballs (gitHead `07783ee`), snapshotted with the current guard: **0 BREAKING, 2 ADDITIVE** — `QzIdGenerator` (Core) and the public member `AccordionItemDirective.blurredThisTask` (Primitives; an internal-looking flag read by `AccordionDirective`, so the maintainer should decide whether it stays public before freezing). The Forms entry point is unchanged |
+| Maintainer decision    | **PENDING** — no maintainer freeze decision has been supplied; freeze conditions 1 and 2 are still open (see `docs/releases/0.19-acceptance.md`)                                                                                                                                                                                                                                                     |
 
 ## Deprecation and breaking-change policy (proposed — pending maintainer approval)
 

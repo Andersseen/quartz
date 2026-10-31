@@ -1,6 +1,8 @@
 // Registry of live documentation demos (`::demo[id]` in Markdown). Each wrapper renders its demo
 // inside `@defer`, so the demo's code is a lazy chunk, never part of the initial bundle, and is
 // not executed during prerendering (the server renders the placeholder only; `on idle` never fires there).
+// Every block has an `@error` fallback: without one, an aborted chunk request (navigating away while the
+// chunk loads, or a network failure) is reported by Angular as an unhandled NG0750 error.
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { OverlayDemoComponent } from './overlay.demo';
 import { DirectionalityDemoComponent } from './directionality.demo';
@@ -58,6 +60,10 @@ import {
       <app-overlay-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class OverlayDemoLoader {}
@@ -70,6 +76,10 @@ class OverlayDemoLoader {}
       <app-directionality-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DirectionalityDemoLoader {}
@@ -82,6 +92,10 @@ class DirectionalityDemoLoader {}
       <app-scroll-lock-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ScrollLockDemoLoader {}
@@ -94,6 +108,10 @@ class ScrollLockDemoLoader {}
       <app-splitter-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class SplitterDemoLoader {}
@@ -106,6 +124,10 @@ class SplitterDemoLoader {}
       <app-drag-drop-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DragDropDemoLoader {}
@@ -118,6 +140,10 @@ class DragDropDemoLoader {}
       <app-virtual-scroll-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class VirtualScrollDemoLoader {}
@@ -130,6 +156,10 @@ class VirtualScrollDemoLoader {}
       <app-viewport-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ViewportDemoLoader {}
@@ -142,6 +172,10 @@ class ViewportDemoLoader {}
       <app-dialog-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DialogDemoLoader {}
@@ -154,6 +188,10 @@ class DialogDemoLoader {}
       <app-tooltip-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class TooltipDemoLoader {}
@@ -166,6 +204,10 @@ class TooltipDemoLoader {}
       <app-toast-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ToastDemoLoader {}
@@ -178,6 +220,10 @@ class ToastDemoLoader {}
       <app-popover-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class PopoverDemoLoader {}
@@ -190,6 +236,10 @@ class PopoverDemoLoader {}
       <app-menu-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class MenuDemoLoader {}
@@ -202,6 +252,10 @@ class MenuDemoLoader {}
       <app-select-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class SelectDemoLoader {}
@@ -214,6 +268,10 @@ class SelectDemoLoader {}
       <app-listbox-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ListboxDemoLoader {}
@@ -226,6 +284,10 @@ class ListboxDemoLoader {}
       <app-combobox-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ComboboxDemoLoader {}
@@ -238,6 +300,10 @@ class ComboboxDemoLoader {}
       <app-tabs-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class TabsDemoLoader {}
@@ -250,6 +316,10 @@ class TabsDemoLoader {}
       <app-accordion-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class AccordionDemoLoader {}
@@ -262,6 +332,10 @@ class AccordionDemoLoader {}
       <app-switch-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class SwitchDemoLoader {}
@@ -274,6 +348,10 @@ class SwitchDemoLoader {}
       <app-checkbox-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class CheckboxDemoLoader {}
@@ -286,6 +364,10 @@ class CheckboxDemoLoader {}
       <app-radio-group-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class RadioGroupDemoLoader {}
@@ -298,6 +380,10 @@ class RadioGroupDemoLoader {}
       <app-toggle-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ToggleDemoLoader {}
@@ -310,6 +396,10 @@ class ToggleDemoLoader {}
       <app-toggle-group-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ToggleGroupDemoLoader {}
@@ -322,6 +412,10 @@ class ToggleGroupDemoLoader {}
       <app-slider-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class SliderDemoLoader {}
@@ -334,6 +428,10 @@ class SliderDemoLoader {}
       <app-range-slider-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class RangeSliderDemoLoader {}
@@ -346,6 +444,10 @@ class RangeSliderDemoLoader {}
       <app-date-picker-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DatePickerDemoLoader {}
@@ -358,6 +460,10 @@ class DatePickerDemoLoader {}
       <app-date-range-picker-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DateRangePickerDemoLoader {}
@@ -370,6 +476,10 @@ class DateRangePickerDemoLoader {}
       <app-date-forms-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DateFormsDemoLoader {}
@@ -382,6 +492,10 @@ class DateFormsDemoLoader {}
       <app-tree-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class TreeDemoLoader {}
@@ -394,6 +508,10 @@ class TreeDemoLoader {}
       <app-sidebar-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class SidebarDemoLoader {}
@@ -406,6 +524,10 @@ class SidebarDemoLoader {}
       <app-navbar-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class NavbarDemoLoader {}
@@ -418,6 +540,10 @@ class NavbarDemoLoader {}
       <app-stepper-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class StepperDemoLoader {}
@@ -430,6 +556,10 @@ class StepperDemoLoader {}
       <app-toolbar-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ToolbarDemoLoader {}
@@ -442,6 +572,10 @@ class ToolbarDemoLoader {}
       <app-navigation-menu-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class NavigationMenuDemoLoader {}
@@ -454,6 +588,10 @@ class NavigationMenuDemoLoader {}
       <app-pagination-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class PaginationDemoLoader {}
@@ -466,6 +604,10 @@ class PaginationDemoLoader {}
       <app-controls-014-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class Controls014DemoLoader {}
@@ -478,6 +620,10 @@ class Controls014DemoLoader {}
       <app-progress-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ProgressDemoLoader {}
@@ -489,6 +635,10 @@ class ProgressDemoLoader {}
       <app-meter-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class MeterDemoLoader {}
@@ -500,6 +650,10 @@ class MeterDemoLoader {}
       <app-avatar-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class AvatarDemoLoader {}
@@ -512,6 +666,10 @@ class AvatarDemoLoader {}
       <app-drawer-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class DrawerDemoLoader {}
@@ -524,6 +682,10 @@ class DrawerDemoLoader {}
       <app-resizable-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class ResizableDemoLoader {}
@@ -536,6 +698,10 @@ class ResizableDemoLoader {}
       <app-tooltip-arrow-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class TooltipArrowDemoLoader {}
@@ -548,6 +714,10 @@ class TooltipArrowDemoLoader {}
       <app-popover-arrow-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class PopoverArrowDemoLoader {}
@@ -560,6 +730,10 @@ class PopoverArrowDemoLoader {}
       <app-menu-groups-demo />
     } @placeholder {
       <div class="qz-demo-placeholder" aria-busy="true">Loading demo…</div>
+    } @error {
+      <div class="qz-demo-placeholder" role="status">
+        This demo could not be loaded. Reload the page to retry.
+      </div>
     }`,
 })
 class MenuGroupsDemoLoader {}

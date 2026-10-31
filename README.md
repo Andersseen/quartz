@@ -169,6 +169,8 @@ export class Example {
 
 Verified against installed tarballs (strict AOT, real SSR, hydration, three browser engines) on Angular 21.2.0, 21.2.x and 22.x — see [docs/compatibility.md](docs/compatibility.md) for the evidence and the known limits.
 
+**Project status.** The latest published version is `0.16.0`. Features through 0.18 are on `main` but 0.17, 0.18 and 0.19 are not accepted or published yet, the public API is a _freeze candidate_ (not frozen) and no 1.0 beta exists; see [docs/releases/0.19-acceptance.md](docs/releases/0.19-acceptance.md) for what is verified and what is blocked.
+
 No runtime dependencies beyond `@angular/*`, `rxjs` and `tslib`.
 
 ## 💻 Local development

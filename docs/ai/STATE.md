@@ -1,5 +1,13 @@
 # STATE — Current Project Status
 
+# 0.19 Acceptance & pre-beta stabilization — engineering on branch, NOT accepted (2026-10-31)
+
+Branch `feat/quartz-0.19-acceptance-beta-readiness` (from main `6e00da2`, PR #51 merge, whose main workflow `41189480447` passed every job; publish/release jobs skipped by design). Package versions are still `0.16.0`; nothing was published; the real publication path has never run; **0.17 and 0.18 are not accepted; the API is a freeze candidate, NOT frozen; no 1.0 beta exists.** Full record and blocker list: [0.19 acceptance](../releases/0.19-acceptance.md).
+
+What exists: manual-review tooling (`pnpm review:manual`, `pnpm review:manual:check`, `consumer/manual-review/scenarios.json`), the `/autofill` consumer lab and `scripts/consumer/autofill-real-browser.mjs` (genuine Chrome autofill verified; Firefox/Safari unverified; `autofill` row now V with that scope), the Firefox "ERROR Error" root cause (NG0750 from aborted `@defer` demo chunks) fixed with `@error` fallbacks, a deterministic FormField pending-state fixture, `docs/releases/BETA_ADOPTION_KIT.md`, and the API freeze candidate record (0 breaking / 2 additive vs published 0.16.0).
+
+**Human decisions still open:** manual screen-reader matrix (no row executed), written waiver or completion for the 0.17 gate, first guarded publication of 0.17.0 then 0.18.0, API freeze decision (including whether `AccordionItemDirective.blurredThisTask` stays public), two independent real consumers.
+
 # 0.18 Distribution, release engineering & API freeze candidate — implemented on branch, NOT accepted (2026-10-30)
 
 Branch `feat/quartz-0.18-release-api-freeze` (from main `bdb27f8`). Package versions are still `0.16.0`: nothing was published and **0.17.0 is not published** (npm `latest` = 0.16.0). The 0.17 implementation is merged (PR #50) and its post-merge workflow `41037315289` passed every job (Node 20.19/24/22 consumer cells included) and deployed to Cloudflare Pages, but 0.17 acceptance is still open: manual screen-reader matrix and genuine browser Autofill are PENDING and no maintainer waiver was supplied. Full record: [0.18 acceptance](../releases/0.18-acceptance.md).

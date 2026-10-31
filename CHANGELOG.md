@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 0.19 acceptance and pre-beta stabilization (engineering only — not accepted, not released; see `docs/releases/0.19-acceptance.md`)
+
+#### Added
+
+- Manual assistive-technology review tooling: `consumer/manual-review/scenarios.json` (the 14 matrix rows as data), a generated accessible review index served by `pnpm review:manual` (steps, keys, expected focus and announcements, exact installed versions and tarball hashes, results recorder exporting JSON/Markdown), and `pnpm review:manual:check` (fails if the scenarios and `docs/releases/0.17-manual-a11y.md` disagree).
+- `/autofill` lab in the consumer fixture and `scripts/consumer/autofill-real-browser.mjs`, which drives real Google Chrome's own autofill engine; `docs/releases/0.19-autofill-verification.md` records the procedure, evidence and limits.
+- `docs/releases/BETA_ADOPTION_KIT.md`, `docs/roadmap/0.19-acceptance-beta-readiness.md`, `docs/releases/0.19-acceptance.md`.
+
+#### Fixed
+
+- Docs site: every live demo `@defer (on idle)` block now has an `@error` fallback. An aborted lazy-chunk request (navigation during load, or a network failure) was reported by Angular as an unhandled NG0750 "ERROR Error", the cause of the intermittent Firefox failure at `e2e/docs.spec.ts:467`. Regression test added.
+- Consumer fixture: the FormField async-validator test no longer depends on a 150 ms window being observable between polls.
+
+#### Changed
+
+- Volt parity: `autofill` promoted from C to V (32 V / 0 C / 14 N), scoped to Chrome; Firefox and Safari remain unverified and the manual matrix row stays PENDING.
+
 ### 0.18 distribution, release engineering and API freeze candidate (in progress — not released; see `docs/releases/0.18-acceptance.md`)
 
 #### Added

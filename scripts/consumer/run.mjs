@@ -29,6 +29,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveTarballs } from './tarballs.mjs';
+import { loadScenarios, startReviewServer } from './manual-review.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const args = process.argv.slice(2);
@@ -179,12 +180,31 @@ try {
     });
 
     if (stage === 'serve') {
+      const appUrl = `http://localhost:${port}`;
+      const reviewPort = port + 1;
+      const review = startReviewServer({
+        port: reviewPort,
+        scenarios: loadScenarios(),
+        baseUrl: appUrl,
+        run: {
+          fixture,
+          source: evidence.tarballSource,
+          versions: evidence.versions,
+          tarballs: evidence.tarballs,
+        },
+      });
+      process.on('exit', () => review.close());
       console.log(
         `\n✓ consumer(${fixture}) is being served for MANUAL assistive-technology testing`,
       );
-      for (const page of ['forms', 'overlays', 'navigation', 'parity', 'controls'])
-        console.log(`  http://localhost:${port}/${page}`);
-      console.log('Record results in docs/releases/0.17-manual-a11y.md. Ctrl+C to stop.');
+      console.log(`\n  Review index (scenarios, expected focus/announcements, results recorder):`);
+      console.log(`    http://localhost:${reviewPort}/`);
+      console.log('\n  Test pages:');
+      for (const page of ['forms', 'overlays', 'navigation', 'parity', 'controls', 'autofill'])
+        console.log(`    ${appUrl}/${page}`);
+      console.log(
+        '\nRecord outcomes in docs/releases/0.17-manual-a11y.md (the index can export rows). Ctrl+C to stop.',
+      );
       await new Promise(() => {});
     }
 

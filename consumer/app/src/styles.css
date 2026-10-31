@@ -132,3 +132,19 @@ textarea {
 .drop[data-drag-active] {
   background: #ffe9a8;
 }
+
+/* Documented production autofill detection (src/content/docs/primitives/autofill.md), used by /autofill. */
+@keyframes qz-autofill-cancel {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+input.af-real:-webkit-autofill {
+  animation: qz-autofill-start 1ms;
+}
+input.af-real:not(:-webkit-autofill) {
+  animation: qz-autofill-cancel 1ms;
+}

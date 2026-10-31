@@ -32,10 +32,15 @@ import {
 } from '@quartz-headless/primitives';
 import { QUARTZ_FORMS } from '@quartz-headless/primitives/forms';
 
-/** Async validator: "taken" is rejected after a short delay (exercises pending → invalid → valid). */
+/**
+ * Async validator: "taken" is rejected after a short delay (exercises pending → invalid → valid).
+ * A test may set `globalThis.__qzValidatorDelayMs` to hold the pending state long enough to observe it
+ * deterministically (150 ms is shorter than a loaded browser's polling interval).
+ */
 function uniqueName(control: AbstractControl<string | null>) {
+  const ms = (globalThis as { __qzValidatorDelayMs?: number }).__qzValidatorDelayMs ?? 150;
   return of(control.value === 'taken' ? ({ taken: true } as ValidationErrors) : null).pipe(
-    delay(150),
+    delay(ms),
   );
 }
 
