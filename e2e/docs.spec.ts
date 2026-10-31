@@ -556,3 +556,44 @@ test.describe('accessibility (axe)', () => {
     await scan(page, 'nav[aria-label="Quartz Headless docs"]');
   });
 });
+
+test.describe('discovery journey', () => {
+  test('catalogue → documentation → live demo → API reference → install path', async ({ page }) => {
+    const problems = trackConsole(page);
+    await go(page, '/components');
+    await page.getByLabel('Search the catalogue').fill('slider');
+    const card = page.locator('[data-entry="/docs/primitives/slider"]');
+    await expect(card.getByRole('link', { name: 'Slider API reference' })).toHaveAttribute(
+      'href',
+      '/docs/reference/api/primitives/slider-directive',
+    );
+    await card.locator('h3 a').click();
+    await expect(page).toHaveURL('/docs/primitives/slider');
+    await expect(page.getByRole('heading', { name: 'Slider', level: 1 })).toBeVisible();
+    // Live demo (lazy, hydrated) works.
+    await expect(page.getByRole('slider', { name: 'Volume' }).first()).toBeVisible();
+    // The install/copy-source path is on the page; the API page is one catalogue click away.
+    await expect(page.getByRole('main')).toContainText('quartz add slider');
+    expect(problems).toEqual([]);
+    const api = await page.request.get('/docs/reference/api/primitives/slider-directive');
+    expect(api.status()).toBe(200);
+  });
+
+  test('a Core entry reaches its own page, not the documentation index', async ({ page }) => {
+    await go(page, '/components?layer=core');
+    await page.locator('[data-entry="/docs/core/focus"] h3 a').click();
+    await expect(page).toHaveURL('/docs/core/focus');
+    await expect(page.getByRole('heading', { name: 'Focus', level: 1 })).toBeVisible();
+  });
+
+  test('documentation pages keep Doqs metadata after visiting the landing page', async ({
+    page,
+  }) => {
+    await go(page, '/');
+    await page.getByRole('banner').getByRole('link', { name: 'Docs' }).click();
+    await page.locator('main a[href="/docs/primitives/select"]').click();
+    await expect(page).toHaveTitle('Select · Quartz Headless');
+    await expect(page.locator('link[rel="canonical"][data-site-canonical]')).toHaveCount(0);
+    await expect(page.locator('meta[property="og:url"]')).toHaveCount(0);
+  });
+});
