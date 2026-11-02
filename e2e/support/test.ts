@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises';
 import { test as base, expect } from '@playwright/test';
 import { describeFailure, observePage, type PageDiagnostics } from './diagnostics';
 
@@ -12,10 +13,11 @@ export const test = base.extend<{ diagnostics: PageDiagnostics }>({
       const record = observePage(page);
       await use(record);
       if (testInfo.status !== testInfo.expectedStatus) {
-        await testInfo.attach('diagnostics.json', {
-          body: await describeFailure(page, record, testInfo, browser.version()),
-          contentType: 'application/json',
-        });
+        // A real file under the test's output directory, so it is uploaded with `test-results/`
+        // (an attachment given only a `body` is embedded in the report instead).
+        const path = testInfo.outputPath('diagnostics.json');
+        await writeFile(path, await describeFailure(page, record, testInfo, browser.version()));
+        await testInfo.attach('diagnostics.json', { path, contentType: 'application/json' });
       }
     },
     { auto: true },

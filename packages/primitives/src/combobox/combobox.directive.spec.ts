@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ComboboxContentDirective } from './combobox-content.directive';
 import { ComboboxDirective } from './combobox.directive';
 import { ComboboxInputDirective } from './combobox-input.directive';
@@ -150,6 +150,37 @@ describe('Combobox', () => {
     expect(document.activeElement).toBe(input);
     expect(input).toHaveAttribute('aria-activedescendant', options[2].id);
     expect(options[1]).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('keeps keyboard navigation made before the post-typing frame runs', async () => {
+    // Typing re-activates the first option on the next animation frame (after the filtered list
+    // renders). That deferred reset must not undo an arrow key the user pressed in the meantime:
+    // under load (headless WebKit in CI) the frame can lag far behind the keystrokes.
+    const frames: FrameRequestCallback[] = [];
+    const raf = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback: FrameRequestCallback) => frames.push(callback));
+    try {
+      const { fixture } = await render(StringHost);
+      const input = screen.getByRole('combobox', { name: 'Fruit' }) as HTMLInputElement;
+      input.focus();
+
+      fireEvent.input(input, { target: { value: 'ap' } });
+      fixture.detectChanges();
+      const options = await screen.findAllByRole('option');
+      expect(input).toHaveAttribute('aria-activedescendant', options[0].id);
+
+      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      fixture.detectChanges();
+      expect(input).toHaveAttribute('aria-activedescendant', options[1].id);
+
+      // The frame requested by the keystroke finally runs.
+      frames.splice(0).forEach((callback) => callback(performance.now()));
+      fixture.detectChanges();
+      expect(input).toHaveAttribute('aria-activedescendant', options[1].id);
+    } finally {
+      raf.mockRestore();
+    }
   });
 
   it('selects the active option with Enter and closes', async () => {
