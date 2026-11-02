@@ -247,18 +247,23 @@ test.describe('Install section', () => {
     browserName,
   }) => {
     await go(page, '/');
+    type Probe = { __copied: string[]; __release?: () => void };
+    // The write stays pending until the test releases it, so "not reported before it resolves" is
+    // asserted against a deterministic state instead of racing a timer (a slow click must not be
+    // able to let the write finish, and the 2 s "Copied" window pass, before the first assertion).
     await page.evaluate(() => {
-      (window as unknown as { __copied: string[] }).__copied = [];
+      const probe = window as unknown as Probe;
+      probe.__copied = [];
       Object.defineProperty(navigator, 'clipboard', {
         configurable: true,
         value: {
           writeText: (text: string) =>
-            new Promise<void>((resolve) =>
-              setTimeout(() => {
-                (window as unknown as { __copied: string[] }).__copied.push(text);
+            new Promise<void>((resolve) => {
+              probe.__release = () => {
+                probe.__copied.push(text);
                 resolve();
-              }, 250),
-            ),
+              };
+            }),
         },
       });
     });
@@ -268,12 +273,17 @@ test.describe('Install section', () => {
     });
     await button.scrollIntoViewIfNeeded();
     await button.click();
-    await expect(button).toHaveText('Copy'); // not yet resolved
+    await expect
+      .poll(() => page.evaluate(() => typeof (window as unknown as Probe).__release))
+      .toBe('function'); // the clipboard write has started and is pending
+    await expect(button).toHaveText('Copy');
+    await expect(page.getByTestId('copy-status')).not.toContainText('copied');
+    await page.evaluate(() => (window as unknown as Probe).__release?.());
     await expect(button).toHaveText('Copied');
     await expect(page.getByTestId('copy-status')).toContainText('copied');
-    expect(
-      await page.evaluate(() => (window as unknown as { __copied: string[] }).__copied),
-    ).toEqual(['npm install @quartz-headless/core @quartz-headless/primitives']);
+    expect(await page.evaluate(() => (window as unknown as Probe).__copied)).toEqual([
+      'npm install @quartz-headless/core @quartz-headless/primitives',
+    ]);
   });
 
   test('a rejected clipboard write is reported as a failure, never as copied', async ({ page }) => {
