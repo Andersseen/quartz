@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from './support/test';
 
 /**
  * Real-browser checks for the Quartz 0.11 range & toggle controls against /e2e-range, in

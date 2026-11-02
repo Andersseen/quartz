@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
 
 /**
  * Real-browser checks for the Quartz 0.9 selection controls and Angular Forms adapters:

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test.describe('Navigation and layout primitives', () => {
   test('sidebar supports push collapse and overlay dismissal', async ({ page }) => {

@@ -1,11 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
+import { gotoReady } from './support/readiness';
 import { readdirSync } from 'node:fs';
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
 
-const go = async (page: Page, url: string) => {
-  await page.goto(url);
-  await page.waitForLoadState('networkidle');
-};
+const go = (page: Page, url: string) => gotoReady(page, url);
 
 test.describe('Components Pages', () => {
   const components = [
@@ -41,8 +39,7 @@ test.describe('Components Pages', () => {
   }
 
   test('should navigate from sidebar', async ({ page }) => {
-    await page.goto('/docs/primitives/select');
-    await page.waitForLoadState('networkidle');
+    await go(page, '/docs/primitives/select');
     await page
       .getByRole('navigation', { name: 'Quartz Headless docs' })
       .getByRole('link', { name: 'Dialog & Drawer' })

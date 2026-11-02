@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
 
 /**
  * Real-browser checks for the Core 0.7 contracts: layer ownership, focus scope, overlay geometry

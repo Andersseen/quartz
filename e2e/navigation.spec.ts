@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/e2e-navigation');
@@ -43,6 +43,12 @@ test.describe('Toolbar', () => {
 
     await page.locator('#toolbar-dir-toggle').click();
     await page.locator('#toolbar-reorder').click();
+    // The reorder renders asynchronously; moving a focused node in the DOM blurs it, so focus only
+    // after the new order is committed.
+    await expect(page.locator('#toolbar-horizontal > button').first()).toHaveAttribute(
+      'id',
+      'toolbar-three',
+    );
     await page.locator('#toolbar-three').focus();
     await page.keyboard.press('ArrowRight');
     await expect(page.locator('#toolbar-one')).toBeFocused();

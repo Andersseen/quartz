@@ -1,11 +1,11 @@
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
+import { gotoReady } from './support/readiness';
 
 /** Navigate, wait for hydration, and let entrance transitions finish so axe sees final colours. */
 const go = async (page: Page, url: string) => {
-  await page.goto(url);
-  await page.waitForLoadState('networkidle');
+  await gotoReady(page, url);
   await settled(page);
 };
 
