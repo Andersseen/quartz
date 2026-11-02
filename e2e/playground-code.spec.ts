@@ -133,6 +133,7 @@ test.describe('Playground usage code', () => {
     await gotoReady(page, '/components/slider');
     const playground = playgroundOf(page, 'quartz-slider');
     await playground.getByLabel('Disabled').check();
+    await expect(templateCode(page, 'quartz-slider')).toContainText('disabled');
     const visible = await templateCode(page, 'quartz-slider').innerText();
 
     const button = playground.locator('.doq-pg-panel').first().locator('.doq-pg-copy');
