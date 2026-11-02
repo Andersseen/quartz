@@ -27,16 +27,27 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button
-      type="button"
-      (click)="open()"
-      class="site-focus rounded-lg border border-line-strong bg-surface-2 px-4 py-2.5 text-sm font-medium text-fg hover:border-brand/60"
-    >
-      Export settings…
-    </button>
-    <p class="mt-4 text-sm text-fg-muted" data-testid="export-format-readout">
-      Current format: <span class="font-mono text-fg">{{ applied() }}</span>
-    </p>
+    <div class="rounded-2xl border border-line-strong bg-surface-2/70 p-5 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold text-fg">Quarterly report</p>
+          <p class="mt-1 text-xs text-fg-subtle">42 pages · updated today</p>
+        </div>
+        <span class="rounded-md bg-brand/15 px-2 py-0.5 font-mono text-xs text-brand">ready</span>
+      </div>
+      <div class="mt-5 flex items-center justify-between gap-4 border-t border-line pt-4">
+        <p class="text-sm text-fg-muted" data-testid="export-format-readout">
+          Current format: <span class="font-mono text-fg">{{ applied() }}</span>
+        </p>
+        <button
+          type="button"
+          (click)="open()"
+          class="site-focus shrink-0 rounded-lg bg-fg px-3.5 py-2 text-sm font-semibold text-surface-0 hover:bg-white"
+        >
+          Export settings…
+        </button>
+      </div>
+    </div>
 
     <ng-template #settings let-ref let-labelledBy="ariaLabelledBy">
       <div

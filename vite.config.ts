@@ -4,6 +4,7 @@ import { doqPrerenderRoutes } from '@doqs/analog';
 import { doqContent } from '@doqs/analog/content';
 import { doqDeterministicMarkdown } from '@doqs/analog/vite';
 import { doqPaths } from './src/doq.paths';
+import { CATALOGUE, componentPath } from './src/app/site/catalogue';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, type Plugin } from 'vite';
 import { resolve } from 'path';
@@ -63,6 +64,7 @@ export default defineConfig(() => ({
         routes: async () => [
           '/',
           '/components',
+          ...CATALOGUE.map(componentPath),
           // Browser-contract fixtures driven by Playwright (unstyled, not linked from the site).
           '/e2e-forms',
           '/e2e-floating',

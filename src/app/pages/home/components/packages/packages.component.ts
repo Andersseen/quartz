@@ -2,94 +2,91 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
 import { catalogueCounts } from '../../../../site/catalogue';
+import { SectionHeadingComponent } from '../section-heading/section-heading.component';
 
+/** Core vs Primitives, drawn as the layer stack they form inside an application. */
 @Component({
   selector: 'app-home-packages',
-  imports: [RouterLink, ...MOVEMENT_DIRECTIVES],
+  imports: [RouterLink, SectionHeadingComponent, ...MOVEMENT_DIRECTIVES],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-labelledby="packages-title" class="px-4 py-20 sm:px-6 md:px-10 md:py-24">
-      <div class="mx-auto max-w-6xl">
-        <div [move]="'fade-up'" class="max-w-2xl">
-          <p class="text-xs font-semibold tracking-[0.16em] text-brand uppercase">Two packages</p>
-          <h2
-            id="packages-title"
-            class="mt-3 text-3xl font-bold tracking-tight text-fg md:text-4xl"
-          >
-            Core is the engine. Primitives are the patterns.
-          </h2>
-          <p class="mt-5 text-base leading-7 text-fg-muted sm:text-lg sm:leading-8">
+    <section aria-labelledby="packages-title" class="section-shell">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
+        <div>
+          <app-section-heading headingId="packages-title" eyebrow="Architecture" tone="accent">
+            <ng-container heading>Core is the engine. Primitives are the patterns.</ng-container>
             Build your own widget on Core, or take a finished accessible pattern from Primitives.
             Primitives depends on Core as a peer dependency; Core never depends on Primitives.
+          </app-section-heading>
+
+          <dl
+            class="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line"
+          >
+            <div class="bg-surface-0 p-5">
+              <dt class="text-xs text-fg-subtle">&#64;quartz-headless/core</dt>
+              <dd class="mt-2">
+                <span class="stat-number text-signal">{{ counts.coreApis }}</span
+                >&nbsp;<span class="text-sm text-fg-muted">Core APIs</span>
+              </dd>
+            </div>
+            <div class="bg-surface-0 p-5">
+              <dt class="text-xs text-fg-subtle">&#64;quartz-headless/primitives</dt>
+              <dd class="mt-2">
+                <span class="stat-number text-brand">{{ counts.primitiveFamilies }}</span
+                >&nbsp;<span class="text-sm text-fg-muted">primitive families</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="mt-4 text-sm leading-6 text-fg-subtle">
+            Also documented: {{ counts.aliases }} alias backed by Core and
+            {{ counts.compositions }} native-HTML recipe, labelled as such in the catalogue. Not
+            sure which to install?
+            <a
+              routerLink="/docs/guides/core-vs-primitives"
+              class="site-focus text-fg underline underline-offset-4"
+              >Core versus Primitives</a
+            >.
           </p>
         </div>
 
-        <div class="mt-12 grid gap-5 md:grid-cols-2">
-          <article
-            [move]="'fade-up'"
-            class="rounded-2xl border border-line bg-surface-1 p-6 sm:p-8"
-            aria-labelledby="pkg-core"
-          >
-            <p class="font-mono text-xs text-signal">{{ counts.coreApis }} Core APIs</p>
-            <h3 id="pkg-core" class="mt-2 font-mono text-lg font-semibold text-fg">
-              &#64;quartz-headless/core
-            </h3>
-            <p class="mt-3 text-sm leading-6 text-fg-muted">
-              Low-level interaction infrastructure, comparable to the Angular CDK: positioned
-              overlays, dismissal, focus, keyboard collections, direction, viewport, scroll lock,
-              drag and drop, virtual scroll and a splitter.
-            </p>
-            <p class="mt-4 text-sm leading-6 text-fg-subtle">
-              Choose it when you are building a custom widget and want the hard parts.
-            </p>
-            <a
-              routerLink="/components"
-              [queryParams]="{ layer: 'core' }"
-              class="site-focus mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-signal underline underline-offset-4"
-              >Browse Core APIs →</a
-            >
-          </article>
-
-          <article
-            [move]="'fade-up'"
-            [moveDelay]="100"
-            class="rounded-2xl border border-line bg-surface-1 p-6 sm:p-8"
-            aria-labelledby="pkg-primitives"
-          >
-            <p class="font-mono text-xs text-brand">
-              {{ counts.primitiveFamilies }} primitive families
-            </p>
-            <h3 id="pkg-primitives" class="mt-2 font-mono text-lg font-semibold text-fg">
-              &#64;quartz-headless/primitives
-            </h3>
-            <p class="mt-3 text-sm leading-6 text-fg-muted">
-              Accessible UI patterns built on Core: dialogs, menus, selects, comboboxes, tabs,
-              sliders, date pickers, form fields, navigation, toasts and more. Directives with no
-              CSS; state is exposed as signals, ARIA and
-              <code class="font-mono text-fg">data-qz-*</code> hooks.
-            </p>
-            <p class="mt-4 text-sm leading-6 text-fg-subtle">
-              Also documented: {{ counts.aliases }} alias backed by Core and
-              {{ counts.compositions }} native-HTML recipe, labelled as such in the catalogue.
+        <ol class="layer-stack" aria-label="How the layers fit together, top to bottom">
+          <li [move]="'fade-up'" class="layer layer-yours">
+            <p class="layer-kicker">Your code</p>
+            <p class="layer-title">Your design system</p>
+            <p class="layer-text">Markup, Tailwind, CSS, tokens, Volt UI. Every pixel.</p>
+          </li>
+          <li [move]="'fade-up'" [moveDelay]="80" class="layer layer-primitives">
+            <p class="layer-kicker">&#64;quartz-headless/primitives</p>
+            <p class="layer-title">Accessible patterns</p>
+            <p class="layer-text">
+              Dialog, Menu, Select, Combobox, Tabs, Slider, DatePicker, FormField, Toast…
             </p>
             <a
               routerLink="/components"
               [queryParams]="{ layer: 'primitives' }"
-              class="site-focus mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-brand underline underline-offset-4"
+              class="site-focus layer-link text-brand"
               >Browse Primitives →</a
             >
-          </article>
-        </div>
-
-        <p class="mt-6 text-sm text-fg-subtle">
-          Not sure which to install?
-          <a
-            routerLink="/docs/guides/core-vs-primitives"
-            class="site-focus text-fg underline underline-offset-4"
-            >Core versus Primitives</a
-          >
-          explains the dependency direction and the import map.
-        </p>
+          </li>
+          <li [move]="'fade-up'" [moveDelay]="160" class="layer layer-core">
+            <p class="layer-kicker">&#64;quartz-headless/core</p>
+            <p class="layer-title">Interaction engine</p>
+            <p class="layer-text">
+              Overlay, dismiss, focus, collection, direction, viewport, scroll lock, drag and drop,
+              virtual scroll, splitter.
+            </p>
+            <a
+              routerLink="/components"
+              [queryParams]="{ layer: 'core' }"
+              class="site-focus layer-link text-signal"
+              >Browse Core APIs →</a
+            >
+          </li>
+          <li [move]="'fade-up'" [moveDelay]="240" class="layer layer-angular">
+            <p class="layer-title">Angular 21.2+ and 22</p>
+            <p class="layer-text">Signals, zoneless change detection, SSR and hydration.</p>
+          </li>
+        </ol>
       </div>
     </section>
   `,

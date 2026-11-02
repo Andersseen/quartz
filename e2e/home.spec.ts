@@ -93,6 +93,38 @@ test.describe('Home page content', () => {
   });
 });
 
+test.describe('Hero plasma background', () => {
+  test('is decorative, settles on a rendering mode and never widens the page', async ({ page }) => {
+    await go(page, '/');
+    const plasma = page.locator('app-hero-plasma');
+    await expect(plasma).toHaveAttribute('aria-hidden', 'true');
+    // animated (GPU), still (slow device) or fallback (no WebGL2 / software renderer: CSS only).
+    await expect(plasma).toHaveAttribute('data-mode', /^(animated|still|fallback)$/);
+    if ((await plasma.getAttribute('data-mode')) !== 'fallback') {
+      await expect(plasma.locator('canvas')).toHaveClass(/is-live/);
+    }
+    expect(await noOverflow(page)).toBe(true);
+  });
+
+  // An explicit context, as in "respects prefers-reduced-motion" below: `test.use({ reducedMotion })`
+  // does not reach matchMedia in this project's Firefox.
+  test('never animates under reduced motion: a still frame or the CSS backdrop', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await go(page, '/');
+    expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(
+      true,
+    );
+    await expect(page.locator('app-hero-plasma')).toHaveAttribute(
+      'data-mode',
+      /^(still|fallback)$/,
+    );
+    await context.close();
+  });
+});
+
 test.describe('Hero demo', () => {
   test.beforeEach(async ({ page }) => {
     await go(page, '/');
@@ -113,6 +145,7 @@ test.describe('Hero demo', () => {
   test('the slider responds to pointer input', async ({ page }) => {
     const thumb = page.getByRole('slider', { name: 'Volume' });
     const track = page.locator('app-volume-demo [qzSliderTrack]');
+    await track.scrollIntoViewIfNeeded();
     const box = (await track.boundingBox())!;
     await page.mouse.click(box.x + box.width * 0.9, box.y + box.height / 2);
     await expect
@@ -149,6 +182,32 @@ test.describe('Hero demo', () => {
     await expect(pre).toContainText('qzSlider');
     await expect(pre).toContainText('qzSwitch');
     await expect(pre).toContainText("from '@quartz-headless/primitives'");
+  });
+
+  test('switching Preview and Code never changes the frame height', async ({ page }) => {
+    const frame = page.locator('app-demo-showcase').first();
+    const before = (await frame.boundingBox())!.height;
+    await page.getByRole('tab', { name: 'Code' }).first().click();
+    await expect(page.getByLabel('Volume control source code')).toBeVisible();
+    expect((await frame.boundingBox())!.height).toBeCloseTo(before, 0);
+  });
+
+  test('the skin picker restyles the demo while the behaviour stays the same', async ({ page }) => {
+    const brutal = page.getByRole('button', { name: 'Brutalist' });
+    await brutal.scrollIntoViewIfNeeded();
+    await brutal.click();
+    await expect(brutal).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Quartz', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    const thumb = page.getByRole('slider', { name: 'Volume' });
+    await thumb.focus();
+    await page.keyboard.press('End');
+    await expect(thumb).toHaveAttribute('aria-valuenow', '100');
+    await page.getByRole('button', { name: 'Soft' }).click();
+    // State is not reset by a new skin.
+    await expect(thumb).toHaveAttribute('aria-valuenow', '100');
   });
 
   test('displayed code is the real component source and imports only public entry points', async () => {
@@ -514,6 +573,7 @@ test.describe('Metadata and quality', () => {
       results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(',')}`),
     ).toEqual([]);
     await page.getByRole('tab', { name: 'Code' }).first().click();
+    await settled(page); // the panel cross-fades in
     results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.map((v) => v.id)).toEqual([]);
   });

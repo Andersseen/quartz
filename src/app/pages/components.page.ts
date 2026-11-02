@@ -17,6 +17,7 @@ import {
   CATALOGUE,
   CATEGORIES,
   apiPath,
+  componentPath,
   catalogueCounts,
   filterCatalogue,
   type CatalogueLayer,
@@ -54,8 +55,9 @@ const LAYERS: { id: LayerFilter; label: string }[] = [
             Find the behaviour you need.
           </h1>
           <p class="mt-5 text-base leading-7 text-fg-muted sm:text-lg sm:leading-8">
-            {{ counts.coreApis }} Core APIs and {{ counts.primitiveFamilies }} primitive families,
-            each linked to its documentation, live demo and API reference. Entries marked
+            {{ counts.coreApis }} Core APIs and {{ counts.primitiveFamilies }} primitive families.
+            Open one to try it in a playground and see live examples; the documentation and API
+            reference are one click away. Entries marked
             <strong class="font-semibold text-fg">Alias</strong> or
             <strong class="font-semibold text-fg">Recipe</strong> are documented patterns, not
             separate exports.
@@ -176,7 +178,7 @@ const LAYERS: { id: LayerFilter; label: string }[] = [
                       <div class="flex items-start justify-between gap-3">
                         <h3 class="text-base font-semibold text-fg">
                           <a
-                            [routerLink]="entry.path"
+                            [routerLink]="component(entry)"
                             class="site-focus rounded after:absolute after:inset-0 after:content-['']"
                             >{{ entry.name }}</a
                           >
@@ -215,14 +217,22 @@ const LAYERS: { id: LayerFilter; label: string }[] = [
                         >
                           {{ entry.exports.join(' · ') }}
                         </p>
-                        @if (api(entry); as route) {
+                        <span class="flex shrink-0 items-center gap-3">
                           <a
-                            [routerLink]="route"
-                            class="site-focus relative z-10 inline-flex min-h-8 shrink-0 items-center text-xs font-medium text-fg underline underline-offset-4"
-                            [attr.aria-label]="entry.name + ' API reference'"
-                            >API</a
+                            [routerLink]="entry.path"
+                            class="site-focus relative z-10 inline-flex min-h-8 items-center text-xs font-medium text-fg underline underline-offset-4"
+                            [attr.aria-label]="entry.name + ' docs'"
+                            >Docs</a
                           >
-                        }
+                          @if (api(entry); as route) {
+                            <a
+                              [routerLink]="route"
+                              class="site-focus relative z-10 inline-flex min-h-8 shrink-0 items-center text-xs font-medium text-fg underline underline-offset-4"
+                              [attr.aria-label]="entry.name + ' API reference'"
+                              >API</a
+                            >
+                          }
+                        </span>
                       </div>
                     </li>
                   }
@@ -283,7 +293,7 @@ export default class ComponentsCatalogPage {
     inject(PageSeoService).claim(inject(DestroyRef), {
       title: 'Component catalogue · Quartz Headless',
       description:
-        'Search every Quartz Headless Core API and primitive: overlays, dialogs, menus, selects, forms, navigation, date pickers and feedback. Each entry links to docs, live demos and the API reference.',
+        'Search every Quartz Headless Core API and primitive: overlays, dialogs, menus, selects, forms, navigation, date pickers and feedback. Each entry opens a playground with live examples.',
       path: '/components',
     });
 
@@ -317,6 +327,7 @@ export default class ComponentsCatalogPage {
   }
 
   protected readonly api = apiPath;
+  protected readonly component = componentPath;
 
   protected clearSearch(): void {
     this.query.set('');

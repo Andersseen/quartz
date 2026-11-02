@@ -561,7 +561,9 @@ test.describe('accessibility (axe)', () => {
 });
 
 test.describe('discovery journey', () => {
-  test('catalogue → documentation → live demo → API reference → install path', async ({ page }) => {
+  test('catalogue → component page → documentation → live demo → API reference → install path', async ({
+    page,
+  }) => {
     const problems = trackConsole(page);
     await go(page, '/components');
     await page.getByLabel('Search the catalogue').fill('slider');
@@ -571,6 +573,10 @@ test.describe('discovery journey', () => {
       '/docs/reference/api/primitives/slider-directive',
     );
     await card.locator('h3 a').click();
+    // The card opens the component page (playground and examples); the docs are one click away.
+    await expect(page).toHaveURL('/components/slider');
+    await expect(page.locator('[data-doq-playground="quartz-slider"]')).toBeVisible();
+    await page.getByRole('link', { name: 'Documentation', exact: true }).click();
     await expect(page).toHaveURL('/docs/primitives/slider');
     await expect(page.getByRole('heading', { name: 'Slider', level: 1 })).toBeVisible();
     // Live demo (lazy, hydrated) works.
@@ -585,6 +591,8 @@ test.describe('discovery journey', () => {
   test('a Core entry reaches its own page, not the documentation index', async ({ page }) => {
     await go(page, '/components?layer=core');
     await page.locator('[data-entry="/docs/core/focus"] h3 a').click();
+    await expect(page).toHaveURL('/components/focus');
+    await page.getByRole('link', { name: 'Documentation', exact: true }).click();
     await expect(page).toHaveURL('/docs/core/focus');
     await expect(page.getByRole('heading', { name: 'Focus', level: 1 })).toBeVisible();
   });

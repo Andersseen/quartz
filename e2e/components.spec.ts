@@ -51,12 +51,14 @@ test.describe('Components Pages', () => {
 test.describe('Catalogue (/components)', () => {
   const entryLinks = (page: Page) => page.locator('main [data-entry] h3 a');
 
-  test('lists every documented Core and Primitives page exactly once', async ({ page }) => {
+  test('lists every documented Core and Primitives page exactly once, opening its component page', async ({
+    page,
+  }) => {
     await go(page, '/components');
     const documented = ['core', 'primitives'].flatMap((group) =>
       readdirSync(`src/content/docs/${group}`)
         .filter((file) => file.endsWith('.md'))
-        .map((file) => `/docs/${group}/${file.replace(/\.md$/, '')}`),
+        .map((file) => `/components/${file.replace(/\.md$/, '')}`),
     );
     const listed = await entryLinks(page).evaluateAll((links) =>
       links.map((a) => a.getAttribute('href')),
@@ -106,6 +108,13 @@ test.describe('Catalogue (/components)', () => {
       expect(response.status(), href).toBe(200);
     }
     await page.locator('[data-entry="/docs/core/dismiss"] h3 a').click();
+    await expect(page).toHaveURL('/components/dismiss');
+    // The documentation stays one click away from every card.
+    await go(page, '/components');
+    await page
+      .locator('[data-entry="/docs/core/dismiss"]')
+      .getByRole('link', { name: 'Dismiss docs' })
+      .click();
     await expect(page).toHaveURL('/docs/core/dismiss');
   });
 
