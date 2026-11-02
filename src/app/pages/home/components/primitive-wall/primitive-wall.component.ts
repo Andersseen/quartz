@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
-import { CATALOGUE, CATEGORIES } from '../../../../site/catalogue';
+import { CATALOGUE, CATEGORIES, componentPath } from '../../../../site/catalogue';
 import { SectionHeadingComponent } from '../section-heading/section-heading.component';
 
 /**
@@ -21,7 +21,7 @@ import { SectionHeadingComponent } from '../section-heading/section-heading.comp
               >{{ total }} building blocks. None of them has a look.</ng-container
             >
             Every documented Core API and primitive, grouped by what it is for. Each one is a page
-            with a live demo, keyboard map and API reference.
+            with a playground and live examples, one click from its documentation.
           </app-section-heading>
           <a routerLink="/components" class="site-focus link-arrow">Search the catalogue</a>
         </div>
@@ -45,7 +45,7 @@ import { SectionHeadingComponent } from '../section-heading/section-heading.comp
                 @for (entry of group.entries; track entry.path) {
                   <li>
                     <a
-                      [routerLink]="entry.path"
+                      [routerLink]="component(entry)"
                       class="chip site-focus gap-2"
                       [attr.data-layer]="entry.layer"
                     >
@@ -79,6 +79,7 @@ import { SectionHeadingComponent } from '../section-heading/section-heading.comp
 })
 export class HomePrimitiveWallComponent {
   protected readonly total = CATALOGUE.length;
+  protected readonly component = componentPath;
   protected readonly groups = CATEGORIES.map((category) => ({
     ...category,
     entries: CATALOGUE.filter((entry) => entry.category === category.id),

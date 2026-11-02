@@ -35,6 +35,13 @@ export const appConfig: ApplicationConfig = {
     provideFileRouter(
       withExtraRoutes([
         ...doqRoutes(doqConfig),
+        // One page per component (playground, examples, install). Registered explicitly, like the
+        // fixtures below, so the production static router never reaches the JIT fallback.
+        {
+          path: 'components/:slug',
+          loadComponent: () =>
+            import('./pages/component-detail.page').then((module) => module.default),
+        },
         // Playwright fixtures must use statically compiled lazy components. Analog's discovered
         // route components can reach Angular's runtime JIT fallback in the production static
         // router when their module is first activated, leaving the prerendered fixture inert.

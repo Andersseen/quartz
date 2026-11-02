@@ -25,12 +25,20 @@ export class PageSeoService {
   private readonly titleService = inject(Title);
 
   claim(destroyRef: DestroyRef, seo: PageSeo): void {
+    destroyRef.onDestroy(this.apply(seo));
+  }
+
+  /**
+   * Writes the metadata and returns the function that reverts it. For a page that keeps its
+   * instance while its content changes (one component page to the next): revert, then apply again.
+   */
+  apply(seo: PageSeo): () => void {
     const url = `${SITE_ORIGIN}${seo.path}`;
     this.write(seo.title, seo.description);
     this.meta.updateTag({ property: 'og:url', content: url });
     const link = this.claimCanonical(url);
 
-    destroyRef.onDestroy(() => {
+    return () => {
       // A successor page may already have taken the canonical over; only remove our own value.
       if (link?.getAttribute('href') === url) link.remove();
       if (this.meta.getTag('property="og:url"')?.content === url) {
@@ -39,7 +47,7 @@ export class PageSeoService {
       if (this.titleService.getTitle() === seo.title) {
         this.write(SITE_NAME, DEFAULT_DESCRIPTION);
       }
-    });
+    };
   }
 
   private write(title: string, description: string): void {

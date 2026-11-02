@@ -168,9 +168,9 @@ export class HomeUseCasesComponent {
       sketch: 'palette',
       span: 'lg:col-span-2',
       pieces: [
-        { name: 'Combobox', path: '/docs/primitives/combobox' },
-        { name: 'Dialog', path: '/docs/primitives/dialog' },
-        { name: 'Search recipe', path: '/docs/primitives/search-composition' },
+        { name: 'Combobox', path: '/components/combobox' },
+        { name: 'Dialog', path: '/components/dialog' },
+        { name: 'Search recipe', path: '/components/search-composition' },
       ],
     },
     {
@@ -179,9 +179,9 @@ export class HomeUseCasesComponent {
       sketch: 'shell',
       span: '',
       pieces: [
-        { name: 'Sidebar', path: '/docs/primitives/sidebar' },
-        { name: 'Navbar', path: '/docs/primitives/navbar' },
-        { name: 'Resizable', path: '/docs/primitives/resizable' },
+        { name: 'Sidebar', path: '/components/sidebar' },
+        { name: 'Navbar', path: '/components/navbar' },
+        { name: 'Resizable', path: '/components/resizable' },
       ],
     },
     {
@@ -191,9 +191,9 @@ export class HomeUseCasesComponent {
       sketch: 'forms',
       span: '',
       pieces: [
-        { name: 'FormField', path: '/docs/primitives/form-field' },
-        { name: 'Switch', path: '/docs/primitives/switch' },
-        { name: 'Select', path: '/docs/primitives/select' },
+        { name: 'FormField', path: '/components/form-field' },
+        { name: 'Switch', path: '/components/switch' },
+        { name: 'Select', path: '/components/select' },
         { name: 'Forms adapters', path: '/docs/guides/angular-forms' },
       ],
     },
@@ -203,8 +203,8 @@ export class HomeUseCasesComponent {
       sketch: 'dates',
       span: '',
       pieces: [
-        { name: 'DatePicker', path: '/docs/primitives/date-picker' },
-        { name: 'DateRangePicker', path: '/docs/primitives/date-range-picker' },
+        { name: 'DatePicker', path: '/components/date-picker' },
+        { name: 'DateRangePicker', path: '/components/date-range-picker' },
       ],
     },
     {
@@ -213,10 +213,10 @@ export class HomeUseCasesComponent {
       sketch: 'data',
       span: '',
       pieces: [
-        { name: 'VirtualScroll', path: '/docs/core/virtual-scroll' },
-        { name: 'Tree', path: '/docs/primitives/tree' },
-        { name: 'Toolbar', path: '/docs/primitives/toolbar' },
-        { name: 'Pagination', path: '/docs/primitives/pagination' },
+        { name: 'VirtualScroll', path: '/components/virtual-scroll' },
+        { name: 'Tree', path: '/components/tree' },
+        { name: 'Toolbar', path: '/components/toolbar' },
+        { name: 'Pagination', path: '/components/pagination' },
       ],
     },
     {
@@ -226,10 +226,10 @@ export class HomeUseCasesComponent {
       sketch: 'widgets',
       span: 'md:col-span-2 lg:col-span-3',
       pieces: [
-        { name: 'Overlay', path: '/docs/core/overlay' },
-        { name: 'Dismiss', path: '/docs/core/dismiss' },
-        { name: 'Collection', path: '/docs/core/collection' },
-        { name: 'DragDrop', path: '/docs/core/drag-drop' },
+        { name: 'Overlay', path: '/components/overlay' },
+        { name: 'Dismiss', path: '/components/dismiss' },
+        { name: 'Collection', path: '/components/collection' },
+        { name: 'DragDrop', path: '/components/drag-drop' },
       ],
     },
   ];

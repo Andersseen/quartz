@@ -511,6 +511,20 @@ export function apiPath(entry: CatalogueEntry): string | null {
   return primary ? `/docs/reference/api/${entry.layer}/${kebab(primary)}` : null;
 }
 
+/** Slug shared by the documentation page and the component page (unique across both layers). */
+export function entrySlug(entry: CatalogueEntry): string {
+  return entry.path.slice(entry.path.lastIndexOf('/') + 1);
+}
+
+/** The interactive component page: playground, live examples and install, outside the docs. */
+export function componentPath(entry: CatalogueEntry): string {
+  return `/components/${entrySlug(entry)}`;
+}
+
+export function findBySlug(slug: string): CatalogueEntry | undefined {
+  return CATALOGUE.find((entry) => entrySlug(entry) === slug);
+}
+
 export interface CatalogueQuery {
   text?: string;
   category?: CategoryId | 'all';
