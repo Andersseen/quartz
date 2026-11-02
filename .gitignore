@@ -45,6 +45,7 @@ __screenshots__/
 # Playwright
 /playwright-report
 /test-results
+/e2e-logs
 
 # System files
 .DS_Store

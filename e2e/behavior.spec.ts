@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/test';
 
 /**
  * Behavior-focussed E2E tests for Quartz primitives.

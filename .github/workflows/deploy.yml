@@ -339,6 +339,8 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-latest
     needs: quality
+    # A hung browser must fail the job (and keep its artifacts), not occupy a runner for hours.
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -365,8 +367,13 @@ jobs:
           pnpm build:demo
           pnpm docs:check
 
+      # The CI profile (scripts/e2e/run.mjs): all three engines, pinned workers and retries from
+      # playwright.config.ts, the exact output that just passed `docs:check` (E2E_BUILD=skip refuses
+      # to serve anything incomplete). Reproduce locally with `pnpm e2e:ci`.
       - name: Run E2E Tests
-        run: pnpm e2e
+        run: pnpm e2e:ci
+        env:
+          E2E_BUILD: skip
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
@@ -374,6 +381,19 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+
+      # First-failure evidence (traces, screenshots, per-test diagnostics.json, preview-server log,
+      # machine-readable results). Only produced for failing tests, so green runs upload no traces.
+      - name: Upload E2E failure diagnostics
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-failure-diagnostics
+          path: |
+            test-results/
+            e2e-logs/
+          if-no-files-found: ignore
+          retention-days: 14
 
   deploy:
     name: Deploy to Cloudflare Pages
