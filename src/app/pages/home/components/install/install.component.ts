@@ -58,111 +58,103 @@ const COMMANDS: Command[] = [
   providers: [ClipboardCopy],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section
-      id="install"
-      aria-labelledby="install-title"
-      class="border-t border-line px-4 py-20 sm:px-6 md:px-10 md:py-24"
-    >
-      <div
-        [move]="'fade-up'"
-        class="mx-auto max-w-4xl rounded-3xl border border-brand/20 bg-[radial-gradient(circle_at_top,rgb(16_185_129/0.12),transparent_45%)] bg-surface-1 px-5 py-12 sm:px-10 sm:py-14"
-      >
-        <div class="text-center">
-          <h2 id="install-title" class="text-3xl font-extrabold tracking-tight text-fg md:text-4xl">
+    <section id="install" aria-labelledby="install-title" class="section-shell">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-16">
+        <div [move]="'fade-up'">
+          <p class="section-eyebrow" data-tone="brand">
+            <span class="section-eyebrow-dot" aria-hidden="true"></span>Install
+          </p>
+          <h2
+            id="install-title"
+            class="mt-4 text-[clamp(2rem,5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.035em] text-fg"
+          >
             Install what you need.
           </h2>
-          <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-fg-muted">
+          <p class="mt-5 max-w-lg text-base leading-7 text-fg-muted sm:text-lg sm:leading-8">
             Latest on npm: <span class="font-mono text-fg">{{ npmVersion }}</span
             >. Requires Angular 21.2+ or 22 with zoneless change detection.
           </p>
-        </div>
 
-        <div qzTabs [(value)]="manager" class="mt-9">
-          <div class="flex justify-center">
-            <div
-              qzTabList
-              aria-label="Package manager"
-              class="inline-flex rounded-lg border border-line p-1"
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a routerLink="/docs/getting-started/installation" class="site-focus btn-primary"
+              >Read the installation guide</a
             >
-              @for (name of managers; track name) {
-                <button
-                  [qzTab]="name"
-                  class="site-focus min-h-10 rounded-md px-5 font-mono text-sm text-fg-muted hover:text-fg data-[qz-selected]:bg-surface-2 data-[qz-selected]:text-fg"
-                >
-                  {{ name }}
-                </button>
-              }
-            </div>
+            <a routerLink="/docs" class="site-focus btn-secondary">Browse documentation</a>
+            <a [href]="github" rel="noopener" class="site-focus btn-secondary"
+              >View source on GitHub</a
+            >
           </div>
+          <p class="mt-6 text-sm leading-6 text-fg-subtle">
+            On npm:
+            <a [href]="npmCore" rel="noopener" class="site-focus underline underline-offset-4"
+              >&#64;quartz-headless/core</a
+            >,
+            <a [href]="npmPrimitives" rel="noopener" class="site-focus underline underline-offset-4"
+              >&#64;quartz-headless/primitives</a
+            >. Prefer owning the code?
+            <a routerLink="/docs/guides/cli" class="site-focus underline underline-offset-4"
+              >Copy the source with the CLI</a
+            >.
+          </p>
+        </div>
 
-          @for (name of managers; track name) {
-            <div [qzTabPanel]="name" class="mt-6 space-y-4">
-              @for (command of commands; track command.id) {
-                <div class="rounded-xl border border-line bg-surface-0 p-4">
-                  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <p class="text-sm font-semibold text-fg">{{ command.label }}</p>
-                    <p class="text-xs text-fg-subtle">{{ command.note }}</p>
-                  </div>
-                  <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <pre
-                      class="code-scroll site-focus min-w-0 flex-1 rounded-lg bg-surface-2 px-3.5 py-3 font-mono text-[0.8125rem] leading-6 text-fg"
-                      tabindex="0"
-                      [attr.aria-label]="command.label + ' ' + name + ' command'"
-                    ><code><span class="select-none text-accent" aria-hidden="true">$ </span>{{ command.text[name] }}</code></pre>
-                    <button
-                      type="button"
-                      (click)="copy(command.text[name])"
-                      [attr.data-copy-state]="stateFor(command.text[name])"
-                      [attr.aria-label]="'Copy ' + command.label + ' ' + name + ' command'"
-                      class="site-focus min-h-11 shrink-0 rounded-lg border border-line-strong px-4 text-sm font-semibold text-fg transition-colors hover:border-brand/60 data-[copy-state=copied]:border-brand data-[copy-state=copied]:text-brand"
-                    >
-                      {{ labelFor(command.text[name]) }}
-                    </button>
-                  </div>
-                </div>
-              }
+        <div [move]="'fade-up'" [moveDelay]="100" class="relative min-w-0">
+          <div class="showcase-glow" aria-hidden="true"></div>
+          <div qzTabs [(value)]="manager" class="showcase-frame">
+            <div
+              class="flex items-center justify-between gap-3 border-b border-line bg-surface-1/80 py-2 pr-2 pl-4"
+            >
+              <span class="flex gap-1.5" aria-hidden="true">
+                <span class="size-2.5 rounded-full bg-white/10"></span>
+                <span class="size-2.5 rounded-full bg-white/10"></span>
+                <span class="size-2.5 rounded-full bg-white/10"></span>
+              </span>
+              <div
+                qzTabList
+                aria-label="Package manager"
+                class="flex rounded-lg border border-line bg-surface-0/60 p-0.5"
+              >
+                @for (name of managers; track name) {
+                  <button [qzTab]="name" class="showcase-tab site-focus font-mono">
+                    {{ name }}
+                  </button>
+                }
+              </div>
             </div>
-          }
-        </div>
 
-        <p
-          class="mt-4 min-h-6 text-center text-sm text-fg-muted"
-          role="status"
-          data-testid="copy-status"
-        >
-          {{ statusMessage() }}
-        </p>
-
-        <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <a
-            routerLink="/docs/getting-started/installation"
-            class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 text-sm font-semibold text-surface-0 hover:bg-brand-deep"
-            >Read the installation guide</a
-          >
-          <a
-            routerLink="/docs"
-            class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg border border-line-strong px-5 text-sm font-semibold text-fg hover:border-brand/60"
-            >Browse documentation</a
-          >
-          <a
-            [href]="github"
-            rel="noopener"
-            class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg border border-line-strong px-5 text-sm font-semibold text-fg hover:border-brand/60"
-            >View source on GitHub</a
-          >
+            @for (name of managers; track name) {
+              <div [qzTabPanel]="name" class="showcase-panel divide-y divide-line">
+                @for (command of commands; track command.id) {
+                  <div class="p-5">
+                    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <p class="text-sm font-semibold text-fg">{{ command.label }}</p>
+                      <p class="text-xs text-fg-subtle">{{ command.note }}</p>
+                    </div>
+                    <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-stretch">
+                      <pre
+                        class="code-scroll site-focus m-0 min-w-0 flex-1 rounded-lg border border-line bg-surface-0 px-3.5 py-2.5 font-mono text-[0.8125rem] leading-6 text-fg"
+                        tabindex="0"
+                        [attr.aria-label]="command.label + ' ' + name + ' command'"
+                      ><code><span class="select-none text-accent" aria-hidden="true">$ </span>{{ command.text[name] }}</code></pre>
+                      <button
+                        type="button"
+                        (click)="copy(command.text[name])"
+                        [attr.data-copy-state]="stateFor(command.text[name])"
+                        [attr.aria-label]="'Copy ' + command.label + ' ' + name + ' command'"
+                        class="site-focus min-h-11 min-w-24 shrink-0 rounded-lg border border-line-strong px-4 text-sm font-semibold text-fg transition-colors hover:border-brand/60 hover:bg-white/5 data-[copy-state=copied]:border-brand data-[copy-state=copied]:text-brand"
+                      >
+                        {{ labelFor(command.text[name]) }}
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <p class="mt-3 min-h-6 text-sm text-fg-muted" role="status" data-testid="copy-status">
+            {{ statusMessage() }}
+          </p>
         </div>
-        <p class="mt-6 text-center text-xs text-fg-subtle">
-          On npm:
-          <a [href]="npmCore" rel="noopener" class="site-focus underline underline-offset-4"
-            >&#64;quartz-headless/core</a
-          >,
-          <a [href]="npmPrimitives" rel="noopener" class="site-focus underline underline-offset-4"
-            >&#64;quartz-headless/primitives</a
-          >. Prefer owning the code?
-          <a routerLink="/docs/guides/cli" class="site-focus underline underline-offset-4"
-            >Copy the source with the CLI</a
-          >.
-        </p>
       </div>
     </section>
   `,

@@ -2,101 +2,92 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
 import { ANGULAR_SUPPORT, LATEST_NPM_VERSION } from '../../../../site/site-config';
-import volumeDemoSource from '../../demos/volume-demo.component.ts?raw';
-import { VolumeDemoComponent } from '../../demos/volume-demo.component';
-import { DemoShowcaseComponent } from '../demo-showcase/demo-showcase.component';
+import { HeroPlasmaComponent } from './hero-plasma.component';
 
 @Component({
   selector: 'app-home-hero',
-  imports: [RouterLink, DemoShowcaseComponent, VolumeDemoComponent, ...MOVEMENT_DIRECTIVES],
+  imports: [RouterLink, HeroPlasmaComponent, ...MOVEMENT_DIRECTIVES],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
       aria-labelledby="hero-title"
-      class="relative z-10 px-4 pt-32 pb-16 sm:px-6 sm:pb-20 md:px-10 md:pt-40 lg:pb-28"
+      class="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-24 sm:px-6 md:px-10"
     >
-      <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_.95fr] lg:gap-16">
-        <div class="text-center lg:text-left">
-          <p
-            [move]="'fade-up'"
-            [moveDelay]="40"
-            class="mx-auto mb-6 inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-brand/25 bg-brand/10 px-3.5 py-1.5 text-xs font-medium text-brand lg:mx-0"
-          >
-            <span class="size-1.5 rounded-full bg-brand" aria-hidden="true"></span>
-            <span>npm {{ npmVersion }}</span>
-            <span class="text-fg-subtle" aria-hidden="true">·</span>
-            <span>{{ angularSupport }}</span>
-          </p>
-          <h1
-            id="hero-title"
-            [move]="'fade-up'"
-            [moveDelay]="100"
-            class="mx-auto max-w-3xl text-[clamp(2.5rem,10.5vw,4rem)] leading-[1.02] font-black tracking-[-0.05em] text-fg sm:text-6xl md:text-7xl lg:mx-0 lg:text-7xl"
-          >
-            Behaviour for the
-            <span
-              class="bg-gradient-to-r from-brand via-signal to-accent bg-clip-text text-transparent"
-              >interfaces you own.</span
-            >
-          </h1>
-          <p
-            [move]="'fade-up'"
-            [moveDelay]="160"
-            class="mx-auto mt-6 max-w-xl text-base leading-7 text-fg-muted sm:text-lg sm:leading-8 lg:mx-0"
-          >
-            Quartz is a set of unstyled, accessible Angular primitives: focus, keyboard, ARIA,
-            overlays and state, shipped as two npm packages. You write the markup and the styles;
-            Quartz owns the behaviour.
-          </p>
-          <div
-            [move]="'fade-up'"
-            [moveDelay]="220"
-            class="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start"
-          >
-            <a
-              routerLink="/docs/getting-started/installation"
-              class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-5 text-sm font-semibold text-surface-0 transition-colors hover:bg-brand-deep"
-              >Start building →</a
-            >
-            <a
-              routerLink="/components"
-              class="site-focus inline-flex min-h-11 items-center justify-center rounded-lg border border-line-strong px-5 text-sm font-semibold text-fg transition-colors hover:border-brand/60"
-              >Browse the catalogue</a
-            >
-          </div>
-          <ul
-            [move]="'fade-up'"
-            [moveDelay]="280"
-            class="mt-9 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium tracking-wide text-fg-subtle uppercase lg:justify-start"
-            aria-label="Key properties"
-          >
-            <li>Signals-first</li>
-            <li>Zoneless</li>
-            <li>SSR-safe</li>
-            <li>No CSS shipped</li>
-          </ul>
-        </div>
+      <app-hero-plasma />
+      <!-- Keeps the copy legible wherever the folds and the lens happen to be. -->
+      <div class="hero-scrim pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
 
-        <div [move]="'fade-up'" [moveDelay]="140" class="min-w-0">
-          <app-demo-showcase
-            label="Volume control"
-            filename="volume-demo.component.ts"
-            [code]="source"
+      <div class="relative mx-auto flex max-w-4xl flex-col items-center text-center">
+        <p
+          [move]="'fade-up'"
+          [moveDelay]="40"
+          class="mb-7 inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-white/15 bg-surface-0/60 px-3.5 py-1.5 text-xs font-medium text-fg-muted backdrop-blur-md"
+        >
+          <span class="size-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+          <span class="text-fg">npm {{ npmVersion }}</span>
+          <span class="text-fg-subtle" aria-hidden="true">·</span>
+          <span>{{ angularSupport }}</span>
+        </p>
+        <h1
+          id="hero-title"
+          [move]="'fade-up'"
+          [moveDelay]="100"
+          class="text-[clamp(2.75rem,11vw,6.25rem)] leading-[0.95] font-black tracking-[-0.055em] text-fg [text-shadow:0_2px_40px_rgb(0_0_0/0.6)]"
+        >
+          Behaviour for the
+          <span class="hero-title-accent block">interfaces you own.</span>
+        </h1>
+        <p
+          [move]="'fade-up'"
+          [moveDelay]="160"
+          class="mt-7 max-w-2xl text-base leading-7 text-fg-muted sm:text-lg sm:leading-8"
+        >
+          Quartz is a set of unstyled, accessible Angular primitives: focus, keyboard, ARIA,
+          overlays and state, shipped as two npm packages. You write the markup and the styles;
+          Quartz owns the behaviour.
+        </p>
+        <div
+          [move]="'fade-up'"
+          [moveDelay]="220"
+          class="mt-9 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row"
+        >
+          <a
+            routerLink="/docs/getting-started/installation"
+            class="site-focus inline-flex min-h-12 items-center justify-center rounded-full bg-fg px-6 text-sm font-semibold text-surface-0 shadow-[0_0_40px_rgb(52_211_153/0.25)] transition-[background-color,box-shadow] hover:bg-white hover:shadow-[0_0_60px_rgb(52_211_153/0.4)]"
+            >Start building →</a
           >
-            <app-volume-demo />
-          </app-demo-showcase>
-          <p class="mt-3 text-sm leading-6 text-fg-subtle">
-            Real Quartz <code class="font-mono text-fg-muted">Slider</code> and
-            <code class="font-mono text-fg-muted">Switch</code>: drag, use the arrow keys, Home and
-            End, or mute. State is a signal; the look is Tailwind classes in the file under Code.
-          </p>
+          <a
+            routerLink="/components"
+            class="site-focus inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-surface-0/50 px-6 text-sm font-semibold text-fg backdrop-blur-md transition-colors hover:border-brand/60"
+            >Browse the catalogue</a
+          >
         </div>
+        <ul
+          [move]="'fade-up'"
+          [moveDelay]="280"
+          class="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-mono text-xs tracking-wide text-fg-subtle"
+          aria-label="Key properties"
+        >
+          <li>signals-first</li>
+          <li class="max-sm:hidden" aria-hidden="true">/</li>
+          <li>zoneless</li>
+          <li class="max-sm:hidden" aria-hidden="true">/</li>
+          <li>SSR-safe</li>
+          <li class="max-sm:hidden" aria-hidden="true">/</li>
+          <li>0 bytes of CSS</li>
+        </ul>
       </div>
+
+      <p
+        class="absolute inset-x-4 bottom-8 max-sm:hidden mx-auto max-w-md text-center font-mono text-[0.6875rem] tracking-wide text-fg-subtle"
+      >
+        <span class="text-brand" aria-hidden="true">◯</span> The lens shows what Quartz ships:
+        structure, not skin.
+      </p>
     </section>
   `,
 })
 export class HomeHeroComponent {
   protected readonly npmVersion = LATEST_NPM_VERSION;
   protected readonly angularSupport = ANGULAR_SUPPORT;
-  protected readonly source = volumeDemoSource;
 }
