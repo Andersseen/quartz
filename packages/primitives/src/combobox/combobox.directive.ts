@@ -78,6 +78,8 @@ export class ComboboxDirective<T> implements OnDestroy {
   private readonly generatedPanelId = `${this.generatedId}-listbox`;
 
   readonly #formDisabled = signal(false);
+  /** Bumped whenever the user moves the active option; lets a pending post-typing reset stand down. */
+  #activationEpoch = 0;
 
   /** Selected value in single mode. In `multiple` mode use `values`. */
   readonly value = model<T | null>(null);
@@ -244,6 +246,7 @@ export class ComboboxDirective<T> implements OnDestroy {
   }
 
   setActive(id: string | null): void {
+    this.#activationEpoch++;
     this.collection.setActive(id);
   }
 
@@ -269,8 +272,12 @@ export class ComboboxDirective<T> implements OnDestroy {
     if (changed) this.queryChanged.emit(value);
     this.clearSelectedValueIfInputDiverged(value);
     if (this.resolvedOpenOnTyping()) this.openPopup('input', { activate: 'first' });
+    // Re-activate the first option once the filtered list has rendered, unless the user already
+    // moved the active option (arrow key / pointer) while this frame was pending: a lagging frame
+    // must not undo navigation that happened after the keystroke.
+    const epoch = ++this.#activationEpoch;
     this.queueFrame(() => {
-      this.collection.first();
+      if (epoch === this.#activationEpoch) this.collection.first();
       this.overlayRef?.updatePosition();
     });
   }
@@ -287,6 +294,7 @@ export class ComboboxDirective<T> implements OnDestroy {
 
     if (event.key === 'ArrowDown') {
       event.preventDefault();
+      this.#activationEpoch++;
       if (!this.isOpen()) this.openPopup('keyboard', { activate: 'first' });
       else this.collection.next();
       return;
@@ -294,6 +302,7 @@ export class ComboboxDirective<T> implements OnDestroy {
 
     if (event.key === 'ArrowUp') {
       event.preventDefault();
+      this.#activationEpoch++;
       if (!this.isOpen()) this.openPopup('keyboard', { activate: 'last' });
       else this.collection.previous();
       return;

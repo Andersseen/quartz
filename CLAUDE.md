@@ -28,8 +28,11 @@ pnpm test:coverage    # Coverage report → coverage/
 # Run a single test file
 pnpm exec vitest run packages/core/src/overlay/overlay.service.spec.ts
 
-# E2E (requires dev server running or uses webServer config)
-pnpm e2e              # Playwright headless
+# E2E — production build served like Cloudflare Pages (scripts/e2e/serve.mjs starts it)
+pnpm e2e              # Playwright headless, all engines (profile `local`: 4 workers, 0 retries)
+pnpm e2e:ci           # CI-equivalent, required before merging (2 workers, 0 retries, 3 engines)
+pnpm e2e:focused e2e/navigation.spec.ts -g Toolbar   # developer loop: chromium, reuses the build
+pnpm e2e:stress -g "<pattern>" --repeat-each=20      # diagnostic only, never a merge gate
 pnpm e2e:ui           # Playwright UI mode
 
 # Run a single E2E spec
@@ -124,4 +127,4 @@ The `quartz add` CLI copies raw TypeScript source files from `packages/core/src/
 
 Unit tests live alongside source files as `*.spec.ts`. They use `@testing-library/angular` and `TestBed` with Vitest globals. Each library's vitest config (`packages/core/vite.config.ts`, `packages/primitives/vite.config.ts`) and the app's config (`vitest.app.config.ts`) are registered as Vitest workspaces in the root `vitest.config.ts`. Primitives' vitest project resolves `@quartz-headless/core` via `node_modules` too, so `packages/core` must be built before running primitives' unit tests (`pnpm test` at the root doesn't hit this because CI/local flows build first — running `vitest` directly against just the primitives project without a prior core build will fail to resolve the import).
 
-E2E tests in `e2e/` use Playwright against a running dev server (auto-started by `webServer` config). Tests target `localhost:5173`. Behavior that must hold in a real installed, AOT-compiled, SSR-hydrated application is tested in `consumer/` (`pnpm verify:consumer:runtime -- --fixture <angular-21.2-min|angular-21.2|angular-22>`, `pnpm verify:consumer:cli`); `docs/compatibility.md` describes the matrix.
+E2E tests in `e2e/` use Playwright against the production build served by `scripts/preview-static.mjs` (auto-started by the `webServer` config via `scripts/e2e/serve.mjs`, which never serves partial output). Tests target `127.0.0.1:5173`. Readiness is explicit — never `networkidle`, sleeps or longer timeouts: navigate with `gotoReady` from `e2e/support/readiness.ts`, import `test`/`expect` from `e2e/support/test.ts` (it attaches first-failure diagnostics), and set fixture `data-ready` markers from the browser only. Retries are 0 in every profile; a test that needs one has a defect. Profiles, env knobs and the investigation behind them: `docs/roadmap/0.21-e2e-reliability.md`. Behavior that must hold in a real installed, AOT-compiled, SSR-hydrated application is tested in `consumer/` (`pnpm verify:consumer:runtime -- --fixture <angular-21.2-min|angular-21.2|angular-22>`, `pnpm verify:consumer:cli`); `docs/compatibility.md` describes the matrix.

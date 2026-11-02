@@ -89,7 +89,7 @@ pnpm start          # dev server → http://localhost:5173
 pnpm typecheck      # lib + app tsconfigs
 pnpm test           # all Vitest workspaces, once
 pnpm lint           # eslint over lib + app
-pnpm e2e            # Playwright (auto-starts dev server)
+pnpm e2e            # Playwright (builds + serves the production site; `pnpm e2e:ci` is the CI-equivalent gate, see docs/roadmap/0.21-e2e-reliability.md)
 ```
 
 The pre-commit hook runs lint-staged + typecheck + test. If you skipped them, the commit

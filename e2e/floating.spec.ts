@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
 
 /**
  * Real-browser checks for the Quartz 0.8 floating-surface contracts: modal isolation, Dialog ↔
@@ -397,12 +397,20 @@ test.describe('RTL submenu', () => {
     await page.keyboard.press('ArrowLeft');
     await expect(page.locator('#rtl-sub')).toBeVisible();
     await expect.poll(() => activeText(page)).toBe('Nested');
-    const [parent, sub] = await Promise.all([
-      page.locator('#rtl-menu').boundingBox(),
-      page.locator('#rtl-sub').boundingBox(),
-    ]);
-    expect(sub!.x + sub!.width).toBeLessThanOrEqual(parent!.x + parent!.width);
-    expect(sub!.x).toBeLessThan(parent!.x);
+    // Overlays are mounted first and positioned on the next animation frame, so geometry is only
+    // meaningful once both surfaces have been placed; assert the final layout, retrying until then.
+    await expect
+      .poll(async () => {
+        const [parent, sub] = await Promise.all([
+          page.locator('#rtl-menu').boundingBox(),
+          page.locator('#rtl-sub').boundingBox(),
+        ]);
+        return {
+          withinParentEnd: sub!.x + sub!.width <= parent!.x + parent!.width,
+          towardInlineEnd: sub!.x < parent!.x,
+        };
+      })
+      .toEqual({ withinParentEnd: true, towardInlineEnd: true });
 
     await page.keyboard.press('ArrowRight');
     await expect(page.locator('#rtl-sub')).toHaveCount(0);

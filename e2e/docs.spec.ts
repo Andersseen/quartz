@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
+import { gotoReady, waitForDemos } from './support/readiness';
 
 /**
  * Official documentation (Doqs) against the production build: prerendered HTML served like
@@ -8,11 +9,12 @@ import { expect, test, type Page } from '@playwright/test';
  * redirects, console cleanliness and automated accessibility scans.
  */
 
-/** Navigate and wait for hydration/idle so early clicks are not lost to event replay races. */
-const go = async (page: Page, url: string) => {
-  await page.goto(url);
-  await page.waitForLoadState('networkidle');
-};
+/**
+ * Navigate and wait for the readiness contract (hydrated app, rendered heading — see
+ * support/readiness.ts), so early clicks are not lost to event replay races. Redirecting URLs are
+ * allowed here; the tests that care assert the final URL themselves.
+ */
+const go = (page: Page, url: string) => gotoReady(page, url, { path: /^\// });
 
 const docsNav = (page: Page) => page.getByRole('navigation', { name: 'Quartz Headless docs' });
 
@@ -470,7 +472,8 @@ test.describe('health', () => {
     const problems = trackConsole(page);
     for (const route of routes) {
       await go(page, route);
-      await page.waitForLoadState('networkidle');
+      // Deferred demos either render or show their explicit fallback; both are final states.
+      await waitForDemos(page);
     }
     expect(problems).toEqual([]);
   });

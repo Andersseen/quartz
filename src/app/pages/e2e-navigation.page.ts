@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import {
   AccordionDirective,
   AccordionItemDirective,
@@ -51,7 +52,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { ngSkipHydration: 'true' },
   template: `
-    <main id="app" data-ready style="padding: 20px; min-height: 1400px">
+    <main
+      id="app"
+      [attr.data-ready]="ready() ? '' : null"
+      style="padding: 20px; min-height: 1400px"
+    >
       <h1>Navigation and roving focus fixtures</h1>
       <p id="toolbar-activations">{{ toolbarActivations() }}</p>
       <button id="toolbar-reorder" type="button" (click)="reorderToolbar()">Reorder</button>
@@ -285,6 +290,8 @@ import {
   `,
 })
 export default class E2eNavigationPage {
+  /** Only true once the client-rendered component is live (never in the prerendered HTML). */
+  readonly ready = signal(false);
   readonly toolbarActivations = signal(0);
   readonly toolbarDir = signal<'ltr' | 'rtl'>('ltr');
   readonly toolbarItems = signal([
@@ -311,6 +318,10 @@ export default class E2eNavigationPage {
   readonly sidebarCollapsed = signal(false);
   readonly sidebarFocusMode = signal<'none' | 'initial' | 'trap'>('none');
   readonly sidebarSide = signal<'inline-start' | 'inline-end'>('inline-start');
+
+  constructor() {
+    if (isPlatformBrowser(inject(PLATFORM_ID))) this.ready.set(true);
+  }
 
   pageNumbers = () => Array.from({ length: this.pageCount() }, (_, index) => index + 1);
 

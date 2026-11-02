@@ -1,11 +1,11 @@
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './support/test';
+import { gotoReady } from './support/readiness';
 
 /** Navigate, wait for hydration, and let entrance transitions finish so axe sees final colours. */
 const go = async (page: Page, url: string) => {
-  await page.goto(url);
-  await page.waitForLoadState('networkidle');
+  await gotoReady(page, url);
   await settled(page);
 };
 
@@ -247,33 +247,68 @@ test.describe('Install section', () => {
     browserName,
   }) => {
     await go(page, '/');
+    type State = { label: string; status: string };
+    type Probe = { __copied: string[]; __release?: () => void; __states: State[] };
+    // Two things are kept off the wall clock. The write stays pending until the test releases it,
+    // so "not reported before it resolves" is checked against a deterministic state. And the
+    // "Copied" feedback only lasts 2 s, so rather than racing it with separate assertions, a
+    // MutationObserver records every (button label, status line) pair as it is rendered and the
+    // test asserts on that record.
     await page.evaluate(() => {
-      (window as unknown as { __copied: string[] }).__copied = [];
+      const probe = window as unknown as Probe;
+      probe.__copied = [];
+      probe.__states = [];
+      const button = document.querySelector(
+        'button[aria-label="Copy Core + Primitives npm command"]',
+      );
+      const status = document.querySelector('[data-testid="copy-status"]');
+      const record = () =>
+        probe.__states.push({
+          label: button?.textContent?.trim() ?? '',
+          status: status?.textContent?.trim() ?? '',
+        });
+      new MutationObserver(record).observe(document.querySelector('#install') as Element, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+      });
       Object.defineProperty(navigator, 'clipboard', {
         configurable: true,
         value: {
           writeText: (text: string) =>
-            new Promise<void>((resolve) =>
-              setTimeout(() => {
-                (window as unknown as { __copied: string[] }).__copied.push(text);
+            new Promise<void>((resolve) => {
+              probe.__release = () => {
+                probe.__copied.push(text);
                 resolve();
-              }, 250),
-            ),
+              };
+            }),
         },
       });
     });
     void browserName;
+    const states = () => page.evaluate(() => (window as unknown as Probe).__states);
     const button = page.getByRole('button', {
       name: 'Copy Core + Primitives npm command',
     });
     await button.scrollIntoViewIfNeeded();
     await button.click();
-    await expect(button).toHaveText('Copy'); // not yet resolved
-    await expect(button).toHaveText('Copied');
-    await expect(page.getByTestId('copy-status')).toContainText('copied');
-    expect(
-      await page.evaluate(() => (window as unknown as { __copied: string[] }).__copied),
-    ).toEqual(['npm install @quartz-headless/core @quartz-headless/primitives']);
+    await expect
+      .poll(() => page.evaluate(() => typeof (window as unknown as Probe).__release))
+      .toBe('function'); // the clipboard write has started and is pending
+    await expect(button).toHaveText('Copy');
+    expect((await states()).filter((state) => /copied/i.test(state.label + state.status))).toEqual(
+      [],
+    );
+    await page.evaluate(() => (window as unknown as Probe).__release?.());
+    await expect
+      .poll(async () =>
+        (await states()).some((state) => state.label === 'Copied' && /copied/i.test(state.status)),
+      )
+      .toBe(true);
+    expect(await page.evaluate(() => (window as unknown as Probe).__copied)).toEqual([
+      'npm install @quartz-headless/core @quartz-headless/primitives',
+    ]);
   });
 
   test('a rejected clipboard write is reported as a failure, never as copied', async ({ page }) => {

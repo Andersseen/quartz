@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
+import { gotoReady } from './support/readiness';
 
 /**
  * Regression for the 0.16 intermittent "JIT compiler unavailable" failure.
@@ -20,9 +21,7 @@ for (const route of routes) {
     });
     page.on('pageerror', (e) => errors.push(e.message));
 
-    await page.goto(route);
-    await page.waitForLoadState('networkidle');
-    await expect(page.locator('h1').first()).toBeVisible();
+    await gotoReady(page, route);
     expect(errors, `console errors on ${route}`).toEqual([]);
   });
 }

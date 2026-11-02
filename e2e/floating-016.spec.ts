@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './support/test';
 
 /**
  * Real-browser checks for Quartz 0.16: Drawer, Resizable (Core Splitter), Tooltip / Popover arrow

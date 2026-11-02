@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
+import { gotoReady } from './support/readiness';
 import AxeBuilder from '@axe-core/playwright';
 
 test.describe('feedback and value indicators', () => {
@@ -71,8 +72,7 @@ test.describe('feedback and value indicators', () => {
   test('Toast playground controls real content, actions, placement and stacking', async ({
     page,
   }) => {
-    await page.goto('/docs/primitives/toast');
-    await page.waitForLoadState('networkidle');
+    await gotoReady(page, '/docs/primitives/toast');
     const playground = page.locator('[data-doq-playground="quartz-toast"]');
     await playground.getByLabel('Severity').selectOption({ label: 'Error' });
     await playground.getByLabel('Duration (ms, 0 persists)').fill('0');

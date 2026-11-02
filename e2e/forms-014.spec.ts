@@ -1,9 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test } from './support/test';
+import { gotoReady } from './support/readiness';
 
-const openDemo = async (page: import('@playwright/test').Page) => {
-  await page.goto('/docs/primitives/form-field');
-  await page.waitForLoadState('networkidle');
+const openDemo = async (page: import('./support/test').Page) => {
+  await gotoReady(page, '/docs/primitives/form-field');
   await expect(page.locator('app-controls-014-demo')).toBeVisible();
 };
 
