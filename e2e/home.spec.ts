@@ -247,13 +247,32 @@ test.describe('Install section', () => {
     browserName,
   }) => {
     await go(page, '/');
-    type Probe = { __copied: string[]; __release?: () => void };
-    // The write stays pending until the test releases it, so "not reported before it resolves" is
-    // asserted against a deterministic state instead of racing a timer (a slow click must not be
-    // able to let the write finish, and the 2 s "Copied" window pass, before the first assertion).
+    type State = { label: string; status: string };
+    type Probe = { __copied: string[]; __release?: () => void; __states: State[] };
+    // Two things are kept off the wall clock. The write stays pending until the test releases it,
+    // so "not reported before it resolves" is checked against a deterministic state. And the
+    // "Copied" feedback only lasts 2 s, so rather than racing it with separate assertions, a
+    // MutationObserver records every (button label, status line) pair as it is rendered and the
+    // test asserts on that record.
     await page.evaluate(() => {
       const probe = window as unknown as Probe;
       probe.__copied = [];
+      probe.__states = [];
+      const button = document.querySelector(
+        'button[aria-label="Copy Core + Primitives npm command"]',
+      );
+      const status = document.querySelector('[data-testid="copy-status"]');
+      const record = () =>
+        probe.__states.push({
+          label: button?.textContent?.trim() ?? '',
+          status: status?.textContent?.trim() ?? '',
+        });
+      new MutationObserver(record).observe(document.querySelector('#install') as Element, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+      });
       Object.defineProperty(navigator, 'clipboard', {
         configurable: true,
         value: {
@@ -268,6 +287,7 @@ test.describe('Install section', () => {
       });
     });
     void browserName;
+    const states = () => page.evaluate(() => (window as unknown as Probe).__states);
     const button = page.getByRole('button', {
       name: 'Copy Core + Primitives npm command',
     });
@@ -277,10 +297,15 @@ test.describe('Install section', () => {
       .poll(() => page.evaluate(() => typeof (window as unknown as Probe).__release))
       .toBe('function'); // the clipboard write has started and is pending
     await expect(button).toHaveText('Copy');
-    await expect(page.getByTestId('copy-status')).not.toContainText('copied');
+    expect((await states()).filter((state) => /copied/i.test(state.label + state.status))).toEqual(
+      [],
+    );
     await page.evaluate(() => (window as unknown as Probe).__release?.());
-    await expect(button).toHaveText('Copied');
-    await expect(page.getByTestId('copy-status')).toContainText('copied');
+    await expect
+      .poll(async () =>
+        (await states()).some((state) => state.label === 'Copied' && /copied/i.test(state.status)),
+      )
+      .toBe(true);
     expect(await page.evaluate(() => (window as unknown as Probe).__copied)).toEqual([
       'npm install @quartz-headless/core @quartz-headless/primitives',
     ]);

@@ -138,3 +138,15 @@ process.on('SIGTERM', forward('SIGTERM'));
 process.on('SIGINT', forward('SIGINT'));
 process.on('exit', () => server.kill('SIGKILL'));
 server.on('exit', (code, signal) => process.exit(code ?? (signal ? 1 : 0)));
+
+// If the process that started us (Playwright's runner) dies without signalling us — a killed CI
+// step, a crashed terminal — nothing would stop this server and it would keep the port. Reparenting
+// is how a POSIX child notices that its parent is gone.
+const parent = process.ppid;
+setInterval(() => {
+  if (process.ppid !== parent) {
+    say('parent process is gone; shutting down the preview server');
+    server.kill('SIGTERM');
+    setTimeout(() => process.exit(1), 2500).unref();
+  }
+}, 2000).unref();
