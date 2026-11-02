@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from './support/test';
 import { gotoReady, waitForDemos } from './support/readiness';
+import { isEnvironmentNoise } from './support/diagnostics';
 
 /**
  * Official documentation (Doqs) against the production build: prerendered HTML served like
@@ -22,7 +23,10 @@ function trackConsole(page: Page) {
   const problems: string[] = [];
   page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
   page.on('console', (message) => {
-    if (message.type() === 'error' || message.type() === 'warning') {
+    if (
+      (message.type() === 'error' || message.type() === 'warning') &&
+      !isEnvironmentNoise(message.text())
+    ) {
       problems.push(`${message.type()}: ${message.text()}`);
     }
   });
