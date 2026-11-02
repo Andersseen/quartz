@@ -29,3 +29,13 @@
   color: var(--host-docs-muted);
   font-size: 0.875rem;
 }
+
+/*
+ * Playground usage code wraps instead of scrolling: Doqs renders the <pre> as a scroll container
+ * without making it keyboard-focusable (axe: scrollable-region-focusable), and the copy button
+ * would scroll away with the content. Indentation is preserved by pre-wrap.
+ */
+.doq-pg-panel pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

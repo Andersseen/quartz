@@ -1,4 +1,4 @@
-import { formatDoqUsage, type DoqPlaygroundDefinition } from '@doqs/analog';
+import type { DoqPlaygroundDefinition } from '@doqs/analog';
 import {
   CheckboxPlaygroundComponent,
   RangeSliderPlaygroundComponent,
@@ -36,6 +36,18 @@ import {
   ProgressPlaygroundComponent,
   ToastPlaygroundComponent,
 } from './feedback-playgrounds';
+
+import {
+  inputOtpCode,
+  navigationMenuCode,
+  paginationCode,
+  rangeSliderCode,
+  selectCode,
+  sliderCode,
+  toggleCode,
+  toggleGroupCode,
+  toolbarCode,
+} from './usage-code';
 
 const orientation = (label = 'Orientation') => ({
   input: 'orientation',
@@ -153,40 +165,14 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
     ],
     outputs: [{ event: 'completed', label: 'Completed' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          `<qz-input-otp [length]="${v['length']}"${v['disabled'] ? ' disabled' : ''} [(value)]="code" (completed)="onCodeEntered($event)" />`,
-      },
-    ],
+    code: inputOtpCode,
   },
   'quartz-toolbar': {
     component: ToolbarPlaygroundComponent,
     title: 'Toolbar',
     description: 'Roving focus toolbar with orientation, RTL and disabled-state controls.',
     controls: [orientation(), bool('rtl', 'RTL'), bool('disabled', 'Disabled')],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'div',
-            {},
-            {
-              attributes: [
-                'qzToolbar',
-                'aria-label="Formatting"',
-                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
-                ...(v['disabled'] ? ['disabled'] : []),
-              ],
-              text: '<button qzToolbarItem>Bold</button>…',
-            },
-          ),
-      },
-    ],
+    code: toolbarCode,
   },
   'quartz-navigation-menu': {
     component: NavigationMenuPlaygroundComponent,
@@ -199,14 +185,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
       bool('rtl', 'RTL'),
     ],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: () =>
-          '<nav qzNavigationMenu aria-label="Main navigation"><ul qzNavigationMenuList><li qzNavigationMenuItem="products"><button qzNavigationMenuTrigger>Products</button><ng-template qzNavigationMenuContent>…</ng-template></li></ul></nav>',
-      },
-    ],
+    code: navigationMenuCode,
   },
   'quartz-pagination': {
     component: PaginationPlaygroundComponent,
@@ -217,14 +196,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       { input: 'pageCount', kind: 'number', label: 'Page count', initial: 5, min: 0 },
       bool('disabled', 'Disabled'),
     ],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          `<nav qzPagination aria-label="Search results" [(page)]="page" [pageCount]="${v['pageCount']}"${v['disabled'] ? ' disabled' : ''}>…</nav>`,
-      },
-    ],
+    code: paginationCode,
   },
   'quartz-accordion': {
     component: AccordionPlaygroundComponent,
@@ -290,26 +262,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('rtl', 'RTL'),
     ],
     outputs: [{ event: 'selection', label: 'Selected option' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'div',
-            {},
-            {
-              attributes: [
-                'qzSelect',
-                ...(v['multiple'] ? ['multiple', '[(values)]="fruits"'] : ['[(value)]="fruit"']),
-                ...(v['closeOnSelect'] ? ['[closeOnSelect]="true"'] : []),
-                ...(v['disabled'] ? ['disabled'] : []),
-              ],
-              text: '…',
-            },
-          ),
-      },
-    ],
+    code: selectCode,
   },
   'quartz-listbox': {
     component: ListboxPlaygroundComponent,
@@ -384,25 +337,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
     description: 'A real qzToggle. The pressed control sets the state; clicks commit once each.',
     controls: [bool('pressed', 'Pressed'), bool('disabled', 'Disabled')],
     outputs: [{ event: 'committed', label: 'Committed state' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'button',
-            {},
-            {
-              attributes: [
-                'qzToggle',
-                '[(pressed)]="bold"',
-                ...(v['disabled'] ? ['disabled'] : []),
-              ],
-              text: 'Bold',
-            },
-          ),
-      },
-    ],
+    code: toggleCode,
   },
   'quartz-toggle-group': {
     component: ToggleGroupPlaygroundComponent,
@@ -425,31 +360,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
     ],
     outputs: [{ event: 'committed', label: 'Committed value' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'div',
-            {},
-            {
-              attributes: [
-                'qzToggleGroup',
-                'aria-label="Formatting"',
-                `type="${v['type']}"`,
-                ...(v['type'] === 'single' && !v['allowDeselection']
-                  ? ['[allowDeselection]="false"']
-                  : []),
-                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
-                ...(v['disabled'] ? ['disabled'] : []),
-                '[(value)]="formats"',
-              ],
-              text: '<button qzToggleItem="bold">Bold</button> …',
-            },
-          ),
-      },
-    ],
+    code: toggleGroupCode,
   },
   'quartz-slider': {
     component: SliderPlaygroundComponent,
@@ -465,29 +376,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
     ],
     outputs: [{ event: 'committed', label: 'Committed value' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'div',
-            {},
-            {
-              attributes: [
-                'qzSlider',
-                '[(value)]="volume"',
-                `[min]="${v['min']}"`,
-                `[max]="${v['max']}"`,
-                `[step]="${v['step']}"`,
-                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
-                ...(v['disabled'] ? ['disabled'] : []),
-              ],
-              text: '<div qzSliderTrack>…<button qzSliderThumb aria-label="Volume"></button></div>',
-            },
-          ),
-      },
-    ],
+    code: sliderCode,
   },
   'quartz-range-slider': {
     component: RangeSliderPlaygroundComponent,
@@ -505,31 +394,7 @@ export const DOC_PLAYGROUNDS: Record<string, DoqPlaygroundDefinition> = {
       bool('disabled', 'Disabled'),
     ],
     outputs: [{ event: 'committed', label: 'Committed value' }],
-    code: [
-      {
-        label: 'Template',
-        language: 'html',
-        code: (v) =>
-          formatDoqUsage(
-            'div',
-            {},
-            {
-              attributes: [
-                'qzRangeSlider',
-                '[(low)]="low"',
-                '[(high)]="high"',
-                `[min]="${v['min']}"`,
-                `[max]="${v['max']}"`,
-                `[step]="${v['step']}"`,
-                ...(Number(v['minDistance']) > 0 ? [`[minDistance]="${v['minDistance']}"`] : []),
-                ...(v['orientation'] === 'vertical' ? ['orientation="vertical"'] : []),
-                ...(v['disabled'] ? ['disabled'] : []),
-              ],
-              text: '<button qzRangeSliderThumb="low" aria-label="Minimum"></button> …',
-            },
-          ),
-      },
-    ],
+    code: rangeSliderCode,
   },
   'quartz-date-picker': {
     component: DatePickerPlaygroundComponent,
