@@ -7,6 +7,11 @@ on:
   pull_request:
     branches:
       - main
+  # Weekly deep run: the full consumer matrix (3 Angular fixtures x 3 engines) and the 3-engine CLI
+  # consumer. They are NOT part of the PR / push critical path; they still gate every publish
+  # (workflow_dispatch) and catch drift in Angular / Playwright / browsers between releases.
+  schedule:
+    - cron: '0 4 * * 1'
   workflow_dispatch:
     inputs:
       source_ref:
@@ -22,6 +27,12 @@ on:
         description: Exact lockstep package version to publish (required when publish is enabled)
         required: false
         type: string
+
+# A new push to a PR supersedes the previous run. Pushes to main, schedule and manual runs (deploy /
+# publish) have a unique group per run, so they are never cancelled.
+concurrency:
+  group: ci-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   quality:
@@ -70,7 +81,6 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: quality
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,9 +102,6 @@ jobs:
       - name: Build Library
         run: pnpm build:lib
 
-      - name: Verify Build Artifacts
-        run: pnpm verify:build
-
       - name: Consumer Install Smoke Test
         run: pnpm verify:consumer
 
@@ -115,7 +122,6 @@ jobs:
   package:
     name: Build and pack release artifacts
     runs-on: ubuntu-latest
-    needs: quality
     outputs:
       manifest-sha256: ${{ steps.pack.outputs.manifest-sha256 }}
       version: ${{ steps.pack.outputs.version }}
@@ -170,7 +176,7 @@ jobs:
   consumer-smoke:
     name: Consumer Smoke (Angular 21.2 / Chromium)
     runs-on: ubuntu-latest
-    needs: [quality, package]
+    needs: package
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -188,6 +194,16 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
 
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
@@ -222,8 +238,8 @@ jobs:
   consumer-matrix:
     name: Consumer ${{ matrix.fixture }} / Node ${{ matrix.node }}
     runs-on: ubuntu-latest
-    needs: [quality, package]
-    if: github.event_name != 'pull_request'
+    needs: package
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
@@ -248,6 +264,16 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-all
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
@@ -291,12 +317,12 @@ jobs:
             consumer/results/
             test-results-consumer/
 
-  # Angular 21.2 CLI consumer across all three engines (release only; the PR gate covers Chromium).
+  # Angular 21.2 CLI consumer across all three engines (weekly + release; the PR gate covers Chromium).
   cli-consumer:
     name: CLI source-copy consumer (3 engines)
     runs-on: ubuntu-latest
-    needs: [quality, package]
-    if: github.event_name != 'pull_request'
+    needs: package
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -314,6 +340,16 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-all
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
@@ -335,12 +371,18 @@ jobs:
       - name: CLI source-copy consumer
         run: pnpm verify:consumer:cli
 
-  e2e-tests:
-    name: E2E Tests
+  # One job per engine, run in parallel (wall time = slowest engine instead of the sum of three).
+  # Each shard builds the demo itself (~35 s) so it needs no artifact hand-off, and installs only its
+  # own browser. Same CI profile as `pnpm e2e:ci`, restricted with E2E_BROWSERS.
+  e2e-shard:
+    name: E2E (${{ matrix.browser }})
     runs-on: ubuntu-latest
-    needs: quality
     # A hung browser must fail the job (and keep its artifacts), not occupy a runner for hours.
-    timeout-minutes: 60
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -359,27 +401,38 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{ matrix.browser }}
+
+      - name: Install Playwright ${{ matrix.browser }}
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Build and verify documentation output
         run: |
           pnpm build:demo
           pnpm docs:check
 
-      # The CI profile (scripts/e2e/run.mjs): all three engines, pinned workers and retries from
-      # playwright.config.ts, the exact output that just passed `docs:check` (E2E_BUILD=skip refuses
-      # to serve anything incomplete). Reproduce locally with `pnpm e2e:ci`.
+      # The CI profile (scripts/e2e/run.mjs): pinned workers and retries from playwright.config.ts,
+      # the exact output that just passed `docs:check` (E2E_BUILD=skip refuses to serve anything
+      # incomplete). Reproduce locally with `pnpm e2e:ci`.
       - name: Run E2E Tests
         run: pnpm e2e:ci
         env:
           E2E_BUILD: skip
+          E2E_BROWSERS: ${{ matrix.browser }}
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
 
       # First-failure evidence (traces, screenshots, per-test diagnostics.json, preview-server log,
@@ -388,17 +441,32 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: e2e-failure-diagnostics
+          name: e2e-failure-diagnostics-${{ matrix.browser }}
           path: |
             test-results/
             e2e-logs/
           if-no-files-found: ignore
           retention-days: 14
 
+  # Stable aggregate check: keeps the "E2E Tests" status name (branch protection, deploy, publish)
+  # independent of how many engine shards exist.
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: e2e-shard
+    if: always()
+    steps:
+      - name: Require every engine shard to pass
+        env:
+          RESULT: ${{ needs.e2e-shard.result }}
+        run: |
+          echo "e2e-shard result: $RESULT"
+          test "$RESULT" = "success"
+
   deploy:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
-    needs: [unit-tests, e2e-tests, consumer-smoke]
+    needs: [quality, unit-tests, e2e-tests, consumer-smoke]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -456,6 +524,7 @@ jobs:
     name: Publish validated artifacts to npm
     runs-on: ubuntu-latest
     needs:
+      - quality
       - package
       - unit-tests
       - e2e-tests

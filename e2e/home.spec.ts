@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { test, expect, type Page } from './support/test';
 import { gotoReady } from './support/readiness';
+import { isEnvironmentNoise } from './support/diagnostics';
 
 /** Navigate, wait for hydration, and let entrance transitions finish so axe sees final colours. */
 const go = async (page: Page, url: string) => {
@@ -16,7 +17,10 @@ function trackConsole(page: Page) {
   const problems: string[] = [];
   page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
   page.on('console', (message) => {
-    if (message.type() === 'error' || message.type() === 'warning') {
+    if (
+      (message.type() === 'error' || message.type() === 'warning') &&
+      !isEnvironmentNoise(message.text())
+    ) {
       problems.push(`${message.type()}: ${message.text()}`);
     }
   });

@@ -21,6 +21,13 @@ export interface PageDiagnostics {
   problems(): string[];
 }
 
+/**
+ * Browser-level warnings about the machine, not about the app. Firefox on a GPU-less CI runner logs
+ * this when the decorative hero asks for a WebGL2 context; the hero then keeps its CSS backdrop by design.
+ */
+export const isEnvironmentNoise = (text: string) =>
+  /Failed to create WebGL context|AllowWebgl2:false/i.test(text);
+
 const clean = (url: string) => url.replace(/\?.*$/, '').replace(/#.*$/, '');
 
 export function observePage(page: Page): PageDiagnostics {
@@ -33,7 +40,9 @@ export function observePage(page: Page): PageDiagnostics {
       return [
         ...this.pageErrors.map((text) => `pageerror: ${text}`),
         ...this.console
-          .filter((m) => m.type === 'error' || m.type === 'warning')
+          .filter(
+            (m) => (m.type === 'error' || m.type === 'warning') && !isEnvironmentNoise(m.text),
+          )
           .map((m) => `${m.type}: ${m.text}`),
       ];
     },
