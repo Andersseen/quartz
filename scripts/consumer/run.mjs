@@ -79,6 +79,46 @@ try {
     recursive: true,
     filter: (src) => !/node_modules|\/dist(\/|$)|\.angular/.test(src),
   });
+  const generatedDir = join(app, 'src/app/generated-playgrounds');
+  console.log('→ generating registered Component examples for strict AOT (' + fixture + ')');
+  run(
+    'pnpm',
+    [
+      'exec',
+      'vitest',
+      'run',
+      '--project',
+      'quartz-app',
+      'src/app/docs-playgrounds/usage-code.spec.ts',
+      '-t',
+      'generates strict consumer compilation fixtures',
+    ],
+    {
+      cwd: ROOT,
+      env: {
+        ...process.env,
+        QUARTZ_PLAYGROUND_EXAMPLES_DIR: generatedDir,
+        CI: '1',
+        NO_COLOR: '1',
+      },
+    },
+  );
+  const appSource = join(app, 'src/app/app.ts');
+  let appText = readFileSync(appSource, 'utf8');
+  appText = appText.replace(
+    "import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';",
+    "import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';\n" +
+      "import { GENERATED_PLAYGROUND_HOSTS, GENERATED_PLAYGROUND_TEMPLATE } from './generated-playgrounds';",
+  );
+  appText = appText.replace(
+    'imports: [RouterOutlet, RouterLink, RouterLinkActive],',
+    'imports: [RouterOutlet, RouterLink, RouterLinkActive, ...GENERATED_PLAYGROUND_HOSTS],',
+  );
+  appText = appText.replace(
+    '<main><router-outlet /></main>',
+    '<main><router-outlet />@if (false) { ${GENERATED_PLAYGROUND_TEMPLATE} }</main>',
+  );
+  writeFileSync(appSource, appText);
   cpSync(join(fixtureDir, 'package.json'), join(app, 'package.json'));
   const metaFile = join(fixtureDir, 'meta.json');
   if (
@@ -125,28 +165,87 @@ try {
 
   if (stage === 'install') process.exit(0);
 
-  // Negative proof: strict AOT must be able to REJECT a bad template, otherwise a green build
-  // would say nothing. The mutation happens only in the throwaway copy and is reverted.
-  console.log('→ negative AOT check (an invalid binding must fail the build)');
-  const page = join(app, 'src/app/pages/forms.page.ts');
-  const original = readFileSync(page, 'utf8');
-  writeFileSync(page, original.replace('[length]="6"', '[length]="\'six\'" [bogusInput]="1"'));
-  try {
-    execFileSync('npx', ['ng', 'build', '--configuration', 'production'], {
-      cwd: app,
-      encoding: 'utf8',
-      stdio: 'pipe',
-      env: { ...process.env, CI: '1', NG_CLI_ANALYTICS: 'false', NO_COLOR: '1' },
-    });
-    fail('negative fixture compiled: strict AOT is not detecting invalid bindings');
-  } catch (error) {
-    const output = String(error.stdout ?? '') + String(error.stderr ?? '');
-    if (!/NG8002|NG2|is not assignable to type/.test(output)) {
-      fail('negative fixture failed for an unexpected reason:\n' + output.slice(0, 1500));
+  // Negative proof in one isolated fixture: strict AOT must reject each category of bad public
+  // example. All edits live only in this disposable consumer and are restored before the real
+  // build. The normal package builds still compile every generated family/variant on each matrix cell.
+  if (fixture === 'angular-21.2') {
+    const generated = (file) => join(generatedDir, file);
+    const rejectBuild = (label, expected) => {
+      let output = '';
+      try {
+        execFileSync('npx', ['ng', 'build', '--configuration', 'production'], {
+          cwd: app,
+          encoding: 'utf8',
+          stdio: 'pipe',
+          env: { ...process.env, CI: '1', NG_CLI_ANALYTICS: 'false', NO_COLOR: '1' },
+        });
+        fail(`${label}: negative example compiled; strict AOT did not reject it`);
+      } catch (error) {
+        output = String(error.stdout ?? '') + String(error.stderr ?? '');
+      }
+      for (const { family, diagnostic } of expected)
+        if (!diagnostic.test(output))
+          fail(
+            `negative example ${family} did not produce the expected compiler diagnostic for ${fixture}:\n${output.slice(0, 3500)}`,
+          );
+      for (const { family } of expected) console.log(`  ✓ ${family}: expected compiler diagnostic`);
+    };
+    const missingExport = {
+      family: 'Slider / default',
+      file: 'slider-default.ts',
+      change: (text) => text.replace('SliderDirective', 'QuartzMissingPublicDirective'),
+      diagnostic: /TS2305|has no exported member 'QuartzMissingPublicDirective'/,
+    };
+    const templateMutations = [
+      {
+        family: 'Toolbar / default',
+        file: 'toolbar-default.ts',
+        change: (text) =>
+          text.replace('qzToolbar aria-label=', 'qzToolbar [qzUnknownInput]="true" aria-label='),
+        diagnostic: /NG8002|qzUnknownInput/,
+      },
+      {
+        family: 'Slider / default',
+        file: 'slider-default.ts',
+        change: (text) => text.replace('[min]="0"', '[min]="\'wrong\'"'),
+        diagnostic: /not assignable to type 'number'|NG2.*string.*number/,
+      },
+      {
+        family: 'Toggle / default',
+        file: 'toggle-default.ts',
+        change: (text) => text.replace('[(pressed)]="bold"', '[(qzUnknownModel)]="bold"'),
+        diagnostic: /NG8002|NG8007|qzUnknownModel/,
+      },
+      {
+        family: 'Slider / default',
+        file: 'slider-default.ts',
+        change: (text) => text.replace(/\s*protected readonly volume = signal\(40\);\n/, '\n'),
+        diagnostic: /Property 'volume' does not exist|NG9.*volume/,
+      },
+    ];
+    const originals = new Map();
+    try {
+      const rememberAndApply = (item) => {
+        const path = generated(item.file);
+        if (!originals.has(path)) originals.set(path, readFileSync(path, 'utf8'));
+        const current = readFileSync(path, 'utf8');
+        const mutated = item.change(current);
+        if (mutated === current) fail(`negative example mutation did not apply: ${item.family}`);
+        writeFileSync(path, mutated);
+      };
+      console.log(`→ negative generated-example AOT checks (${fixture})`);
+      rememberAndApply(missingExport);
+      rejectBuild('nonexistent Quartz public export', [missingExport]);
+      for (const [path, content] of originals) writeFileSync(path, content);
+      originals.clear();
+      for (const item of templateMutations) rememberAndApply(item);
+      rejectBuild('invalid Angular inputs, bindings, or state', templateMutations);
+      evidence.negativeGeneratedExamples = [missingExport, ...templateMutations].map(
+        ({ family }) => family,
+      );
+    } finally {
+      for (const [path, content] of originals) writeFileSync(path, content);
     }
-    evidence.negativeAot = 'rejected';
-  } finally {
-    writeFileSync(page, original);
   }
 
   console.log('→ ng build (production, AOT, strictTemplates, SSR)');
@@ -225,6 +324,7 @@ try {
           cwd: ROOT,
           env: {
             ...process.env,
+            CI: '1',
             CONSUMER_BASE_URL: `http://localhost:${port}`,
             CONSUMER_FIXTURE: fixture,
             PLAYWRIGHT_JSON_OUTPUT_NAME: resultsFile,

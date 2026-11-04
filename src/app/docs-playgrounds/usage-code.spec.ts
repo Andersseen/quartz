@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { DoqPlaygroundControl, DoqPlaygroundValues } from '@doqs/analog';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { DOC_PLAYGROUNDS } from './registry';
 import { attr, bind, componentSource, el, usage } from './usage';
 
@@ -70,6 +72,98 @@ const snippets = (id: string, change: DoqPlaygroundValues = {}) => {
 const template = (id: string, change: DoqPlaygroundValues = {}) =>
   Object.values(snippets(id, change))[0];
 
+const compileVariants: Record<string, DoqPlaygroundValues> = {
+  'quartz-toolbar': { orientation: 'vertical', rtl: true, disabled: true },
+  'quartz-toggle-group': {
+    type: 'multiple',
+    allowDeselection: false,
+    orientation: 'vertical',
+    disabled: true,
+  },
+  'quartz-toggle': { pressed: true, disabled: true },
+  'quartz-slider': {
+    min: -10,
+    max: 30,
+    step: 0.5,
+    value: 7,
+    orientation: 'vertical',
+    disabled: true,
+  },
+  'quartz-range-slider': {
+    min: -20,
+    max: 80,
+    step: 2,
+    low: 0,
+    high: 40,
+    minDistance: 6,
+    orientation: 'vertical',
+    disabled: true,
+  },
+  'quartz-select': {
+    multiple: true,
+    grouped: false,
+    closeOnSelect: true,
+    disabled: true,
+    rtl: true,
+  },
+  'quartz-input-otp': { length: 8, disabled: true },
+  'quartz-pagination': { page: 5, pageCount: 5, disabled: true },
+  'quartz-navigation-menu': {
+    orientation: 'vertical',
+    showDelay: 0,
+    hideDelay: 400,
+    disabled: true,
+    rtl: true,
+  },
+};
+
+/** Called by the installed-tarball consumer harness to compile the registry's real generated code. */
+function writeConsumerExamples(directory: string) {
+  mkdirSync(directory, { recursive: true });
+  const hosts: string[] = [];
+  const rootSelectors: string[] = [];
+  let index = 0;
+  for (const [family, change] of Object.entries(compileVariants)) {
+    const variants = [
+      { name: 'default', values: defaults(family) },
+      { name: 'representative', values: { ...defaults(family), ...change } },
+    ];
+    for (const variant of variants) {
+      const definition = DOC_PLAYGROUNDS[family];
+      const component = (definition.code ?? []).find((entry) => entry.label === 'Component');
+      if (!component) throw new Error(`${family}: missing copyable Component example`);
+      const source =
+        typeof component.code === 'function' ? component.code(variant.values) : component.code;
+      const repeated =
+        typeof component.code === 'function' ? component.code(variant.values) : component.code;
+      if (source !== repeated)
+        throw new Error(`${family}/${variant.name}: generated source is not deterministic`);
+      const className = source.match(/export class (\w+)/)?.[1];
+      const selector = source.match(/selector: '([^']+)'/)?.[1];
+      if (!className || !selector)
+        throw new Error(`${family}/${variant.name}: malformed component example`);
+      const file = `${family.replace('quartz-', '')}-${variant.name}`;
+      writeFileSync(join(directory, `${file}.ts`), `// ${family} / ${variant.name}\n${source}\n`);
+      const hostName = `ExampleHost${index}`;
+      const componentName = `ExampleComponent${index}`;
+      const hostSelector = `qz-example-host-${index}`;
+      hosts.push(
+        `import { ${className} as ${componentName} } from './${file}';\n` +
+          `@Component({ selector: '${hostSelector}', imports: [${componentName}], template: '<${selector}></${selector}>' })\n` +
+          `export class ${hostName} {}`,
+      );
+      rootSelectors.push(`<${hostSelector}></${hostSelector}>`);
+      index += 1;
+    }
+  }
+  writeFileSync(
+    join(directory, 'index.ts'),
+    `import { Component } from '@angular/core';\n${hosts.join('\n')}\n` +
+      `export const GENERATED_PLAYGROUND_HOSTS = [${Array.from({ length: index }, (_, i) => `ExampleHost${i}`).join(', ')}] as const;\n` +
+      `export const GENERATED_PLAYGROUND_TEMPLATE = ${JSON.stringify(rootSelectors.join('\n'))};\n`,
+  );
+}
+
 describe('usage serializer', () => {
   it('keeps nested markup as markup and escapes text', () => {
     expect(usage(el('div', ['qzA'], [el('b', [], ['1 < 2 & 3 > 2'])]))).toBe(
@@ -133,6 +227,17 @@ describe('usage serializer', () => {
 
 describe('registered playground code', () => {
   const withCode = Object.entries(DOC_PLAYGROUNDS).filter(([, d]) => d.code?.length);
+
+  it('generates strict consumer compilation fixtures from the actual registry', () => {
+    const output = process.env['QUARTZ_PLAYGROUND_EXAMPLES_DIR'];
+    if (output) writeConsumerExamples(output);
+    expect(Object.keys(compileVariants)).toHaveLength(9);
+    expect(
+      withCode.filter(([, definition]) =>
+        definition.code?.some((entry) => entry.label === 'Component'),
+      ),
+    ).toHaveLength(9);
+  });
 
   it('has code for the families this milestone fixed', () => {
     expect(withCode.map(([id]) => id).sort()).toEqual(

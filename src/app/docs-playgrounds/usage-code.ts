@@ -103,11 +103,11 @@ export const toggleGroupCode: readonly DoqPlaygroundCode[] = [
           v['type'] === 'multiple'
             ? [
                 "protected readonly formats = signal<readonly string[]>(['bold']);",
-                'protected onFormatsCommitted(value: string | readonly string[] | null) {}',
+                'protected onFormatsCommitted(value: string | readonly (string | null)[] | null) {}',
               ]
             : [
                 "protected readonly formats = signal<string | null>('bold');",
-                'protected onFormatsCommitted(value: string | readonly string[] | null) {}',
+                'protected onFormatsCommitted(value: string | readonly (string | null)[] | null) {}',
               ],
         template: toggleGroupTemplate(v),
       }),
@@ -411,6 +411,36 @@ export const paginationCode: readonly DoqPlaygroundCode[] = [
         ? `<!-- Illustrative: only the first ${MAX_LISTED_PAGES} page buttons are listed; render the rest with @for. -->\n${paginationTemplate(v)}`
         : paginationTemplate(v),
   },
+  {
+    ...COMPONENT,
+    code: (v) =>
+      componentSource({
+        selector: 'search-pagination',
+        importFrom: [
+          {
+            names: [
+              'PaginationDirective',
+              'PaginationFirstDirective',
+              'PaginationPreviousDirective',
+              'PaginationPageDirective',
+              'PaginationNextDirective',
+              'PaginationLastDirective',
+            ],
+            from: PRIMITIVES,
+          },
+        ],
+        imports: [
+          'PaginationDirective',
+          'PaginationFirstDirective',
+          'PaginationPreviousDirective',
+          'PaginationPageDirective',
+          'PaginationNextDirective',
+          'PaginationLastDirective',
+        ],
+        members: [`protected readonly page = signal(${num(v['page'], 1)});`],
+        template: paginationTemplate(v),
+      }),
+  },
 ];
 
 // ---------------------------------------------------------------------------------------------
@@ -473,4 +503,34 @@ export const navigationMenuTemplate = (v: Values) => {
 
 export const navigationMenuCode: readonly DoqPlaygroundCode[] = [
   { label: 'Template', language: 'html', code: navigationMenuTemplate },
+  {
+    ...COMPONENT,
+    code: (v) =>
+      componentSource({
+        selector: 'site-navigation-menu',
+        importFrom: [
+          {
+            names: [
+              'NavigationMenuDirective',
+              'NavigationMenuItemDirective',
+              'NavigationMenuListDirective',
+              'NavigationMenuTriggerDirective',
+              'NavigationMenuContentDirective',
+              'NavigationMenuLinkDirective',
+            ],
+            from: PRIMITIVES,
+          },
+        ],
+        imports: [
+          'NavigationMenuDirective',
+          'NavigationMenuItemDirective',
+          'NavigationMenuListDirective',
+          'NavigationMenuTriggerDirective',
+          'NavigationMenuContentDirective',
+          'NavigationMenuLinkDirective',
+        ],
+        members: ["protected readonly section = signal('');"],
+        template: navigationMenuTemplate(v),
+      }),
+  },
 ];
