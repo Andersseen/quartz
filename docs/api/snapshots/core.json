@@ -33,10 +33,10 @@
     "CollectionItem": {
       "kind": "interface",
       "members": {
-        "disabled": "boolean | (() => boolean) | undefined",
-        "element": "HTMLElement | (() => HTMLElement | null | undefined) | null | undefined",
+        "disabled": "(() => boolean) | boolean | undefined",
+        "element": "(() => HTMLElement | null | undefined) | HTMLElement | null | undefined",
         "id": "string",
-        "label": "string | (() => string) | undefined"
+        "label": "(() => string) | string | undefined"
       }
     },
     "CollectionNavigationResult": {
@@ -55,7 +55,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeItem": "readonly _angular_core.Signal<T>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "configure": "(config: Partial<CollectionConfig>) => void",
         "destroy": "() => void",
         "enabledItems": "readonly _angular_core.Signal<T[]>",
@@ -68,7 +68,7 @@
         "previous": "(options?: { focus?: boolean; wrap?: boolean; }) => T | null",
         "refreshOrder": "() => void",
         "register": "(item: T) => void",
-        "setActive": "(id: string | null, options?: { focus?: boolean; }) => void",
+        "setActive": "(id: null | string, options?: { focus?: boolean; }) => void",
         "typeahead": "(character: string, options?: { focus?: boolean; }) => T | null",
         "unregister": "(item: T) => void"
       }
@@ -191,7 +191,7 @@
         "onDragEnd": "(event: DragEvent) => void",
         "onDragStart": "(event: DragEvent) => void",
         "qzDragEnd": "readonly _angular_core.OutputEmitterRef<QzDragEndInfo>",
-        "qzDraggable": "readonly _angular_core.InputSignal<string | DragDropConfig>",
+        "qzDraggable": "readonly _angular_core.InputSignal<DragDropConfig | string>",
         "qzDraggableData": "readonly _angular_core.InputSignal<unknown>",
         "qzDraggableDisabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "qzDraggableHandle": "readonly _angular_core.InputSignal<string>",
@@ -204,7 +204,7 @@
       "members": {
         "accept": "string[] | undefined",
         "disabled": "boolean | undefined",
-        "orientation": "\"vertical\" | \"horizontal\" | undefined",
+        "orientation": "\"horizontal\" | \"vertical\" | undefined",
         "sortable": "boolean | undefined"
       }
     },
@@ -231,7 +231,7 @@
       "members": {
         "accept": "readonly _angular_core.InputSignal<string[]>",
         "canDrop": "readonly _angular_core.Signal<boolean>",
-        "config": "readonly _angular_core.InputSignal<string | DropZoneConfig>",
+        "config": "readonly _angular_core.InputSignal<DropZoneConfig | string>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "isDisabled": "readonly _angular_core.Signal<boolean>",
         "isDragOver": "readonly _angular_core.Signal<boolean>",
@@ -240,7 +240,7 @@
         "onDragLeave": "(_event: DragEvent) => void",
         "onDragOver": "(event: DragEvent) => void",
         "onDrop": "(event: unknown) => void",
-        "orientation": "readonly _angular_core.InputSignal<\"vertical\" | \"horizontal\">",
+        "orientation": "readonly _angular_core.InputSignal<\"horizontal\" | \"vertical\">",
         "qzDragEnter": "readonly _angular_core.OutputEmitterRef<QzDragOverInfo>",
         "qzDragLeave": "readonly _angular_core.OutputEmitterRef<void>",
         "qzDragOver": "readonly _angular_core.OutputEmitterRef<QzDragOverInfo>",
@@ -352,12 +352,12 @@
     "OverlayArrowGeometry": {
       "kind": "interface",
       "members": {
-        "alignment": "\"start\" | \"center\" | \"end\"",
+        "alignment": "\"center\" | \"end\" | \"start\"",
         "available": "boolean",
         "axis": "\"x\" | \"y\"",
-        "centerOffset": "number | null",
+        "centerOffset": "null | number",
         "edge": "OverlaySide",
-        "offset": "number | null",
+        "offset": "null | number",
         "placement": "OverlayPlacement",
         "side": "OverlaySide"
       }
@@ -517,7 +517,7 @@
         "data": "unknown",
         "element": "HTMLElement",
         "event": "DragEvent",
-        "position": "\"before\" | \"after\" | \"inside\""
+        "position": "\"after\" | \"before\" | \"inside\""
       }
     },
     "QzDropInfo": {
@@ -634,7 +634,7 @@
       },
       "members": {
         "heightStyle": "_angular_core.Signal<string>",
-        "isPrimary": "_angular_core.InputSignalWithTransform<boolean, string | boolean>",
+        "isPrimary": "_angular_core.InputSignalWithTransform<boolean, boolean | string>",
         "widthStyle": "_angular_core.Signal<string>"
       }
     },

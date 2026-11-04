@@ -50,7 +50,55 @@ function isPublicMember(symbol) {
 }
 
 function typeText(checker, type, location) {
-  return checker.typeToString(type, location, ts.TypeFormatFlags.NoTruncation);
+  return canonicalizeUnionTypeText(
+    checker.typeToString(type, location, ts.TypeFormatFlags.NoTruncation),
+  );
+}
+
+/**
+ * TypeScript's typeToString preserves the checker's iteration order for union members. That order
+ * can vary with compiler versions and declaration traversal even though unions are set-like.
+ * Parse the rendered type and sort only UnionTypeNode members. The AST walk keeps tuple elements,
+ * object members, call signatures and overload arrays in their original order.
+ */
+function canonicalizeUnionTypeText(text) {
+  if (!text.includes('|')) return text;
+  const file = ts.createSourceFile(
+    '__api_type__.ts',
+    `type __ApiType = ${text};`,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  const declaration = file.statements[0];
+  if (!declaration || !ts.isTypeAliasDeclaration(declaration)) return text;
+  const normalizeNode = (node) => {
+    if (ts.isUnionTypeNode(node)) {
+      const compare = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+      return [...node.types].map(normalizeNode).sort(compare).join(' | ');
+    }
+    const start = node.getStart(file);
+    const end = node.end;
+    const original = file.text.slice(start, end);
+    const edits = [];
+    const visitChildren = (child) => {
+      if (ts.isUnionTypeNode(child)) {
+        const replacement = normalizeNode(child);
+        const childStart = child.getStart(file);
+        const childEnd = child.end;
+        if (replacement !== file.text.slice(childStart, childEnd))
+          edits.push({ start: childStart - start, end: childEnd - start, replacement });
+        return;
+      }
+      ts.forEachChild(child, visitChildren);
+    };
+    ts.forEachChild(node, visitChildren);
+    let output = original;
+    for (const edit of edits.sort((a, b) => b.start - a.start))
+      output = output.slice(0, edit.start) + edit.replacement + output.slice(edit.end);
+    return output;
+  };
+  return normalizeNode(declaration.type);
 }
 
 /** Properties/methods of a class or interface, public only, with their rendered types. */
@@ -288,7 +336,14 @@ function checkApiSurface({ update = false, baselineDir } = {}) {
   if (!update) console.log(`✓ Public API surface matches ${path.relative(ROOT, dir)}`);
 }
 
-module.exports = { checkApiSurface, compareSurface, formatChanges };
+module.exports = {
+  checkApiSurface,
+  compareSurface,
+  formatChanges,
+  canonicalizeUnionTypeText,
+  describeExports,
+  describeDefaults,
+};
 
 if (require.main === module) {
   try {

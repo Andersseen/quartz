@@ -31,7 +31,7 @@
         }
       },
       "members": {
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "collapsible": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
         "config": "readonly _angular_core.InputSignal<Partial<AccordionConfig<T>>>",
@@ -64,7 +64,7 @@
         "outputs": {}
       },
       "members": {
-        "activeTabIndex": "() => 0 | -1",
+        "activeTabIndex": "() => -1 | 0",
         "blurredThisTask": "boolean",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "element": "readonly () => any",
@@ -170,7 +170,7 @@
         "onLoad": "(event: Event) => void",
         "showFallback": "readonly _angular_core.WritableSignal<boolean>",
         "src": "readonly _angular_core.InputSignal<string>",
-        "state": "readonly () => \"loading\" | \"loaded\" | \"empty\" | \"fallback\""
+        "state": "readonly () => \"empty\" | \"fallback\" | \"loaded\" | \"loading\""
       }
     },
     "CalendarCellDirective": {
@@ -304,14 +304,14 @@
         }
       },
       "members": {
-        "ariaChecked": "readonly _angular_core.Signal<CheckboxState | \"mixed\">",
+        "ariaChecked": "readonly _angular_core.Signal<\"mixed\" | CheckboxState>",
         "checked": "readonly _angular_core.ModelSignal<CheckboxState>",
         "checkedChangeCommitted": "readonly _angular_core.OutputEmitterRef<CheckboxState>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "isDisabled": "readonly _angular_core.Signal<boolean>",
         "onKeydown": "(event: KeyboardEvent) => void",
         "setFormDisabled": "(disabled: boolean) => void",
-        "state": "readonly _angular_core.Signal<\"indeterminate\" | \"checked\" | \"unchecked\">",
+        "state": "readonly _angular_core.Signal<\"checked\" | \"indeterminate\" | \"unchecked\">",
         "toggle": "(event?: Event) => void"
       }
     },
@@ -473,13 +473,13 @@
         "selected": "readonly _angular_core.OutputEmitterRef<T>",
         "selectedValues": "readonly _angular_core.Signal<readonly T[]>",
         "selectOption": "(option: ComboboxOptionDirective<T>) => void",
-        "setActive": "(id: string | null) => void",
+        "setActive": "(id: null | string) => void",
         "setContentTemplate": "(template: TemplateRef<unknown> | null) => void",
         "setFormDisabled": "(disabled: boolean) => void",
         "setInputElement": "(element: HTMLInputElement | null) => void",
         "setTriggerElement": "(element: HTMLElement | null) => void",
         "startComposition": "() => void",
-        "status": "readonly _angular_core.Signal<\"loading\" | \"empty\" | \"results\">",
+        "status": "readonly _angular_core.Signal<\"empty\" | \"loading\" | \"results\">",
         "togglePopup": "() => void",
         "touched": "readonly _angular_core.OutputEmitterRef<void>",
         "unregister": "(option: ComboboxOptionDirective<T>) => void",
@@ -849,7 +849,7 @@
     },
     "DEFAULT_TOAST_OPTIONS": {
       "kind": "const",
-      "type": "Required<Omit<ToastOptions, \"title\" | \"message\" | \"content\" | \"actions\">>"
+      "type": "Required<Omit<ToastOptions, \"actions\" | \"content\" | \"message\" | \"title\">>"
     },
     "DEFAULT_TOGGLE_GROUP_CONFIG": {
       "kind": "const",
@@ -1123,7 +1123,7 @@
         "completed": "readonly _angular_core.OutputEmitterRef<string>",
         "composing": "readonly _angular_core.WritableSignal<boolean>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
-        "inputMode": "readonly _angular_core.InputSignal<\"search\" | \"text\" | \"email\" | \"tel\" | \"numeric\" | \"decimal\" | \"url\">",
+        "inputMode": "readonly _angular_core.InputSignal<\"decimal\" | \"email\" | \"numeric\" | \"search\" | \"tel\" | \"text\" | \"url\">",
         "isComplete": "readonly _angular_core.Signal<boolean>",
         "isDisabled": "readonly _angular_core.Signal<boolean>",
         "labelledBy": "readonly _angular_core.InputSignal<string>",
@@ -1274,7 +1274,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeOption": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>>",
-        "configure": "(options: { orientation: \"vertical\" | \"horizontal\"; typeaheadTimeoutMs: number; }) => void",
+        "configure": "(options: { orientation: \"horizontal\" | \"vertical\"; typeaheadTimeoutMs: number; }) => void",
         "destroy": "() => void",
         "enabledOptions": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>[]>",
         "first": "() => void",
@@ -1283,7 +1283,7 @@
         "options": "readonly _angular_core.Signal<ListboxOptionDirective<unknown>[]>",
         "previous": "() => void",
         "register": "(option: ListboxOptionDirective<unknown>) => void",
-        "setActive": "(id: string | null) => void",
+        "setActive": "(id: null | string) => void",
         "typeahead": "(character: string) => void",
         "unregister": "(option: ListboxOptionDirective<unknown>) => void"
       }
@@ -1318,7 +1318,7 @@
         "onClick": "(event: MouseEvent) => void",
         "onFocus": "() => void",
         "selected": "readonly _angular_core.OutputEmitterRef<void>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>"
       }
     },
     "MenuCollectionEntry": {
@@ -1326,11 +1326,11 @@
       "members": {
         "activate": "() => void",
         "closeSubmenu": "((restoreFocus?: boolean) => void) | undefined",
-        "disabled": "boolean | (() => boolean) | undefined",
-        "element": "HTMLElement | (() => HTMLElement | null | undefined) | null | undefined",
+        "disabled": "(() => boolean) | boolean | undefined",
+        "element": "(() => HTMLElement | null | undefined) | HTMLElement | null | undefined",
         "hasSubmenu": "(() => boolean) | undefined",
         "id": "string",
-        "label": "string | (() => string) | undefined",
+        "label": "(() => string) | string | undefined",
         "openSubmenu": "((options?: { focusFirst?: boolean; }) => void) | undefined"
       }
     },
@@ -1410,7 +1410,7 @@
         "selected": "readonly _angular_core.OutputEmitterRef<void>",
         "submenu": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown>>",
         "submenuPanelId": "readonly _angular_core.Signal<string>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>"
       }
     },
     "MenuLabelDirective": {
@@ -1478,7 +1478,7 @@
         "onClick": "(event: MouseEvent) => void",
         "onFocus": "() => void",
         "selected": "readonly _angular_core.OutputEmitterRef<void>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -1498,7 +1498,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeItem": "readonly _angular_core.Signal<MenuCollectionEntry>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "closeAll": "(restoreFocus?: boolean) => void",
         "closeOpenSubmenu": "() => void",
         "config": "readonly _angular_core.Signal<MenuConfig>",
@@ -1518,7 +1518,7 @@
         "registerRootClose": "(fn: (restoreFocus: boolean) => void) => void",
         "requestOpenSubmenu": "(ownerId: string, open: () => void, close: () => void) => void",
         "root": "readonly MenuService",
-        "setActive": "(id: string | null, options?: { focus?: boolean; }) => void",
+        "setActive": "(id: null | string, options?: { focus?: boolean; }) => void",
         "unregister": "(item: MenuCollectionEntry) => void",
         "unregisterLevelClose": "(fn: (restoreFocus: boolean) => void) => void",
         "unregisterPanel": "(el: HTMLElement) => void",
@@ -1716,7 +1716,7 @@
         "element": "() => HTMLElement",
         "menuId": "readonly _angular_core.Signal<string>",
         "ngOnDestroy": "() => void",
-        "setControlledMenuId": "(id: string | null) => void",
+        "setControlledMenuId": "(id: null | string) => void",
         "toggle": "(event: MouseEvent) => void"
       }
     },
@@ -1771,7 +1771,7 @@
         "cancelTimers": "() => void",
         "close": "(restoreFocus: boolean) => void",
         "contentChanged": "(item: NavigationMenuItemDirective, available: boolean) => void",
-        "controlsId": "(item: NavigationMenuItemDirective) => string | null",
+        "controlsId": "(item: NavigationMenuItemDirective) => null | string",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "flip": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "flipAxis": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayFlipAxis>",
@@ -1902,7 +1902,7 @@
         }
       },
       "members": {
-        "controlDisabled": "(action: \"first\" | \"previous\" | \"next\" | \"last\") => boolean",
+        "controlDisabled": "(action: \"first\" | \"last\" | \"next\" | \"previous\") => boolean",
         "currentPage": "readonly _angular_core.Signal<number>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "first": "(event?: Event) => void",
@@ -1915,7 +1915,7 @@
         "pageCount": "readonly _angular_core.InputSignalWithTransform<number, number>",
         "pageDisabled": "() => boolean",
         "previous": "(event?: Event) => void",
-        "setPage": "(page: number, action?: \"first\" | \"previous\" | \"next\" | \"last\", event?: Event) => void"
+        "setPage": "(page: number, action?: \"first\" | \"last\" | \"next\" | \"previous\", event?: Event) => void"
       }
     },
     "PaginationFirstDirective": {
@@ -2137,7 +2137,7 @@
         "onFocus": "() => void",
         "radioDisabled": "readonly _angular_core.Signal<boolean>",
         "selected": "readonly _angular_core.Signal<boolean>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -2170,7 +2170,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeRadio": "readonly _angular_core.Signal<RadioDirective<T> & _quartz_headless_core.CollectionItem>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "isDisabled": "readonly _angular_core.Signal<boolean>",
@@ -2398,7 +2398,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeOption": "readonly _angular_core.Signal<SelectOptionDirective<T> & _quartz_headless_core.CollectionItem>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "closed": "readonly _angular_core.OutputEmitterRef<void>",
         "closeOnEscape": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "closeOnFocusOutside": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
@@ -2427,7 +2427,7 @@
         "onTriggerBlur": "() => void",
         "open": "readonly _angular_core.ModelSignal<boolean>",
         "opened": "readonly _angular_core.OutputEmitterRef<void>",
-        "openPopup": "(reason: SelectOpenReason, options?: { activate?: \"selected\" | \"first\" | \"last\"; }) => void",
+        "openPopup": "(reason: SelectOpenReason, options?: { activate?: \"first\" | \"last\" | \"selected\"; }) => void",
         "panelId": "readonly _angular_core.Signal<string>",
         "placement": "readonly _angular_core.InputSignal<_quartz_headless_core.OverlayPlacement>",
         "register": "(option: SelectOptionDirective<T>) => void",
@@ -2518,7 +2518,7 @@
         "optionDisabled": "readonly _angular_core.Signal<boolean>",
         "qzSelectOptionLabel": "readonly _angular_core.InputSignal<string>",
         "selected": "readonly _angular_core.Signal<boolean>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -2680,7 +2680,7 @@
         "element": "() => HTMLElement",
         "ngOnDestroy": "() => void",
         "panelId": "readonly _angular_core.Signal<string>",
-        "setControlledPanelId": "(id: string | null) => void",
+        "setControlledPanelId": "(id: null | string) => void",
         "toggle": "(event: MouseEvent) => void"
       }
     },
@@ -2857,7 +2857,7 @@
       "members": {
         "activate": "(trigger: StepTriggerDirective<T>, options?: { focus?: boolean; }) => void",
         "activationMode": "readonly _angular_core.InputSignal<StepperActivationMode>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "activeTrigger": "readonly _angular_core.Signal<StepTriggerDirective<T> & _quartz_headless_core.CollectionItem>",
         "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
@@ -2876,7 +2876,7 @@
         "registerStep": "(step: StepDirective<T>) => void",
         "registerTrigger": "(trigger: StepTriggerDirective<T>) => void",
         "setActive": "(trigger: StepTriggerDirective<T>, options?: { focus?: boolean; }) => void",
-        "triggerIdFor": "(panel: StepPanelDirective<T>) => string | null",
+        "triggerIdFor": "(panel: StepPanelDirective<T>) => null | string",
         "unregisterPanel": "(panel: StepPanelDirective<T>) => void",
         "unregisterStep": "(step: StepDirective<T>) => void",
         "unregisterTrigger": "(trigger: StepTriggerDirective<T>) => void",
@@ -2950,7 +2950,7 @@
         "state": "() => string",
         "stepDisabled": "readonly _angular_core.Signal<boolean>",
         "stepValue": "() => T",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -3003,7 +3003,7 @@
         "panelId": "readonly _angular_core.Signal<string>",
         "selected": "readonly _angular_core.Signal<boolean>",
         "tabDisabled": "readonly _angular_core.Signal<boolean>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -3073,7 +3073,7 @@
         "activationMode": "readonly _angular_core.InputSignal<TabsActivationMode>",
         "activeId": "readonly _angular_core.Signal<string>",
         "activeTab": "readonly _angular_core.Signal<TabDirective<T> & _quartz_headless_core.CollectionItem>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
         "config": "readonly _angular_core.InputSignal<Partial<TabsConfig<T>>>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
@@ -3082,11 +3082,11 @@
         "isSelected": "(tab: TabDirective<T>) => boolean",
         "ngOnDestroy": "() => void",
         "orientation": "readonly _angular_core.InputSignal<TabsOrientation>",
-        "panelIdFor": "(tab: TabDirective<T>) => string | null",
+        "panelIdFor": "(tab: TabDirective<T>) => null | string",
         "registerPanel": "(panel: TabPanelDirective<T>) => void",
         "registerTab": "(tab: TabDirective<T>) => void",
         "setActive": "(tab: TabDirective<T>, options?: { focus?: boolean; }) => void",
-        "tabIdFor": "(panel: TabPanelDirective<T>) => string | null",
+        "tabIdFor": "(panel: TabPanelDirective<T>) => null | string",
         "unregisterPanel": "(panel: TabPanelDirective<T>) => void",
         "unregisterTab": "(tab: TabDirective<T>) => void",
         "value": "readonly _angular_core.ModelSignal<T>"
@@ -3213,16 +3213,16 @@
       "members": {
         "dismiss": "(id: string) => void",
         "dismissAll": "() => void",
-        "error": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
-        "info": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
+        "error": "(message: string, title?: string, options?: Omit<ToastOptions, \"message\" | \"title\" | \"type\">) => string",
+        "info": "(message: string, title?: string, options?: Omit<ToastOptions, \"message\" | \"title\" | \"type\">) => string",
         "ngOnDestroy": "() => void",
         "pause": "(id: string) => void",
         "resume": "(id: string) => void",
         "show": "(options: ToastOptions) => string",
-        "success": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string",
+        "success": "(message: string, title?: string, options?: Omit<ToastOptions, \"message\" | \"title\" | \"type\">) => string",
         "toasts": "readonly _angular_core.Signal<Toast[]>",
         "toastsByPosition": "readonly _angular_core.Signal<Map<ToastPosition, Toast[]>>",
-        "warning": "(message: string, title?: string, options?: Omit<ToastOptions, \"type\" | \"message\" | \"title\">) => string"
+        "warning": "(message: string, title?: string, options?: Omit<ToastOptions, \"message\" | \"title\" | \"type\">) => string"
       }
     },
     "ToastTemplateContext": {
@@ -3294,7 +3294,7 @@
       "members": {
         "activeId": "readonly _angular_core.Signal<string>",
         "activeItem": "readonly _angular_core.Signal<ToggleItemDirective<T> & _quartz_headless_core.CollectionItem>",
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "allowDeselection": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "compareWith": "readonly _angular_core.InputSignal<(a: T, b: T) => boolean>",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
@@ -3345,7 +3345,7 @@
         "onClick": "(event: MouseEvent) => void",
         "onFocus": "() => void",
         "pressed": "readonly _angular_core.Signal<boolean>",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>",
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>",
         "value": "readonly _angular_core.InputSignal<T>"
       }
     },
@@ -3368,7 +3368,7 @@
         "outputs": {}
       },
       "members": {
-        "activeTabIndex": "(id: string) => 0 | -1",
+        "activeTabIndex": "(id: string) => -1 | 0",
         "disabled": "readonly _angular_core.InputSignalWithTransform<boolean, unknown>",
         "handleItemKeydown": "(item: ToolbarItemDirective, event: KeyboardEvent) => void",
         "ngOnDestroy": "() => void",
@@ -3402,7 +3402,7 @@
         "onClick": "(event: MouseEvent) => void",
         "onFocus": "() => void",
         "onKeydown": "(event: KeyboardEvent) => void",
-        "tabIndex": "readonly _angular_core.Signal<0 | -1>"
+        "tabIndex": "readonly _angular_core.Signal<-1 | 0>"
       }
     },
     "ToolbarOrientation": {
@@ -3455,7 +3455,7 @@
         "onFocus": "() => void",
         "onMouseEnter": "() => void",
         "onMouseLeave": "() => void",
-        "qzTooltip": "readonly _angular_core.InputSignal<string | _angular_core.TemplateRef<unknown>>",
+        "qzTooltip": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<unknown> | string>",
         "resolvedPlacement": "readonly _angular_core.Signal<_quartz_headless_core.OverlayPlacement | null>",
         "show": "() => void",
         "tooltipArrowPadding": "readonly _angular_core.InputSignal<number>",
@@ -3558,9 +3558,9 @@
         "onToggleClick": "(event: MouseEvent) => void",
         "posinset": "readonly _angular_core.InputSignal<number>",
         "setsize": "readonly _angular_core.InputSignal<number>",
-        "tabindex": "readonly _angular_core.Signal<0 | -1>",
+        "tabindex": "readonly _angular_core.Signal<-1 | 0>",
         "template": "readonly _angular_core.InputSignal<_angular_core.TemplateRef<TreeNodeContext>>",
-        "toggleGlyph": "readonly _angular_core.Signal<\"⋯\" | \"↻\" | \"▼\" | \"▶\">"
+        "toggleGlyph": "readonly _angular_core.Signal<\"↻\" | \"⋯\" | \"▶\" | \"▼\">"
       }
     },
     "TreeNodeContext": {
@@ -3620,7 +3620,7 @@
         "setLoadChildren": "(fn: TreeLoadChildrenFn | null) => void",
         "toggle": "(id: string) => void",
         "toggleSelection": "(id: string) => void",
-        "typeahead": "(char: string, currentId: string | null) => void",
+        "typeahead": "(char: string, currentId: null | string) => void",
         "visibleNodes": "readonly _angular_core.Signal<FlatTreeNode[]>"
       }
     }

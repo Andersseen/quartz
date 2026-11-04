@@ -20,6 +20,16 @@ The boundary is wider than TypeScript. A change is **compatibility-breaking** if
 
 `docs/api/API_INVENTORY.md` is the generated, human-readable projection of the snapshots; there is no second export registry.
 
+Union members in API type strings are sorted by the API guard using a locale-independent code-unit
+ordering. This removes checker iteration order from snapshots while retaining each member and its
+rendered type. Normalization applies recursively inside generic arguments, signatures and object
+properties; it does not reorder overload signatures, tuple elements or object members. Snapshot
+updates still fail closed and must be reviewed. The 0.16.0 published-package baseline was rechecked
+for milestone 0.23: zero breaking changes and two additions (`QzIdGenerator` and
+`AccordionItemDirective.blurredThisTask`). The latter remains an exported public member pending the
+maintainer's freeze decision; marking it private would be a source compatibility change and needs a
+planned deprecation or breaking release decision.
+
 ## Allowed after the freeze (no review beyond normal PR)
 
 - Compatible bug fixes that keep the documented contracts.

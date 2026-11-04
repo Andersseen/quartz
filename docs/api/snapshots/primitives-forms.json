@@ -91,7 +91,7 @@
         "registerOnChange": "(fn: (value: string) => void) => void",
         "registerOnTouched": "(fn: () => void) => void",
         "setDisabledState": "(disabled: boolean) => void",
-        "writeValue": "(value: string | null | undefined) => void"
+        "writeValue": "(value: null | string | undefined) => void"
       }
     },
     "ListboxControlDirective": {
@@ -175,7 +175,7 @@
         "registerOnChange": "(fn: (value: number) => void) => void",
         "registerOnTouched": "(fn: () => void) => void",
         "setDisabledState": "(isDisabled: boolean) => void",
-        "writeValue": "(value: number | null | undefined) => void"
+        "writeValue": "(value: null | number | undefined) => void"
       }
     },
     "SwitchControlDirective": {

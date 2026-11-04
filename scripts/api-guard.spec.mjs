@@ -5,7 +5,13 @@ import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 
 const require = createRequire(import.meta.url);
-const { compareSurface, formatChanges, checkApiSurface } = require('./api-guard.js');
+const {
+  compareSurface,
+  formatChanges,
+  checkApiSurface,
+  canonicalizeUnionTypeText,
+  describeExports,
+} = require('./api-guard.js');
 
 const directive = () => ({
   kind: 'class',
@@ -47,6 +53,14 @@ describe('API compatibility guard', () => {
       'exports.Thing.angular.inputs.size',
     ],
     [
+      'input alias changed',
+      (n) => {
+        delete n.exports.Thing.angular.inputs.size;
+        n.exports.Thing.angular.inputs.controlSize = 'number';
+      },
+      'exports.Thing.angular.inputs.size',
+    ],
+    [
       'output removed',
       (n) => delete n.exports.Thing.angular.outputs.opened,
       'exports.Thing.angular.outputs.opened',
@@ -84,6 +98,91 @@ describe('API compatibility guard', () => {
     expect(text).toContain('BREAKING');
     expect(text).toContain('was: [qzThing]');
     expect(text).toContain('now: [qzOther]');
+  });
+
+  it.each([
+    ['"ready" | "busy"', '"busy" | "ready"'],
+    ['string | null | undefined', 'undefined | string | null'],
+    ['ReadonlyArray<"a" | "b"> | null', 'null | ReadonlyArray<"b" | "a">'],
+    ['{ state: "ready" | "busy"; value: number }', '{ state: "busy" | "ready"; value: number }'],
+  ])('canonicalizes equivalent union types: %s and %s', (left, right) => {
+    expect(canonicalizeUnionTypeText(left)).toBe(canonicalizeUnionTypeText(right));
+  });
+
+  it.each([
+    ['"ready" | "busy"', '"ready"'],
+    ['"ready" | "busy"', '"ready" | "busy" | "disabled"'],
+  ])('keeps a real union change detectable: %s -> %s', (before, after) => {
+    expect(
+      compareSurface(
+        { type: canonicalizeUnionTypeText(before) },
+        { type: canonicalizeUnionTypeText(after) },
+      ),
+    ).toEqual([expect.objectContaining({ severity: 'breaking', at: 'type', change: 'changed' })]);
+  });
+
+  it('preserves overload order and tuple order while canonicalizing their union members', () => {
+    expect(canonicalizeUnionTypeText('readonly ["a" | "b", number]')).toBe(
+      canonicalizeUnionTypeText('readonly ["b" | "a", number]'),
+    );
+    expect(
+      compareSurface(
+        { signatures: ['(value: string): string', '(value: number): number'] },
+        { signatures: ['(value: number): number', '(value: string): string'] },
+      ),
+    ).toHaveLength(1);
+    expect(canonicalizeUnionTypeText('readonly [string, number]')).not.toBe(
+      canonicalizeUnionTypeText('readonly [number, string]'),
+    );
+  });
+
+  it('canonicalizes unions from representative TypeScript declarations', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'api-union-declarations-'));
+    const file = join(dir, 'public.d.ts');
+    writeFileSync(
+      file,
+      [
+        `export interface PublicTypes {`,
+        `  stateA: 'ready' | 'busy';`,
+        `  stateB: 'busy' | 'ready';`,
+        `  nestedA: ReadonlyArray<'a' | 'b'> | null;`,
+        `  nestedB: null | ReadonlyArray<'b' | 'a'>;`,
+        `  nullableA: string | null | undefined;`,
+        `  nullableB: undefined | null | string;`,
+        `}`,
+      ].join('\n'),
+    );
+    const members = describeExports(file).PublicTypes.members;
+    expect(members.stateA).toBe(members.stateB);
+    expect(members.nestedA).toBe(members.nestedB);
+    expect(members.nullableA).toBe(members.nullableB);
+  });
+
+  it('detects required metadata changes and protects function signatures and overload order', () => {
+    expect(
+      compareSurface(
+        { inputs: { value: 'value: number, value, true' } },
+        { inputs: { value: 'value: number, value, false' } },
+      ),
+    ).toContainEqual(
+      expect.objectContaining({ severity: 'breaking', at: 'inputs.value', change: 'changed' }),
+    );
+    const before = { exports: { find: { kind: 'function', signatures: ['(id: string): Item'] } } };
+    const changed = structuredClone(before);
+    changed.exports.find.signatures[0] = '(id: number): Item';
+    expect(compareSurface(before, changed)).toContainEqual(
+      expect.objectContaining({ severity: 'breaking', at: 'exports.find.signatures' }),
+    );
+    const overloads = {
+      exports: {
+        parse: { kind: 'function', signatures: ['(text: string): string', '(n: number): number'] },
+      },
+    };
+    const reversed = structuredClone(overloads);
+    reversed.exports.parse.signatures.reverse();
+    expect(compareSurface(overloads, reversed)).toContainEqual(
+      expect.objectContaining({ severity: 'breaking', at: 'exports.parse.signatures' }),
+    );
   });
 
   const built = existsSync(

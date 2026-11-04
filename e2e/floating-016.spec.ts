@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from './support/test';
+import { gotoReady } from './support/readiness';
 
 /**
  * Real-browser checks for Quartz 0.16: Drawer, Resizable (Core Splitter), Tooltip / Popover arrow
@@ -28,7 +29,7 @@ const residue = (page: Page) =>
 test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/e2e-floating-016', { waitUntil: 'commit' });
+  await gotoReady(page, '/e2e-floating-016', { heading: 'Floating 0.16 fixture' });
   await expect(page.locator('main[data-ready]')).toBeVisible();
 });
 
@@ -128,10 +129,21 @@ test.describe('drawer', () => {
     await activate(page, '#open-slow');
     const drawer = page.locator('[data-qz-drawer]');
     await expect(drawer).toHaveAttribute('data-state', 'open');
+    await page.evaluate(() => {
+      const panel = document.querySelector<HTMLElement>('[data-qz-drawer]');
+      if (!panel) throw new Error('drawer panel missing before close');
+      const observer = new MutationObserver(() => {
+        if (panel.getAttribute('data-state') !== 'closing') return;
+        observer.disconnect();
+        document.body.setAttribute('data-lock-during-drawer-close', document.body.style.overflow);
+      });
+      observer.observe(panel, { attributes: true, attributeFilter: ['data-state'] });
+    });
     await page.locator('#drawer-close').click();
     await expect(drawer).toHaveAttribute('data-state', 'closing');
-    // Locked and inert until the transition ended.
-    expect((await residue(page)).overflow).toBe('hidden');
+    // Capture scroll lock in the same browser microtask that observes the closing state. This
+    // remains deterministic even when a busy runner delays the Playwright process past the exit.
+    await expect(page.locator('body')).toHaveAttribute('data-lock-during-drawer-close', 'hidden');
     await expect(drawer).toHaveCount(0);
     expect(await residue(page)).toEqual({ backdrops: 0, wrappers: 0, inert: 0, overflow: '' });
     await expect(page.locator('#drawer-log')).toHaveText('open:left;closed;');

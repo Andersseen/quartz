@@ -1,5 +1,9 @@
 # STATE — Current Project Status
 
+# 0.23 Public contract and playground compilation — engineering milestone, NOT an npm release (2026-11-04)
+
+Branch `feat/quartz-0.23-contract-verification` starts from synchronized `main` at `c378b815af5f018d8b0830d721b826aebf2f3959`. The API guard now canonicalizes semantic union member order while preserving overload, tuple and object-member order. The installed-tarball consumer harness compiles actual generated Component examples (18 variants across nine families) with strict Angular AOT and exercises negative compiler cases. Package versions remain `0.16.0`; nothing was published and no formal freeze or beta decision was made. Record: [roadmap](../roadmap/0.23-contract-verification.md), [acceptance](../releases/0.23-contract-acceptance.md). Final local/CI evidence is updated in the acceptance record.
+
 # 0.22 Playground accuracy & code examples — DX engineering milestone, NOT an npm release (2026-11-02)
 
 Branch `feat/quartz-0.22-playground-dx` (from main `ba736b0`). **No package version changed (still `0.16.0`), nothing was published, the API is a freeze candidate (not frozen), no 1.0 beta exists, the manual screen-reader matrix is still pending, and 0.17–0.19 still need their formal acceptance.** The escaped-markup defect below is **fixed**: playground usage code is now built by a Quartz-owned serializer (`src/app/docs-playgrounds/usage.ts`, generators in `usage-code.ts`, contract tests in `usage-code.spec.ts` run against the real `DOC_PLAYGROUNDS`, browser tests in `e2e/playground-code.spec.ts`). Record: [roadmap](../roadmap/0.22-playground-dx.md), [acceptance](../releases/0.22-playground-acceptance.md).
