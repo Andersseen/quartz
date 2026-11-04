@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from './support/test';
+import { gotoReady } from './support/readiness';
 
 /**
  * Real-browser checks for Quartz 0.16: Drawer, Resizable (Core Splitter), Tooltip / Popover arrow
@@ -28,7 +29,7 @@ const residue = (page: Page) =>
 test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/e2e-floating-016', { waitUntil: 'commit' });
+  await gotoReady(page, '/e2e-floating-016', { heading: 'Floating 0.16 fixture' });
   await expect(page.locator('main[data-ready]')).toBeVisible();
 });
 
