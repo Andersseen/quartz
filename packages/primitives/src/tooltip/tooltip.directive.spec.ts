@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { render, screen } from '@testing-library/angular';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TooltipDirective } from './tooltip.directive';
+import { DEFAULT_TOOLTIP_CONFIG } from './tooltip.types';
 
 @Component({
   standalone: true,
@@ -339,6 +340,142 @@ describe('TooltipDirective', () => {
       directive.show();
       vi.advanceTimersByTime(500);
       expect(document.querySelector('.qz-tooltip')).not.toBeNull();
+    });
+  });
+
+  describe('pressing the trigger', () => {
+    // jsdom has no PointerEvent constructor; the directive only needs the event type.
+    const press = (el: Element) =>
+      el.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+    const tooltip = () => document.querySelector('.qz-tooltip');
+
+    it('hides at once on pointerdown and stays hidden until the pointer leaves and re-enters', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      expect(tooltip()).not.toBeNull();
+
+      press(button);
+      expect(tooltip()).toBeNull();
+
+      // Moving inside the trigger, the focus the press causes and a late enter: still hidden.
+      button.dispatchEvent(new MouseEvent('mousemove'));
+      button.dispatchEvent(new FocusEvent('focus'));
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(1000);
+      expect(tooltip()).toBeNull();
+
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(DEFAULT_TOOLTIP_CONFIG.showDelay - 1);
+      expect(tooltip()).toBeNull();
+      vi.advanceTimersByTime(1);
+      expect(tooltip()).not.toBeNull();
+    });
+
+    it('cancels a pending show when pressed during the show delay', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(200);
+      press(button);
+      vi.advanceTimersByTime(1000);
+      expect(tooltip()).toBeNull();
+    });
+
+    it('shows again on a new keyboard focus after focus left the trigger', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      press(button);
+      button.focus();
+      vi.advanceTimersByTime(1000);
+      expect(tooltip()).toBeNull();
+
+      vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+      button.blur();
+      button.focus();
+      vi.advanceTimersByTime(400);
+      expect(tooltip()).not.toBeNull();
+    });
+
+    it('a blur caused by the window losing focus does not lift the suppression', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      press(button);
+      button.dispatchEvent(new FocusEvent('focus'));
+
+      vi.spyOn(document, 'hasFocus').mockReturnValue(false);
+      button.dispatchEvent(new FocusEvent('blur'));
+      button.dispatchEvent(new FocusEvent('focus'));
+      vi.advanceTimersByTime(1000);
+      expect(tooltip()).toBeNull();
+    });
+
+    it('keeps programmatic show() working while suppressed', async () => {
+      const { fixture } = await render(TestHost);
+      const button = screen.getByText('Hover me');
+      press(button);
+      fixture.debugElement
+        .query(By.directive(TooltipDirective))
+        .injector.get(TooltipDirective)
+        .show();
+      vi.advanceTimersByTime(400);
+      expect(tooltip()).not.toBeNull();
+    });
+
+    it('hides when focus moves into a modal even though the pointer is still on the trigger', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+      const modal = document.createElement('div');
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      const inside = document.createElement('button');
+      modal.appendChild(inside);
+      document.body.appendChild(modal);
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      button.dispatchEvent(new FocusEvent('focus'));
+      vi.advanceTimersByTime(400);
+      expect(tooltip()).not.toBeNull();
+
+      button.dispatchEvent(new FocusEvent('blur', { relatedTarget: inside }));
+      expect(tooltip()).toBeNull();
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(1000);
+      expect(tooltip()).toBeNull();
+      modal.remove();
+    });
+
+    it('hides when the window loses focus', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      expect(tooltip()).not.toBeNull();
+
+      window.dispatchEvent(new Event('blur'));
+      expect(tooltip()).toBeNull();
+    });
+
+    it('stops listening for window blur once hidden', async () => {
+      await render(TestHost);
+      const button = screen.getByText('Hover me');
+      const remove = vi.spyOn(window, 'removeEventListener');
+
+      button.dispatchEvent(new MouseEvent('mouseenter'));
+      vi.advanceTimersByTime(400);
+      button.dispatchEvent(new MouseEvent('mouseleave'));
+      vi.advanceTimersByTime(200);
+      expect(tooltip()).toBeNull();
+      expect(remove).toHaveBeenCalledWith('blur', expect.any(Function));
     });
   });
 

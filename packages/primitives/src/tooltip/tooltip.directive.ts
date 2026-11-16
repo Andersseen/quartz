@@ -52,8 +52,9 @@ import {
   host: {
     '(mouseenter)': 'onMouseEnter()',
     '(mouseleave)': 'onMouseLeave()',
+    '(pointerdown)': 'handlePointerDown()',
     '(focus)': 'onFocus()',
-    '(blur)': 'onBlur()',
+    '(blur)': 'handleBlur($event)',
   },
 })
 export class TooltipDirective implements OnDestroy {
@@ -95,6 +96,11 @@ export class TooltipDirective implements OnDestroy {
   // cannot hide a tooltip the other source still asks for.
   private hovered = false;
   private focused = false;
+  // Set by pressing the trigger (and by focus moving into a modal): hover and the focus that the
+  // press itself causes must not reopen the tooltip. Cleared when the pointer leaves the trigger
+  // or focus leaves it within the page, so the next enter or keyboard focus shows it again.
+  private suppressed = false;
+  private removeWindowBlur: (() => void) | null = null;
   // The id this tooltip appended to the host's `aria-describedby` (removed again on teardown).
   private describedId: string | null = null;
 
@@ -347,11 +353,21 @@ export class TooltipDirective implements OnDestroy {
       excludeElements: () => [this.elementRef.nativeElement],
       onDismiss: () => this.hideImmediately(),
     });
+    // The window losing focus (another tab, app or an iframe) takes the tooltip down.
+    this.removeWindowBlur?.();
+    const view = this.document.defaultView;
+    if (view) {
+      const onWindowBlur = () => this.hideImmediately();
+      view.addEventListener('blur', onWindowBlur);
+      this.removeWindowBlur = () => view.removeEventListener('blur', onWindowBlur);
+    }
   }
 
   private detachDismissListeners(): void {
     this.dismissController?.destroy();
     this.dismissController = null;
+    this.removeWindowBlur?.();
+    this.removeWindowBlur = null;
   }
 
   private clearShowTimer(): void {
@@ -410,24 +426,62 @@ export class TooltipDirective implements OnDestroy {
   /** @internal */
   onMouseEnter(): void {
     this.hovered = true;
-    this.show();
+    if (!this.suppressed) this.show();
   }
 
   /** @internal */
   onMouseLeave(): void {
     this.hovered = false;
+    this.suppressed = false;
     if (!this.focused) this.hide();
+  }
+
+  /**
+   * Pressing the trigger (to open a dialog, menu…) hides the tooltip at once and keeps it hidden
+   * while the pointer stays on the trigger, even though `hovered` is still true.
+   */
+  protected handlePointerDown(): void {
+    this.suppressed = true;
+    this.hideImmediately();
   }
 
   /** @internal */
   onFocus(): void {
     this.focused = true;
-    this.show();
+    if (!this.suppressed) this.show();
   }
 
   /** @internal */
   onBlur(): void {
+    this.handleBlur();
+  }
+
+  protected handleBlur(event?: FocusEvent): void {
     this.focused = false;
+    if (this.movedIntoModal(event)) {
+      // A modal now covers the trigger: the hovered pointer must not keep the tooltip above it.
+      this.suppressed = true;
+      this.hideImmediately();
+      return;
+    }
+    // Focus left within the page, so a later focus is a new one (keyboard, focus return) and may
+    // show the tooltip. A blur caused by the window losing focus is not: it returns on refocus.
+    if (this.document.hasFocus()) this.suppressed = false;
     if (!this.hovered) this.hide();
+  }
+
+  private movedIntoModal(event?: FocusEvent): boolean {
+    const target = event?.relatedTarget;
+    if (!target || typeof (target as Element).closest !== 'function') return false;
+    const element = target as Element;
+    if (element.closest('[aria-modal="true"]')) return true;
+    const dialog = element.closest('dialog');
+    if (!dialog) return false;
+    try {
+      return dialog.matches(':modal');
+    } catch {
+      // Engines without `:modal`: an open native dialog is the best available signal.
+      return dialog.hasAttribute('open');
+    }
   }
 }

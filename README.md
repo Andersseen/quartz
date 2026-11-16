@@ -157,6 +157,23 @@ export class Example {
 }
 ```
 
+### Styling the text tooltip
+
+`qzTooltip="…"` renders a `div` in `document.body` with the hooks `.qz-tooltip`, `[data-qz-tooltip]` and
+`role="tooltip"`. Quartz only sets positioning inline styles, so put the visual styles in a global stylesheet:
+
+```css
+[data-qz-tooltip] {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-neutral-900, #111827);
+  color: var(--color-neutral-50, #f9fafb);
+  font-size: var(--text-xs, 0.75rem);
+}
+```
+
+See the [tooltip docs](https://quartz-headless.pages.dev/docs/primitives/tooltip#styling-text-tooltips) for every hook.
+
 ## 📋 Requirements
 
 | Dependency        | Version                                                                                  |

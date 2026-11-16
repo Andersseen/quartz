@@ -131,6 +131,52 @@ The directive exposes `arrow()` (an `OverlayArrowGeometry` or `null`) and `resol
 
 Resolved `-start`/`-end` placements are physical: in RTL a requested `top-start` resolves to `top-end`.
 
+## Styling text tooltips
+
+A string tooltip (`qzTooltip="…"`) is rendered by Quartz as a `div` appended to `document.body`, so style it globally, not from the host component's encapsulated styles. Quartz sets only behavioural inline styles (`position: fixed`, `top`/`left`, `transform`, `z-index: 9999`, `pointer-events: none`, `visibility` while measuring); everything visual is yours. Stable hooks:
+
+| Hook                              | Use                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| `.qz-tooltip`                     | Class on every text tooltip                                             |
+| `[data-qz-tooltip]`               | Attribute on every text tooltip (use it if `.qz-tooltip` clashes)       |
+| `[role='tooltip']`                | ARIA role; also present on template tooltips' root element              |
+| `[data-side]`, `[data-placement]` | Resolved side/placement after flip (with `tooltipArrowSize`, see below) |
+
+```css
+/* styles.css — global, uses your design tokens */
+:root {
+  --tooltip-bg: var(--color-neutral-900, #111827);
+  --tooltip-fg: var(--color-neutral-50, #f9fafb);
+  --tooltip-radius: var(--radius-sm, 6px);
+  --tooltip-font: var(--text-xs, 0.75rem);
+  --tooltip-shadow: var(--shadow-md, 0 4px 12px rgb(0 0 0 / 0.15));
+}
+
+[data-qz-tooltip] {
+  max-width: 16rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--tooltip-radius);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  font-size: var(--tooltip-font);
+  line-height: 1.4;
+  box-shadow: var(--tooltip-shadow);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tooltip-bg: var(--color-neutral-100, #f3f4f6);
+    --tooltip-fg: var(--color-neutral-900, #111827);
+  }
+}
+```
+
+Do not override `position`, `transform` or `visibility`: positioning writes them. `z-index` can be raised from your stylesheet only with `!important` because it is inline.
+
+## Pressing the trigger
+
+Pressing the trigger (`pointerdown`) hides the tooltip at once and keeps it hidden while the pointer stays on the trigger, so a button that opens a dialog does not leave its tooltip above the backdrop. It shows again when the pointer leaves and re-enters, or on a new focus after focus has left the trigger (keyboard, focus return). Focus moving into a modal (`aria-modal="true"` or a modal `<dialog>`) and the window losing focus also close it. `show()` called programmatically is not affected.
+
 ## Tooltip vs Popover
 
 A tooltip is a non-interactive description (`role="tooltip"`, `aria-describedby`, hover/focus, Escape) and must not contain focusable content. Use [Popover](/docs/primitives/popover) for interactive surfaces.

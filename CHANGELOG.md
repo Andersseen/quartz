@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Tooltip fixes (unreleased)
+
+#### Fixed
+
+- `TooltipDirective`: pressing the trigger (`pointerdown`) now hides the tooltip immediately and keeps it hidden while the pointer stays on the trigger, so a button that opens a modal dialog no longer leaves its tooltip (`z-index: 9999`) above the backdrop. It shows again when the pointer leaves and re-enters, or on a new focus after focus has left the trigger. A pending show is cancelled by the press. Focus moving into a modal (`aria-modal="true"` or a modal `<dialog>`) and the window losing focus also close it. Programmatic `show()` is unaffected; no public API change.
+
+#### Documentation
+
+- Tooltip docs and README: styling hooks of the text tooltip (`.qz-tooltip`, `[data-qz-tooltip]`, `role="tooltip"`, `data-side`/`data-placement`) with a design-token CSS example, and the press/dismiss behaviour.
+
+#### Notes
+
+- The Angular 22 peer range requested for the published `0.16.0` (`^21.0.0`) is already widened in the source to `^21.2.0 || ^22.0.0` for both packages (Angular 21.0/21.1 do not build), and CI already runs the `angular-22` consumer fixture. It reaches npm with the next guarded release.
+
 ### 0.19 acceptance and pre-beta stabilization (engineering only — not accepted, not released; see `docs/releases/0.19-acceptance.md`)
 
 #### Added
