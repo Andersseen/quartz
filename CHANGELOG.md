@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1] — pending guarded publication
+
+Patch release of `main` for consumers on Angular 22 and SSR. Acceptance record: `docs/releases/0.16.1-acceptance.md`.
+
+### Fixed
+
+- Angular 22 support: peers of both packages are `^21.2.0 || ^22.0.0` (was `^21.0.0`). npm no longer reports `@quartz-headless/*` as `invalid` on Angular 22, so `legacy-peer-deps` is no longer needed. Angular 21.0/21.1 were never buildable (the Toast template uses an arrow function, which needs 21.2), so the lower bound only corrects the declared range. Verified on Angular 21.2.0, 21.2.x and 22.2.x consumer fixtures (strict AOT, SSR, hydration; Chromium, Firefox, WebKit).
+- `TooltipDirective`: pressing the trigger (`pointerdown`) hides the tooltip immediately and keeps it hidden while the pointer stays on the trigger, so a button that opens a modal dialog no longer leaves its tooltip (`z-index: 9999`) above the backdrop. It shows again when the pointer leaves and re-enters, or on a new focus after focus has left the trigger. A pending show is cancelled by the press. Focus moving into a modal (`aria-modal="true"` or a modal `<dialog>`) and the window losing focus also close it. Programmatic `show()` is unaffected.
+- SSR: generated DOM ids no longer leak across server requests (identical requests rendered `qz-radio-3` then `qz-radio-7`) and now match on the client after hydration.
+- Combobox: a lagging post-typing frame no longer undoes `ArrowDown` navigation.
+- Accordion: removing the focused open trigger no longer drops focus to `<body>` in Chromium.
+- Sidebar: the off-canvas overlay no longer opens on first render at a mobile width.
+- NavigationMenu: the plain `<ul>` list no longer carries `aria-orientation` (axe `aria-allowed-attr`).
+
+### Added
+
+- `QzIdGenerator` (`@quartz-headless/core`): the application-scoped id generator behind the SSR fix.
+- `AccordionItemDirective.blurredThisTask` is a public member (implementation detail of the Accordion focus fix; do not depend on it).
+
+### Documentation
+
+- Tooltip docs and README: styling hooks of the text tooltip (`.qz-tooltip`, `[data-qz-tooltip]`, `role="tooltip"`, `data-side`/`data-placement`) with a design-token CSS example, and the press/dismiss behaviour.
+
+### Notes
+
+- Released as a patch by maintainer decision: the two additions above are incidental to bug fixes, and every other change is a fix or a peer-range correction. No breaking API change (API guard against the published 0.16.0: 0 BREAKING).
+- The repository engineering milestones below (0.17–0.23) are included in this source but are not separate npm releases.
+
+## Repository engineering since 0.16.0 (included in 0.16.1)
+
 ### 0.19 acceptance and pre-beta stabilization (engineering only — not accepted, not released; see `docs/releases/0.19-acceptance.md`)
 
 #### Added
@@ -62,6 +92,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Accordion: removing the focused open trigger no longer drops focus to `<body>` in Chromium (it blurs the trigger before teardown).
 - Sidebar: the off-canvas overlay no longer opens on first render at a mobile width (hydrated pages opened a scroll-locked overlay on load).
 - Docs site build: the client and SSR environments are built sequentially. Parallel builds shared one Analog AOT output map that the first finishing environment cleared, so lazily transformed pages shipped un-compiled and failed with "JIT compiler unavailable" (roughly every second warm build).
+
+## [0.16.0] — 2026-10-29
 
 ### Added (0.16)
 

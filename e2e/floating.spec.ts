@@ -384,6 +384,36 @@ test.describe('Tooltip', () => {
     );
     await expect(page.getByRole('tooltip')).toBeVisible();
   });
+
+  test('pressing the trigger hides it until the pointer leaves and re-enters', async ({ page }) => {
+    const trigger = page.locator('#tip-trigger');
+    const tip = page.getByRole('tooltip');
+    const box = (await trigger.boundingBox())!;
+    const pastShowDelay = () =>
+      page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            setTimeout(() => requestAnimationFrame(() => resolve()), 500),
+          ),
+      );
+
+    await trigger.hover();
+    await expect(tip).toBeVisible();
+
+    await page.mouse.down();
+    await expect(tip).toHaveCount(0);
+    await page.mouse.up();
+
+    // Moving inside the trigger after the click (which also focused it) keeps it hidden.
+    await page.mouse.move(box.x + 2, box.y + 2);
+    await page.mouse.move(box.x + box.width - 2, box.y + box.height - 2);
+    await pastShowDelay();
+    await expect(tip).toHaveCount(0);
+
+    await page.mouse.move(2, 400);
+    await trigger.hover();
+    await expect(tip).toBeVisible();
+  });
 });
 
 test.describe('RTL submenu', () => {
