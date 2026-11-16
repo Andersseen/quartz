@@ -37,7 +37,7 @@ concurrency:
 jobs:
   quality:
     name: Quality Checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
 
   unit-tests:
     name: Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
   # manifest) and the publish job uploads THESE exact files. Nothing downstream rebuilds.
   package:
     name: Build and pack release artifacts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       manifest-sha256: ${{ steps.pack.outputs.manifest-sha256 }}
       version: ${{ steps.pack.outputs.version }}
@@ -175,7 +175,7 @@ jobs:
   # CLI source-copy consumer and the bundle budgets. The full declared matrix runs in consumer-matrix.
   consumer-smoke:
     name: Consumer Smoke (Angular 21.2 / Chromium)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: package
     steps:
       - name: Checkout
@@ -237,7 +237,7 @@ jobs:
   # blocks publication; nothing here retries.
   consumer-matrix:
     name: Consumer ${{ matrix.fixture }} / Node ${{ matrix.node }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: package
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     strategy:
@@ -320,7 +320,7 @@ jobs:
   # Angular 21.2 CLI consumer across all three engines (weekly + release; the PR gate covers Chromium).
   cli-consumer:
     name: CLI source-copy consumer (3 engines)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: package
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
@@ -376,7 +376,7 @@ jobs:
   # own browser. Same CI profile as `pnpm e2e:ci`, restricted with E2E_BROWSERS.
   e2e-shard:
     name: E2E (${{ matrix.browser }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # A hung browser must fail the job (and keep its artifacts), not occupy a runner for hours.
     timeout-minutes: 30
     strategy:
@@ -452,7 +452,7 @@ jobs:
   # independent of how many engine shards exist.
   e2e-tests:
     name: E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: e2e-shard
     if: always()
     steps:
@@ -465,7 +465,7 @@ jobs:
 
   deploy:
     name: Deploy to Cloudflare Pages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [quality, unit-tests, e2e-tests, consumer-smoke]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
@@ -522,7 +522,7 @@ jobs:
   # the job. The unscoped `quartz-headless` package remains frozen.
   publish:
     name: Publish validated artifacts to npm
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - quality
       - package
@@ -592,7 +592,7 @@ jobs:
   # The tag is created at the validated commit; an existing tag at another commit is a conflict.
   release:
     name: Create GitHub Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [package, publish]
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     permissions:
