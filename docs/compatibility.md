@@ -7,8 +7,9 @@ verified. Every claim below is backed by a command you can run (see
 
 > Status: the 0.17 consumer gate is merged but **not accepted** — see `docs/releases/0.17-acceptance.md` and
 > `docs/releases/0.19-acceptance.md` for the recorded results and the gate that remains open (manual
-> screen-reader review). Genuine browser autofill was verified in Chrome in 0.19. Until `0.17.0` is
-> published, the peer ranges below are what `main` declares; the latest published version is `0.16.0`.
+> screen-reader review). Genuine browser autofill was verified in Chrome in 0.19. The latest published
+> version is `0.16.0`; the manifests on `main` are the prepared, **unpublished** `0.16.1` candidate, and the
+> peer ranges below are what it declares (see `docs/releases/0.16.1-acceptance.md`).
 
 ## Supported versions
 
@@ -68,8 +69,26 @@ The per-row inventory (which of the 46 Volt-parity rows runs on which page and s
 
 Quartz itself has no Node runtime requirement beyond what the Angular toolchain demands. CI runs the
 consumer matrix on Node `20.19.0` (Angular 21.2.0), `24` (Angular 21.2) and `22` (Angular 22, asserted
-`>=22.22.3`); the repository toolchain builds the libraries on Node 22. The CI cells for Node 20 and 24 cannot be
-reproduced on a machine that only has Node 22 — they are CI-only evidence.
+`>=22.22.3`).
+
+Two runtimes are kept apart (0.24, `scripts/toolchain.mjs`):
+
+- **Repository tooling** (pnpm, Vite/Vitest/Analog, playground fixture generation, the consumer harness,
+  the Playwright driver) runs on Node `^22.12.0 || >=24` — Node 22 in CI. The scripts refuse other versions.
+- **The consumer** — `npm ci`, the tarball install, strict-AOT `ng build`, the negative compiler builds and
+  the SSR server — runs on the cell's Node, passed explicitly:
+
+```bash
+pnpm verify:consumer:runtime -- --fixture angular-21.2-min \
+  --consumer-node /path/to/node-v20.19.0/bin/node --expect-consumer-node 20.19.0
+```
+
+The harness checks that npm itself reports that Node and records both versions in
+`consumer/results/<fixture>.json` (`node` = consumer, `toolchainNode` = harness). Before 0.24 the whole
+harness ran on the cell's Node, so the Node 20.19.0 cell executed repository Vitest, which hits a
+`require(esm)` race in Node 20.19.0 and failed before Angular compiled anything
+(`docs/roadmap/0.24-release-readiness.md`). That was a tooling failure, not a Quartz/Node 20 incompatibility.
+With `--consumer-node` the Node 20 and 24 cells can be reproduced locally (any Node version manager).
 
 ## Browsers
 
@@ -147,7 +166,8 @@ workspace, a destination path containing a space, strict AOT, and a browser inte
 - **Angular 21.0 / 21.1** are not supported (21.0 fails to build, see above).
 - **Directory pickers** only set `webkitdirectory`; directory contents are never traversed or read, and
   there is no upload or file-content validation.
-- The Node 20 and Node 24 matrix cells run in CI only.
+- Node 20 and 24 cells are reproducible locally only with a separately installed Node binary passed as
+  `--consumer-node`; without one they remain CI evidence.
 
 ## Reproduce the matrix
 

@@ -235,6 +235,13 @@ jobs:
   # Node version its Angular release supports (https://angular.dev/reference/versions): Angular 21
   # accepts ^20.19 || ^22.12 || ^24, Angular 22 requires ^22.22.3 || ^24.15 || ^26. A failing cell
   # blocks publication; nothing here retries.
+  #
+  # Toolchain boundary (0.24): repository tooling (pnpm, Vite, the playground fixture generator,
+  # the harness and the Playwright driver) runs on the repository Node 22. The CONSUMER — npm ci,
+  # the tarball install, strict-AOT `ng build`, the negative AOT builds and the SSR server — runs on
+  # the cell's Node, passed explicitly with --consumer-node and asserted with
+  # --expect-consumer-node. (Until 0.24 the whole harness ran on the cell's Node, so Node 20.19.0
+  # executed repository Vitest and crashed before Angular compiled anything.)
   consumer-matrix:
     name: Consumer ${{ matrix.fixture }} / Node ${{ matrix.node }}
     runs-on: ubuntu-24.04
@@ -292,21 +299,39 @@ jobs:
           node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
           echo "QUARTZ_RELEASE_ARTIFACTS=$PWD/release-artifacts" >> "$GITHUB_ENV"
 
+      - name: Generate strict-AOT playground fixtures (repository Node)
+        run: |
+          node --version
+          pnpm consumer:fixtures -- --out "$RUNNER_TEMP/playground-fixtures"
+          echo "QUARTZ_PLAYGROUND_FIXTURES=$RUNNER_TEMP/playground-fixtures" >> "$GITHUB_ENV"
+
       - name: Setup Node (consumer toolchain)
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Report toolchain
+      - name: Record consumer Node
         run: |
           echo "fixture=${{ matrix.fixture }}"
           node --version
           if [ "${{ matrix.fixture }}" = "angular-22" ]; then
             node -e "const [a,b,c]=process.versions.node.split('.').map(Number); if (a===22 ? (b<22||(b===22&&c<3)) : a<24) { console.error('Angular 22 requires Node ^22.22.3 || ^24.15 || ^26'); process.exit(1); }"
           fi
+          echo "QUARTZ_CONSUMER_NODE=$(command -v node)" >> "$GITHUB_ENV"
+
+      # Put the repository Node back in front of PATH: only --consumer-node runs the consumer.
+      - name: Setup Node (restore repository toolchain)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Installed-tarball consumer in Chromium, Firefox and WebKit
-        run: pnpm verify:consumer:runtime -- --fixture ${{ matrix.fixture }}
+        run: |
+          node --version
+          pnpm verify:consumer:runtime -- --fixture ${{ matrix.fixture }} \
+            --consumer-node "$QUARTZ_CONSUMER_NODE" \
+            --expect-consumer-node ${{ matrix.node }} \
+            --playground-fixtures "$QUARTZ_PLAYGROUND_FIXTURES"
 
       - name: Upload consumer evidence
         uses: actions/upload-artifact@v4
@@ -513,15 +538,15 @@ jobs:
           command: pages deploy dist/analog/public --project-name quartz-headless --branch main --commit-dirty=true
           packageManager: pnpm
 
-  # Explicit manual release only. The publish job never builds: it downloads the tarballs the
-  # `package` job produced and that the consumer matrix installed, re-verifies them against the
-  # manifest (sha256, npm integrity, package contract, source commit, version confirmation), asks
-  # the registry what already exists (fail closed), then publishes exactly those files — Core first.
-  # Re-running is safe: versions that already match are verified and skipped; a version whose
-  # integrity differs, an inconsistent Core/Primitives pair or any ambiguous registry answer stops
-  # the job. The unscoped `quartz-headless` package remains frozen.
-  publish:
-    name: Publish validated artifacts to npm
+  # Release acceptance (0.24). Runs on every manual dispatch, after all validation jobs, and
+  # evaluates the fail-closed preflight (scripts/release/preflight.mjs): lockstep versions, Core
+  # peer, source commit, the manifest every consumer job verified, every required job's result
+  # (a skipped or failed job blocks), the acceptance record's manual gates, the protection of the
+  # `npm-release` environment, and the registry state. It holds no secrets. On a publishing
+  # dispatch a BLOCKED result fails this job, so `publish` never starts; on a non-publishing
+  # dispatch it only reports (--advisory) into the job summary.
+  release-acceptance:
+    name: Release acceptance preflight
     runs-on: ubuntu-24.04
     needs:
       - quality
@@ -531,6 +556,72 @@ jobs:
       - consumer-smoke
       - consumer-matrix
       - cli-consumer
+    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download validated release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: release-artifacts
+
+      - name: Release preflight (before maintainer approval)
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+          GH_TOKEN: ${{ github.token }}
+          CONFIRM_VERSION: ${{ inputs.confirm_version }}
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          # Report-only unless this dispatch publishes; a publishing dispatch fails here when BLOCKED.
+          if [ "$PUBLISH" = "true" ]; then set --; else set -- --advisory; fi
+          node scripts/release/preflight.mjs --mode pre-approval \
+            --dir release-artifacts \
+            --commit "$(git rev-parse HEAD)" \
+            --confirm-version "$CONFIRM_VERSION" \
+            --expect-manifest-sha256 "$EXPECTED_MANIFEST_SHA256" \
+            --run-id "${{ github.run_id }}" "$@"
+
+  # Explicit manual release only. The publish job never builds: it downloads the tarballs the
+  # `package` job produced and that the consumer matrix installed, re-verifies them against the
+  # manifest (sha256, npm integrity, package contract, source commit, version confirmation), asks
+  # the registry what already exists (fail closed), then publishes exactly those files — Core first.
+  # Re-running is safe: versions that already match are verified and skipped; a version whose
+  # integrity differs, an inconsistent Core/Primitives pair or any ambiguous registry answer stops
+  # the job. The unscoped `quartz-headless` package remains frozen.
+  #
+  # Human authorization (0.24): the job deploys to the protected `npm-release` environment, so it
+  # waits until a required reviewer approves THIS run. The publish-mode preflight then reads that
+  # approval back from the GitHub API, re-checks the environment protection and every gate, and
+  # binds the result to the version, commit, manifest sha256 and run id; `release.mjs publish`
+  # refuses without it. NPM_TOKEN belongs to the environment's secrets (RELEASE_RUNBOOK §0.1).
+  publish:
+    name: Publish validated artifacts to npm
+    runs-on: ubuntu-24.04
+    environment:
+      name: npm-release
+    needs:
+      - quality
+      - package
+      - unit-tests
+      - e2e-tests
+      - consumer-smoke
+      - consumer-matrix
+      - cli-consumer
+      - release-acceptance
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     # One publisher at a time per repository; a queued run waits instead of racing. Never cancel a
     # run that may be midway through publishing.
@@ -539,6 +630,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: read
+      actions: read # read this run's deployment approvals
       id-token: write # npm provenance attestation
     steps:
       - name: Checkout
@@ -574,6 +666,21 @@ jobs:
           test "$(sha256sum release-artifacts/release-manifest.json | cut -d' ' -f1)" = "$EXPECTED_MANIFEST_SHA256"
           node scripts/release/release.mjs verify --dir release-artifacts --commit "$(git rev-parse HEAD)"
 
+      - name: Release preflight (after maintainer approval, fails closed)
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+          GH_TOKEN: ${{ github.token }}
+          CONFIRM_VERSION: ${{ inputs.confirm_version }}
+          EXPECTED_MANIFEST_SHA256: ${{ needs.package.outputs.manifest-sha256 }}
+        run: |
+          node scripts/release/preflight.mjs --mode publish \
+            --dir release-artifacts \
+            --commit "$(git rev-parse HEAD)" \
+            --confirm-version "$CONFIRM_VERSION" \
+            --expect-manifest-sha256 "$EXPECTED_MANIFEST_SHA256" \
+            --run-id "${{ github.run_id }}" \
+            --out "$RUNNER_TEMP/release-preflight.json"
+
       - name: Registry reconciliation plan (read-only, fails closed)
         run: node scripts/release/release.mjs plan --dir release-artifacts
 
@@ -586,6 +693,8 @@ jobs:
             --dir release-artifacts \
             --commit "$(git rev-parse HEAD)" \
             --confirm-version "$CONFIRM_VERSION" \
+            --preflight "$RUNNER_TEMP/release-preflight.json" \
+            --run-id "${{ github.run_id }}" \
             --provenance
 
   # Runs after a fully verified publication (also on a re-run, where publish verifies and skips).

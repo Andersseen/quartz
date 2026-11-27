@@ -1,5 +1,22 @@
 # STATE — Current Project Status
 
+# 0.24 Consumer toolchain boundary & release acceptance enforcement — engineering milestone, NOT an npm release (2026-11-27)
+
+Branch `feat/quartz-0.24-release-readiness` from synchronized `main` `30764e5fc567c005d637ad787a72143735966797` (PR #61 merge). **Versions:** latest
+published `0.16.0` (npm + GitHub release `v0.16.0`); manifests are the prepared, **unpublished** `0.16.1` candidate (maintainer's patch decision of
+2026-11-16, unchanged). API: freeze candidate, not frozen (published-0.16.0 comparison 0 BREAKING / 2 ADDITIVE: `QzIdGenerator`,
+`AccordionItemDirective.blurredThisTask`). Record: [roadmap](../roadmap/0.24-release-readiness.md), [acceptance](../releases/0.24-readiness-acceptance.md).
+
+- The weekly Node 20.19.0 consumer failure was repository Vitest crashing in a Node `require(esm)` race while loading the CJS-bundled `vitest.app.config.ts`,
+  before any Angular step ran. Repository tooling now runs on Node `^22.12 || >=24` (`scripts/toolchain.mjs`). Consumers run on their cell's Node via
+  `run.mjs --consumer-node/--expect-consumer-node`, and fixtures come from `scripts/consumer/playground-fixtures.mjs` (real `DOC_PLAYGROUNDS`, Vite module
+  runner, hash- and freshness-verified).
+- `pnpm release:preflight` and the `release-acceptance` / `publish` jobs enforce the manual gates (`json release-acceptance` block in the acceptance
+  record) and require a required reviewer's approval of the run's `npm-release` deployment, read from the GitHub API. Waivers count only when signed by an
+  approving reviewer.
+- **Maintainer action required:** the `npm-release` environment does not exist and `main` is unprotected (read 2026-11-27). Publication stays BLOCKED until
+  RELEASE_RUNBOOK §0.1 is done. 0.16.1 gates still pending: manual screen-reader matrix, Firefox/Safari Autofill, maintainer decision.
+
 # 0.23 Public contract and playground compilation — engineering milestone, NOT an npm release (2026-11-04)
 
 Branch `feat/quartz-0.23-contract-verification` starts from synchronized `main` at `c378b815af5f018d8b0830d721b826aebf2f3959`. The API guard now canonicalizes semantic union member order while preserving overload, tuple and object-member order. The installed-tarball consumer harness compiles actual generated Component examples (18 variants across nine families) with strict Angular AOT and exercises negative compiler cases. Package versions remain `0.16.0`; nothing was published and no formal freeze or beta decision was made. Record: [roadmap](../roadmap/0.23-contract-verification.md), [acceptance](../releases/0.23-contract-acceptance.md). Final local/CI evidence is updated in the acceptance record.

@@ -20,6 +20,8 @@
     "release:pack": "node scripts/release/release.mjs pack --out release-artifacts",
     "release:verify": "node scripts/release/release.mjs verify --dir release-artifacts",
     "release:plan": "node scripts/release/release.mjs plan --dir release-artifacts",
+    "release:preflight": "node scripts/release/preflight.mjs --dir release-artifacts",
+    "consumer:fixtures": "node scripts/consumer/playground-fixtures.mjs",
     "verify:consumer": "node scripts/consumer-smoke.js",
     "verify:consumer:runtime": "node scripts/consumer/run.mjs",
     "review:manual": "node scripts/consumer/run.mjs --fixture angular-21.2 --stage serve",
