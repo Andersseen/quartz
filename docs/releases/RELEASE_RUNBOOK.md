@@ -18,7 +18,10 @@ quality ─┬─ unit-tests
                           ├─ consumer-smoke   ┐ install THESE tarballs (re-verified),
                           ├─ consumer-matrix  ├ strict AOT, SSR, hydration, 3 browsers
                           └─ cli-consumer     ┘
-all of the above ─► publish (downloads the same artifact; builds nothing) ─► release (GitHub)
+all of the above ─► release-acceptance (preflight, no secrets)
+                  ─► publish [environment npm-release: waits for a required reviewer]
+                       (preflight again in publish mode; downloads the same artifact; builds nothing)
+                  ─► release (GitHub)
 ```
 
 1. `package` builds once (`pnpm build:lib`), runs `pnpm verify:build` (package contract + public API guard), packs both tarballs and writes
@@ -37,10 +40,58 @@ all of the above ─► publish (downloads the same artifact; builds nothing) �
 - `main` is green on the last push (`gh run list --branch main --limit 3`).
 - Required gates are accepted in the acceptance record for the version (`docs/releases/<version>-acceptance.md`). Manual gates (screen reader,
   genuine Autofill) are either executed or **explicitly waived in writing by the maintainer** — an agent cannot grant the waiver.
-- Repository secrets: `NPM_TOKEN` (an automation token with publish rights on the `@quartz-headless` scope). `GITHUB_TOKEN` is provided by Actions.
-  Provenance needs the publish job's `id-token: write` permission, which is already declared. Never print or echo the token; the tooling redacts
-  `npm_…`, `_authToken=` and `Bearer …` values from every message.
-- Node ≥ 20 locally; CI uses Node 22.
+- `NPM_TOKEN` (an automation token with publish rights on the `@quartz-headless` scope) is an **`npm-release` environment secret** (§0.1).
+  `GITHUB_TOKEN` is provided by Actions. Provenance needs the publish job's `id-token: write` permission, which is already declared. Never print or echo
+  the token; the tooling redacts `npm_…`, `_authToken=` and `Bearer …` values from every message.
+- Repository tooling (pnpm, Vite/Vitest, release and consumer scripts) needs Node `^22.12.0 || >=24`; CI uses Node 22. Consumer compatibility cells run
+  their own Node via `--consumer-node` (see `docs/compatibility.md`).
+- `pnpm release:preflight` lists what is still BLOCKED for the candidate (read-only; §2).
+
+### 0.1 One-time GitHub setup [MANUAL — maintainer only]
+
+The publish job deploys to the environment `npm-release`. **Until it exists with the protection below, every publication is BLOCKED by the preflight**
+(GitHub would otherwise create a referenced environment silently and without protection). An agent must not perform these steps or approve deployments.
+
+1. Settings → Environments → **New environment** `npm-release`.
+2. **Required reviewers**: add the maintainer's GitHub _user_ (team-only reviewer lists cannot be verified by the preflight). With a single maintainer,
+   leave "Prevent self-review" off, otherwise nobody can approve.
+3. Untick **Allow administrators to bypass configured protection rules**.
+4. **Deployment branches and tags** → _Selected branches and tags_ → add the rule `main`.
+5. **Environment secrets** → add `NPM_TOKEN`. Then delete the repository-level `NPM_TOKEN` (Settings → Secrets and variables → Actions), so only a job
+   that passed the environment review can read it.
+6. Recommended: protect `main` (require a pull request and passing checks). The workflow that publishes is always the one on `main`, so unreviewed workflow
+   edits are the remaining way around these gates.
+7. Verify (read-only): `gh api repos/{owner}/{repo}/environments/npm-release --jq '{bypass: .can_admins_bypass, branch: .deployment_branch_policy, rules: [.protection_rules[] | {type, reviewers: [.reviewers[]?.reviewer.login]}]}'`
+   and `pnpm release:preflight` (the `GitHub environment "npm-release" protection` line must be PASS).
+
+Do not give a coding agent a token that can approve deployments (`POST …/pending_deployments`) or administer the repository. The approval must be a
+maintainer's own click in the run's "Review deployments" dialog.
+
+### 0.2 Acceptance record format
+
+`docs/releases/<version>-acceptance.md` contains exactly one block read by the preflight:
+
+````markdown
+```json release-acceptance
+{
+  "schema": 1,
+  "version": "0.16.1",
+  "gates": {
+    "manual-screen-reader": { "status": "pending" },
+    "autofill-firefox-safari": { "status": "pending", "scope": [] }
+  }
+}
+```
+````
+
+| `status`   | Required fields                                                                                                       | Accepted when                                                                                                                                                                              |
+| ---------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pending`  | —                                                                                                                     | never (BLOCKED)                                                                                                                                                                            |
+| `executed` | `testedCommit` (full SHA), `date` (YYYY-MM-DD), `tester` (GitHub login); Autofill also `scope: ["firefox", "safari"]` | the gate's rows in `0.17-manual-a11y.md` are `PASS` (screen reader: rows 1–13, Autofill: row 14), and `testedCommit` is an ancestor of the release commit with no `packages/` change since |
+| `waived`   | `waiver: { by, date, reason, version }`                                                                               | **only** in the publish job, when `by` approved that run's `npm-release` deployment as a required reviewer; before that it is shown as WAIVED "not yet verified"                           |
+
+Only the maintainer edits the decision. An agent records evidence and may prepare the block with `pending`; it never writes `executed` without real results
+in the matrix, and never writes a waiver.
 
 ## 1. Prepare the version [MANUAL → PR]
 
@@ -76,13 +127,18 @@ pnpm format:check && pnpm lint && pnpm typecheck
 pnpm build:lib && pnpm verify:build           # expect: "✓ Public API surface matches docs/api/snapshots"
 pnpm release:pack && pnpm release:verify      # expect: "✓ packed X from <sha>" then "✓ artifacts verified"
 pnpm release:plan                              # read-only; expect steps "publish" for a new version (see §7 for other outcomes)
+pnpm release:preflight                         # read-only acceptance report; exits 1 while anything is BLOCKED (always, locally:
+                                               # CI job results and the maintainer approval exist only inside the workflow run)
 QUARTZ_RELEASE_ARTIFACTS=$PWD/release-artifacts pnpm verify:consumer:runtime -- --fixture angular-21.2 --project chromium
 pnpm test:coverage                             # includes the release rehearsal suite (scripts/**/*.spec.mjs)
 ```
 
 The rehearsal suite (`pnpm exec vitest run --project quartz-release`) drives the real planning/publishing code against a fake registry and covers:
 stable, beta, RC, version already published, partial publication, wrong peer range, hash mismatch, registry/auth/permission/rate-limit failures,
-interrupted publish, concurrent writers (same and different artifact), re-run, and GitHub-release metadata failures. It never contacts npm.
+interrupted publish, concurrent writers (same and different artifact), re-run, and GitHub-release metadata failures. Since 0.24 it also covers the
+acceptance gate (`scripts/release/acceptance.spec.mjs`: pending review, unaccepted Autofill scope, missing/forged/wrong-run approval, wrong version,
+commit or artifacts, unsigned waiver, malformed evidence, skipped or failed consumer jobs, invalid Core peer, registry conflict, missing environment
+protection, and recovery through the gate) and the workflow wiring (`workflow-gate.spec.mjs`). It never contacts npm.
 
 ## 3. Merge [MANUAL]
 
@@ -98,6 +154,10 @@ gh workflow run "CI / CD" --ref main \
 gh run watch $(gh run list --workflow "CI / CD" --limit 1 --json databaseId --jq '.[0].databaseId')
 ```
 
+- After every validation job passes, `release-acceptance` runs the preflight. A BLOCKED line fails it and nothing publishes; read the job summary.
+- The `publish` job then shows **"Waiting for review"**. A required reviewer of `npm-release` opens the run → _Review deployments_ → checks the preflight
+  summary (version, commit, manifest sha256, any waiver signed with their own login) → **Approve**. The publish job re-runs the preflight in publish mode,
+  which reads that approval from the GitHub API; without it, or for another version/commit/artifact/run, it stops before npm.
 - `confirm_version` must equal the artifact version exactly; otherwise `publish` refuses before any registry write.
 - Use the full commit SHA, not a branch name: the artifact is bound to that commit.
 - The `publish` job has `concurrency: quartz-npm-release` with `cancel-in-progress: false`; a second dispatch waits instead of racing.
@@ -185,7 +245,7 @@ Never "just rerun everything" blindly: re-run the **same** dispatch (same `sourc
 
 ## 11. Audit trail [AUTO + MANUAL]
 
-For every release keep: workflow run URL, source SHA, `release-manifest.json` and `SHA256SUMS` (attached to the GitHub Release and the run artifact for 30
+For every release keep: workflow run URL, the `release-acceptance` and `publish` preflight summaries (with the approving login), source SHA, `release-manifest.json` and `SHA256SUMS` (attached to the GitHub Release and the run artifact for 30
 days), npm integrity values and provenance attestation, the acceptance record (`docs/releases/<version>-acceptance.md`) and the `docs/ai/STATE.md` entry.
 
 ## 12. Failure escalation

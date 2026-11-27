@@ -5,15 +5,19 @@
  *   pack            --out DIR [--commit SHA]     build outputs -> tarballs + release-manifest.json
  *   verify          --dir DIR [--commit SHA]     re-hash + re-inspect tarballs against the manifest
  *   plan            --dir DIR                    read-only registry reconciliation (fails closed)
- *   publish         --dir DIR --commit SHA --confirm-version V [--provenance] [--dry-run]
+ *   publish         --dir DIR --commit SHA --confirm-version V --preflight FILE [--run-id ID]
+ *                   [--provenance] [--dry-run]
  *   github-release  --dir DIR --commit SHA [--dry-run]
  *
  * `publish` and `github-release` are the only commands with external side effects; both
  * re-verify the artifact first and refuse to run for any other commit or version.
  */
 import { spawnSync } from 'node:child_process';
-import { resolve } from 'node:path';
-import { packArtifacts, readManifest, verifyManifestFiles } from './artifacts.mjs';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { assertPreflightBinding } from './acceptance.mjs';
+import { MANIFEST_FILE, packArtifacts, readManifest, verifyManifestFiles } from './artifacts.mjs';
 import {
   ReleaseConflictError,
   assertConfirmed,
@@ -92,6 +96,21 @@ function main() {
       const m = verifyManifestFiles(dir, { expectedCommit: opt('commit') || undefined });
       if (!opt('commit')) throw new Error('--commit is required');
       assertConfirmed(m, opt('confirm-version'));
+      // 0.24: a real publication needs a passing publish-mode preflight (acceptance gates,
+      // environment protection, maintainer approval) bound to exactly this artifact and run.
+      // Checked BEFORE any registry call; a dry run (no side effects) does not need it.
+      const preflightFile = opt('preflight');
+      if (!opt('dry-run', false) && typeof preflightFile !== 'string')
+        throw new Error('Refusing publication: --preflight <release-preflight.json> is required');
+      if (!opt('dry-run', false))
+        assertPreflightBinding(JSON.parse(readFileSync(resolve(preflightFile), 'utf8')), {
+          version: m.version,
+          commit: opt('commit'),
+          manifestSha256: createHash('sha256')
+            .update(readFileSync(join(dir, MANIFEST_FILE)))
+            .digest('hex'),
+          runId: typeof opt('run-id') === 'string' ? opt('run-id') : undefined,
+        });
       const plan = planPublication(m);
       console.log(`plan (dist-tag ${plan.tag}):`);
       for (const s of plan.steps) console.log(`  ${s.action.padEnd(9)} ${s.name}@${m.version}`);
